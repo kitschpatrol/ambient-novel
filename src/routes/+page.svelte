@@ -41,6 +41,11 @@
 		}
 	}
 
+	function previousLine() {
+		const currentSequenceIndex = lineSequence.findIndex((line) => line === activeLine);
+		activeLine = lineSequence[(currentSequenceIndex - 1 + lines.length) % lines.length];
+	}
+
 	function nextLine() {
 		const currentSequenceIndex = lineSequence.findIndex((line) => line === activeLine);
 		activeLine = lineSequence[(currentSequenceIndex + 1) % lineSequence.length];
@@ -52,10 +57,6 @@
 
 	function sortSequence() {
 		lineSequence = lineSequence.sort((a, b) => a - b);
-	}
-
-	function previousLine() {
-		activeLine = (activeLine - 1 + lines.length) % lines.length;
 	}
 
 	const maxVolumeSpeech = 1.0;
