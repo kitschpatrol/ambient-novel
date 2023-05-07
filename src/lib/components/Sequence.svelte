@@ -1,10 +1,12 @@
 <script lang="ts">
+	// This component is currently unused
+
 	// props
 	export let sequence: number[] = [];
 	// logic goes here
 
 	// state
-	let container: HTMLDivElement;
+	let container: HTMLUListElement;
 	let cards: HTMLLIElement[] = [];
 
 	const nativeWidth = 800;
@@ -17,14 +19,14 @@
 	}
 </script>
 
-<ul class="container" bind:this={container}>
+<ul bind:this={container}>
 	{#each sequence as line, i}
-		<li class="card" bind:this={cards[line]}>{i + 1}</li>
+		<li bind:this={cards[line]}>{i + 1}</li>
 	{/each}
 </ul>
 
 <style>
-	ul.container {
+	ul {
 		position: relative;
 		display: block;
 		width: 800px;
@@ -33,7 +35,7 @@
 		background-color: red;
 	}
 
-	li.card {
+	li {
 		width: 30px;
 		height: 40px;
 		position: absolute;

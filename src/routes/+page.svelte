@@ -1,37 +1,40 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
-	import { fade } from 'svelte/transition';
-	import { fadeVolume } from '$lib/utils/transition/fadeVolume';
-	import { lines } from '$lib/data-generated/text.json';
+	import { title, lines } from '$lib/data-generated/text.json';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import shuffle from 'lodash.shuffle';
+	import shuffle from 'lodash/shuffle';
+	import clamp from 'lodash/clamp';
+	import Card from '$lib/components/Card.svelte';
 
-	function initialVolume(node: HTMLAudioElement) {
-		const maxVolume = node.getAttribute('data-volume-max');
-		node.volume = maxVolume ? parseFloat(maxVolume) : 1.0;
-		node.muted = false;
-		if (playing) {
-			node.play();
-		}
-	}
+	// config
+	const maxVolumeSpeech = 1.0;
+	const maxVolumeMusic = 0.4;
 
-	function onAudioEnded(event: Event) {
-		const audioElement = event.target as HTMLAudioElement;
-		const associatedLine = audioElement.getAttribute('data-line-number');
-		if (associatedLine && parseInt(associatedLine) === activeLine) {
-			nextLine();
-		}
-	}
+	// state, but history button doesn't work?
+	const searchParams = $page.url.searchParams;
+	const queryLine = searchParams ? searchParams.get('line') : undefined;
+	let activeLineIndex = queryLine ? parseInt(queryLine) - 1 : 0;
+	let isPlaying = false;
+	let lineSequence = Array.from({ length: lines.length }, (_, i) => i);
 
 	function previousLine() {
-		const currentSequenceIndex = lineSequence.findIndex((line) => line === activeLine);
-		activeLine = lineSequence[(currentSequenceIndex - 1 + lines.length) % lines.length];
+		const currentSequenceIndex = lineSequence.findIndex((line) => line === activeLineIndex);
+		activeLineIndex = lineSequence[(currentSequenceIndex - 1 + lines.length) % lines.length];
 	}
 
 	function nextLine() {
-		const currentSequenceIndex = lineSequence.findIndex((line) => line === activeLine);
-		activeLine = lineSequence[(currentSequenceIndex + 1) % lineSequence.length];
+		const currentSequenceIndex = lineSequence.findIndex((line) => line === activeLineIndex);
+		activeLineIndex = lineSequence[(currentSequenceIndex + 1) % lineSequence.length];
+	}
+
+	// https://stackoverflow.com/questions/64087782/svelte-event-parameter-type-for-typescript
+	function onAudioEnded(event: CustomEvent<number>) {
+		const textIndex = event.detail;
+		// make sure this message came from the active card (because of transitions)
+		if (textIndex !== activeLineIndex) {
+			return;
+		}
+		nextLine();
 	}
 
 	function shuffleSequence() {
@@ -42,88 +45,42 @@
 		lineSequence = lineSequence.sort((a, b) => a - b);
 	}
 
-	const maxVolumeSpeech = 1.0;
-	const maxVolumeMusic = 0.4;
-
-	// state
-	const searchParams = browser && $page.url.searchParams;
-	const queryLine = searchParams ? searchParams.get('line') : undefined;
-	let activeLine = queryLine ? parseInt(queryLine) - 1 : 0;
-	let playing = false;
-	let lineSequence = Array.from({ length: lines.length }, (_, i) => i);
-
 	$: isSorted = lineSequence.every((line, i) => line === i);
-
-	function playAudio() {
-		const audioElements = document.getElementsByTagName(
-			'audio'
-		) as HTMLCollectionOf<HTMLAudioElement>;
-		for (const element of audioElements) {
-			element
-				.play()
-				.then(() => {})
-				.catch((error) => {
-					console.error(error);
-				});
-		}
-	}
-
-	function pauseAudio() {
-		const audioElements = document.getElementsByTagName(
-			'audio'
-		) as HTMLCollectionOf<HTMLAudioElement>;
-		for (const element of audioElements) {
-			element.pause();
-		}
-	}
+	$: activeLine = lines[activeLineIndex];
 
 	$: {
-		if (browser) {
-			// update query params
-			const urlSearchParams = $page.url.searchParams;
-			urlSearchParams.set('line', (activeLine + 1).toString());
-			goto(`?${$page.url.searchParams.toString()}`);
+		// validate active line
+		activeLineIndex = clamp(activeLineIndex, 0, lines.length - 1);
 
-			// play/pause all audio elements
-			// we can't use bind here because of bugs...
-
-			if (playing) {
-				playAudio();
-			} else {
-				pauseAudio();
-			}
-		}
+		// update query params, don't push history
+		$page.url.searchParams.set('line', (activeLineIndex + 1).toString());
+		goto(`?${$page.url.searchParams.toString()}`, { replaceState: true });
 	}
 </script>
 
+<svelte:head>
+	<title>{title} — Line {activeLineIndex + 1}</title>
+	<!-- https://github.com/sveltejs/kit/issues/4039 -->
+	<!-- <link
+		rel="preload"
+		href="/fonts/nasalization/nasalization-extended-light.woff2"
+		as="font"
+		crossOrigin="anonymous"
+	/> -->
+</svelte:head>
+
 <div class="book">
 	{#key activeLine}
-		<div class="line" transition:fade>
-			{@html lines[activeLine].text}
-			<p class="lineNumber">
-				{activeLine + 1}
-			</p>
-		</div>
-		<audio
-			muted
-			use:initialVolume
-			on:ended={onAudioEnded}
-			data-line-number={activeLine}
-			data-volume-max={maxVolumeMusic}
-			transition:fadeVolume={{ duration: 2000 }}
-		>
-			<source src={lines[activeLine].musicFilePath} type="audio/mpeg" />
-			Your browser does not support the audio element.
-		</audio>
-		<audio
-			muted
-			use:initialVolume
-			data-volume-max={maxVolumeSpeech}
-			transition:fadeVolume={{ duration: 2000 }}
-		>
-			<source src={lines[activeLine].speechFilePath} type="audio/mpeg" />
-			Your browser does not support the audio element.
-		</audio>
+		<Card
+			{isPlaying}
+			text={activeLine.text}
+			textIndex={activeLineIndex}
+			speechSrc={activeLine.speechFilePath}
+			musicSrc={activeLine.musicFilePath}
+			{maxVolumeMusic}
+			{maxVolumeSpeech}
+			on:audioEnded={onAudioEnded}
+		/>
 	{/key}
 </div>
 
@@ -137,10 +94,12 @@
 		<button on:click={nextLine}>Next</button>
 	</span>
 	<span class="button-group">
-		<button class={playing ? '' : 'down'} disabled={!playing} on:click={() => (playing = false)}
-			>Pause</button
+		<button
+			class={isPlaying ? '' : 'down'}
+			disabled={!isPlaying}
+			on:click={() => (isPlaying = false)}>Pause</button
 		>
-		<button class={playing ? 'down' : ''} disabled={playing} on:click={() => (playing = true)}
+		<button class={isPlaying ? 'down' : ''} disabled={isPlaying} on:click={() => (isPlaying = true)}
 			>Play</button
 		>
 	</span>
@@ -151,33 +110,6 @@
 		display: grid;
 		grid-template-columns: 100vw;
 		grid-template-rows: 75vh;
-	}
-
-	div.line {
-		grid-area: 1 / 1; /* force overlap for transitions */
-		justify-self: center;
-		align-self: center;
-		background-color: rgba(255, 255, 255);
-		box-shadow: -3px 3px 5px #00000067;
-		font-family: 'Times New Roman', Times, serif;
-		font-size: 1.2rem;
-		line-height: 120%;
-		text-indent: 3.6rem;
-		padding: 30px;
-		max-width: 550px;
-		/* text-align: justify; */
-		position: relative;
-	}
-
-	p.lineNumber {
-		position: absolute;
-		font-style: italic;
-		right: 12px;
-		bottom: 5px;
-		text-indent: 0;
-
-		font-size: 0.7rem;
-		color: rgb(182, 182, 182);
 	}
 
 	div#controls {

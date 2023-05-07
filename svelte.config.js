@@ -9,6 +9,15 @@ const config = {
 
 	kit: {
 		adapter: adapter()
+		// hmm https://stackoverflow.com/questions/74931516/in-svete-what-to-use-instead-of-html-to-avoid-xss-attacks
+		// csp: {
+		// 	directives: {
+		// 		'script-src': ['self']
+		// 	},
+		// 	reportOnly: {
+		// 		'script-src': ['self']
+		// 	}
+		// }
 	}
 };
 

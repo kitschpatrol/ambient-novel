@@ -2,17 +2,6 @@
 	import { title } from '$lib/data-generated/text.json';
 </script>
 
-<svelte:head>
-	<title>{title}</title>
-	<!-- https://github.com/sveltejs/kit/issues/4039 -->
-	<!-- <link
-		rel="preload"
-		href="/fonts/nasalization/nasalization-extended-light.woff2"
-		as="font"
-		crossOrigin="anonymous"
-	/> -->
-</svelte:head>
-
 <header>
 	<h1>{title.replaceAll('a', 'A')}</h1>
 </header>
