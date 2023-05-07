@@ -136,7 +136,6 @@
 			</p>
 		</div>
 		<audio
-			controls
 			autoplay
 			muted
 			use:initialVolume
@@ -149,7 +148,6 @@
 			Your browser does not support the audio element.
 		</audio>
 		<audio
-			controls
 			autoplay
 			muted
 			use:initialVolume
@@ -209,7 +207,7 @@
 	div.book {
 		display: grid;
 		grid-template-columns: 100vw;
-		grid-template-rows: 100vh;
+		grid-template-rows: 75vh;
 	}
 
 	div.line {
@@ -244,11 +242,14 @@
 		bottom: 20px;
 		text-align: center;
 		width: 100%;
+		user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
 	}
 
 	button {
 		font-family: 'Nasalization Extended', sans-serif;
-		background-color: rgba(255, 255, 255, 0.8);
+		background-color: rgba(255, 255, 255, 0.75);
 		border: none;
 		padding: 10px;
 		margin: 3px;
@@ -257,10 +258,14 @@
 		box-shadow: -3px 3px 5px #00000067;
 		position: relative;
 		user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
 	}
 
-	button:hover {
-		background-color: white;
+	@media (hover: hover) {
+		button:hover {
+			background-color: white;
+		}
 	}
 
 	button:enabled:active,
@@ -268,17 +273,6 @@
 		top: 1px;
 		right: 1px;
 		box-shadow: -2px 3px 5px #00000067;
-	}
-
-	button:enabled:active:focus,
-	button:focus {
-		background-color: rgba(255, 255, 255, 0.8);
-	}
-	button:disabled:active:focus,
-	button:focus:disabled {
-		outline: none;
-		color: rgba(0, 0, 0, 0.3);
-		background-color: rgba(255, 255, 255, 0.3);
 	}
 
 	button:disabled {
