@@ -2,11 +2,24 @@
 	touch-action: manipulation;
 }
 
+@property --backgroundGradientAngle {
+	syntax: '<angle>';
+	inherits: false;
+	initial-value: 0deg;
+}
+
 body {
 	width: 100vw;
 	height: 100vh;
-	background: linear-gradient(#f01ef6 0%, #4447fb 100%);
+	background: linear-gradient(var(--backgroundGradientAngle), #f01ef6 0%, #4447fb 100%);
 	overflow: hidden;
+	animation: spin 30s infinite linear;
+}
+
+@keyframes spin {
+	to {
+		--backgroundGradientAngle: 360deg;
+	}
 }
 
 strong {
