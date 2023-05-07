@@ -1,10 +1,11 @@
 <script lang="ts">
-	import { title, lines } from '$lib/data-generated/text.json';
+	import { title, lines, ambientMusicFilePath } from '$lib/data-generated/text.json';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import shuffle from 'lodash/shuffle';
 	import clamp from 'lodash/clamp';
 	import Card from '$lib/components/Card.svelte';
+	import Audio from '$lib/components/Audio.svelte';
 
 	// config
 	const maxVolumeSpeech = 1.0;
@@ -75,10 +76,8 @@
 			{isPlaying}
 			text={activeLine.text}
 			textIndex={activeLineIndex}
-			speechSrc={activeLine.speechFilePath}
-			musicSrc={activeLine.musicFilePath}
-			{maxVolumeMusic}
-			{maxVolumeSpeech}
+			audioSrc={activeLine.speechFilePath}
+			maxVolume={maxVolumeSpeech}
 			on:audioEnded={onAudioEnded}
 		/>
 	{/key}
@@ -104,6 +103,8 @@
 		>
 	</span>
 </div>
+
+<Audio loop={true} audioSrc={ambientMusicFilePath} maxVolume={maxVolumeMusic} {isPlaying} />
 
 <style>
 	div.book {

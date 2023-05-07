@@ -1,54 +1,19 @@
 <script lang="ts">
-	import { fade } from 'svelte/transition';
-	import { fadeVolume } from '$lib/utils/transition/fadeVolume';
 	import { createEventDispatcher } from 'svelte';
+	import { fade } from 'svelte/transition';
+	import Audio from './Audio.svelte';
 
 	export let isPlaying: boolean;
 	export let text: string;
 	export let textIndex: number;
-	export let speechSrc: string;
-	export let musicSrc: string;
-	export let maxVolumeSpeech: number;
-	export let maxVolumeMusic: number;
+	export let audioSrc: string;
+	export let maxVolume: number;
 
 	// https://stackoverflow.com/questions/64087782/svelte-event-parameter-type-for-typescript
 	const dispatch = createEventDispatcher<{ audioEnded: number }>();
 
-	let audioElements: HTMLAudioElement[] = [];
-
-	function onAudioElementMounted(node: HTMLAudioElement) {
-		const maxVolume = node.getAttribute('data-volume-max');
-		node.volume = maxVolume ? parseFloat(maxVolume) : 1.0;
-		node.muted = false;
-		if (isPlaying) node.play();
-	}
-
 	function onAudioEnded() {
 		dispatch('audioEnded', textIndex);
-	}
-
-	function playAudio() {
-		for (const element of audioElements) {
-			if (element)
-				element
-					.play()
-					.then(() => {
-						// all good
-					})
-					.catch((error) => {
-						console.error(error);
-					});
-		}
-	}
-
-	function pauseAudio() {
-		for (const element of audioElements) {
-			if (element) element.pause();
-		}
-	}
-
-	$: {
-		isPlaying ? playAudio() : pauseAudio();
 	}
 </script>
 
@@ -58,27 +23,7 @@
 		{@html text}
 	</p>
 	<p class="lineNumber">{textIndex + 1}</p>
-	<audio
-		muted
-		use:onAudioElementMounted
-		on:ended={onAudioEnded}
-		bind:this={audioElements[0]}
-		transition:fadeVolume={{ duration: 2000 }}
-		data-max-volume={maxVolumeMusic}
-	>
-		<source src={musicSrc} type="audio/mpeg" />
-		Your browser does not support the audio element.
-	</audio>
-	<audio
-		muted
-		use:onAudioElementMounted
-		transition:fadeVolume={{ duration: 2000 }}
-		bind:this={audioElements[1]}
-		data-max-volume={maxVolumeSpeech}
-	>
-		<source src={speechSrc} type="audio/mpeg" />
-		Your browser does not support the audio element.
-	</audio>
+	<Audio {audioSrc} {isPlaying} {maxVolume} loop={false} on:ended={onAudioEnded} />
 </div>
 
 <style>

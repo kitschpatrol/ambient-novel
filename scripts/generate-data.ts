@@ -6,13 +6,16 @@ import prettier from 'prettier';
 
 console.log('Generating data...');
 
+// this duration is applied to both the head and tail
+// so total additional duration is this times 2
+const speechHeadAndTailSilenceSeconds = 1;
+
 // Generates a voice audio file for each line in the source text
 // Converts to aac and mp3 and saves to speechDir
 // AAC not working in safari???
 const speechDir = `./static/speech`;
 const musicDir = `./static/music`;
 const jsonDir = `./src/lib/data-generated`;
-const musicDurationPadding = 4; // add a head and tail to the music track
 
 function runCommand(command: string): string {
 	try {
@@ -26,10 +29,6 @@ function runCommand(command: string): string {
 function stripHtmlTags(input: string): string {
 	const htmlRegex = /<\/?[^>]+(>|$)/g;
 	return input.replace(htmlRegex, '');
-}
-
-function generateTempFilename(file: string): string {
-	return file.replace(/(\.[^/.]+)$/, `_temp$1`);
 }
 
 function padHeadAndTailOfAudio(
@@ -50,22 +49,8 @@ function padHeadAndTailOfAudio(
 	fs.renameSync(tempOutputFile, outputFile);
 }
 
-function fadeHeadAndTailOfAudio(
-	sourceFile: string,
-	outputFile: string,
-	fadeDurationSeconds: number
-): void {
-	if (!fs.existsSync(sourceFile)) {
-		throw new Error(`Source file does not exist: ${sourceFile}`);
-	}
-
-	const tempOutputFile = generateTempFilename(outputFile);
-	runCommand(
-		`${pathToFfmpeg} -i "${sourceFile}" -af "afade=t=in:ss=0:d=${fadeDurationSeconds},afade=t=out:st=${
-			getAudioDuration(sourceFile) - fadeDurationSeconds
-		}:d=${fadeDurationSeconds}" "${tempOutputFile}"`
-	);
-	fs.renameSync(tempOutputFile, outputFile);
+function generateTempFilename(file: string): string {
+	return file.replace(/(\.[^/.]+)$/, `_temp$1`);
 }
 
 async function formatJson(jsonString: string): Promise<string> {
@@ -75,11 +60,6 @@ async function formatJson(jsonString: string): Promise<string> {
 
 function sayToFile(textToSay: string, ouputFile: string) {
 	runCommand(`say -o "${ouputFile}" "${textToSay}"`);
-}
-
-function getRandomElement<T>(array: T[]): T {
-	const randomIndex = Math.floor(Math.random() * array.length);
-	return array[randomIndex];
 }
 
 function truncateWithEllipsis(text: string, maxLength: number): string {
@@ -137,28 +117,6 @@ function compressToMp3(sourceFile: string, outputFile: string, bitrate: number):
 	fs.renameSync(tempOutputFile, outputFile);
 }
 
-function trimToRandomWindow(sourceFile: string, outputFile: string, targetDuration: number): void {
-	if (!fs.existsSync(sourceFile)) {
-		throw new Error(`Source file does not exist: ${sourceFile}`);
-	}
-
-	const sourceDuration = getAudioDuration(sourceFile);
-
-	if (targetDuration >= sourceDuration) {
-		throw new Error(
-			`Target duration ${targetDuration} should be less than the source duration ${sourceDuration}`
-		);
-	}
-
-	const randomStart = Math.random() * (sourceDuration - targetDuration);
-
-	const tempOutputFile = generateTempFilename(outputFile);
-	runCommand(
-		`${pathToFfmpeg} -ss ${randomStart} -t ${targetDuration} -i "${sourceFile}" -vn -c:a flac "${tempOutputFile}"`
-	);
-	fs.renameSync(tempOutputFile, outputFile);
-}
-
 clearAndCreate(speechDir);
 clearAndCreate(jsonDir);
 clearAndCreate(musicDir);
@@ -166,55 +124,40 @@ clearAndCreate(musicDir);
 // Load the text
 const textJson = JSON.parse(fs.readFileSync('./data/text.json', 'utf8'));
 
+const ambientMusicFileOutputPath = `${musicDir}/${textJson.ambientMusicFilePath}`;
+
 const outputJson: {
 	title: string;
+	ambientMusicFilePath: string;
 	lines: object[];
 } = {
 	title: textJson.title,
+	ambientMusicFilePath: ambientMusicFileOutputPath.replace('./static/', ''),
 	lines: []
 };
 
+// copy over placeholder ambient track, it's already compressed
+fs.copyFileSync(`./data/${textJson.ambientMusicFilePath}`, ambientMusicFileOutputPath);
+
+// generate speech and compress
 for (const [index, text] of textJson.lines.entries()) {
 	// if (index > 0) continue;
 	console.log(`Generating audio for line ${index}: ${truncateWithEllipsis(text, 48)}`);
 
-	// generate speech and compress
-	const speechFilePathLossless = `${speechDir}/${index}.flac`;
-	// const speechFilePathCompressedAac = `${speechDir}/${index}.m4a`;
-	const speechFilePathCompressedMp3 = `${speechDir}/${index}.mp3`;
-	sayToFile(stripHtmlTags(text), speechFilePathLossless);
-	padHeadAndTailOfAudio(speechFilePathLossless, speechFilePathLossless, musicDurationPadding / 2);
-	// compressToAac(speechFilePathLossless, speechFilePathCompressedAac, 32);
-	compressToMp3(speechFilePathLossless, speechFilePathCompressedMp3, 32);
-	fs.rmSync(speechFilePathLossless, { force: true });
-
-	// TEMP grab a random ambient track, trim it to the speech duration, fade the head and tail, compress to AAC
-
-	const ambientFolder =
-		'/Volumes/Working/Music/Library/Aphex Twin/Selected Ambient Works Volume II';
-	const ambientTrack =
-		ambientFolder +
-		'/' +
-		getRandomElement(fs.readdirSync(ambientFolder).filter((f) => f.endsWith('.mp3')));
-
-	const musicFilePathLossless = `${musicDir}/${index}.flac`;
-	// const musicFilePathCompressedAac = `${musicDir}/${index}.m4a`;
-	const musicFilePathCompressedMp3 = `${musicDir}/${index}.mp3`;
-	// match speech audio duration, note that speech has a silent header / tail
-	const speechDuration = getAudioDuration(speechFilePathCompressedMp3);
-	trimToRandomWindow(ambientTrack, musicFilePathLossless, speechDuration);
-	fadeHeadAndTailOfAudio(musicFilePathLossless, musicFilePathLossless, 2);
-	// compressToAac(musicFilePathLossless, musicFilePathCompressedAac, 32);
-	compressToMp3(musicFilePathLossless, musicFilePathCompressedMp3, 32);
-	fs.rmSync(musicFilePathLossless, { force: true });
+	const filePathLossless = `${speechDir}/${index}.flac`;
+	// const filePathCompressedAac = `${speechDir}/${index}.m4a`;
+	const filePathCompressedMp3 = `${speechDir}/${index}.mp3`;
+	sayToFile(stripHtmlTags(text), filePathLossless);
+	// compressToAac(filePathLossless, filePathCompressedAac, 32);
+	padHeadAndTailOfAudio(filePathLossless, filePathLossless, speechHeadAndTailSilenceSeconds);
+	compressToMp3(filePathLossless, filePathCompressedMp3, 32);
+	fs.rmSync(filePathLossless, { force: true });
 
 	// update json
 	outputJson.lines.push({
 		text: text,
-		speechFilePath: speechFilePathCompressedMp3.replace('./static/', ''),
-		speechDurationSeconds: speechDuration,
-		musicFilePath: musicFilePathCompressedMp3.replace('./static/', ''),
-		musicDurationSeconds: speechDuration // same for now
+		speechFilePath: filePathCompressedMp3.replace('./static/', ''),
+		speechDurationSeconds: getAudioDuration(filePathCompressedMp3)
 	});
 }
 
