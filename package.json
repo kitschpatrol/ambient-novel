@@ -12,7 +12,7 @@
 		"test:unit": "vitest",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
 		"format": "prettier --plugin-search-dir . --write .",
-		"generate-speech": "ts-node --esm ./scripts/generate-speech.ts"
+		"generate-data": "ts-node --esm ./scripts/generate-data.ts"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.33.0",

@@ -1,6 +1,23 @@
 # Ambient Novel
 
-TK
+## Updating the content
+
+Certain data and assets are generated from the source data in `/data` and ouput to `/static` and `/src/lib/data-generated`.
+
+To update the generated data, run:
+
+```bash
+ npm run generate-data
+```
+
+Note that this will overwrite existing data.
+
+Note special cards with embedded html (1-indexed):
+
+- 1: Has a color span
+- 19: Has a list
+- 54: Has a color span
+- 83: Has a color span
 
 ## Developing
 

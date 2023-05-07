@@ -166,7 +166,15 @@ clearAndCreate(musicDir);
 // Load the text
 const textJson = JSON.parse(fs.readFileSync('./data/text.json', 'utf8'));
 
-for (const [index, { text }] of textJson.lines.entries()) {
+const outputJson: {
+	title: string;
+	lines: object[];
+} = {
+	title: textJson.title,
+	lines: []
+};
+
+for (const [index, text] of textJson.lines.entries()) {
 	// if (index > 0) continue;
 	console.log(`Generating audio for line ${index}: ${truncateWithEllipsis(text, 48)}`);
 
@@ -201,13 +209,16 @@ for (const [index, { text }] of textJson.lines.entries()) {
 	fs.rmSync(musicFilePathLossless, { force: true });
 
 	// update json
-	textJson.lines[index].speechFilePath = speechFilePathCompressedMp3.replace('./static/', '');
-	textJson.lines[index].speechDurationSeconds = speechDuration;
-	textJson.lines[index].musicFilePath = musicFilePathCompressedMp3.replace('./static/', '');
-	textJson.lines[index].musicDurationSeconds = speechDuration; // same for now
+	outputJson.lines.push({
+		text: text,
+		speechFilePath: speechFilePathCompressedMp3.replace('./static/', ''),
+		speechDurationSeconds: speechDuration,
+		musicFilePath: musicFilePathCompressedMp3.replace('./static/', ''),
+		musicDurationSeconds: speechDuration // same for now
+	});
 }
 
-fs.writeFileSync(`${jsonDir}/text.json`, await formatJson(JSON.stringify(textJson)), {
+fs.writeFileSync(`${jsonDir}/text.json`, await formatJson(JSON.stringify(outputJson)), {
 	encoding: 'utf8'
 });
 
