@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
-
 	// props
 	export let sequence: number[] = [];
 	// logic goes here

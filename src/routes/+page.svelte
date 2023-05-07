@@ -1,28 +1,11 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import { fade, type FadeParams, type TransitionConfig } from 'svelte/transition';
-	import { cubicOut, cubicInOut, linear } from 'svelte/easing';
-	import { title, lines } from '$lib/data-generated/text.json';
+	import { fade } from 'svelte/transition';
+	import { fadeVolume } from '$lib/utils/transition/fadeVolume';
+	import { lines } from '$lib/data-generated/text.json';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import shuffle from 'lodash.shuffle';
-
-	function fadeVolume(
-		node: HTMLAudioElement,
-		{ delay = 0, duration = 400, easing = linear }: FadeParams = {}
-	): TransitionConfig {
-		const o = +getComputedStyle(node).opacity;
-
-		return {
-			delay,
-			duration,
-			easing,
-			tick: (t) => {
-				const maxVolume = node.getAttribute('data-volume-max');
-				node.volume = maxVolume ? parseFloat(maxVolume) * t : t;
-			}
-		};
-	}
 
 	function initialVolume(node: HTMLAudioElement) {
 		const maxVolume = node.getAttribute('data-volume-max');
@@ -113,19 +96,6 @@
 	}
 </script>
 
-<svelte:head>
-	<title>{title}</title>
-	<!-- https://github.com/sveltejs/kit/issues/4039 -->
-	<!-- <link
-		rel="preload"
-		href="/fonts/nasalization/nasalization-extended-light.woff2"
-		as="font"
-		crossOrigin="anonymous"
-	/> -->
-</svelte:head>
-
-<h1>{title.replaceAll('a', 'A')}</h1>
-
 <div class="book">
 	{#key activeLine}
 		<div class="line" transition:fade>
@@ -177,30 +147,6 @@
 </div>
 
 <style>
-	/* via https://fontsgeek.com/fonts/Nasalization-Extended-Light-Regular */
-	/* and https://transfonter.org */
-	@font-face {
-		font-family: 'Nasalization Extended';
-		src: url('/fonts/nasalization/nasalization-extended-light.woff2') format('woff2'),
-			url('/fonts/nasalization/nasalization-extended-light.woff') format('woff'),
-			url('/fonts/nasalization/nasalization-extended-light.ttf') format('truetype');
-		/* TODO good idea? */
-		font-display: fallback;
-	}
-
-	h1 {
-		font-weight: 300;
-		font-family: 'Nasalization Extended', sans-serif;
-		font-size: 6vw;
-		color: white;
-		text-shadow: -3px 3px 5px #00000067;
-		letter-spacing: 0.2rem;
-		text-align: center;
-		width: 100%;
-		position: absolute;
-		top: 35px;
-	}
-
 	div.book {
 		display: grid;
 		grid-template-columns: 100vw;
