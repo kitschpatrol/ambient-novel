@@ -23,6 +23,11 @@ function runCommand(command: string): string {
 	}
 }
 
+function stripHtmlTags(input: string): string {
+	const htmlRegex = /<\/?[^>]+(>|$)/g;
+	return input.replace(htmlRegex, '');
+}
+
 function generateTempFilename(file: string): string {
 	return file.replace(/(\.[^/.]+)$/, `_temp$1`);
 }
@@ -106,18 +111,18 @@ function getAudioDuration(file: string): number {
 	);
 }
 
-function compressToAac(sourceFile: string, outputFile: string, bitrate: number): void {
-	if (!fs.existsSync(sourceFile)) {
-		console.error('Source file does not exist');
-		return;
-	}
+// function compressToAac(sourceFile: string, outputFile: string, bitrate: number): void {
+// 	if (!fs.existsSync(sourceFile)) {
+// 		console.error('Source file does not exist');
+// 		return;
+// 	}
 
-	const tempOutputFile = generateTempFilename(outputFile);
-	runCommand(
-		`${pathToFfmpeg} -i "${sourceFile}" -vn -c:a aac -b:a ${bitrate}k "${tempOutputFile}"`
-	);
-	fs.renameSync(tempOutputFile, outputFile);
-}
+// 	const tempOutputFile = generateTempFilename(outputFile);
+// 	runCommand(
+// 		`${pathToFfmpeg} -i "${sourceFile}" -vn -c:a aac -b:a ${bitrate}k "${tempOutputFile}"`
+// 	);
+// 	fs.renameSync(tempOutputFile, outputFile);
+// }
 
 function compressToMp3(sourceFile: string, outputFile: string, bitrate: number): void {
 	if (!fs.existsSync(sourceFile)) {
@@ -169,7 +174,7 @@ for (const [index, { text }] of textJson.lines.entries()) {
 	const speechFilePathLossless = `${speechDir}/${index}.flac`;
 	// const speechFilePathCompressedAac = `${speechDir}/${index}.m4a`;
 	const speechFilePathCompressedMp3 = `${speechDir}/${index}.mp3`;
-	sayToFile(text, speechFilePathLossless);
+	sayToFile(stripHtmlTags(text), speechFilePathLossless);
 	padHeadAndTailOfAudio(speechFilePathLossless, speechFilePathLossless, musicDurationPadding / 2);
 	// compressToAac(speechFilePathLossless, speechFilePathCompressedAac, 32);
 	compressToMp3(speechFilePathLossless, speechFilePathCompressedMp3, 32);
