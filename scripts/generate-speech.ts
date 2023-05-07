@@ -167,11 +167,11 @@ for (const [index, { text }] of textJson.lines.entries()) {
 
 	// generate speech and compress
 	const speechFilePathLossless = `${speechDir}/${index}.flac`;
-	const speechFilePathCompressed = `${speechDir}/${index}.m4a`;
+	// const speechFilePathCompressedAac = `${speechDir}/${index}.m4a`;
 	const speechFilePathCompressedMp3 = `${speechDir}/${index}.mp3`;
 	sayToFile(text, speechFilePathLossless);
 	padHeadAndTailOfAudio(speechFilePathLossless, speechFilePathLossless, musicDurationPadding / 2);
-	// compressToAac(speechFilePathLossless, speechFilePathCompressed, 32);
+	// compressToAac(speechFilePathLossless, speechFilePathCompressedAac, 32);
 	compressToMp3(speechFilePathLossless, speechFilePathCompressedMp3, 32);
 	fs.rmSync(speechFilePathLossless, { force: true });
 
@@ -185,13 +185,13 @@ for (const [index, { text }] of textJson.lines.entries()) {
 		getRandomElement(fs.readdirSync(ambientFolder).filter((f) => f.endsWith('.mp3')));
 
 	const musicFilePathLossless = `${musicDir}/${index}.flac`;
-	const musicFilePathCompressed = `${musicDir}/${index}.m4a`;
+	// const musicFilePathCompressedAac = `${musicDir}/${index}.m4a`;
 	const musicFilePathCompressedMp3 = `${musicDir}/${index}.mp3`;
 	// match speech audio duration, note that speech has a silent header / tail
-	const speechDuration = getAudioDuration(speechFilePathCompressed);
+	const speechDuration = getAudioDuration(speechFilePathCompressedMp3);
 	trimToRandomWindow(ambientTrack, musicFilePathLossless, speechDuration);
 	fadeHeadAndTailOfAudio(musicFilePathLossless, musicFilePathLossless, 2);
-	// compressToAac(musicFilePathLossless, musicFilePathCompressed, 32);
+	// compressToAac(musicFilePathLossless, musicFilePathCompressedAac, 32);
 	compressToMp3(musicFilePathLossless, musicFilePathCompressedMp3, 32);
 	fs.rmSync(musicFilePathLossless, { force: true });
 

@@ -134,7 +134,6 @@
 			</p>
 		</div>
 		<audio
-			autoplay
 			muted
 			use:initialVolume
 			on:ended={onAudioEnded}
@@ -146,7 +145,6 @@
 			Your browser does not support the audio element.
 		</audio>
 		<audio
-			autoplay
 			muted
 			use:initialVolume
 			data-volume-max={maxVolumeSpeech}
