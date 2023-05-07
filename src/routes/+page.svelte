@@ -27,6 +27,7 @@
 	function initialVolume(node: HTMLAudioElement) {
 		const maxVolume = node.getAttribute('data-volume-max');
 		node.volume = maxVolume ? parseFloat(maxVolume) : 1.0;
+		node.muted = false;
 		if (playing) {
 			node.play();
 		}
@@ -61,12 +62,38 @@
 	const maxVolumeMusic = 0.4;
 
 	// state
-	const queryLine = $page.url.searchParams.get('line');
+	const searchParams = browser && $page.url.searchParams;
+	const queryLine = searchParams ? searchParams.get('line') : undefined;
 	let activeLine = queryLine ? parseInt(queryLine) - 1 : 0;
 	let playing = false;
 	let lineSequence = Array.from({ length: lines.length }, (_, i) => i);
 
 	$: isSorted = lineSequence.every((line, i) => line === i);
+
+	function playAudio() {
+		const audioElements = document.getElementsByTagName(
+			'audio'
+		) as HTMLCollectionOf<HTMLAudioElement>;
+		console.log(audioElements);
+		for (const element of audioElements) {
+			element
+				.play()
+				.then(() => {})
+				.catch((error) => {
+					console.log(error);
+				});
+		}
+	}
+
+	function pauseAudio() {
+		const audioElements = document.getElementsByTagName(
+			'audio'
+		) as HTMLCollectionOf<HTMLAudioElement>;
+		console.log(audioElements);
+		for (const element of audioElements) {
+			element.pause();
+		}
+	}
 
 	$: {
 		if (browser) {
@@ -78,11 +105,10 @@
 			// play/pause all audio elements
 			// we can't use bind here because of bugs...
 
-			const audioElements = document.getElementsByTagName(
-				'audio'
-			) as HTMLCollectionOf<HTMLAudioElement>;
-			for (const element of audioElements) {
-				playing ? element.play() : element.pause();
+			if (playing) {
+				playAudio();
+			} else {
+				pauseAudio();
 			}
 		}
 	}
@@ -103,34 +129,34 @@
 
 <div class="book">
 	{#key activeLine}
-		<div
-			class="line"
-			transition:fade
-			on:introstart={() => {
-				console.log('introstart');
-			}}
-		>
+		<div class="line" transition:fade>
 			{@html lines[activeLine].text}
 			<p class="lineNumber">
 				{activeLine + 1}
 			</p>
 		</div>
 		<audio
+			controls
+			autoplay
+			muted
 			use:initialVolume
 			on:ended={onAudioEnded}
 			data-line-number={activeLine}
 			data-volume-max={maxVolumeMusic}
 			transition:fadeVolume={{ duration: 2000 }}
 		>
-			<source src={lines[activeLine].musicFilePath} type="audio/aac" />
+			<source src={lines[activeLine].musicFilePath} type="audio/mpeg" />
 			Your browser does not support the audio element.
 		</audio>
 		<audio
+			controls
+			autoplay
+			muted
 			use:initialVolume
 			data-volume-max={maxVolumeSpeech}
 			transition:fadeVolume={{ duration: 2000 }}
 		>
-			<source src={lines[activeLine].speechFilePath} type="audio/aac" />
+			<source src={lines[activeLine].speechFilePath} type="audio/mpeg" />
 			Your browser does not support the audio element.
 		</audio>
 	{/key}

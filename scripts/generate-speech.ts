@@ -7,7 +7,8 @@ import prettier from 'prettier';
 console.log('Generating data...');
 
 // Generates a voice audio file for each line in the source text
-// Converts to aac and saves to speechDir
+// Converts to aac and mp3 and saves to speechDir
+// AAC not working in safari???
 const speechDir = `./static/speech`;
 const musicDir = `./static/music`;
 const jsonDir = `./src/lib/data-generated`;
@@ -118,6 +119,19 @@ function compressToAac(sourceFile: string, outputFile: string, bitrate: number):
 	fs.renameSync(tempOutputFile, outputFile);
 }
 
+function compressToMp3(sourceFile: string, outputFile: string, bitrate: number): void {
+	if (!fs.existsSync(sourceFile)) {
+		console.error('Source file does not exist');
+		return;
+	}
+
+	const tempOutputFile = generateTempFilename(outputFile);
+	runCommand(
+		`${pathToFfmpeg} -i "${sourceFile}" -vn -c:a libmp3lame -b:a ${bitrate}k "${tempOutputFile}"`
+	);
+	fs.renameSync(tempOutputFile, outputFile);
+}
+
 function trimToRandomWindow(sourceFile: string, outputFile: string, targetDuration: number): void {
 	if (!fs.existsSync(sourceFile)) {
 		throw new Error(`Source file does not exist: ${sourceFile}`);
@@ -154,9 +168,11 @@ for (const [index, { text }] of textJson.lines.entries()) {
 	// generate speech and compress
 	const speechFilePathLossless = `${speechDir}/${index}.flac`;
 	const speechFilePathCompressed = `${speechDir}/${index}.m4a`;
+	const speechFilePathCompressedMp3 = `${speechDir}/${index}.mp3`;
 	sayToFile(text, speechFilePathLossless);
 	padHeadAndTailOfAudio(speechFilePathLossless, speechFilePathLossless, musicDurationPadding / 2);
-	compressToAac(speechFilePathLossless, speechFilePathCompressed, 32);
+	// compressToAac(speechFilePathLossless, speechFilePathCompressed, 32);
+	compressToMp3(speechFilePathLossless, speechFilePathCompressedMp3, 32);
 	fs.rmSync(speechFilePathLossless, { force: true });
 
 	// TEMP grab a random ambient track, trim it to the speech duration, fade the head and tail, compress to AAC
@@ -170,17 +186,19 @@ for (const [index, { text }] of textJson.lines.entries()) {
 
 	const musicFilePathLossless = `${musicDir}/${index}.flac`;
 	const musicFilePathCompressed = `${musicDir}/${index}.m4a`;
+	const musicFilePathCompressedMp3 = `${musicDir}/${index}.mp3`;
 	// match speech audio duration, note that speech has a silent header / tail
 	const speechDuration = getAudioDuration(speechFilePathCompressed);
 	trimToRandomWindow(ambientTrack, musicFilePathLossless, speechDuration);
 	fadeHeadAndTailOfAudio(musicFilePathLossless, musicFilePathLossless, 2);
-	compressToAac(musicFilePathLossless, musicFilePathCompressed, 32);
+	// compressToAac(musicFilePathLossless, musicFilePathCompressed, 32);
+	compressToMp3(musicFilePathLossless, musicFilePathCompressedMp3, 32);
 	fs.rmSync(musicFilePathLossless, { force: true });
 
 	// update json
-	textJson.lines[index].speechFilePath = speechFilePathCompressed.replace('./static/', '');
+	textJson.lines[index].speechFilePath = speechFilePathCompressedMp3.replace('./static/', '');
 	textJson.lines[index].speechDurationSeconds = speechDuration;
-	textJson.lines[index].musicFilePath = musicFilePathCompressed.replace('./static/', '');
+	textJson.lines[index].musicFilePath = musicFilePathCompressedMp3.replace('./static/', '');
 	textJson.lines[index].musicDurationSeconds = speechDuration; // same for now
 }
 
