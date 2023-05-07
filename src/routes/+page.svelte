@@ -74,13 +74,12 @@
 		const audioElements = document.getElementsByTagName(
 			'audio'
 		) as HTMLCollectionOf<HTMLAudioElement>;
-		console.log(audioElements);
 		for (const element of audioElements) {
 			element
 				.play()
 				.then(() => {})
 				.catch((error) => {
-					console.log(error);
+					console.error(error);
 				});
 		}
 	}
@@ -89,7 +88,6 @@
 		const audioElements = document.getElementsByTagName(
 			'audio'
 		) as HTMLCollectionOf<HTMLAudioElement>;
-		console.log(audioElements);
 		for (const element of audioElements) {
 			element.pause();
 		}
@@ -201,7 +199,7 @@
 		text-align: center;
 		width: 100%;
 		position: absolute;
-		top: 30px;
+		top: 35px;
 	}
 
 	div.book {
