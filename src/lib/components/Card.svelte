@@ -6,7 +6,7 @@
 	export let isPlaying: boolean;
 	export let text: string;
 	export let textIndex: number;
-	export let audioSrc: string;
+	export let audioSources: string[];
 	export let maxVolume: number;
 
 	// https://stackoverflow.com/questions/64087782/svelte-event-parameter-type-for-typescript
@@ -23,7 +23,7 @@
 		{@html text}
 	</p>
 	<p class="lineNumber">{textIndex + 1}</p>
-	<Audio {audioSrc} {isPlaying} {maxVolume} loop={false} on:ended={onAudioEnded} />
+	<Audio {audioSources} {isPlaying} {maxVolume} loop={false} on:ended={onAudioEnded} />
 </div>
 
 <style>

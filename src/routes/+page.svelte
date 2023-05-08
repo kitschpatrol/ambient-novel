@@ -1,15 +1,15 @@
 <script lang="ts">
-	import { title, lines, ambientMusicFilePath } from '$lib/data-generated/text.json';
+	import { title, lines, ambientTracks } from '$lib/data-generated/text.json';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import shuffle from 'lodash/shuffle';
 	import clamp from 'lodash/clamp';
 	import Card from '$lib/components/Card.svelte';
-	import Audio from '$lib/components/Audio.svelte';
+	import Playlist from '$lib/components/Playlist.svelte';
 
 	// config
 	const maxVolumeSpeech = 1.0;
-	const maxVolumeMusic = 0.4;
+	const maxVolumeMusic = 0.7;
 
 	// state, but history button doesn't work?
 	const searchParams = $page.url.searchParams;
@@ -76,7 +76,7 @@
 			{isPlaying}
 			text={activeLine.text}
 			textIndex={activeLineIndex}
-			audioSrc={activeLine.speechFilePath}
+			audioSources={[activeLine.speechFilePathAac, activeLine.speechFilePathMp3]}
 			maxVolume={maxVolumeSpeech}
 			on:audioEnded={onAudioEnded}
 		/>
@@ -104,7 +104,7 @@
 	</span>
 </div>
 
-<Audio loop={true} audioSrc={ambientMusicFilePath} maxVolume={maxVolumeMusic} {isPlaying} />
+<Playlist isShuffleOn={true} tracks={ambientTracks} maxVolume={maxVolumeMusic} {isPlaying} />
 
 <style>
 	div.book {
