@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-	// matches ouput from generate-data.ts
+	// matches ouput from generateData.ts
 	export type TrackInfo = {
 		files: string[];
 	};

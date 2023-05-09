@@ -7,7 +7,7 @@ Certain data and assets are generated from the source data in `/data` and ouput 
 To update the generated data, run:
 
 ```bash
- npm run generate-data
+ npm run generateData
 ```
 
 Note that this will overwrite existing data.
