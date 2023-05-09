@@ -1,10 +1,14 @@
 import fs from 'fs';
+import path from 'path';
 import { execSync } from 'child_process';
 import prettier from 'prettier';
+import * as z from 'zod';
+import { type Book, bookSchema } from '../src/lib/schemas/bookSchema';
 
 console.log('Generating data...');
 
-// Prerequisites:
+// Prerequisites ----------------------------------------------------------------------
+
 // Mac only (because of "say" command)
 // You must have ffmpeg (with the fdk-aac codec) and ffprobe on your path.
 // The bundled mac build of ffmpeg does not include fdk-aac, and the ffmpeg
@@ -21,17 +25,82 @@ console.log('Generating data...');
 
 // this duration is applied to both the head and tail
 // so total additional duration is this times 2
-const speechHeadAndTailSilenceSeconds = 1;
-const ambientMusicSourceDir = '/Users/mika/Downloads/Soundtrack';
-const ambientMusicQuality = 0; // todo revisit
-const speechQuality = 0; // todo revisit
 
-// Generates a voice audio file for each line in the source text
-// Converts to aac and mp3 and saves to speechDir
-// AAC not working in safari???
-const speechDir = `./static/speech`;
-const musicDir = `./static/music`;
-const jsonDir = `./src/lib/data-generated`;
+// CONFIG ----------------------------------------------------------------------
+
+// Customize this to your liking
+const config = {
+	jsonSettings: {
+		sourceFile: './data/book.json',
+		outputFile: './src/lib/data/book.json'
+	},
+	speechSettings: {
+		regenerate: true,
+		headAndTailSilenceSeconds: 1,
+		sourceDir: null, // generate using say if empty
+		outputDir: './static/speech',
+		outputs: [
+			{
+				format: 'mp3',
+				quality: 0,
+				sampleRate: 22050
+			},
+			{
+				format: 'm4a', // aac
+				quality: 0,
+				sampleRate: 22050
+			}
+		]
+	},
+	musicSettings: {
+		regenerate: true,
+		headAndTailSilenceSeconds: 0,
+		sourceDir: '/Users/mika/Downloads/Soundtrack',
+		outputDir: './static/music',
+		outputs: [
+			{
+				format: 'mp3',
+				quality: 0,
+				sampleRate: 22050
+			},
+			{
+				format: 'm4a', // aac
+				quality: 0,
+				sampleRate: 22050
+			}
+		]
+	}
+};
+
+// SCEHMAS ----------------------------------------------------------------------
+
+const bookSourceSchema = z.object({
+	title: z.string().nonempty(),
+	titleAlt: z.string().nonempty(),
+	author: z.string().nonempty(),
+	year: z.number().int().positive(),
+	publisher: z.string().nonempty(),
+	country: z.string().nonempty(),
+	chapters: z
+		.array(
+			z.object({
+				title: z.string().nonempty(),
+				ambientTracks: z.array(z.string().nonempty()),
+				lineShuffleAllowed: z.boolean(),
+				lines: z
+					.array(
+						z.object({
+							text: z.string().nonempty(),
+							voiceOver: z.string().nonempty()
+						})
+					)
+					.nonempty()
+			})
+		)
+		.nonempty()
+});
+
+// UTILS ----------------------------------------------------------------------
 
 function checkForBinaryOnPath(binary: string) {
 	try {
@@ -42,9 +111,6 @@ function checkForBinaryOnPath(binary: string) {
 		throw new Error(`${binary} is not on the PATH. Please install it first.`);
 	}
 }
-
-checkForBinaryOnPath('ffmpeg');
-checkForBinaryOnPath('ffprobe');
 
 function runCommand(command: string): string {
 	try {
@@ -118,8 +184,8 @@ function generateTempFilename(file: string): string {
 // 	fs.renameSync(tempOutputFile, outputFile);
 // }
 
-async function formatJson(jsonString: string): Promise<string> {
-	const prettierConfig = await prettier.resolveConfig(process.cwd());
+function formatJson(jsonString: string): string {
+	const prettierConfig = prettier.resolveConfig.sync(process.cwd());
 	return prettier.format(jsonString, { ...prettierConfig, parser: 'json' });
 }
 
@@ -137,11 +203,21 @@ function truncateWithEllipsis(text: string, maxLength: number): string {
 	return truncatedText + ellipsis;
 }
 
-function clearAndCreate(path: string) {
-	if (fs.existsSync(path)) {
-		fs.rmSync(path, { recursive: true, force: true });
+// function clearAndCreate(path: string) {
+// 	if (fs.existsSync(path)) {
+// 		fs.rmSync(path, { recursive: true, force: true });
+// 	}
+// 	fs.mkdirSync(path);
+// }
+
+function createIntermediatePaths(inputPath: string, clearExisting = false) {
+	if (clearExisting && fs.existsSync(inputPath)) {
+		fs.rmSync(inputPath, { recursive: true, force: true });
 	}
-	fs.mkdirSync(path);
+
+	const isDirPath = !path.extname(inputPath);
+	const targetPath = isDirPath ? inputPath : path.dirname(inputPath);
+	fs.mkdirSync(targetPath, { recursive: true });
 }
 
 function getAudioDuration(file: string): number {
@@ -219,82 +295,193 @@ function compressToMp3(
 	fs.renameSync(tempOutputFile, outputFile);
 }
 
-clearAndCreate(speechDir);
-clearAndCreate(jsonDir);
-clearAndCreate(musicDir);
+// 0 is lowest quality, 1 is highest
+// infers output type from extension
+function compressTo(
+	sourceFile: string,
+	outputFile: string,
+	quality: number,
+	sampleRate = 22050
+): void {
+	const extension = outputFile.split('.').pop();
+
+	switch (extension) {
+		case 'm4a':
+		case 'aac':
+			compressToAac(sourceFile, outputFile, quality, sampleRate);
+			break;
+		case 'mp3':
+			compressToMp3(sourceFile, outputFile, quality, sampleRate);
+			break;
+		default:
+			throw new Error(`compressTo function hasn't implemented output file extension: ${extension}`);
+	}
+}
+
+// CONTENT GENERATION ----------------------------------------------------------------------
+
+checkForBinaryOnPath('ffmpeg');
+checkForBinaryOnPath('ffprobe');
+
+// generate ouput dirs if needed, clear them if regenerate is true
+createIntermediatePaths(config.jsonSettings.outputFile, true);
+createIntermediatePaths(config.speechSettings.outputDir, config.speechSettings.regenerate);
+createIntermediatePaths(config.musicSettings.outputDir, config.musicSettings.regenerate);
 
 // Load the text
-const textJson = JSON.parse(fs.readFileSync('./data/text.json', 'utf8'));
 
-const outputJson: {
-	title: string;
-	ambientTracks: object[];
-	lines: object[];
-} = {
-	title: textJson.title,
-	ambientTracks: [],
-	lines: []
+const bookSource = bookSourceSchema.parse(
+	JSON.parse(fs.readFileSync(config.jsonSettings.sourceFile, 'utf8'))
+);
+
+// partial because we figure out the chapters later
+// makes everything optional
+type DeepPartial<T> = {
+	[P in keyof T]?: T[P] extends Array<infer U>
+		? Array<DeepPartial<U>>
+		: T[P] extends object
+		? DeepPartial<T[P]>
+		: T[P];
+};
+
+type StripArray<T> = T extends Array<infer U> ? U : T;
+
+const bookOutput: DeepPartial<Book> = {
+	title: bookSource.title,
+	titleAlt: bookSource.titleAlt,
+	author: bookSource.author,
+	year: bookSource.year,
+	publisher: bookSource.publisher,
+	country: bookSource.country,
+	chapters: []
 };
 
 // generate speech and compress
-for (const [index, text] of textJson.lines.entries()) {
-	// if (index > 0) continue;
-	console.log(`Generating audio for line ${index}: ${truncateWithEllipsis(text, 48)}`);
+for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
+	console.log(
+		`Processing chapter ${chapterNumber}: ${truncateWithEllipsis(chapterSource.title, 30)}`
+	);
 
-	const filePathLossless = `${speechDir}/${index}.flac`;
-	const filePathCompressedAac = `${speechDir}/${index}.m4a`;
-	const filePathCompressedMp3 = `${speechDir}/${index}.mp3`;
+	const chapter: StripArray<typeof bookOutput.chapters> = {};
 
-	sayToFile(stripHtmlTags(text), filePathLossless);
-	padHeadAndTailOfAudio(filePathLossless, filePathLossless, speechHeadAndTailSilenceSeconds);
-	compressToAac(filePathLossless, filePathCompressedAac, speechQuality);
-	compressToMp3(filePathLossless, filePathCompressedMp3, speechQuality);
+	chapter.title = chapterSource.title;
+	chapter.lineShuffleAllowed = chapterSource.lineShuffleAllowed;
 
-	fs.rmSync(filePathLossless, { force: true });
+	// lines
+	chapter.lines = [];
 
-	// update json
-	outputJson.lines.push({
-		text: text,
-		speechFilePathMp3: filePathCompressedMp3.replace('./static/', ''),
-		speechFilePathAac: filePathCompressedAac.replace('./static/', ''),
-		speechDurationSeconds: getAudioDuration(filePathCompressedMp3)
-	});
+	for (const [lineNumber, lineSource] of chapterSource.lines.entries()) {
+		console.log(
+			`Processing chapter ${chapterNumber} line ${lineNumber}: ${truncateWithEllipsis(
+				lineSource.text,
+				30
+			)}`
+		);
+
+		const line: StripArray<DeepPartial<Book['chapters'][0]['lines']>> = {};
+		line.text = lineSource.text;
+		line.voiceOver = {};
+		line.voiceOver.originalFile = lineSource.voiceOver;
+		line.voiceOver.files = [];
+
+		const fileBase = `${chapterNumber}-${lineNumber}`;
+
+		for (const { format } of config.speechSettings.outputs) {
+			line.voiceOver.files.push(
+				`${config.speechSettings.outputDir}/${fileBase}.${format}`.replace('./static/', '')
+			);
+		}
+
+		if (config.speechSettings.regenerate) {
+			let sourceFilePath: null | string = null;
+			const tempSourceFilePath = `${config.speechSettings.outputDir}/${fileBase}.flac`;
+
+			if (config.speechSettings.sourceDir !== null) {
+				sourceFilePath = `${config.speechSettings.sourceDir}/${lineSource.voiceOver}`;
+			} else {
+				// no real source file, so we generate it
+				console.log(`Generating speech since sourceDir is null`);
+				sayToFile(stripHtmlTags(lineSource.text), tempSourceFilePath);
+				sourceFilePath = tempSourceFilePath;
+			}
+
+			padHeadAndTailOfAudio(
+				sourceFilePath,
+				tempSourceFilePath,
+				config.speechSettings.headAndTailSilenceSeconds
+			);
+
+			for (const { format, quality, sampleRate } of config.speechSettings.outputs) {
+				console.log(`Compressing line ${lineNumber} speech to ${format}`);
+				compressTo(
+					tempSourceFilePath,
+					`${config.speechSettings.outputDir}/${fileBase}.${format}`,
+					quality,
+					sampleRate
+				);
+			}
+
+			// clean up
+			fs.rmSync(tempSourceFilePath, { force: true });
+		}
+
+		line.voiceOver.durationSeconds = getAudioDuration(
+			`${config.speechSettings.outputDir}/${fileBase}.${config.speechSettings.outputs[0].format}`
+		);
+
+		chapter.lines?.push(line);
+	}
+
+	// ambient tracks
+	console.log(`Processing chapter ${chapterNumber} ambient tracks`);
+	chapter.ambientTracks = [];
+
+	for (const ambientTracksSource of chapterSource.ambientTracks) {
+		console.log(`Processing chapter ${chapterNumber} ambient track ${ambientTracksSource}`);
+		const ambientTrack: StripArray<DeepPartial<Book['chapters'][0]['ambientTracks']>> = {};
+		ambientTrack.originalFile = ambientTracksSource;
+		ambientTrack.files = [];
+
+		const cleanFilename = kebabCase(ambientTracksSource);
+
+		// too wonky
+		// const filePathLosslessTrimmed = generateTempFilename(filePathLossless);
+		// trimSilence(filePathLossless, filePathLosslessTrimmed);
+		// const secondsTrimmed =
+		// 	getAudioDuration(filePathLossless) - getAudioDuration(filePathLosslessTrimmed);
+		// console.log(`Trimmed ${secondsTrimmed} seconds of silence`);
+		// compressToAac(filePathLosslessTrimmed, filePathCompressedAac, ambientMusicQuality);
+		// compressToMp3(filePathLosslessTrimmed, filePathCompressedMp3, ambientMusicQuality);
+		// fs.rmSync(filePathLosslessTrimmed, { force: true });
+
+		for (const { format, quality, sampleRate } of config.musicSettings.outputs) {
+			const sourceFile = `${config.musicSettings.sourceDir}/${ambientTracksSource}`;
+			const outputFile = `${config.musicSettings.outputDir}/${cleanFilename}.${format}`;
+
+			// generate only if needed, since there might be multiple references to
+			// the same ambient track
+			if (config.musicSettings.regenerate && !fs.existsSync(outputFile)) {
+				console.log(`Compressing ambient track to ${format}`);
+				compressTo(sourceFile, outputFile, quality, sampleRate);
+			}
+
+			ambientTrack.files.push(outputFile.replace('./static/', ''));
+		}
+
+		ambientTrack.durationSeconds = getAudioDuration(
+			`${config.musicSettings.outputDir}/${cleanFilename}.${config.speechSettings.outputs[0].format}`
+		);
+
+		chapter.ambientTracks?.push(ambientTrack);
+	}
+
+	bookOutput.chapters?.push(chapter);
 }
 
-// generate ambient tracks
-const ambientTracks = fs.readdirSync(ambientMusicSourceDir).filter((file) => file.endsWith('.wav'));
-for (const [index, ambientFile] of ambientTracks.entries()) {
-	// if (index > 0) continue;
-	console.log(`Processing ambient track ${index} / ${ambientTracks.length}`);
+// Check for errors
+bookSchema.parse(bookOutput);
 
-	const cleanFileNameBase = kebabCase(ambientFile.replace('.wav', ''));
-	const filePathLossless = `${ambientMusicSourceDir}/${ambientFile}`;
-	const filePathCompressedAac = `${musicDir}/${cleanFileNameBase}.m4a`;
-	const filePathCompressedMp3 = `${musicDir}/${cleanFileNameBase}.mp3`;
-
-	// too wonky
-	// const filePathLosslessTrimmed = generateTempFilename(filePathLossless);
-	// trimSilence(filePathLossless, filePathLosslessTrimmed);
-	// const secondsTrimmed =
-	// 	getAudioDuration(filePathLossless) - getAudioDuration(filePathLosslessTrimmed);
-	// console.log(`Trimmed ${secondsTrimmed} seconds of silence`);
-	// compressToAac(filePathLosslessTrimmed, filePathCompressedAac, ambientMusicQuality);
-	// compressToMp3(filePathLosslessTrimmed, filePathCompressedMp3, ambientMusicQuality);
-	// fs.rmSync(filePathLosslessTrimmed, { force: true });
-
-	compressToAac(filePathLossless, filePathCompressedAac, ambientMusicQuality);
-	compressToMp3(filePathLossless, filePathCompressedMp3, ambientMusicQuality);
-
-	// update json
-	outputJson.ambientTracks.push({
-		originalFileName: ambientFile,
-		filePathMp3: filePathCompressedMp3.replace('./static/', ''),
-		filePathAac: filePathCompressedAac.replace('./static/', ''),
-		durationSeconds: getAudioDuration(filePathCompressedMp3)
-	});
-}
-
-fs.writeFileSync(`${jsonDir}/text.json`, await formatJson(JSON.stringify(outputJson)), {
+fs.writeFileSync(config.jsonSettings.outputFile, formatJson(JSON.stringify(bookOutput)), {
 	encoding: 'utf8'
 });
 

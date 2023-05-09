@@ -1,11 +1,15 @@
 <script lang="ts">
-	import { title, lines, ambientTracks } from '$lib/data-generated/text.json';
+	import type { Book } from '$lib/schemas/bookSchema';
+	import bookTypeless from '$lib/data/book.json';
+	import { createEventDispatcher } from 'svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import shuffle from 'lodash/shuffle';
 	import clamp from 'lodash/clamp';
 	import Card from '$lib/components/Card.svelte';
 	import Playlist from '$lib/components/Playlist.svelte';
+	const book = bookTypeless as Book;
+	const lines = book.chapters[0].lines; // temp
 
 	// config
 	const maxVolumeSpeech = 1.0;
@@ -60,7 +64,7 @@
 </script>
 
 <svelte:head>
-	<title>{title} — Line {activeLineIndex + 1}</title>
+	<title>{book.title} — Line {activeLineIndex + 1}</title>
 	<!-- https://github.com/sveltejs/kit/issues/4039 -->
 	<!-- <link
 		rel="preload"
@@ -76,7 +80,7 @@
 			{isPlaying}
 			text={activeLine.text}
 			textIndex={activeLineIndex}
-			audioSources={[activeLine.speechFilePathAac, activeLine.speechFilePathMp3]}
+			audioSources={activeLine.voiceOver.files}
 			maxVolume={maxVolumeSpeech}
 			on:audioEnded={onAudioEnded}
 		/>
@@ -104,7 +108,12 @@
 	</span>
 </div>
 
-<Playlist isShuffleOn={true} tracks={ambientTracks} maxVolume={maxVolumeMusic} {isPlaying} />
+<Playlist
+	isShuffleOn={true}
+	tracks={book.chapters[0].ambientTracks}
+	maxVolume={maxVolumeMusic}
+	{isPlaying}
+/>
 
 <style>
 	div.book {

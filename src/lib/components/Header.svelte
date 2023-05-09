@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { title } from '$lib/data-generated/text.json';
+	import { title } from '$lib/data/book.json';
 </script>
 
 <header>

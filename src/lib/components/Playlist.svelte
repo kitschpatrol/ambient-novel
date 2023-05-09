@@ -1,8 +1,7 @@
 <script context="module" lang="ts">
 	// matches ouput from generate-data.ts
 	export type TrackInfo = {
-		filePathMp3: string;
-		filePathAac: string;
+		files: string[];
 	};
 </script>
 
@@ -43,9 +42,4 @@
 	$: currentTrackInfo = tracks[currentTrackIndex];
 </script>
 
-<Audio
-	audioSources={[currentTrackInfo.filePathAac, currentTrackInfo.filePathMp3]}
-	{isPlaying}
-	{maxVolume}
-	on:ended={onTrackEnded}
-/>
+<Audio audioSources={currentTrackInfo.files} {isPlaying} {maxVolume} on:ended={onTrackEnded} />
