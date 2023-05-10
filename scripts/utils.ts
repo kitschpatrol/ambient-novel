@@ -15,13 +15,26 @@ export function checkForBinaryOnPath(binary: string) {
 	}
 }
 
-function runCommand(command: string): string {
+// trim non-json garbage
+export function extractOutermostJsonObjectArray(s: string): string {
+	const start = s.indexOf('[{') >= 0 ? s.indexOf('[{') : 0;
+	const end = s.lastIndexOf('}]') >= 0 ? s.lastIndexOf('}]') + 2 : s.length;
+	return s.slice(start, end);
+}
+
+export function runCommand(command: string): string {
 	try {
 		const output = execSync(command, { stdio: 'pipe' });
 		return output.toString();
 	} catch (error) {
 		throw new Error(`Error running command: ${command}\nMessage: ${error}`);
 	}
+}
+
+export function saveFormattedJson(file: string, theObject: object) {
+	fs.writeFileSync(file, formatJson(JSON.stringify(theObject)), {
+		encoding: 'utf8'
+	});
 }
 
 export function stripHtmlTags(input: string): string {

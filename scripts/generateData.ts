@@ -5,9 +5,9 @@ import {
 	checkForBinaryOnPath,
 	compressTo,
 	createIntermediatePaths,
-	formatJson,
 	getAudioDuration,
 	kebabCase,
+	saveFormattedJson,
 	padHeadAndTailOfAudio,
 	sayToFile,
 	stripHtmlTags,
@@ -240,9 +240,7 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 // Check for errors
 bookSchema.parse(bookOutput);
 
-fs.writeFileSync(config.jsonSettings.outputFile, formatJson(JSON.stringify(bookOutput)), {
-	encoding: 'utf8'
-});
+saveFormattedJson(config.jsonSettings.outputFile, bookOutput);
 
 // rewrite the json file with speech file names and duration
 console.log('...Done');
