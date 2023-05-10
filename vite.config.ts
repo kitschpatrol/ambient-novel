@@ -2,6 +2,8 @@ import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vitest/config';
 import mkcert from 'vite-plugin-mkcert';
 
+process.env.BROWSER = 'google chrome';
+
 export default defineConfig({
 	plugins: [sveltekit(), mkcert()],
 	test: {
@@ -9,6 +11,7 @@ export default defineConfig({
 	},
 	server: {
 		https: true,
-		proxy: {}
+		proxy: {},
+		open: true
 	}
 });
