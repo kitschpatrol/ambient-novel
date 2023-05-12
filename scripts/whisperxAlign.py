@@ -1,3 +1,4 @@
+# no pure CLI equivalent of this...
 import whisperx
 import json
 import argparse
@@ -10,8 +11,8 @@ parser.add_argument('--end_time', help='End of alignment window, float seconds')
 args = parser.parse_args()
 
 # device = "cuda" 
-# device = "cpu" 
-device = "mps" 
+device = "cpu" 
+# device = "mps" 
 
 audio = whisperx.load_audio(args.audio_file)
 knownTranscript = [{'text': args.transcript, 'start': float(args.start_time), 'end': float(args.end_time)}]

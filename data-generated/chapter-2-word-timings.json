@@ -1,0 +1,7 @@
+[
+	{ "word": "Lorem", "start": 0.108, "end": 0.571, "score": 0.682 },
+	{ "word": "Ipsum", "start": 0.571, "end": 0.912, "score": 0.555 },
+	{ "word": "Dolor", "start": 0.912, "end": 1.415, "score": 0.849 },
+	{ "word": "Sit", "start": 1.415, "end": 1.676, "score": 0.576 },
+	{ "word": "Amet", "start": 1.676, "end": 2.018, "score": 0.701 }
+]

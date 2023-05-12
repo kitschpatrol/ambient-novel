@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 import { bookSourceSchema } from './bookSourceSchema';
 import { type Book, bookSchema } from '../src/lib/schemas/bookSchema';
 import {
@@ -8,10 +9,13 @@ import {
 	getAudioDuration,
 	kebabCase,
 	saveFormattedJson,
-	padHeadAndTailOfAudio,
 	sayToFile,
 	stripHtmlTags,
-	truncateWithEllipsis
+	stripEmojis,
+	normalizeWord,
+	truncateWithEllipsis,
+	transcribe,
+	alignTranscriptToAudioWithWordLevelTimings
 } from './utils';
 
 // Prerequisites ----------------------------------------------------------------------
@@ -40,9 +44,10 @@ const config = {
 		outputFile: './src/lib/data/book.json'
 	},
 	speechSettings: {
-		regenerate: true,
-		headAndTailSilenceSeconds: 1,
-		sourceDir: null, // generate using say if empty
+		regenerateSource: false,
+		regenerate: false,
+		generatedDataDir: './data-generated',
+		sourceDir: '/Users/mika/Documents/Projects/Ambient Novel with Scott Wayne Indiana/Voice Over', // will generate using say if missing
 		outputDir: './static/speech',
 		outputs: [
 			{
@@ -58,9 +63,8 @@ const config = {
 		]
 	},
 	musicSettings: {
-		regenerate: true,
-		headAndTailSilenceSeconds: 0,
-		sourceDir: '/Users/mika/Downloads/Soundtrack',
+		regenerate: false,
+		sourceDir: '/Users/mika/Documents/Projects/Ambient Novel with Scott Wayne Indiana/Soundtrack',
 		outputDir: './static/music',
 		outputs: [
 			{
@@ -81,8 +85,12 @@ console.log('Generating data...');
 
 checkForBinaryOnPath('ffmpeg');
 checkForBinaryOnPath('ffprobe');
+checkForBinaryOnPath('conda');
 
 // generate ouput dirs if needed, clear them if regenerate is true
+if (config.speechSettings.regenerateSource) {
+	createIntermediatePaths(config.speechSettings.sourceDir, true);
+}
 createIntermediatePaths(config.jsonSettings.outputFile, true);
 createIntermediatePaths(config.speechSettings.outputDir, config.speechSettings.regenerate);
 createIntermediatePaths(config.musicSettings.outputDir, config.musicSettings.regenerate);
@@ -122,73 +130,110 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 	);
 
 	const chapter: StripArray<typeof bookOutput.chapters> = {};
-
 	chapter.title = chapterSource.title;
 	chapter.lineShuffleAllowed = chapterSource.lineShuffleAllowed;
-
-	// lines
 	chapter.lines = [];
+	chapter.voiceOver = {};
+	chapter.voiceOver.files = [];
+
+	// glue together lines
+	const chapterText = chapterSource.lines
+		.reduce((prev, curr) => prev + stripEmojis(stripHtmlTags(curr)) + ' ', '')
+		.trim();
+
+	// say if needed
+	const voiceOverSourceFile = `${config.speechSettings.sourceDir}/${chapterSource.voiceOver}`;
+	if (fs.existsSync(voiceOverSourceFile) && !config.speechSettings.regenerateSource) {
+		console.log(
+			`Already found voice over source file ${voiceOverSourceFile}, nothing to generate...`
+		);
+	} else {
+		console.log('Generating say file...');
+		sayToFile(chapterText, voiceOverSourceFile);
+	}
+
+	chapter.voiceOver.durationSeconds = getAudioDuration(voiceOverSourceFile);
+	chapter.voiceOver.originalFile = voiceOverSourceFile;
+
+	// compress the audio if needed
+	for (const { format, quality, sampleRate } of config.speechSettings.outputs) {
+		const speechFile = `${config.speechSettings.outputDir}/${chapterNumber}.${format}`;
+
+		if (fs.existsSync(speechFile) && !config.speechSettings.regenerate) {
+			console.log(`Already found voice over output file ${speechFile}, nothing to generate...`);
+		} else {
+			console.log(`Compressing ${voiceOverSourceFile} speech to ${format}`);
+			compressTo(voiceOverSourceFile, speechFile, quality, sampleRate);
+		}
+
+		chapter.voiceOver.files.push(speechFile.replace('./static/', ''));
+	}
+
+	//---------------
+
+	// to get the per-word perfect transcript, we need the rough timings of the (error prone) whisperx transcript.
+	// we later use these timings to force alignment of the perfect transcript against the audio
+	// theoretically we could feed the whole perfect transcript to the audio and skip this step,
+	// but whisperx can not handle alignment tasks of that size
+	const transcriptRawFile = `${config.speechSettings.generatedDataDir}/chapter-${chapterNumber}-audio-transcript.json`;
+	if (fs.existsSync(transcriptRawFile) && !config.speechSettings.regenerate) {
+		console.log('Already found audio transcript file, nothing to generate...');
+	} else {
+		console.log(`Transcribing ${voiceOverSourceFile} with whisperx...`);
+		transcribe(voiceOverSourceFile, transcriptRawFile);
+	}
+
+	// align the perfect transcript to the audio, using timing chunks from the whisperx transcript
+	const wordTimingsFile = `${config.speechSettings.generatedDataDir}/chapter-${chapterNumber}-word-timings.json`;
+	if (fs.existsSync(wordTimingsFile) && !config.speechSettings.regenerate) {
+		console.log('Already found word-level timings file, nothing to generate...');
+	} else {
+		console.log(`Getting word level timings with whisperx...`);
+
+		alignTranscriptToAudioWithWordLevelTimings(
+			chapterText,
+			transcriptRawFile,
+			voiceOverSourceFile,
+			wordTimingsFile
+		);
+	}
+
+	// -------------------
+
+	// add word timings to the output
+	const wordTimings = JSON.parse(fs.readFileSync(wordTimingsFile, 'utf8'));
 
 	for (const [lineNumber, lineSource] of chapterSource.lines.entries()) {
 		console.log(
 			`Processing chapter ${chapterNumber} line ${lineNumber}: ${truncateWithEllipsis(
-				lineSource.text,
+				lineSource,
 				30
 			)}`
 		);
 
-		const line: StripArray<DeepPartial<Book['chapters'][0]['lines']>> = {};
-		line.text = lineSource.text;
-		line.voiceOver = {};
-		line.voiceOver.originalFile = lineSource.voiceOver;
-		line.voiceOver.files = [];
+		const wordsSource = stripEmojis(stripHtmlTags(lineSource)).trim().split(' ');
 
-		const fileBase = `${chapterNumber}-${lineNumber}`;
+		const line: StripArray<DeepPartial<Book['chapters'][0]['lines'][0]>> = {};
+		line.text = lineSource;
+		line.timings = [];
 
-		for (const { format } of config.speechSettings.outputs) {
-			line.voiceOver.files.push(
-				`${config.speechSettings.outputDir}/${fileBase}.${format}`.replace('./static/', '')
-			);
-		}
+		wordsSource.forEach((wordSource) => {
+			const wordTiming = wordTimings.shift();
 
-		if (config.speechSettings.regenerate) {
-			let sourceFilePath: null | string = null;
-			const tempSourceFilePath = `${config.speechSettings.outputDir}/${fileBase}.flac`;
-
-			if (config.speechSettings.sourceDir !== null) {
-				sourceFilePath = `${config.speechSettings.sourceDir}/${lineSource.voiceOver}`;
-			} else {
-				// no real source file, so we generate it
-				console.log(`Generating speech since sourceDir is null`);
-				sayToFile(stripHtmlTags(lineSource.text), tempSourceFilePath);
-				sourceFilePath = tempSourceFilePath;
+			if (normalizeWord(wordSource) !== normalizeWord(wordTiming.word)) {
+				throw new Error(`mismatched words ${wordSource} vs. ${wordTiming.word}`);
 			}
 
-			padHeadAndTailOfAudio(
-				sourceFilePath,
-				tempSourceFilePath,
-				config.speechSettings.headAndTailSilenceSeconds
-			);
-
-			for (const { format, quality, sampleRate } of config.speechSettings.outputs) {
-				console.log(`Compressing line ${lineNumber} speech to ${format}`);
-				compressTo(
-					tempSourceFilePath,
-					`${config.speechSettings.outputDir}/${fileBase}.${format}`,
-					quality,
-					sampleRate
-				);
+			if (line.timings) {
+				line.timings.push({
+					word: wordTiming.word,
+					start: wordTiming.start,
+					end: wordTiming.end
+				});
 			}
+		});
 
-			// clean up
-			fs.rmSync(tempSourceFilePath, { force: true });
-		}
-
-		line.voiceOver.durationSeconds = getAudioDuration(
-			`${config.speechSettings.outputDir}/${fileBase}.${config.speechSettings.outputs[0].format}`
-		);
-
-		chapter.lines?.push(line);
+		chapter.lines.push(line);
 	}
 
 	// ambient tracks
@@ -201,7 +246,10 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 		ambientTrack.originalFile = ambientTracksSource;
 		ambientTrack.files = [];
 
-		const cleanFilename = kebabCase(ambientTracksSource);
+		const cleanFilename = kebabCase(path.parse(path.basename(ambientTracksSource)).name);
+
+		const sourceFile = `${config.musicSettings.sourceDir}/${ambientTracksSource}`;
+		ambientTrack.durationSeconds = getAudioDuration(sourceFile);
 
 		// too wonky
 		// const filePathLosslessTrimmed = generateTempFilename(filePathLossless);
@@ -214,22 +262,19 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 		// fs.rmSync(filePathLosslessTrimmed, { force: true });
 
 		for (const { format, quality, sampleRate } of config.musicSettings.outputs) {
-			const sourceFile = `${config.musicSettings.sourceDir}/${ambientTracksSource}`;
 			const outputFile = `${config.musicSettings.outputDir}/${cleanFilename}.${format}`;
 
 			// generate only if needed, since there might be multiple references to
 			// the same ambient track
-			if (config.musicSettings.regenerate && !fs.existsSync(outputFile)) {
-				console.log(`Compressing ambient track to ${format}`);
+			if (fs.existsSync(outputFile) && !config.musicSettings.regenerate) {
+				console.log(`Already compressed ambient track ${outputFile}`);
+			} else {
+				console.log(`Compressing ambient ${sourceFile} to ${format}`);
 				compressTo(sourceFile, outputFile, quality, sampleRate);
 			}
 
 			ambientTrack.files.push(outputFile.replace('./static/', ''));
 		}
-
-		ambientTrack.durationSeconds = getAudioDuration(
-			`${config.musicSettings.outputDir}/${cleanFilename}.${config.speechSettings.outputs[0].format}`
-		);
 
 		chapter.ambientTracks?.push(ambientTrack);
 	}
@@ -239,6 +284,7 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 
 // Check for errors
 bookSchema.parse(bookOutput);
+// console.log(`bookSchema: ${bookSchema}`);
 
 saveFormattedJson(config.jsonSettings.outputFile, bookOutput);
 

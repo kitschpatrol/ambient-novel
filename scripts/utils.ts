@@ -2,6 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
 import prettier from 'prettier';
+import leven from 'leven';
+import { stripHtml } from 'string-strip-html';
 
 // utility functions used by generateData.ts
 
@@ -37,9 +39,18 @@ export function saveFormattedJson(file: string, theObject: object) {
 	});
 }
 
-export function stripHtmlTags(input: string): string {
-	const htmlRegex = /<\/?[^>]+(>|$)/g;
-	return input.replace(htmlRegex, '');
+// export function stripHtmlTags(input: string): string {
+// 	const htmlRegex = /<\/?[^>]+(>|$)/g;
+// 	return input.replace(htmlRegex, '');
+// }
+
+export function stripHtmlTags(html: string): string {
+	return stripHtml(html).result;
+}
+
+export function stripEmojis(text: string): string {
+	const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]|\p{Emoji_Presentation}|\p{Emoji}\uFE0F/gu;
+	return text.replace(emojiRegex, '');
 }
 
 export function kebabCase(input: string): string {
@@ -225,4 +236,102 @@ export function compressTo(
 		default:
 			throw new Error(`compressTo function hasn't implemented output file extension: ${extension}`);
 	}
+}
+
+export function transcribe(sourceAudioFile: string, destinationJsonFile: string) {
+	// writes to .json
+	runCommand(
+		`conda run -n whisperx whisperx "${sourceAudioFile}" --model tiny --device cpu --batch_size 16 --language en --compute_type int8  --output_format json --no_align`
+	);
+
+	const whisperXTempOutput = `${path.basename(
+		sourceAudioFile,
+		path.extname(sourceAudioFile)
+	)}.json`;
+	const transcriptRawJson = JSON.parse(fs.readFileSync(whisperXTempOutput, 'utf8'));
+	fs.rmSync(whisperXTempOutput, { force: true });
+
+	saveFormattedJson(destinationJsonFile, transcriptRawJson.segments);
+}
+
+export function normalizeWord(s: string): string {
+	const regex = /[^A-Za-z0-9]/g;
+	const filtered = s.toLowerCase().replace(regex, '');
+	return filtered;
+}
+
+function getLevenSentenceDistance(sentenceA: string, sentenceB: string): number {
+	return leven(sentenceA, sentenceB);
+}
+
+export function alignTranscriptToAudioWithWordLevelTimings(
+	perfectTranscriptString: string,
+	sourceRawTranscriptFile: string,
+	sourceAudioFile: string,
+	destinationTimingsFile: string
+) {
+	const transcriptRaw = JSON.parse(fs.readFileSync(sourceRawTranscriptFile, 'utf8'));
+
+	// go through the raw transcript, try to replace the detected words with the perfect transcript from book.json
+	const targetWordsArray = perfectTranscriptString.split(' ');
+
+	for (const chunk of transcriptRaw) {
+		const rawWords: string = chunk.text.trim();
+		const rawWordsArray = rawWords.split(' ').map((word) => normalizeWord(word));
+
+		// find peak similarity
+		let minSimilarity = Number.MAX_SAFE_INTEGER;
+		let minSimilarityIndex = 0;
+
+		for (
+			let i = 0;
+			i <= Math.min(Math.floor(rawWordsArray.length * 1.5), targetWordsArray.length);
+			i++
+		) {
+			const similarity = getLevenSentenceDistance(
+				rawWordsArray.join(' '),
+				targetWordsArray
+					.slice(0, i)
+					.map((word) => normalizeWord(word))
+					.join(' ')
+			);
+
+			if (similarity < minSimilarity) {
+				// console.log(`Min similarity ${similarity} at window ${i}`);
+				minSimilarity = similarity;
+				minSimilarityIndex = i;
+			}
+		}
+
+		// swap the raw words for the matched words in the raw transcript
+		chunk.text = targetWordsArray.splice(0, minSimilarityIndex).join(' ');
+
+		// console.log(`Raw: ${rawWords}`);
+		// console.log(`Mat: ${chunk.text}\n\n`);
+	}
+
+	// Generate timings
+	// Only works on a few lines of text, hence the fuss above
+
+	let timings: object[] = [];
+
+	for (const chunk of transcriptRaw) {
+		// if (chunkNumber < transcriptRaw.length - 1) continue;
+
+		// console.log(`chunk ${chunkNumber}: ${JSON.stringify(chunk, null, 2)}`);
+		const timingsRawJson: string = runCommand(
+			`conda run -n whisperx python ./scripts/whisperxAlign.py --audio_file="${sourceAudioFile}" --transcript="${chunk.text}" --start_time=${chunk.start} --end_time=${chunk.end}`
+		);
+
+		// console.log(`timingsRawJson: ${JSON.stringify(timingsRawJson, null, 2)}`);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const timingsRaw: any[] = JSON.parse(timingsRawJson);
+
+		// console.log(`timingsRaw: ${JSON.stringify(timingsRaw, null, 2)}`);
+		for (const segement of timingsRaw) {
+			timings = [...timings, ...segement.words];
+		}
+	}
+
+	saveFormattedJson(destinationTimingsFile, timings);
 }

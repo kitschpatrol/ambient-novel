@@ -13,14 +13,8 @@ export const bookSourceSchema = z.object({
 				title: z.string().nonempty(),
 				ambientTracks: z.array(z.string().nonempty()),
 				lineShuffleAllowed: z.boolean(),
-				lines: z
-					.array(
-						z.object({
-							text: z.string().nonempty(),
-							voiceOver: z.string().nonempty()
-						})
-					)
-					.nonempty()
+				voiceOver: z.string().nonempty(),
+				lines: z.array(z.string().nonempty()).nonempty()
 			})
 		)
 		.nonempty()

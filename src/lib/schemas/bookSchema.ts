@@ -20,16 +20,25 @@ export const bookSchema = z.object({
 						originalFile: z.string().nonempty()
 					})
 				),
+				voiceOver: z.object({
+					files: z.array(z.string().nonempty()),
+					durationSeconds: z.number().positive(),
+					originalFile: z.string().nonempty()
+				}),
 				lineShuffleAllowed: z.boolean(),
 				lines: z
 					.array(
 						z.object({
 							text: z.string().nonempty(),
-							voiceOver: z.object({
-								files: z.array(z.string().nonempty()),
-								durationSeconds: z.number().positive(),
-								originalFile: z.string().nonempty()
-							})
+							timings: z
+								.array(
+									z.object({
+										word: z.string().nonempty(),
+										start: z.number(),
+										end: z.number()
+									})
+								)
+								.nonempty()
 						})
 					)
 					.nonempty()
