@@ -48,8 +48,19 @@ export function stripHtmlTags(html: string): string {
 	return stripHtml(html).result;
 }
 
+export function getTextBetween(
+	source: string,
+	firstDelimeter: string,
+	lastDelimeter: string
+): string {
+	const firstIndex = source.indexOf(firstDelimeter) + firstDelimeter.length;
+	const lastIndex = source.indexOf(lastDelimeter);
+	return source.slice(firstIndex, lastIndex);
+}
+
 export function stripEmojis(text: string): string {
-	const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]|\p{Emoji_Presentation}|\p{Emoji}\uFE0F/gu;
+	const emojiRegex =
+		/[\uD800-\uDBFF][\uDC00-\uDFFF]|\p{Emoji_Presentation}|\p{Emoji}\uFE0F|🗝|🦊|💜|🗝|🎱|🚀|力||||/gu;
 	return text.replace(emojiRegex, '');
 }
 
@@ -69,7 +80,7 @@ export function padHeadAndTailOfAudio(
 
 	const tempOutputFile = generateTempFilename(outputFile);
 	runCommand(
-		`ffmpeg -vn -i "${sourceFile}" -af "adelay=delays=${paddingSeconds * 1000}|${
+		`ffmpeg -y -vn -i "${sourceFile}" -af "adelay=delays=${paddingSeconds * 1000}|${
 			paddingSeconds * 1000
 		}:all=1,apad=pad_dur=${paddingSeconds}" "${tempOutputFile}"`
 	);
@@ -92,12 +103,12 @@ export function trimSilence(sourceFile: string, outputFile: string, secondsToKee
 	const totalDuration = getAudioDuration(sourceFile);
 	const silenceDurationStart = parseFloat(
 		runCommand(
-			`ffmpeg -vn -i "${sourceFile}" -af "silencedetect=noise=-50dB:d=0.25" -f null - 2>&1 | grep "silence_duration" | head -n 1  | awk '{print $NF}'`
+			`ffmpeg -y -vn -i "${sourceFile}" -af "silencedetect=noise=-50dB:d=0.25" -f null - 2>&1 | grep "silence_duration" | head -n 1  | awk '{print $NF}'`
 		)
 	);
 	const silenceDurationEnd = parseFloat(
 		runCommand(
-			`ffmpeg -vn -i "${sourceFile}" -af "areverse,silencedetect=noise=-50dB:d=0.25" -f null - 2>&1 | grep "silence_duration" | head -n 1 | awk '{print $NF}'`
+			`ffmpeg -y -vn -i "${sourceFile}" -af "areverse,silencedetect=noise=-50dB:d=0.25" -f null - 2>&1 | grep "silence_duration" | head -n 1 | awk '{print $NF}'`
 		)
 	);
 
@@ -106,9 +117,13 @@ export function trimSilence(sourceFile: string, outputFile: string, secondsToKee
 	const trimEndSeconds = totalDuration - Math.max(silenceDurationEnd - secondsToKeep, 0);
 
 	runCommand(
-		`ffmpeg -vn -i "${sourceFile}" -ss ${trimStartSeconds} -to ${trimEndSeconds} -c copy "${tempOutputFile}"`
+		`ffmpeg -y -vn -i "${sourceFile}" -ss ${trimStartSeconds} -to ${trimEndSeconds} -c copy "${tempOutputFile}"`
 	);
 	fs.renameSync(tempOutputFile, outputFile);
+}
+
+export function actionWordTrimmer(text: string): string {
+	return text.replace(/([A-Za-z])\1{3,}/gu, '$1');
 }
 
 export function formatJson(jsonString: string): string {
@@ -117,7 +132,19 @@ export function formatJson(jsonString: string): string {
 }
 
 export function sayToFile(textToSay: string, ouputFile: string) {
-	runCommand(`say -o "${ouputFile}" "${textToSay}"`);
+	runCommand(`say -o "${ouputFile}" --data-format=LEF32@44100 --channels=2 "${textToSay}"`);
+}
+
+export function sayToFileCoqui(textToSay: string, ouputFile: string) {
+	// Excellent voices...
+	// 287, 232
+
+	// Good voices...
+	// 262, 318, 317, 298
+
+	runCommand(
+		`conda run -n coqui tts --text "${textToSay}" --model_name tts_models/en/vctk/vits --speaker_idx p232 --out_path "${ouputFile}"`
+	);
 }
 
 export function truncateWithEllipsis(text: string, maxLength: number): string {
@@ -185,7 +212,7 @@ function compressToAac(
 		`Encoding ${sourceFile} to AAC with quality ${quality} (Codec-native: ${bitrateMode}) at ${sampleRate}kHz`
 	);
 	runCommand(
-		`ffmpeg -vn -i "${sourceFile}" -c:a libfdk_aac -ar ${sampleRate} -vbr ${bitrateMode} "${tempOutputFile}"`
+		`ffmpeg -y -vn -i "${sourceFile}" -c:a libfdk_aac -ar ${sampleRate} -vbr ${bitrateMode} "${tempOutputFile}"`
 	);
 	fs.renameSync(tempOutputFile, outputFile);
 }
@@ -210,7 +237,7 @@ function compressToMp3(
 		`Encoding ${sourceFile} to MP3 with quality ${quality} (Codec-native: ${bitrateMode}) at ${sampleRate}kHz`
 	);
 	runCommand(
-		`ffmpeg -vn -i "${sourceFile}" -codec:a libmp3lame -ar ${sampleRate} -qscale:a ${bitrateMode} "${tempOutputFile}"`
+		`ffmpeg -y -vn -i "${sourceFile}" -codec:a libmp3lame -ar ${sampleRate} -qscale:a ${bitrateMode} "${tempOutputFile}"`
 	);
 	fs.renameSync(tempOutputFile, outputFile);
 }
@@ -264,11 +291,28 @@ function getLevenSentenceDistance(sentenceA: string, sentenceB: string): number 
 	return leven(sentenceA, sentenceB);
 }
 
+// speech to text turns e.g. 'five' into 5
+// change it back to improve odds of a sentence match
+function spellOutNumbers(text: string): string {
+	text = text.replace(/\b0\b/gu, 'zero');
+	text = text.replace(/\b1\b/gu, 'one');
+	text = text.replace(/\b2\b/gu, 'two');
+	text = text.replace(/\b3\b/gu, 'three');
+	text = text.replace(/\b4\b/gu, 'four');
+	text = text.replace(/\b5\b/gu, 'five');
+	text = text.replace(/\b6\b/gu, 'six');
+	text = text.replace(/\b7\b/gu, 'seven');
+	text = text.replace(/\b8\b/gu, 'eight');
+	text = text.replace(/\b9\b/gu, 'nine');
+	return text;
+}
+
 export function alignTranscriptToAudioWithWordLevelTimings(
 	perfectTranscriptString: string,
 	sourceRawTranscriptFile: string,
 	sourceAudioFile: string,
-	destinationTimingsFile: string
+	destinationTimingsFile: string,
+	destinationTranscriptMatchedFile?: string // just for reference
 ) {
 	const transcriptRaw = JSON.parse(fs.readFileSync(sourceRawTranscriptFile, 'utf8'));
 
@@ -277,7 +321,9 @@ export function alignTranscriptToAudioWithWordLevelTimings(
 
 	for (const chunk of transcriptRaw) {
 		const rawWords: string = chunk.text.trim();
-		const rawWordsArray = rawWords.split(' ').map((word) => normalizeWord(word));
+		const rawWordsArray = rawWords
+			.split(' ')
+			.map((word) => spellOutNumbers(actionWordTrimmer(normalizeWord(word))));
 
 		// find peak similarity
 		let minSimilarity = Number.MAX_SAFE_INTEGER;
@@ -292,7 +338,7 @@ export function alignTranscriptToAudioWithWordLevelTimings(
 				rawWordsArray.join(' '),
 				targetWordsArray
 					.slice(0, i)
-					.map((word) => normalizeWord(word))
+					.map((word) => spellOutNumbers(actionWordTrimmer(normalizeWord(word))))
 					.join(' ')
 			);
 
@@ -306,8 +352,21 @@ export function alignTranscriptToAudioWithWordLevelTimings(
 		// swap the raw words for the matched words in the raw transcript
 		chunk.text = targetWordsArray.splice(0, minSimilarityIndex).join(' ');
 
-		// console.log(`Raw: ${rawWords}`);
-		// console.log(`Mat: ${chunk.text}\n\n`);
+		console.log(`Raw: ${rawWords}`);
+		console.log(`Mat: ${chunk.text}\n\n`);
+	}
+
+	// add any straggler words to the last entry, TODO this is ugly
+	if (targetWordsArray.length > 0) {
+		console.warn(
+			`There were ${targetWordsArray.length} left over words... adding them to the last chunk`
+		);
+		transcriptRaw[transcriptRaw.length - 1].text =
+			transcriptRaw[transcriptRaw.length - 1].text + ' ' + targetWordsArray.join(' ');
+	}
+
+	if (destinationTranscriptMatchedFile) {
+		saveFormattedJson(destinationTranscriptMatchedFile, transcriptRaw);
 	}
 
 	// Generate timings

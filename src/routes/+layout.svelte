@@ -6,6 +6,6 @@
 
 <Header />
 
-<main>
+<main style="display: contents;">
 	<slot />
 </main>

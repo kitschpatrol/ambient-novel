@@ -2,14 +2,19 @@
 
 ## Updating the content
 
-Certain data and assets are generated from the source data in `/data` and ouput to `/static` and `/src/lib/data-generated`.
+Certain data and assets are generated from the source data in `/data` and ouput to `/static`, `/data-generated` and `/src/lib/data`.
 
-To install dependencies, run:
+The content generator does a number of things depending on the config object in `/data/book.json`.
 
-```bash
-brew tap homebrew-ffmpeg/ffmpeg
-brew install homebrew-ffmpeg/ffmpeg/ffmpeg --with-fdk-aacbrew tap homebrew-ffmpeg/ffmpeg
-```
+- Generates voice audio files to narrate each chapter if no recordings are provided.
+- Compresses the voice audio to a number of formats.
+- Transcribes the voice files using a speech-to-text to a transcript with line-level timings
+- Aligns the transcription output to the text of the book, preserving the line-level timings
+- Runs a word-level timing inference on the modified transcript against the original voice over file
+- Compresses the ambient music to a number of formats.
+- Information gathered in the above steps is merged with data from `/data/book.json` to tield the final `/src/lib/data`
+
+To install dependencies for the content generation process, run:
 
 To update the generated data, run:
 
@@ -26,7 +31,7 @@ Note special cards with embedded html (1-indexed):
 - 54: Has a color span
 - 83: Has a color span
 
-## Transcript Alignment
+## Transcript Alignment and Text to Speech
 
 This is sketchy.
 
@@ -35,16 +40,18 @@ Runs on an M1.
 To set up the environment:
 
 ```bash
-# install ffmpeg if you haven't already
+# install brew if you haven't already
+# install ffmpeg with fddk-aac
 # whisperx doesn't care about specific versions, but safari does
 # and we also use ffmpeg in the data generation step
 brew tap homebrew-ffmpeg/ffmpeg
 brew install homebrew-ffmpeg/ffmpeg/ffmpeg --with-fdk-aacbrew tap homebrew-ffmpeg/ffmpeg
-
 brew install miniconda
 conda init zsh
 
 # restart terminal
+
+# install whisperx
 conda create --name whisperx python=3.10
 conda activate whisperx
 pip install argparse torch torchaudio torchvision
@@ -54,6 +61,18 @@ pip install git+https://github.com/m-bain/whisperx.git
 pip install --pre --force-reinstall torch torchaudio torchvision --index-url https://download.pytorch.org/whl/nightly/cpu
 
 # pip will complain about missmatched dependencies, but ignore this
+conda deactivate
+
+# install tts
+# https://github.com/coqui-ai/TTS/discussions/2177
+conda create --name coqui python=3.9
+conda activate coqui
+git clone https://github.com/coqui-ai/TTS.git
+brew install mecab
+brew install espeak
+conda install numpy scipy scikit-learn Cython
+pip install -e .
+make install
 conda deactivate
 ```
 

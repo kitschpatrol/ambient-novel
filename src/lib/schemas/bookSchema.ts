@@ -13,6 +13,7 @@ export const bookSchema = z.object({
 		.array(
 			z.object({
 				title: z.string().nonempty(),
+				index: z.number().int().nonnegative(),
 				ambientTracks: z.array(
 					z.object({
 						files: z.array(z.string().nonempty()),
@@ -30,7 +31,12 @@ export const bookSchema = z.object({
 					.array(
 						z.object({
 							text: z.string().nonempty(),
-							timings: z
+							index: z.number().int().nonnegative(),
+							timing: z.object({
+								start: z.number(),
+								end: z.number()
+							}),
+							wordTimings: z
 								.array(
 									z.object({
 										word: z.string().nonempty(),
@@ -48,6 +54,6 @@ export const bookSchema = z.object({
 });
 
 // export type AmbientTrack = z.infer<typeof bookSchema>['chapters'][number]['ambientTracks'][number];
-// export type Line = z.infer<typeof bookSchema>['chapters'][number]['lines'][number];
-// export type Chapter = z.infer<typeof bookSchema>['chapters'][number];
+export type Line = z.infer<typeof bookSchema>['chapters'][number]['lines'][number];
+export type Chapter = z.infer<typeof bookSchema>['chapters'][number];
 export type Book = z.infer<typeof bookSchema>;

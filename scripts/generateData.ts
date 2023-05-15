@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { bookSourceSchema } from './bookSourceSchema';
 import { type Book, bookSchema } from '../src/lib/schemas/bookSchema';
+import round from 'lodash/round';
 import {
 	checkForBinaryOnPath,
 	compressTo,
@@ -9,13 +10,14 @@ import {
 	getAudioDuration,
 	kebabCase,
 	saveFormattedJson,
-	sayToFile,
 	stripHtmlTags,
 	stripEmojis,
 	normalizeWord,
 	truncateWithEllipsis,
 	transcribe,
-	alignTranscriptToAudioWithWordLevelTimings
+	alignTranscriptToAudioWithWordLevelTimings,
+	sayToFileCoqui,
+	actionWordTrimmer
 } from './utils';
 
 // Prerequisites ----------------------------------------------------------------------
@@ -34,6 +36,9 @@ import {
 // You must also have access to the lossless ambient audio files.
 // These are too large to bundle in the repo
 
+// WIP
+// brew install mecab
+
 // this duration is applied to both the head and tail
 // so total additional duration is this times 2
 
@@ -51,14 +56,14 @@ const config = {
 		outputDir: './static/speech',
 		outputs: [
 			{
-				format: 'mp3',
-				quality: 0,
-				sampleRate: 22050
+				format: 'm4a', // aac
+				quality: 0.2,
+				sampleRate: 44100
 			},
 			{
-				format: 'm4a', // aac
-				quality: 0,
-				sampleRate: 22050
+				format: 'mp3',
+				quality: 0.2,
+				sampleRate: 44100
 			}
 		]
 	},
@@ -68,14 +73,14 @@ const config = {
 		outputDir: './static/music',
 		outputs: [
 			{
-				format: 'mp3',
-				quality: 0,
-				sampleRate: 22050
+				format: 'm4a', // aac
+				quality: 0.2,
+				sampleRate: 44100
 			},
 			{
-				format: 'm4a', // aac
-				quality: 0,
-				sampleRate: 22050
+				format: 'mp3',
+				quality: 0.2,
+				sampleRate: 44100
 			}
 		]
 	}
@@ -131,15 +136,13 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 
 	const chapter: StripArray<typeof bookOutput.chapters> = {};
 	chapter.title = chapterSource.title;
+	chapter.index = chapterNumber;
 	chapter.lineShuffleAllowed = chapterSource.lineShuffleAllowed;
 	chapter.lines = [];
 	chapter.voiceOver = {};
 	chapter.voiceOver.files = [];
 
 	// glue together lines
-	const chapterText = chapterSource.lines
-		.reduce((prev, curr) => prev + stripEmojis(stripHtmlTags(curr)) + ' ', '')
-		.trim();
 
 	// say if needed
 	const voiceOverSourceFile = `${config.speechSettings.sourceDir}/${chapterSource.voiceOver}`;
@@ -149,7 +152,44 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 		);
 	} else {
 		console.log('Generating say file...');
-		sayToFile(chapterText, voiceOverSourceFile);
+
+		// mac say implementation
+		// insert special [[slnc ####]] (ms) directives to get silence between lines
+		// longer pauses at the start
+		// longer pauses between lines
+		// shorter pauses between line breaks
+		// const chapterTextWithPauses =
+		// 	'[[slnc 1500]]' +
+		// 	chapterSource.lines
+		// 		.reduce(
+		// 			(prev, curr) =>
+		// 				prev +
+		// 				stripEmojis(stripHtmlTags(curr.replace('<br />', '[[slnc 500]]'))) +
+		// 				'[[slnc 1200]]',
+		// 			''
+		// 		)
+		// 		.trim()
+		// 		// chapter 5 has ridiculous long strings of characters, on which the say command chokes
+		// 		// this replaces and character strings with more than 3 of the same chars with a single char
+		// 		.replace(/–/gu, '')
+		// 		.replace(/([A-Za-z])\1{3,}/gu, '$1');
+
+		// console.log(chapterTextWithPauses);
+		//sayToFile(chapterTextWithPauses, voiceOverSourceFile);
+
+		// doesn't seem to be a way to command pauses in coqui
+		let chapterTextWithPauses = chapterSource.lines
+			.reduce((prev, curr) => prev + stripEmojis(stripHtmlTags(curr.replace('<br />', ' '))), '')
+			.trim()
+			// chapter 5 has ridiculous long strings of characters, on which the say command chokes
+			// this replaces and character strings with more than 3 of the same chars with a single char
+			.replace(/–/gu, '');
+
+		chapterTextWithPauses = actionWordTrimmer(chapterTextWithPauses);
+
+		sayToFileCoqui(chapterTextWithPauses, voiceOverSourceFile);
+
+		// TODO pad with some silence?
 	}
 
 	chapter.voiceOver.durationSeconds = getAudioDuration(voiceOverSourceFile);
@@ -175,7 +215,7 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 	// we later use these timings to force alignment of the perfect transcript against the audio
 	// theoretically we could feed the whole perfect transcript to the audio and skip this step,
 	// but whisperx can not handle alignment tasks of that size
-	const transcriptRawFile = `${config.speechSettings.generatedDataDir}/chapter-${chapterNumber}-audio-transcript.json`;
+	const transcriptRawFile = `${config.speechSettings.generatedDataDir}/chapter-${chapterNumber}-audio-transcript-raw.json`;
 	if (fs.existsSync(transcriptRawFile) && !config.speechSettings.regenerate) {
 		console.log('Already found audio transcript file, nothing to generate...');
 	} else {
@@ -186,15 +226,24 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 	// align the perfect transcript to the audio, using timing chunks from the whisperx transcript
 	const wordTimingsFile = `${config.speechSettings.generatedDataDir}/chapter-${chapterNumber}-word-timings.json`;
 	if (fs.existsSync(wordTimingsFile) && !config.speechSettings.regenerate) {
-		console.log('Already found word-level timings file, nothing to generate...');
+		console.log(
+			`Already found word-level timings file for ${chapterNumber}, nothing to generate...`
+		);
 	} else {
 		console.log(`Getting word level timings with whisperx...`);
+
+		const transcriptMatchedFile = `${config.speechSettings.generatedDataDir}/chapter-${chapterNumber}-audio-transcript-matched.json`;
+
+		const chapterText = chapterSource.lines
+			.reduce((prev, curr) => prev + stripEmojis(stripHtmlTags(curr)) + ' ', '')
+			.trim();
 
 		alignTranscriptToAudioWithWordLevelTimings(
 			chapterText,
 			transcriptRawFile,
 			voiceOverSourceFile,
-			wordTimingsFile
+			wordTimingsFile,
+			transcriptMatchedFile
 		);
 	}
 
@@ -204,18 +253,19 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 	const wordTimings = JSON.parse(fs.readFileSync(wordTimingsFile, 'utf8'));
 
 	for (const [lineNumber, lineSource] of chapterSource.lines.entries()) {
-		console.log(
-			`Processing chapter ${chapterNumber} line ${lineNumber}: ${truncateWithEllipsis(
-				lineSource,
-				30
-			)}`
-		);
+		// console.log(
+		// 	`Processing chapter ${chapterNumber} line ${lineNumber}: ${truncateWithEllipsis(
+		// 		lineSource,
+		// 		30
+		// 	)}`
+		// );
 
 		const wordsSource = stripEmojis(stripHtmlTags(lineSource)).trim().split(' ');
 
 		const line: StripArray<DeepPartial<Book['chapters'][0]['lines'][0]>> = {};
 		line.text = lineSource;
-		line.timings = [];
+		line.index = lineNumber;
+		line.wordTimings = [];
 
 		wordsSource.forEach((wordSource) => {
 			const wordTiming = wordTimings.shift();
@@ -224,8 +274,8 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 				throw new Error(`mismatched words ${wordSource} vs. ${wordTiming.word}`);
 			}
 
-			if (line.timings) {
-				line.timings.push({
+			if (line.wordTimings) {
+				line.wordTimings.push({
 					word: wordTiming.word,
 					start: wordTiming.start,
 					end: wordTiming.end
@@ -277,6 +327,37 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 		}
 
 		chapter.ambientTracks?.push(ambientTrack);
+	}
+
+	// Figure out the per-line timing based on word timing
+	// we could calculate this in app, but nice to have it AOT
+	for (const [lineNumber, line] of chapter.lines.entries()) {
+		const previousLine = lineNumber > 0 ? chapter.lines[lineNumber - 1] : null;
+		const previousLineEndTime = previousLine?.wordTimings?.at(
+			previousLine?.wordTimings.length - 1
+		)?.end;
+
+		const nextLine = lineNumber < chapter.lines.length - 1 ? chapter.lines[lineNumber + 1] : null;
+		const nextLineStartTime = nextLine?.wordTimings?.at(0)?.start;
+
+		const currentLineStartTime = line.wordTimings?.at(0)?.start;
+		const currentLineEndTime = line.wordTimings?.at(line.wordTimings?.length - 1)?.end;
+
+		if (!currentLineStartTime || !currentLineEndTime) {
+			throw new Error('No current line start time...');
+		}
+
+		line.timing = {
+			// start time is the average of last line's end time and this line's start time
+			start: round(previousLineEndTime ? (previousLineEndTime + currentLineStartTime) / 2 : 0, 3),
+			// end time is average of current line end time and next line start time, or the duration of the VO
+			end: round(
+				nextLineStartTime
+					? (currentLineEndTime + nextLineStartTime) / 2
+					: chapter.voiceOver.durationSeconds,
+				3
+			)
+		};
 	}
 
 	bookOutput.chapters?.push(chapter);

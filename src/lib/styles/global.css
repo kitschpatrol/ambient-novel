@@ -8,11 +8,15 @@
 	initial-value: 0deg;
 }
 
+html,
 body {
 	width: 100vw;
 	height: 100vh;
-	background: linear-gradient(var(--backgroundGradientAngle), #f01ef6 0%, #4447fb 100%);
 	overflow: hidden;
+}
+
+body {
+	background: linear-gradient(var(--backgroundGradientAngle), #f01ef6 0%, #4447fb 100%);
 	animation: spin 30s infinite linear;
 }
 

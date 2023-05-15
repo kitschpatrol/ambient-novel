@@ -1,70 +1,87 @@
 <script lang="ts">
 	import type { Book } from '$lib/schemas/bookSchema';
 	import bookTypeless from '$lib/data/book.json';
-	import { createEventDispatcher } from 'svelte';
+	import Chapter from '$lib/components/Chapter.svelte';
+	import Controls from '$lib/components/Controls.svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import shuffle from 'lodash/shuffle';
 	import clamp from 'lodash/clamp';
-	import Card from '$lib/components/Card.svelte';
-	import Playlist from '$lib/components/Playlist.svelte';
 	const book = bookTypeless as Book;
-	const lines = book.chapters[0].lines; // temp
 
 	// config
 	const maxVolumeSpeech = 1.0;
 	const maxVolumeMusic = 0.7;
 
+	let chapterElement: Chapter;
+	let audioTime: number = 0;
+
+	// remember line state for each chapter
+	let lineState = Array.from({ length: book.chapters.length }, () => 0);
+	console.log(`lineState: ${lineState}`);
+
 	// state, but history button doesn't work?
 	const searchParams = $page.url.searchParams;
+	const queryChapter = searchParams ? searchParams.get('chapter') : undefined;
 	const queryLine = searchParams ? searchParams.get('line') : undefined;
-	let activeLineIndex = queryLine ? parseInt(queryLine) - 1 : 0;
+	let activeChapterIndex = queryChapter
+		? clamp(parseInt(queryChapter), 1, book.chapters.length) - 1
+		: 0;
+	let activeLineIndex = queryLine
+		? clamp(parseInt(queryLine), 1, book.chapters[activeChapterIndex].lines.length) - 1
+		: 0;
 	let isPlaying = false;
-	let lineSequence = Array.from({ length: lines.length }, (_, i) => i);
 
-	function previousLine() {
-		const currentSequenceIndex = lineSequence.findIndex((line) => line === activeLineIndex);
-		activeLineIndex = lineSequence[(currentSequenceIndex - 1 + lines.length) % lines.length];
+	function onPreviousChapter() {
+		lineState[activeChapterIndex] = activeLineIndex;
+		activeChapterIndex = clamp(activeChapterIndex - 1, 0, book.chapters.length - 1);
+		activeLineIndex = lineState[activeChapterIndex];
 	}
 
-	function nextLine() {
-		const currentSequenceIndex = lineSequence.findIndex((line) => line === activeLineIndex);
-		activeLineIndex = lineSequence[(currentSequenceIndex + 1) % lineSequence.length];
+	function onNextChapter() {
+		lineState[activeChapterIndex] = activeLineIndex;
+		activeChapterIndex = clamp(activeChapterIndex + 1, 0, book.chapters.length - 1);
+		activeLineIndex = lineState[activeChapterIndex];
 	}
 
-	// https://stackoverflow.com/questions/64087782/svelte-event-parameter-type-for-typescript
-	function onAudioEnded(event: CustomEvent<number>) {
-		const textIndex = event.detail;
-		// make sure this message came from the active card (because of transitions)
-		if (textIndex !== activeLineIndex) {
-			return;
-		}
-		nextLine();
+	function onPreviousLine() {
+		chapterElement.previousLine();
 	}
 
-	function shuffleSequence() {
-		lineSequence = shuffle(lineSequence);
+	function onNextLine() {
+		chapterElement.nextLine();
 	}
 
-	function sortSequence() {
-		lineSequence = lineSequence.sort((a, b) => a - b);
+	function onPlay() {
+		isPlaying = true;
 	}
 
-	$: isSorted = lineSequence.every((line, i) => line === i);
-	$: activeLine = lines[activeLineIndex];
+	function onPause() {
+		isPlaying = false;
+	}
+
+	function onActiveLineIndex(event: CustomEvent) {
+		activeLineIndex = event.detail;
+	}
+
+	function onAudioTime(event: CustomEvent) {
+		audioTime = event.detail;
+	}
+
+	// $: lineSequence = Array.from({ length: lines.length }, (_, i) => i);
+	// $: isSorted = lineSequence.every((line, i) => line === i);
+	// $: activeLine = lines[activeLineIndex];
 
 	$: {
-		// validate active line
-		activeLineIndex = clamp(activeLineIndex, 0, lines.length - 1);
-
 		// update query params, don't push history
+		$page.url.searchParams.set('chapter', (activeChapterIndex + 1).toString());
 		$page.url.searchParams.set('line', (activeLineIndex + 1).toString());
 		goto(`?${$page.url.searchParams.toString()}`, { replaceState: true });
 	}
 </script>
 
 <svelte:head>
-	<title>{book.title} — Line {activeLineIndex + 1}</title>
+	<title>{book.title} — Chapter {activeChapterIndex} Line {activeLineIndex + 1}</title>
 	<!-- https://github.com/sveltejs/kit/issues/4039 -->
 	<!-- <link
 		rel="preload"
@@ -74,99 +91,27 @@
 	/> -->
 </svelte:head>
 
-<div class="book">
-	{#key activeLine}
-		<Card
-			{isPlaying}
-			text={activeLine.text}
-			textIndex={activeLineIndex}
-			audioSources={activeLine.voiceOver.files}
-			maxVolume={maxVolumeSpeech}
-			on:audioEnded={onAudioEnded}
-		/>
-	{/key}
-</div>
+{#key activeChapterIndex}
+	<Chapter
+		bind:this={chapterElement}
+		chapterData={book.chapters[activeChapterIndex]}
+		{isPlaying}
+		on:audioTime={onAudioTime}
+		on:activeLineIndex={onActiveLineIndex}
+	/>
+{/key}
 
-<div id="controls">
-	<span class="button-group">
-		<button on:click={shuffleSequence}>Shuffle</button>
-		<button disabled={isSorted} on:click={sortSequence}>Sort</button>
-	</span>
-	<span class="button-group">
-		<button on:click={previousLine}>Previous</button>
-		<button on:click={nextLine}>Next</button>
-	</span>
-	<span class="button-group">
-		<button
-			class={isPlaying ? '' : 'down'}
-			disabled={!isPlaying}
-			on:click={() => (isPlaying = false)}>Pause</button
-		>
-		<button class={isPlaying ? 'down' : ''} disabled={isPlaying} on:click={() => (isPlaying = true)}
-			>Play</button
-		>
-	</span>
-</div>
-
-<Playlist
-	isShuffleOn={true}
-	tracks={book.chapters[0].ambientTracks}
-	maxVolume={maxVolumeMusic}
+<Controls
 	{isPlaying}
+	time={audioTime}
+	isFirstChapter={activeChapterIndex === 0}
+	isLastChapter={activeChapterIndex === book.chapters.length - 1}
+	isFirstLine={activeLineIndex === 0}
+	isLastLine={activeLineIndex === book.chapters[activeChapterIndex].lines.length - 1}
+	on:nextChapter={onNextChapter}
+	on:previousChapter={onPreviousChapter}
+	on:play={onPlay}
+	on:pause={onPause}
+	on:nextLine={onNextLine}
+	on:previousLine={onPreviousLine}
 />
-
-<style>
-	div.book {
-		display: grid;
-		grid-template-columns: 100vw;
-		grid-template-rows: 75vh;
-	}
-
-	div#controls {
-		position: absolute;
-		bottom: 20px;
-		text-align: center;
-		width: 100%;
-		user-select: none;
-		-webkit-user-select: none;
-		-ms-user-select: none;
-	}
-
-	button {
-		font-family: 'Nasalization Extended', sans-serif;
-		background-color: rgba(255, 255, 255, 0.75);
-		border: none;
-		padding: 10px;
-		margin: 3px;
-		border-radius: 10px;
-		cursor: pointer;
-		box-shadow: -3px 3px 5px #00000067;
-		position: relative;
-		user-select: none;
-		-webkit-user-select: none;
-		-ms-user-select: none;
-	}
-
-	@media (hover: hover) {
-		button:hover {
-			background-color: white;
-		}
-	}
-
-	button:enabled:active,
-	button.down {
-		top: 1px;
-		right: 1px;
-		box-shadow: -2px 3px 5px #00000067;
-	}
-
-	button:disabled {
-		color: rgba(0, 0, 0, 0.3);
-		background-color: rgba(255, 255, 255, 0.3);
-	}
-
-	span.button-group {
-		padding: 8px 20px;
-		display: inline-block;
-	}
-</style>
