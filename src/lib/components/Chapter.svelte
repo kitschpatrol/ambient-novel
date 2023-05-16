@@ -65,8 +65,6 @@
 		const { end } = chapterData.lines[activeLine].timing;
 		// magic  math so we can go "back" while playing
 		if (isPlaying && currentTime >= end && currentTime <= end + 0.1) {
-			console.log(`currentTime: ${currentTime}`);
-			console.log(`end: ${chapterData.lines[activeLine].timing.end}`);
 			if (lineOrder.indexOf(activeLine) < chapterData.lines.length - 1) {
 				dispatch('readyForNextLine');
 			} else {
@@ -82,7 +80,7 @@
 			(currentTime < start || currentTime >= end) &&
 			(!isPlaying || targetTime < start || targetTime >= end)
 		) {
-			console.log(`setting audio start time to ${start}`);
+			// console.log(`setting audio start time to ${start}`);
 			targetTime = start;
 		}
 	}
@@ -109,7 +107,6 @@
 	$: {
 		lineOrder;
 		tick().then(() => {
-			console.log(`getActiveLine(): ${getActiveLine()}`);
 			scrollToLineIndex(getActiveLine(), 0);
 		});
 	}

@@ -91,7 +91,6 @@
 	// shuffle
 	$: {
 		const shuffleSeed = $chapterState[$activeChapter].shuffleSeed;
-		console.log(`shuffleSeed: ${shuffleSeed}`);
 		let tempOrder = Array.from(Array(bookData.chapters[$activeChapter].lines.length).keys());
 		if (bookData.chapters[$activeChapter].lineShuffleAllowed && shuffleSeed !== '0') {
 			tempOrder = seededShuffle(tempOrder, shuffleSeed);
@@ -99,6 +98,7 @@
 		}
 		// only assign if there's a change to avoid extra reactions
 		if (!isEqual(lineOrder, tempOrder)) {
+			console.log(`shuffleSeed: ${shuffleSeed}`);
 			lineOrder = tempOrder;
 		}
 	}
@@ -118,7 +118,7 @@
 		chapterData={bookData.chapters[$activeChapter]}
 		activeLine={$chapterState[$activeChapter].line}
 		on:readyForNextLine={() => {
-			console.log(`ready for next line`);
+			// console.log(`ready for next line`);
 			onNextLine();
 		}}
 	/>
