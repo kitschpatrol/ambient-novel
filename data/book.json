@@ -9,7 +9,7 @@
 		{
 			"title": "The Valentine Mob",
 			"ambientTracks": ["Bell Vibes.wav"],
-			"lineShuffleAllowed": false,
+			"lineShuffleAllowed": true,
 			"voiceOver": "chapter-1.wav",
 			"lines": [
 				"We sit here together on low, sturdy, mahogany deck chairs, taking inventory of the scene. There’s the silent still water of the illuminated swimming pool. The night sky is a dotted blur of normal <span style=\"color: #000000;\">black</span>. The unfamiliar landscaping trails off in the dark like a giant sleepwalking cat. The warm subtle breeze is three notches into the realm of perceptible.",
@@ -125,7 +125,7 @@
 		{
 			"title": "Motel Van Been Hit",
 			"ambientTracks": ["The Valentine Mob Track 2.wav"],
-			"lineShuffleAllowed": false,
+			"lineShuffleAllowed": true,
 			"voiceOver": "chapter-2.wav",
 			"lines": [
 				"Back inside, the collective hum of the air conditioner and three ceiling fans was a murmuring whir rustling us from the blur.",
@@ -232,7 +232,7 @@
 		{
 			"title": "Mobile Tent Haven",
 			"ambientTracks": ["The Valentine Mob Track 3.wav"],
-			"lineShuffleAllowed": false,
+			"lineShuffleAllowed": true,
 			"voiceOver": "chapter-3.wav",
 			"lines": [
 				"Binky pulled the van into the parking lot of the most run down hotel you’ve ever seen.",
@@ -279,7 +279,7 @@
 		{
 			"title": "Nova Bent The Lime",
 			"ambientTracks": ["The Valentine Mob Track 4.wav"],
-			"lineShuffleAllowed": false,
+			"lineShuffleAllowed": true,
 			"voiceOver": "chapter-4.wav",
 			"lines": [
 				"I held the cube and not only continued to hear the noise of the broken art, faint as it was, but there was also a subtle vibration that felt like it might have been growing stronger. Perhaps becoming more broken, it seemed.",
@@ -503,7 +503,7 @@
 		{
 			"title": "Hot Inane TV Beam",
 			"ambientTracks": ["The Valentine Mob Track 6.wav"],
-			"lineShuffleAllowed": false,
+			"lineShuffleAllowed": true,
 			"voiceOver": "chapter-6.wav",
 			"lines": [
 				"Three days had passed but–<br />We crashed into the soft furniture of our rental house.<br />And slept.<br />My body ached, in a good way,<br />The way bodies do after adventures.",
@@ -515,7 +515,7 @@
 		{
 			"title": "Abilene Moth Vent",
 			"ambientTracks": ["The Valentine Mob Track 7.wav"],
-			"lineShuffleAllowed": false,
+			"lineShuffleAllowed": true,
 			"voiceOver": "chapter-7.wav",
 			"lines": [
 				"An undiscovered genius lost and aimless, in Texas.<br />Chaplin💜 and Coco🦊 brought water,<br />And plenty of it.<br />Cuz it gets hot there.<br />We’re in, said my friend and I.<br />Good, we need you.",
@@ -525,7 +525,7 @@
 		},
 		{
 			"title": "The Noble Vietnam",
-			"lineShuffleAllowed": false,
+			"lineShuffleAllowed": true,
 			"ambientTracks": ["The Valentine Mob Track 8.wav"],
 			"voiceOver": "chapter-8.wav",
 			"lines": [
@@ -537,7 +537,7 @@
 		{
 			"title": "Invent Home Table",
 			"ambientTracks": ["The Valentine Mob Track 9.wav"],
-			"lineShuffleAllowed": false,
+			"lineShuffleAllowed": true,
 			"voiceOver": "chapter-9.wav",
 			"lines": [
 				"Then nothing happened for awhile.<br />Our vacation duration was coming to a close.<br />Checked everything off the list,<br />And then some.<br />I finished the mystery novel, it was the bellhop.",
@@ -549,7 +549,7 @@
 		{
 			"title": "Viable Tenth Omen",
 			"ambientTracks": ["The Valentine Mob Track 10.wav"],
-			"lineShuffleAllowed": false,
+			"lineShuffleAllowed": true,
 			"voiceOver": "chapter-10.wav",
 			"lines": [
 				"We moved in.<br />Truly joined.<br >It had all been foreseen on some planet’s moon–<br />Out There.<br />Out Here.<br />They actually needed us,<br />It turned out,<br />With more sobering gravity than we needed them.",
