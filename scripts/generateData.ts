@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { bookSourceSchema } from './bookSourceSchema';
-import { type Book, bookSchema } from '../src/lib/schemas/bookSchema';
+import { type BookData, bookSchema } from '../src/lib/schemas/bookSchema';
 import round from 'lodash/round';
 import {
 	checkForBinaryOnPath,
@@ -118,7 +118,7 @@ type DeepPartial<T> = {
 
 type StripArray<T> = T extends Array<infer U> ? U : T;
 
-const bookOutput: DeepPartial<Book> = {
+const bookOutput: DeepPartial<BookData> = {
 	title: bookSource.title,
 	titleAlt: bookSource.titleAlt,
 	author: bookSource.author,
@@ -262,7 +262,7 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 
 		const wordsSource = stripEmojis(stripHtmlTags(lineSource)).trim().split(' ');
 
-		const line: StripArray<DeepPartial<Book['chapters'][0]['lines'][0]>> = {};
+		const line: StripArray<DeepPartial<BookData['chapters'][0]['lines'][0]>> = {};
 		line.text = lineSource;
 		line.index = lineNumber;
 		line.wordTimings = [];
@@ -292,7 +292,7 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 
 	for (const ambientTracksSource of chapterSource.ambientTracks) {
 		console.log(`Processing chapter ${chapterNumber} ambient track ${ambientTracksSource}`);
-		const ambientTrack: StripArray<DeepPartial<Book['chapters'][0]['ambientTracks']>> = {};
+		const ambientTrack: StripArray<DeepPartial<BookData['chapters'][0]['ambientTracks']>> = {};
 		ambientTrack.originalFile = ambientTracksSource;
 		ambientTrack.files = [];
 

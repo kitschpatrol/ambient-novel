@@ -7,13 +7,11 @@
 	export let isLastChapter = false;
 	export let isFirstLine = false;
 	export let isLastLine = false;
-	export let time = 0;
 
 	const dispatch = createEventDispatcher();
 </script>
 
 <div id="controls">
-	<div>{time}</div>
 	<span class="button-group">
 		<button on:click={() => dispatch('shuffle')}>Shuffle</button>
 		<button disabled={isSorted} on:click={() => dispatch('sort')}>Sort</button>

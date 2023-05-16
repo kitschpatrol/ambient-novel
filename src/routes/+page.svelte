@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Book } from '$lib/schemas/bookSchema';
+	import type { BookData } from '$lib/schemas/bookSchema';
 	import bookTypeless from '$lib/data/book.json';
 	import Chapter from '$lib/components/Chapter.svelte';
 	import Controls from '$lib/components/Controls.svelte';
@@ -7,7 +7,7 @@
 	import { goto } from '$app/navigation';
 	import shuffle from 'lodash/shuffle';
 	import clamp from 'lodash/clamp';
-	const book = bookTypeless as Book;
+	const book = bookTypeless as BookData;
 
 	// config
 	const maxVolumeSpeech = 1.0;
@@ -16,6 +16,7 @@
 	let chapterElement: Chapter;
 	let audioTime: number = 0;
 
+	// todo really need a store instead?
 	// remember line state for each chapter
 	let lineState = Array.from({ length: book.chapters.length }, () => 0);
 	console.log(`lineState: ${lineState}`);
@@ -103,7 +104,6 @@
 
 <Controls
 	{isPlaying}
-	time={audioTime}
 	isFirstChapter={activeChapterIndex === 0}
 	isLastChapter={activeChapterIndex === book.chapters.length - 1}
 	isFirstLine={activeLineIndex === 0}

@@ -1,11 +1,9 @@
 <script lang="ts">
-	import type { Line } from '$lib/schemas/bookSchema';
-	import { text } from '@sveltejs/kit';
-	import Audio from './Audio.svelte';
-
+	import type { LineData } from '$lib/schemas/bookSchema';
 	export let isPlaying = false;
-	export let lineData: Line;
-	export let audioTime: number = 0;
+	export let lineData: LineData;
+	export let chapterIndex: number;
+	export let currentTime: number = 0;
 	export let timingOffsetSeconds: number = 0.75;
 
 	let lineElement: HTMLDivElement;
@@ -26,26 +24,6 @@
 	function escapeRegex(inputString: string): string {
 		return inputString.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&');
 	}
-
-	//stackoverflow.com/questions/487073/how-to-check-if-element-is-visible-after-scrolling
-	// function visibleY(element: HTMLElement) {
-	// 	let rect = element.getBoundingClientRect();
-	// 	const top = rect.top;
-	// 	const height = rect.height;
-	// 	let el = element.parentNode as HTMLElement;
-	// 	// Check if bottom of the element is off the page
-	// 	if (rect.bottom < 0) return false;
-	// 	// Check its within the document viewport
-	// 	if (top > document.documentElement.clientHeight) return false;
-	// 	do {
-	// 		rect = el.getBoundingClientRect();
-	// 		if (top <= rect.bottom === false) return false;
-	// 		// Check if the element is out of view due to a container scrolling
-	// 		if (top + height <= rect.top) return false;
-	// 		el = el.parentNode as HTMLElement;
-	// 	} while (el != document.body);
-	// 	return true;
-	// }
 
 	// TODO do all this shit AOT in generate-content?
 	// hard coded to escape span for now
@@ -74,7 +52,7 @@
 		}
 	}
 
-	function getHtmlWithTimeSpans(lineData: Line): string {
+	function getHtmlWithTimeSpans(lineData: LineData): string {
 		let text = lineData.text;
 		let cursor = 0;
 
@@ -106,7 +84,7 @@
 			for (const span of spans) {
 				const timeStart = span.getAttribute('data-time-start');
 				if (timeStart) {
-					if (!isPlaying || audioTime + timingOffsetSeconds >= parseFloat(timeStart)) {
+					if (!isPlaying || currentTime + timingOffsetSeconds >= parseFloat(timeStart)) {
 						span.style.opacity = '1.0';
 					} else {
 						span.style.opacity = '0.0';
@@ -120,7 +98,7 @@
 <div class="line" bind:this={lineElement}>
 	{@html textWithTimingSpans}
 	<p class="lineNumber">
-		{lineData.index + 1} - {lineData.timing.start} to {lineData.timing.end}
+		{chapterIndex + 1} § {lineData.index + 1}
 	</p>
 </div>
 

@@ -54,6 +54,6 @@ export const bookSchema = z.object({
 });
 
 // export type AmbientTrack = z.infer<typeof bookSchema>['chapters'][number]['ambientTracks'][number];
-export type Line = z.infer<typeof bookSchema>['chapters'][number]['lines'][number];
-export type Chapter = z.infer<typeof bookSchema>['chapters'][number];
-export type Book = z.infer<typeof bookSchema>;
+export type LineData = z.infer<typeof bookSchema>['chapters'][number]['lines'][number];
+export type ChapterData = z.infer<typeof bookSchema>['chapters'][number];
+export type BookData = z.infer<typeof bookSchema>;
