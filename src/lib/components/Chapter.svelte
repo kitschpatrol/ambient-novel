@@ -2,7 +2,7 @@
 	import type { ChapterData } from '$lib/schemas/bookSchema';
 	import { fade } from 'svelte/transition';
 	import { tweened } from 'svelte/motion';
-	import { createEventDispatcher, onMount } from 'svelte';
+	import { createEventDispatcher, onMount, tick } from 'svelte';
 	import { quadInOut } from 'svelte/easing';
 	import clamp from 'lodash/clamp';
 	import Playlist from '$lib/components/Playlist.svelte';
@@ -13,12 +13,11 @@
 	export let isPlaying = false;
 	export let chapterData: ChapterData;
 	export let activeLine: number = 0;
-	export let shuffle: boolean = false;
-	export let seed: number = 0;
 	export let currentTime: number = 0;
 	export let seeking: boolean = false;
 	export let maxVolumeMusic = 0.5;
 	export let maxVolumeSpeech = 1.0;
+	export let lineOrder = Array.from(Array(chapterData.lines.length).keys());
 
 	let chapterElement: HTMLDivElement;
 	let targetTime = 0;
@@ -33,24 +32,21 @@
 	const fadeHeightPercent = 0.2;
 
 	onMount(() => {
+		// todo shuffle
+
 		// jump immediately to the correct line,
 		// e.g. when switching chapters
 		scrollToLineIndex(activeLine, 0);
 	});
 
-	// https://stackoverflow.com/questions/64087782/svelte-event-parameter-type-for-typescript
-	function onSpeechEnded() {
-		console.log('speech ended');
-		// TODO next chapter?
-	}
-
 	function scrollToLineIndex(lineIndex: number, duration: number = 600) {
-		console.log(`scrolling to ${lineIndex}`);
-
-		scrollTween.set(clamp(lineIndex, 0, chapterData.lines.length - 1) * chapterHeight, {
-			duration,
-			easing: quadInOut
-		});
+		scrollTween.set(
+			clamp(lineOrder.indexOf(lineIndex), 0, chapterData.lines.length - 1) * chapterHeight,
+			{
+				duration,
+				easing: quadInOut
+			}
+		);
 	}
 
 	// scroll if needed
@@ -71,8 +67,10 @@
 		if (isPlaying && currentTime >= end && currentTime <= end + 0.1) {
 			console.log(`currentTime: ${currentTime}`);
 			console.log(`end: ${chapterData.lines[activeLine].timing.end}`);
-			if (activeLine < chapterData.lines.length - 1) {
+			if (lineOrder.indexOf(activeLine) < chapterData.lines.length - 1) {
 				dispatch('readyForNextLine');
+			} else {
+				console.log(`Reached end of chapter... TODO alert the book?`);
 			}
 		}
 	}
@@ -102,6 +100,19 @@
 			}
 		}
 	}
+
+	// jump to same line after shuffle
+	// protect from updates on activeline
+	function getActiveLine(): number {
+		return activeLine;
+	}
+	$: {
+		lineOrder;
+		tick().then(() => {
+			console.log(`getActiveLine(): ${getActiveLine()}`);
+			scrollToLineIndex(getActiveLine(), 0);
+		});
+	}
 </script>
 
 <div
@@ -114,9 +125,14 @@
 		chapterScrollTop = e?.target?.scrollTop || 0;
 	}}
 >
-	{#each chapterData.lines as line}
+	{#each lineOrder as index}
 		<div class="line-container">
-			<Line lineData={line} {isPlaying} {currentTime} chapterIndex={chapterData.index} />
+			<Line
+				lineData={chapterData.lines[index]}
+				{isPlaying}
+				{currentTime}
+				chapterIndex={chapterData.index}
+			/>
 		</div>
 	{/each}
 </div>
@@ -132,7 +148,6 @@
 	audioSources={chapterData.voiceOver.files}
 	{isPlaying}
 	maxVolume={maxVolumeSpeech}
-	on:ended={onSpeechEnded}
 	{targetTime}
 	bind:currentTime
 	bind:seeking

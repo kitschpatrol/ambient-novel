@@ -5,7 +5,6 @@ export const activeChapter = writable(0);
 export const chapterState = writable<{
 	[key: number]: {
 		line: number;
-		shuffle: boolean;
-		seed: number;
+		shuffleSeed: string;
 	};
-}>({}); // todo push history on change?
+}>({});

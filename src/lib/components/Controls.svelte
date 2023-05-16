@@ -7,14 +7,15 @@
 	export let isLastChapter = false;
 	export let isFirstLine = false;
 	export let isLastLine = false;
+	export let isShuffleEnable = false;
 
 	const dispatch = createEventDispatcher();
 </script>
 
 <div id="controls">
 	<span class="button-group">
-		<button on:click={() => dispatch('shuffle')}>Shuffle</button>
-		<button disabled={isSorted} on:click={() => dispatch('sort')}>Sort</button>
+		<button disabled={!isShuffleEnable} on:click={() => dispatch('shuffle')}>Shuffle</button>
+		<button disabled={isSorted || !isShuffleEnable} on:click={() => dispatch('sort')}>Sort</button>
 	</span>
 	<span class="button-group">
 		<button disabled={isFirstChapter} on:click={() => dispatch('previousChapter')}
