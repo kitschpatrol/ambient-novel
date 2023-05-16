@@ -21,6 +21,21 @@
 		};
 	});
 
+	// set from query string
+	const searchParams = $page.url.searchParams;
+	if (searchParams) {
+		$activeChapter =
+			clamp(parseInt(searchParams.get('chapter') ?? '1'), 1, bookData.chapters.length) - 1;
+		$chapterState[$activeChapter].line =
+			clamp(
+				parseInt(searchParams.get('line') ?? '1'),
+				1,
+				bookData.chapters[$activeChapter].lines.length
+			) - 1;
+
+		$chapterState[$activeChapter].shuffleSeed = searchParams.get('seed') ?? '0';
+	}
+
 	function onPreviousChapter() {
 		$activeChapter = clamp($activeChapter - 1, 0, bookData.chapters.length - 1);
 	}
@@ -107,6 +122,13 @@
 	$: {
 		$page.url.searchParams.set('chapter', ($activeChapter + 1).toString());
 		$page.url.searchParams.set('line', ($chapterState[$activeChapter].line + 1).toString());
+
+		if ($chapterState[$activeChapter].shuffleSeed !== '0') {
+			$page.url.searchParams.set('seed', $chapterState[$activeChapter].shuffleSeed);
+		} else {
+			$page.url.searchParams.delete('seed');
+		}
+
 		goto(`?${$page.url.searchParams.toString()}`, { replaceState: true });
 	}
 </script>
