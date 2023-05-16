@@ -148,6 +148,10 @@
 
 <Controls
 	isShuffleEnable={bookData.chapters[$activeChapter].lineShuffleAllowed}
+	isSorted={isEqual(
+		lineOrder,
+		Array.from(Array(bookData.chapters[$activeChapter].lines.length).keys())
+	)}
 	isPlaying={$isPlaying}
 	isFirstChapter={$activeChapter === 0}
 	isLastChapter={$activeChapter === bookData.chapters.length - 1}
@@ -162,6 +166,3 @@
 	on:shuffle={onShuffle}
 	on:sort={onSort}
 />
-
-<style>
-</style>
