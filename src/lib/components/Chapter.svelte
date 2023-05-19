@@ -62,28 +62,30 @@
 		}
 	}
 
+	// sync the audio to the current line, e.g. when paging through previous / next line
+	$: {
+		const { start, end } = chapterData.lines[activeLine].timing;
+		if (
+			(currentTime < start || currentTime >= end + 0.1) &&
+			(!isPlaying || targetTime < start || targetTime >= end)
+		) {
+			// console.log(`setting audio start time to ${start}`);
+			targetTime = start;
+		}
+	}
+
 	// watch for the end of a line's audio and tell book to advance
 	$: {
 		const { end } = chapterData.lines[activeLine].timing;
+		const currentLineIndex = lineOrder.indexOf(activeLine);
+
 		// magic  math so we can go "back" while playing
-		if (isPlaying && currentTime >= end && currentTime <= end + 0.1) {
+		if (isPlaying && currentTime >= end && currentTime < end + 0.1) {
 			if (lineOrder.indexOf(activeLine) < chapterData.lines.length - 1) {
 				dispatch('readyForNextLine');
 			} else {
 				console.log(`Reached end of chapter... TODO alert the book?`);
 			}
-		}
-	}
-
-	// sync the audio to the current line, e.g. when paging through previous / next line
-	$: {
-		const { start, end } = chapterData.lines[activeLine].timing;
-		if (
-			(currentTime < start || currentTime >= end) &&
-			(!isPlaying || targetTime < start || targetTime >= end)
-		) {
-			// console.log(`setting audio start time to ${start}`);
-			targetTime = start;
 		}
 	}
 
