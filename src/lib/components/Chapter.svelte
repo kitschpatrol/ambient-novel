@@ -85,19 +85,20 @@
 		}
 	}
 
+	// todo update for container
 	// fade lines in and out as they scroll
-	$: {
-		if (chapterElement) {
-			chapterScrollTop;
-			for (const lineContainer of chapterElement.children as HTMLCollectionOf<HTMLDivElement>) {
-				const { height, top } = lineContainer.getBoundingClientRect();
-				lineContainer.style.opacity = `${Math.min(
-					clamp(mapValue(top, 0, height * -fadeHeightPercent, 1.0, 0.0), 0.0, 1.0),
-					clamp(mapValue(top, 0, height * fadeHeightPercent, 1.0, 0.0), 0.0, 1.0)
-				)}`;
-			}
-		}
-	}
+	// $: {
+	// 	if (chapterElement) {
+	// 		chapterScrollTop;
+	// 		for (const lineContainer of chapterElement.children as HTMLCollectionOf<HTMLDivElement>) {
+	// 			const { height, top } = lineContainer.getBoundingClientRect();
+	// 			lineContainer.style.opacity = `${Math.min(
+	// 				clamp(mapValue(top, 0, height * -fadeHeightPercent, 1.0, 0.0), 0.0, 1.0),
+	// 				clamp(mapValue(top, 0, height * fadeHeightPercent, 1.0, 0.0), 0.0, 1.0)
+	// 			)}`;
+	// 		}
+	// 	}
+	// }
 
 	// jump to same line after shuffle
 	// protect from updates on activeline
@@ -110,11 +111,25 @@
 			scrollToLineIndex(getActiveLine(), 0);
 		});
 	}
+
+	$: {
+		console.log(`chapterHeight: ${chapterHeight}`);
+	}
 </script>
 
-<div
+<!-- <div
 	transition:fade
-	class="chapter"
+	class="h-[130px] flex-1 flex-col overflow-scroll"
+	bind:this={chapterElement}
+	bind:clientHeight={chapterHeight}
+	on:scroll={(e) => {
+		// @ts-ignore
+		chapterScrollTop = e?.target?.scrollTop || 0;
+	}}
+> -->
+<div
+	class="grow-1 absolute h-full w-full flex-1 overflow-hidden bg-slate-300"
+	transition:fade
 	bind:this={chapterElement}
 	bind:clientHeight={chapterHeight}
 	on:scroll={(e) => {
@@ -123,16 +138,15 @@
 	}}
 >
 	{#each lineOrder as index}
-		<div class="line-container">
-			<Line
-				lineData={chapterData.lines[index]}
-				{isPlaying}
-				{currentTime}
-				chapterIndex={chapterData.index}
-			/>
-		</div>
+		<Line
+			lineData={chapterData.lines[index]}
+			{isPlaying}
+			{currentTime}
+			chapterIndex={chapterData.index}
+		/>
 	{/each}
 </div>
+<!-- </div> -->
 
 <Playlist
 	isShuffleOn={true}
@@ -150,7 +164,7 @@
 	bind:seeking
 />
 
-<style>
+<!-- <style>
 	.chapter {
 		width: 100vw;
 		height: 100vh;
@@ -187,4 +201,4 @@
 		scroll-snap-align: start;
 		scroll-snap-stop: always;
 	} */
-</style>
+</style> -->

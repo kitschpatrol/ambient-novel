@@ -21,6 +21,7 @@
 		"@playwright/test": "^1.33.0",
 		"@sveltejs/adapter-static": "^2.0.2",
 		"@sveltejs/kit": "^1.16.3",
+		"@tailwindcss/container-queries": "^0.1.1",
 		"@types/ffprobe-static": "^2.0.1",
 		"@types/lodash": "^4.14.194",
 		"@types/mime": "^3.0.1",

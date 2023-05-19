@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* via https://fontsgeek.com/fonts/Nasalization-Extended-Light-Regular */
+/* and https://transfonter.org */
+@font-face {
+	font-family: 'Nasalization Extended';
+	src: url('/fonts/nasalization/nasalization-extended-light.woff2') format('woff2'),
+		url('/fonts/nasalization/nasalization-extended-light.woff') format('woff'),
+		url('/fonts/nasalization/nasalization-extended-light.ttf') format('truetype');
+	/* TODO good idea? */
+	font-display: fallback;
+}
+
+@property --backgroundGradientAngle {
+	syntax: '<angle>';
+	inherits: false;
+	initial-value: 0deg;
+}
+
+body {
+	background: linear-gradient(var(--backgroundGradientAngle), #f01ef6 0%, #4447fb 100%);
+	animation: spin 30s infinite linear;
+}
+
+@keyframes spin {
+	to {
+		--backgroundGradientAngle: 360deg;
+	}
+}
+
+/*
+* {
+	touch-action: manipulation;
+}
+
+html,
+body {
+	width: 100vw;
+	height: 100vh;
+	overflow: hidden;
+} */

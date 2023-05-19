@@ -95,14 +95,14 @@
 	}
 </script>
 
-<div class="line" bind:this={lineElement}>
+<div class="h-full" bind:this={lineElement}>
 	{@html textWithTimingSpans}
 	<p class="lineNumber">
 		{chapterIndex + 1} § {lineData.index + 1}
 	</p>
 </div>
 
-<style>
+<!-- <style>
 	.line {
 		grid-area: 1 / 1; /* force overlap for transitions */
 		justify-self: center;
@@ -119,9 +119,7 @@
 	}
 
 	/* https://stackoverflow.com/questions/60734783/use-svelte-css-class-in-html */
-	.line :global(.timing) {
-		transition: opacity 800ms;
-	}
+
 
 	p.lineNumber {
 		position: absolute;
@@ -131,5 +129,11 @@
 		text-indent: 0;
 		font-size: 0.7rem;
 		color: rgb(182, 182, 182);
+	}
+</style> -->
+
+<style>
+	.line :global(.timing) {
+		transition: opacity 800ms;
 	}
 </style>

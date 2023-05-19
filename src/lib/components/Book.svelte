@@ -9,6 +9,7 @@
 	import sample from 'lodash/sample';
 	import isEqual from 'lodash/isEqual';
 	import { seededShuffle } from '$lib/utils/collection/seededShuffle';
+	import Play from 'svelte-material-icons/Play.svelte';
 
 	export let bookData: BookData;
 	let lineOrder: number[]; // generated for active chapter
@@ -133,36 +134,67 @@
 	}
 </script>
 
-{#key $activeChapter}
-	<Chapter
-		{lineOrder}
-		isPlaying={$isPlaying}
-		chapterData={bookData.chapters[$activeChapter]}
-		activeLine={$chapterState[$activeChapter].line}
-		on:readyForNextLine={() => {
-			// console.log(`ready for next line`);
-			onNextLine();
-		}}
-	/>
-{/key}
+<div class="flex h-full flex-col">
+	<ul class="flex flex-row space-x-2">
+		{#each bookData.chapters as chapter, i}
+			<li
+				class="group flex-col whitespace-nowrap text-center {i === $activeChapter
+					? 'shrink-0 max-sm:grow'
+					: 'shrink grow truncate'}"
+			>
+				<a
+					on:click={() => {
+						$activeChapter = i;
+					}}
+					class="block rounded-t-xl px-4 py-2 {i === $activeChapter
+						? 'bg-slate-300 max-sm:min-w-full'
+						: 'min-w-full bg-slate-400 bg-gradient-to-t from-inner-shadow to-transparent to-35%'}"
+					href="?chapter={i}"
+					>{i + 1}<span
+						class={i === $activeChapter ? 'max-sm:hidden' : 'hidden max-sm:group-hover:inline'}
+						>. {chapter.title}</span
+					></a
+				>
+			</li>
+		{/each}
+	</ul>
+	<h2 class="bg-slate-300 p-4 text-xl sm:hidden">{bookData.chapters[$activeChapter].title}</h2>
+	<div class="grow-1 relative h-full flex-1 overflow-hidden">
+		{#key $activeChapter}
+			<Chapter
+				{lineOrder}
+				isPlaying={$isPlaying}
+				chapterData={bookData.chapters[$activeChapter]}
+				activeLine={$chapterState[$activeChapter].line}
+				on:readyForNextLine={() => {
+					// console.log(`ready for next line`);
+					onNextLine();
+				}}
+			/>
+		{/key}
+	</div>
 
-<Controls
-	isShuffleEnable={bookData.chapters[$activeChapter].lineShuffleAllowed}
-	isSorted={isEqual(
-		lineOrder,
-		Array.from(Array(bookData.chapters[$activeChapter].lines.length).keys())
-	)}
-	isPlaying={$isPlaying}
-	isFirstChapter={$activeChapter === 0}
-	isLastChapter={$activeChapter === bookData.chapters.length - 1}
-	{isFirstLine}
-	{isLastLine}
-	on:nextChapter={onNextChapter}
-	on:previousChapter={onPreviousChapter}
-	on:play={onPlay}
-	on:pause={onPause}
-	on:nextLine={onNextLine}
-	on:previousLine={onPreviousLine}
-	on:shuffle={onShuffle}
-	on:sort={onSort}
-/>
+	<div class="rounded-b-xl bg-slate-400">
+		<button class="m-3 rounded-md bg-red-400 p-2"><Play class="inline text-2xl" /> Hi</button>
+		<Controls
+			isShuffleEnable={bookData.chapters[$activeChapter].lineShuffleAllowed}
+			isSorted={isEqual(
+				lineOrder,
+				Array.from(Array(bookData.chapters[$activeChapter].lines.length).keys())
+			)}
+			isPlaying={$isPlaying}
+			isFirstChapter={$activeChapter === 0}
+			isLastChapter={$activeChapter === bookData.chapters.length - 1}
+			{isFirstLine}
+			{isLastLine}
+			on:nextChapter={onNextChapter}
+			on:previousChapter={onPreviousChapter}
+			on:play={onPlay}
+			on:pause={onPause}
+			on:nextLine={onNextLine}
+			on:previousLine={onPreviousLine}
+			on:shuffle={onShuffle}
+			on:sort={onSort}
+		/>
+	</div>
+</div>
