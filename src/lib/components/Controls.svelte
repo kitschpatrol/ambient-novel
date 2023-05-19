@@ -1,6 +1,20 @@
 <script lang="ts">
+	import Button from '$lib/components/Button.svelte';
+	import {
+		faB,
+		faBackward,
+		faBackwardStep,
+		faForward,
+		faForwardStep,
+		faGripLines,
+		faPause,
+		faPlay,
+		faShuffle
+	} from '@fortawesome/free-solid-svg-icons';
 	import { createEventDispatcher } from 'svelte';
 
+	export let showChapterButtons = false;
+	export let showSortButton = true;
 	export let isSorted = false;
 	export let isPlaying = false;
 	export let isFirstChapter = false;
@@ -12,77 +26,76 @@
 	const dispatch = createEventDispatcher();
 </script>
 
-<div id="controls">
-	<span class="button-group">
-		<button disabled={!isShuffleEnable} on:click={() => dispatch('shuffle')}>Shuffle</button>
-		<button disabled={isSorted || !isShuffleEnable} on:click={() => dispatch('sort')}>Sort</button>
+<div id="controls" class="flex justify-between px-3 py-2">
+	<span>
+		<Button
+			icon={faPlay}
+			label="Play"
+			isDown={isPlaying}
+			isEnabled={!isPlaying}
+			on:click={() => dispatch('play')}
+		/>
+		<Button icon={faPause} label="Pause" isEnabled={isPlaying} on:click={() => dispatch('pause')} />
 	</span>
-	<span class="button-group">
-		<button disabled={isFirstChapter} on:click={() => dispatch('previousChapter')}
-			>Previous Chapter</button
-		>
-		<button disabled={isLastChapter} on:click={() => dispatch('nextChapter')}>Next Chapter</button>
+	<span>
+		{#if showChapterButtons}
+			<Button
+				icon={faBackwardStep}
+				label="Previous Chapter"
+				isEnabled={!isFirstChapter}
+				on:click={() => dispatch('previousChapter')}
+			/>
+		{/if}
+
+		<Button
+			icon={faBackward}
+			label="Previous Line"
+			isEnabled={!isFirstLine}
+			on:click={() => dispatch('previousLine')}
+		/>
+
+		<Button
+			icon={faForward}
+			label="Next Line"
+			isEnabled={!isLastLine}
+			iconAlign="right"
+			on:click={() => dispatch('nextLine')}
+		/>
+
+		{#if showChapterButtons}
+			<Button
+				icon={faForwardStep}
+				label="Next Chapter"
+				isEnabled={!isLastChapter}
+				iconAlign="right"
+				on:click={() => dispatch('nextChapter')}
+			/>
+		{/if}
 	</span>
-	<span class="button-group">
-		<button disabled={isFirstLine} on:click={() => dispatch('previousLine')}>Previous Line</button>
-		<button disabled={isLastLine} on:click={() => dispatch('nextLine')}>Next Line</button>
-	</span>
-	<span class="button-group">
-		<button class={isPlaying ? '' : 'down'} disabled={!isPlaying} on:click={() => dispatch('pause')}
-			>Pause</button
-		>
-		<button class={isPlaying ? 'down' : ''} disabled={isPlaying} on:click={() => dispatch('play')}
-			>Play</button
-		>
+
+	<span>
+		{#if showSortButton}
+			<Button
+				icon={faGripLines}
+				label="Sort"
+				isEnabled={!isSorted && isShuffleEnable}
+				on:click={() => dispatch('sort')}
+			/>
+		{/if}
+
+		<Button
+			icon={faShuffle}
+			label="Shuffle"
+			isEnabled={isShuffleEnable}
+			on:click={() => dispatch('shuffle')}
+		/>
 	</span>
 </div>
 
 <style>
 	div#controls {
-		position: absolute;
-		bottom: 20px;
-		text-align: center;
-		width: 100%;
 		user-select: none;
 		-webkit-user-select: none;
 		-ms-user-select: none;
-	}
-
-	button {
-		font-family: 'Nasalization Extended', sans-serif;
-		background-color: rgba(255, 255, 255, 0.75);
-		border: none;
-		padding: 10px;
-		margin: 3px;
-		border-radius: 10px;
-		cursor: pointer;
-		box-shadow: -3px 3px 5px #00000067;
-		position: relative;
-		user-select: none;
-		-webkit-user-select: none;
-		-ms-user-select: none;
-	}
-
-	@media (hover: hover) {
-		button:hover {
-			background-color: white;
-		}
-	}
-
-	button:enabled:active,
-	button.down {
-		top: 1px;
-		right: 1px;
-		box-shadow: -2px 3px 5px #00000067;
-	}
-
-	button:disabled {
-		color: rgba(0, 0, 0, 0.3);
-		background-color: rgba(255, 255, 255, 0.3);
-	}
-
-	span.button-group {
-		padding: 8px 20px;
-		display: inline-block;
 	}
 </style>

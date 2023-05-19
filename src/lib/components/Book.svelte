@@ -1,15 +1,15 @@
 <script lang="ts">
-	import type { BookData } from '$lib/schemas/bookSchema';
-	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 	import Chapter from '$lib/components/Chapter.svelte';
 	import Controls from '$lib/components/Controls.svelte';
-	import { isPlaying, activeChapter, chapterState } from '../../store';
-	import clamp from 'lodash/clamp';
-	import sample from 'lodash/sample';
-	import isEqual from 'lodash/isEqual';
+	import type { BookData } from '$lib/schemas/bookSchema';
 	import { seededShuffle } from '$lib/utils/collection/seededShuffle';
-	import Play from 'svelte-material-icons/Play.svelte';
+	import clamp from 'lodash/clamp';
+	import isEqual from 'lodash/isEqual';
+	import sample from 'lodash/sample';
+	import { fade } from 'svelte/transition';
+	import { activeChapter, chapterState, isPlaying } from '../../store';
 
 	export let bookData: BookData;
 	let lineOrder: number[]; // generated for active chapter
@@ -114,7 +114,6 @@
 		}
 		// only assign if there's a change to avoid extra reactions
 		if (!isEqual(lineOrder, tempOrder)) {
-			console.log(`shuffleSeed: ${shuffleSeed}`);
 			lineOrder = tempOrder;
 		}
 	}
@@ -134,32 +133,47 @@
 	}
 </script>
 
+<!-- drop-shadow-2xl insanely slow on safari :( -->
 <div class="flex h-full flex-col">
-	<ul class="flex flex-row space-x-2">
+	<ul class="flex flex-row gap-1 overflow-hidden">
 		{#each bookData.chapters as chapter, i}
 			<li
-				class="group flex-col whitespace-nowrap text-center {i === $activeChapter
+				class="group relative flex-col whitespace-nowrap text-center {i === $activeChapter
 					? 'shrink-0 max-sm:grow'
-					: 'shrink grow truncate'}"
+					: // needs truncate?
+					  'shrink grow'}"
 			>
 				<a
 					on:click={() => {
 						$activeChapter = i;
 					}}
-					class="block rounded-t-xl px-4 py-2 {i === $activeChapter
-						? 'bg-slate-300 max-sm:min-w-full'
-						: 'min-w-full bg-slate-400 bg-gradient-to-t from-inner-shadow to-transparent to-35%'}"
+					class="link relative block h-full rounded-t-xl pt-2 font-display text-sm sm:text-base {i ===
+					$activeChapter
+						? 'bg-white pb-2 max-sm:min-w-full sm:px-4'
+						: 'mt-1 min-w-full bg-white bg-opacity-40 bg-gradient-to-t from-vm-inner-shadow-dark to-transparent to-45% text-white text-opacity-70 transition-[margin] duration-300 group-hover:mt-0 group-hover:transition-none'}"
 					href="?chapter={i}"
-					>{i + 1}<span
-						class={i === $activeChapter ? 'max-sm:hidden' : 'hidden max-sm:group-hover:inline'}
-						>. {chapter.title}</span
+				>
+					<span
+						class={i === $activeChapter
+							? 'bg-gradient-to-br from-vm-magenta to-vm-blue bg-clip-text font-extrabold text-transparent'
+							: ''}
+					>
+						{i + 1}<span class={i === $activeChapter ? 'max-sm:hidden' : 'hidden'}
+							>. {chapter.title}</span
+						></span
 					></a
 				>
 			</li>
 		{/each}
 	</ul>
-	<h2 class="bg-slate-300 p-4 text-xl sm:hidden">{bookData.chapters[$activeChapter].title}</h2>
-	<div class="grow-1 relative h-full flex-1 overflow-hidden">
+	<h2
+		class="bg-white bg-gradient-to-t from-vm-inner-shadow-light to-transparent to-45% py-1 text-center font-display sm:hidden"
+	>
+		<span class="bg-gradient-to-br from-vm-magenta to-vm-blue bg-clip-text text-transparent">
+			Chapter {$activeChapter + 1}: {bookData.chapters[$activeChapter].title}
+		</span>
+	</h2>
+	<div class="grow-1 relative h-full flex-1 overflow-hidden bg-white">
 		{#key $activeChapter}
 			<Chapter
 				{lineOrder}
@@ -174,8 +188,9 @@
 		{/key}
 	</div>
 
-	<div class="rounded-b-xl bg-slate-400">
-		<button class="m-3 rounded-md bg-red-400 p-2"><Play class="inline text-2xl" /> Hi</button>
+	<div
+		class="rounded-b-xl bg-white bg-opacity-40 bg-gradient-to-b from-vm-inner-shadow to-transparent to-45%"
+	>
 		<Controls
 			isShuffleEnable={bookData.chapters[$activeChapter].lineShuffleAllowed}
 			isSorted={isEqual(
@@ -198,3 +213,17 @@
 		/>
 	</div>
 </div>
+
+<style>
+	/* crazy approach to expanding the hit area to close the gaps between floated tab links */
+
+	.link:before {
+		content: '';
+		position: absolute;
+		width: calc(100% + theme('spacing.1'));
+		height: 100%;
+		top: 0px;
+		left: calc(theme('spacing.1') * -0.5);
+		cursor: pointer;
+	}
+</style>

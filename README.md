@@ -44,6 +44,7 @@ To set up the environment:
 # install ffmpeg with fddk-aac
 # whisperx doesn't care about specific versions, but safari does
 # and we also use ffmpeg in the data generation step
+# TODO does this install ffprobe as well?
 brew tap homebrew-ffmpeg/ffmpeg
 brew install homebrew-ffmpeg/ffmpeg/ffmpeg --with-fdk-aacbrew tap homebrew-ffmpeg/ffmpeg
 brew install miniconda

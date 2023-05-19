@@ -2,9 +2,8 @@
 	import type { LineData } from '$lib/schemas/bookSchema';
 	export let isPlaying = false;
 	export let lineData: LineData;
-	export let chapterIndex: number;
 	export let currentTime: number = 0;
-	export let timingOffsetSeconds: number = 0.75;
+	export let timingOffsetSeconds: number = 0.5;
 
 	let lineElement: HTMLDivElement;
 
@@ -95,42 +94,11 @@
 	}
 </script>
 
-<div class="h-full" bind:this={lineElement}>
-	{@html textWithTimingSpans}
-	<p class="lineNumber">
-		{chapterIndex + 1} § {lineData.index + 1}
+<div class="flex h-full flex-col overflow-hidden" bind:this={lineElement}>
+	<p class="line m-auto px-8 pb-5 pt-1 font-serif sm:text-lg">
+		{@html textWithTimingSpans}
 	</p>
 </div>
-
-<!-- <style>
-	.line {
-		grid-area: 1 / 1; /* force overlap for transitions */
-		justify-self: center;
-		align-self: center;
-		max-width: 550px;
-		background-color: rgba(255, 255, 255);
-		box-shadow: -3px 3px 5px #00000067;
-		font-family: 'Times New Roman', Times, serif;
-		font-size: 1.2rem;
-		line-height: 120%;
-		text-indent: 3.6rem;
-		padding: 30px;
-		position: relative;
-	}
-
-	/* https://stackoverflow.com/questions/60734783/use-svelte-css-class-in-html */
-
-
-	p.lineNumber {
-		position: absolute;
-		font-style: italic;
-		right: 12px;
-		bottom: 5px;
-		text-indent: 0;
-		font-size: 0.7rem;
-		color: rgb(182, 182, 182);
-	}
-</style> -->
 
 <style>
 	.line :global(.timing) {

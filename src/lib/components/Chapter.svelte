@@ -1,20 +1,20 @@
 <script lang="ts">
-	import type { ChapterData } from '$lib/schemas/bookSchema';
-	import { fade } from 'svelte/transition';
-	import { tweened } from 'svelte/motion';
-	import { createEventDispatcher, onMount, tick } from 'svelte';
-	import { quadInOut } from 'svelte/easing';
-	import clamp from 'lodash/clamp';
-	import Playlist from '$lib/components/Playlist.svelte';
+	import { browser } from '$app/environment';
 	import Audio from '$lib/components/Audio.svelte';
 	import Line from '$lib/components/Line.svelte';
+	import Playlist from '$lib/components/Playlist.svelte';
+	import type { ChapterData } from '$lib/schemas/bookSchema';
 	import { mapValue } from '$lib/utils/math/mapValue';
+	import clamp from 'lodash/clamp';
+	import { createEventDispatcher, onMount, tick } from 'svelte';
+	import { quadInOut } from 'svelte/easing';
+	import { tweened } from 'svelte/motion';
+	import { fade } from 'svelte/transition';
 
 	export let isPlaying = false;
 	export let chapterData: ChapterData;
 	export let activeLine: number = 0;
 	export let currentTime: number = 0;
-	export let seeking: boolean = false;
 	export let maxVolumeMusic = 0.5;
 	export let maxVolumeSpeech = 1.0;
 	export let lineOrder = Array.from(Array(chapterData.lines.length).keys());
@@ -25,28 +25,30 @@
 		duration: 600,
 		easing: quadInOut
 	});
-	let chapterHeight = 0;
+
 	let chapterScrollTop = 0;
 
 	const dispatch = createEventDispatcher();
-	const fadeHeightPercent = 0.2;
+	const fadeHeightPercent = 0.25;
 
 	onMount(() => {
-		// todo shuffle
-
 		// jump immediately to the correct line,
 		// e.g. when switching chapters
 		scrollToLineIndex(activeLine, 0);
 	});
 
 	function scrollToLineIndex(lineIndex: number, duration: number = 600) {
-		scrollTween.set(
-			clamp(lineOrder.indexOf(lineIndex), 0, chapterData.lines.length - 1) * chapterHeight,
-			{
-				duration,
-				easing: quadInOut
-			}
-		);
+		if (chapterElement) {
+			// can't just bind to clientHeight because that's rounded
+			const chapterHeight = chapterElement.getBoundingClientRect().height;
+			scrollTween.set(
+				clamp(lineOrder.indexOf(lineIndex), 0, chapterData.lines.length - 1) * chapterHeight,
+				{
+					duration,
+					easing: quadInOut
+				}
+			);
+		}
 	}
 
 	// scroll if needed
@@ -87,18 +89,29 @@
 
 	// todo update for container
 	// fade lines in and out as they scroll
-	// $: {
-	// 	if (chapterElement) {
-	// 		chapterScrollTop;
-	// 		for (const lineContainer of chapterElement.children as HTMLCollectionOf<HTMLDivElement>) {
-	// 			const { height, top } = lineContainer.getBoundingClientRect();
-	// 			lineContainer.style.opacity = `${Math.min(
-	// 				clamp(mapValue(top, 0, height * -fadeHeightPercent, 1.0, 0.0), 0.0, 1.0),
-	// 				clamp(mapValue(top, 0, height * fadeHeightPercent, 1.0, 0.0), 0.0, 1.0)
-	// 			)}`;
-	// 		}
-	// 	}
-	// }
+	$: {
+		if (chapterElement) {
+			const chapterHeight = chapterElement.getBoundingClientRect().height;
+			chapterScrollTop;
+			for (const [i, lineContainer] of Array.from(
+				chapterElement.children as HTMLCollectionOf<HTMLDivElement>
+			).entries()) {
+				const distanceFromCenter = clamp(
+					mapValue(
+						Math.abs(chapterScrollTop - lineContainer.offsetTop),
+						0.0,
+						fadeHeightPercent * chapterHeight,
+						0.0,
+						1.0
+					),
+					0.0,
+					1.0
+				);
+
+				lineContainer.style.opacity = `${1 - distanceFromCenter}`;
+			}
+		}
+	}
 
 	// jump to same line after shuffle
 	// protect from updates on activeline
@@ -111,42 +124,33 @@
 			scrollToLineIndex(getActiveLine(), 0);
 		});
 	}
-
-	$: {
-		console.log(`chapterHeight: ${chapterHeight}`);
-	}
 </script>
 
-<!-- <div
-	transition:fade
-	class="h-[130px] flex-1 flex-col overflow-scroll"
-	bind:this={chapterElement}
-	bind:clientHeight={chapterHeight}
-	on:scroll={(e) => {
-		// @ts-ignore
-		chapterScrollTop = e?.target?.scrollTop || 0;
+<svelte:window
+	on:resize={() => {
+		scrollToLineIndex(getActiveLine(), 0);
 	}}
-> -->
+/>
+
 <div
-	class="grow-1 absolute h-full w-full flex-1 overflow-hidden bg-slate-300"
-	transition:fade
+	class="grow-1 absolute h-full w-full flex-1 overflow-hidden"
+	transition:fade={{ duration: 300 }}
 	bind:this={chapterElement}
-	bind:clientHeight={chapterHeight}
 	on:scroll={(e) => {
 		// @ts-ignore
 		chapterScrollTop = e?.target?.scrollTop || 0;
 	}}
 >
 	{#each lineOrder as index}
-		<Line
-			lineData={chapterData.lines[index]}
-			{isPlaying}
-			{currentTime}
-			chapterIndex={chapterData.index}
-		/>
+		<Line lineData={chapterData.lines[index]} {isPlaying} {currentTime} />
 	{/each}
 </div>
-<!-- </div> -->
+<p
+	transition:fade={{ duration: 300 }}
+	class="absolute bottom-0 right-0 px-3 pb-3 text-right font-serif text-sm italic text-gray-400"
+>
+	Chapter {chapterData.index + 1} § {activeLine + 1}&hairsp;/&hairsp;{chapterData.lines.length}
+</p>
 
 <Playlist
 	isShuffleOn={true}
@@ -161,44 +165,4 @@
 	maxVolume={maxVolumeSpeech}
 	{targetTime}
 	bind:currentTime
-	bind:seeking
 />
-
-<!-- <style>
-	.chapter {
-		width: 100vw;
-		height: 100vh;
-		position: absolute;
-		top: 0;
-		overflow-y: hidden;
-		overflow-x: hidden;
-	}
-
-	/* .scroll-snap-parent {
-		scroll-snap-type: y mandatory;
-		-webkit-overflow-scrolling: touch;
-		scroll-behavior: smooth;
-	} */
-
-	.line-container {
-		display: grid;
-		grid-template-columns: 100vw;
-		grid-template-rows: 100vh;
-
-		/* grid-area: 1 / 1; force overlap for transitions */
-		/* justify-self: center; */
-		/* align-self: center; */
-		/* width: 100%; */
-		/* height: 100%; */
-
-		/* max-height: 80%; */
-
-		/* text-align: justify; */
-		/* position: relative; */
-	}
-
-	/* .scroll-snap-child {
-		scroll-snap-align: start;
-		scroll-snap-stop: always;
-	} */
-</style> -->

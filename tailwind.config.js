@@ -18,8 +18,13 @@ export default {
 				DEFAULT: '-3px 3px 5px var(--tw-shadow-color)'
 			},
 			colors: {
-				shadow: '#00000067',
-				'inner-shadow': '#00000010'
+				'vm-magenta': '#f01ef6',
+				'vm-magenta-highlight': '#F6CDFB',
+				'vm-blue': '#4447fb',
+				'vm-shadow': '#00000067',
+				'vm-inner-shadow': '#00000010',
+				'vm-inner-shadow-light': '#00000007',
+				'vm-inner-shadow-dark': '#00000020'
 			}
 		}
 	},

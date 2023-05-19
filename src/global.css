@@ -13,21 +13,31 @@
 	font-display: fallback;
 }
 
-@property --backgroundGradientAngle {
+/* @property --backgroundGradientAngle {
 	syntax: '<angle>';
 	inherits: false;
 	initial-value: 0deg;
-}
+} */
 
 body {
-	background: linear-gradient(var(--backgroundGradientAngle), #f01ef6 0%, #4447fb 100%);
-	animation: spin 30s infinite linear;
+	background: linear-gradient(
+		/* var(--backgroundGradientAngle), */ 0deg,
+		theme('colors.vm-magenta') 0%,
+		theme('colors.vm-blue') 100%
+	);
+	/* too slow on safari? */
+	/* animation: spin 30s infinite linear; */
 }
 
 @keyframes spin {
 	to {
 		--backgroundGradientAngle: 360deg;
 	}
+}
+
+::selection {
+	color: white;
+	background: theme('colors.vm-magenta');
 }
 
 /*
