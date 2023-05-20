@@ -3,7 +3,7 @@ const plugin = require('tailwindcss/plugin');
 
 /** @type {import('tailwindcss').Config} */
 export default {
-	content: ['./src/**/*.svelte'],
+	content: ['./src/**/*.{html,js,svelte,ts}'],
 	theme: {
 		fontFamily: {
 			serif: ['Times New Roman', 'Times', 'serif'],

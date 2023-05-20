@@ -1,5 +1,11 @@
 # Ambient Novel
 
+Uses [`dust`](https://github.com/bootandy/dust) in the `build-report` NPM script. Install from brew if needed:
+
+```bash
+brew install dust
+```
+
 ## Updating the content
 
 Certain data and assets are generated from the source data in `/data` and ouput to `/static`, `/data-generated` and `/src/lib/data`.

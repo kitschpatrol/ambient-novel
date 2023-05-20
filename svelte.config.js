@@ -1,5 +1,5 @@
-import { vitePreprocess } from '@sveltejs/kit/vite';
 import adapter from '@sveltejs/adapter-static';
+import { vitePreprocess } from '@sveltejs/kit/vite';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -7,7 +7,10 @@ const config = {
 	// for more information about preprocessors
 	preprocess: vitePreprocess(),
 	kit: {
-		adapter: adapter()
+		adapter: adapter({
+			// cloudflare pages does this for us...
+			// precompress: true
+		})
 		// hmm https://stackoverflow.com/questions/74931516/in-svete-what-to-use-instead-of-html-to-avoid-xss-attacks
 		// csp: {
 		// 	directives: {
