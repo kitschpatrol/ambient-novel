@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import fs from 'fs';
 import round from 'lodash/round';
 import path from 'path';
@@ -9,12 +10,14 @@ import {
 	checkForBinaryOnPath,
 	compressTo,
 	createIntermediatePaths,
+	findHashedFile,
 	generateRegexForString,
 	getAudioDuration,
 	kebabCase,
 	normalizeUnicode,
 	normalizeWord,
 	regexMatchInRange,
+	renameFileWithHash,
 	replaceSubstring,
 	saveFormattedJson,
 	sayToFileCoqui,
@@ -49,6 +52,11 @@ import {
 
 // Customize this to your liking
 const config = {
+	bookAuditSettings: {
+		lineLengthWarningThreshold: 1100, // characters
+		lineLengthSingle: 98, // average full-width line, for calculating breaks
+		abortOnLineLengthWarnings: true
+	},
 	jsonSettings: {
 		sourceFile: './data/book.json',
 		outputFile: './src/lib/data/book.json',
@@ -59,6 +67,7 @@ const config = {
 		regenerateSource: false,
 		regenerateCompressed: false,
 		regenerateTranscript: false,
+		regenerateWordAlignment: false,
 		generatedDataDir: './data-generated',
 		sourceDir: '/Users/mika/Documents/Projects/Ambient Novel with Scott Wayne Indiana/Voice Over', // will generate using say if missing
 		outputDir: './static/speech',
@@ -100,23 +109,7 @@ const config = {
 
 console.log('Generating data...');
 
-checkForBinaryOnPath('ffmpeg');
-checkForBinaryOnPath('ffprobe');
-checkForBinaryOnPath('conda');
-
-// generate ouput dirs if needed, clear them if regenerate is true
-if (config.speechSettings.regenerateSource) {
-	createIntermediatePaths(config.speechSettings.sourceDir, true);
-}
-createIntermediatePaths(config.jsonSettings.outputFile, true);
-createIntermediatePaths(
-	config.speechSettings.outputDir,
-	config.speechSettings.regenerateCompressed
-);
-createIntermediatePaths(config.musicSettings.outputDir, config.musicSettings.regenerateCompressed);
-
 // Load the text
-
 const bookSource = bookSourceSchema.parse(
 	JSON.parse(fs.readFileSync(config.jsonSettings.sourceFile, 'utf8'))
 );
@@ -143,6 +136,59 @@ const bookOutput: DeepPartial<BookData> = {
 	chapters: []
 };
 
+// audit line length
+let haveLineWarnings = false;
+bookSource.chapters.forEach((chapter, chapterIndex) => {
+	chapter.lines.forEach((line, lineIndex) => {
+		const lineWithHtmlBreaks = line.split(/(?<=<br \/>)|(?<=<br>)|(?<=<li>)/giu);
+
+		let lineCharCount = 0;
+		lineWithHtmlBreaks.forEach((line) => {
+			// consider it a full line if it contains html, since that's a break
+			if (line.match(/(<br \/>)|<br>|<li>/giu)) {
+				lineCharCount += config.bookAuditSettings.lineLengthSingle;
+			} else {
+				lineCharCount += stripHtmlTags(line).length;
+			}
+		});
+
+		if (lineCharCount > config.bookAuditSettings.lineLengthWarningThreshold) {
+			console.warn(
+				`Warning: Chapter ${chapterIndex + 1} Line ${
+					lineIndex + 1
+				} that starts "${truncateWithEllipsis(
+					stripHtmlTags(line),
+					30
+				)}" is ${lineCharCount} characters long`
+			);
+			haveLineWarnings = true;
+		}
+	});
+});
+
+// Continue generation...
+if (haveLineWarnings && config.bookAuditSettings.abortOnLineLengthWarnings) {
+	console.log('Aborting because some lines are too long...');
+	process.exit(1);
+} else if (!haveLineWarnings) {
+	console.log('All lines are within the length threshold');
+}
+
+checkForBinaryOnPath('ffmpeg');
+checkForBinaryOnPath('ffprobe');
+checkForBinaryOnPath('conda');
+
+// generate ouput dirs if needed, clear them if regenerate is true
+if (config.speechSettings.regenerateSource) {
+	createIntermediatePaths(config.speechSettings.sourceDir, true);
+}
+createIntermediatePaths(config.jsonSettings.outputFile, true);
+createIntermediatePaths(
+	config.speechSettings.outputDir,
+	config.speechSettings.regenerateCompressed
+);
+createIntermediatePaths(config.musicSettings.outputDir, config.musicSettings.regenerateCompressed);
+
 // generate speech and compress
 for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 	console.log(
@@ -161,6 +207,7 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 
 	// say if needed
 	const voiceOverSourceFile = `${config.speechSettings.sourceDir}/${chapterSource.voiceOver}`;
+	console.log(`voiceOverSourceFile: ${JSON.stringify(voiceOverSourceFile, null, 2)}`);
 	if (fs.existsSync(voiceOverSourceFile) && !config.speechSettings.regenerateSource) {
 		console.log(
 			`Already found voice over source file ${voiceOverSourceFile}, nothing to generate...`
@@ -208,17 +255,25 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 	}
 
 	chapter.voiceOver.durationSeconds = getAudioDuration(voiceOverSourceFile);
-	chapter.voiceOver.originalFile = voiceOverSourceFile;
 
 	// compress the audio if needed
 	for (const { format, quality, sampleRate, vbr } of config.speechSettings.outputs) {
-		const speechFile = `${config.speechSettings.outputDir}/${chapterNumber}.${format}`;
+		const speechFileUnhashed = `${config.speechSettings.outputDir}/${chapterNumber}.${format}`;
+		let speechFile = findHashedFile(speechFileUnhashed);
 
-		if (fs.existsSync(speechFile) && !config.speechSettings.regenerateCompressed) {
+		if (speechFile && !config.speechSettings.regenerateCompressed) {
 			console.log(`Already found voice over output file ${speechFile}, nothing to generate...`);
 		} else {
+			// clean up existing
+			if (speechFile) {
+				fs.rmSync(speechFile, { force: true });
+			}
+
 			console.log(`Compressing ${voiceOverSourceFile} speech to ${format}`);
-			compressTo(voiceOverSourceFile, speechFile, quality, sampleRate, vbr);
+			compressTo(voiceOverSourceFile, speechFileUnhashed, quality, sampleRate, vbr);
+
+			// hash it
+			speechFile = renameFileWithHash(speechFileUnhashed);
 		}
 
 		chapter.voiceOver.files.push(speechFile.replace('./static/', ''));
@@ -240,7 +295,7 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 
 	// align the perfect transcript to the audio, using timing chunks from the whisperx transcript
 	const wordTimingsFile = `${config.speechSettings.generatedDataDir}/chapter-${chapterNumber}-word-timings.json`;
-	if (fs.existsSync(wordTimingsFile) && !config.speechSettings.regenerateTranscript) {
+	if (fs.existsSync(wordTimingsFile) && !config.speechSettings.regenerateWordAlignment) {
 		console.log(
 			`Already found word-level timings file for ${chapterNumber}, nothing to generate...`
 		);
@@ -308,7 +363,6 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 	for (const ambientTracksSource of chapterSource.ambientTracks) {
 		console.log(`Processing chapter ${chapterNumber} ambient track ${ambientTracksSource}`);
 		const ambientTrack: StripArray<DeepPartial<BookData['chapters'][0]['ambientTracks']>> = {};
-		ambientTrack.originalFile = ambientTracksSource;
 		ambientTrack.files = [];
 
 		const cleanFilename = kebabCase(path.parse(path.basename(ambientTracksSource)).name);
@@ -327,18 +381,25 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 		// fs.rmSync(filePathLosslessTrimmed, { force: true });
 
 		for (const { format, quality, sampleRate, vbr } of config.musicSettings.outputs) {
-			const outputFile = `${config.musicSettings.outputDir}/${cleanFilename}.${format}`;
+			const musicFileUnhashed = `${config.musicSettings.outputDir}/${cleanFilename}.${format}`;
+			let musicFile = findHashedFile(musicFileUnhashed);
 
-			// generate only if needed, since there might be multiple references to
-			// the same ambient track
-			if (fs.existsSync(outputFile) && !config.musicSettings.regenerateCompressed) {
-				console.log(`Already compressed ambient track ${outputFile}`);
+			if (musicFile && !config.speechSettings.regenerateCompressed) {
+				console.log(`Already found ambient music track ${musicFile}, nothing to generate...`);
 			} else {
-				console.log(`Compressing ambient ${sourceFile} to ${format}`);
-				compressTo(sourceFile, outputFile, quality, sampleRate, vbr);
+				// clean up existing
+				if (musicFile) {
+					fs.rmSync(musicFile, { force: true });
+				}
+
+				console.log(`Compressing ambient ${sourceFile} speech to ${format}`);
+				compressTo(sourceFile, musicFileUnhashed, quality, sampleRate, vbr);
+
+				// hash it
+				musicFile = renameFileWithHash(musicFileUnhashed);
 			}
 
-			ambientTrack.files.push(outputFile.replace('./static/', ''));
+			ambientTrack.files.push(musicFile.replace('./static/', ''));
 		}
 
 		chapter.ambientTracks?.push(ambientTrack);

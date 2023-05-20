@@ -17,14 +17,12 @@ export const bookSchema = z.object({
 				ambientTracks: z.array(
 					z.object({
 						files: z.array(z.string().nonempty()),
-						durationSeconds: z.number().positive(),
-						originalFile: z.string().nonempty()
+						durationSeconds: z.number().positive()
 					})
 				),
 				voiceOver: z.object({
 					files: z.array(z.string().nonempty()),
-					durationSeconds: z.number().positive(),
-					originalFile: z.string().nonempty()
+					durationSeconds: z.number().positive()
 				}),
 				lineShuffleAllowed: z.boolean(),
 				lines: z

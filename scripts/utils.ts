@@ -1,11 +1,60 @@
 import { execSync } from 'child_process';
+import crypto from 'crypto';
 import fs from 'fs';
+import glob from 'glob';
 import leven from 'leven';
 import path from 'path';
 import prettier from 'prettier';
 import { stripHtml } from 'string-strip-html';
 
 // utility functions used by generateData.ts
+
+export function findHashedFile(filePath: string): string | null {
+	// Match the hash area
+	console.log(`filePath: ${filePath}`);
+
+	const parts = filePath.split('.');
+	parts.splice(-1, 0, '*');
+	const pattern = parts.join('.');
+
+	console.log(`pattern: ${pattern}`);
+	// Synchronously get all files matching the pattern
+	const files = glob.sync(pattern);
+
+	// If at least one file matches the pattern
+	if (files.length == 1) {
+		// Get the first file
+		const matchedFilePath = files[0];
+
+		// Check that the file exists and is a file (not a directory)
+		if (fs.existsSync(matchedFilePath) && fs.lstatSync(matchedFilePath).isFile()) {
+			return matchedFilePath;
+		}
+	} else if (files.length > 1) {
+		throw new Error('More than one hashed version of file ${filePath} was found!');
+	}
+	return null;
+}
+
+function hashFile(filePath: string): string {
+	const fileBuffer = fs.readFileSync(filePath);
+	const hashSum = crypto.createHash('sha256');
+	hashSum.update(fileBuffer);
+
+	// Get the first 8 characters of the hash
+	return hashSum.digest('hex').slice(0, 8);
+}
+
+export function renameFileWithHash(filePath: string): string {
+	const fileHash = hashFile(filePath);
+
+	const parts = filePath.split('.');
+	parts.splice(-1, 0, fileHash);
+	const newFileName = parts.join('.');
+
+	fs.renameSync(filePath, newFileName);
+	return newFileName;
+}
 
 export function checkForBinaryOnPath(binary: string) {
 	try {
@@ -369,41 +418,58 @@ export function alignTranscriptToAudioWithWordLevelTimings(
 	// go through the raw transcript, try to replace the detected words with the perfect transcript from book.json
 	const perfectWordsArray = perfectTranscriptString.split(' ');
 
+	const matchedTranscript: { text: string; start: number; end: number }[] = [];
+
 	for (const chunk of transcriptRaw) {
 		const rawWords: string = chunk.text.trim();
 		const rawWordsArray = rawWords
 			.split(' ')
 			.map((word) => spellOutNumbers(actionWordTrimmer(normalizeWord(normalizeUnicode(word)))));
 
-		// find peak similarity
-		let minSimilarity = Number.MAX_SAFE_INTEGER;
-		let minSimilarityIndex = 0;
+		if (perfectWordsArray.length > 0) {
+			// find peak similarity
+			let minSimilarity = Number.MAX_SAFE_INTEGER;
+			let minSimilarityIndex = 0;
 
-		for (
-			let i = 0;
-			i <= Math.min(Math.floor(rawWordsArray.length * 1.5), perfectWordsArray.length);
-			i++
-		) {
-			const similarity = getLevenSentenceDistance(
-				rawWordsArray.join(' '),
-				perfectWordsArray
-					.slice(0, i)
-					.map((word) => spellOutNumbers(actionWordTrimmer(normalizeWord(normalizeUnicode(word)))))
-					.join(' ')
-			);
+			for (
+				let i = 0;
+				i <= Math.min(Math.floor(rawWordsArray.length * 1.5), perfectWordsArray.length);
+				i++
+			) {
+				const similarity = getLevenSentenceDistance(
+					rawWordsArray.join(' '),
+					perfectWordsArray
+						.slice(0, i)
+						.map((word) =>
+							spellOutNumbers(actionWordTrimmer(normalizeWord(normalizeUnicode(word))))
+						)
+						.join(' ')
+				);
 
-			if (similarity < minSimilarity) {
-				// console.log(`Min similarity ${similarity} at window ${i}`);
-				minSimilarity = similarity;
-				minSimilarityIndex = i;
+				if (similarity < minSimilarity) {
+					// console.log(`Min similarity ${similarity} at window ${i}`);
+					minSimilarity = similarity;
+					minSimilarityIndex = i;
+				}
 			}
+
+			// build the matched transcript
+			const matchedText = perfectWordsArray.splice(0, minSimilarityIndex).join(' ');
+			matchedTranscript.push({
+				text: matchedText,
+				start: chunk.start,
+				end: chunk.end
+			});
+
+			console.log(`Raw transcript:\n${rawWords}`);
+			console.log(`Match from perfect transcript:\n${matchedText}\n\n`);
+		} else {
+			// special case where all perfect transcript words have already matched
+			// sometimes extra words are hallucinated
+			console.warn(
+				`There were ${rawWordsArray.length} words in the raw transcript left over after finding matches for the entirety of the perfect transcript. Ignoring these extra words.`
+			);
 		}
-
-		// swap the raw words for the matched words in the raw transcript
-		chunk.text = perfectWordsArray.splice(0, minSimilarityIndex).join(' ');
-
-		console.log(`Raw: ${rawWords}`);
-		console.log(`Mat: ${chunk.text}\n\n`);
 	}
 
 	// add any straggler words to the last entry, TODO this is ugly
@@ -411,21 +477,27 @@ export function alignTranscriptToAudioWithWordLevelTimings(
 		console.warn(
 			`There were ${perfectWordsArray.length} left over words... adding them to the last chunk`
 		);
-		transcriptRaw[transcriptRaw.length - 1].text =
-			transcriptRaw[transcriptRaw.length - 1].text + ' ' + perfectWordsArray.join(' ');
+		matchedTranscript[matchedTranscript.length - 1].text =
+			matchedTranscript[matchedTranscript.length - 1].text + ' ' + perfectWordsArray.join(' ');
 	}
 
 	if (destinationTranscriptMatchedFile) {
-		saveFormattedJson(destinationTranscriptMatchedFile, transcriptRaw);
+		saveFormattedJson(destinationTranscriptMatchedFile, matchedTranscript);
 	}
 
 	// Generate timings
 	// Only works on a few lines of text, hence the fuss above
 
+	console.log(`Generating per-word timings...`);
+
 	let timings: object[] = [];
 
-	for (const chunk of transcriptRaw) {
-		// if (chunkNumber < transcriptRaw.length - 1) continue;
+	for (const [chunkNumber, chunk] of matchedTranscript.entries()) {
+		// if (chunkNumber < matchedTranscript.length - 1) continue;
+
+		console.log(
+			`Generating per-word timings for chunk ${chunkNumber} / ${matchedTranscript.length}`
+		);
 
 		// console.log(`chunk ${chunkNumber}: ${JSON.stringify(chunk, null, 2)}`);
 		const timingsRawJson: string = runCommand(

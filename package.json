@@ -24,6 +24,7 @@
 		"@sveltejs/adapter-static": "^2.0.2",
 		"@sveltejs/kit": "^1.18.0",
 		"@tailwindcss/container-queries": "^0.1.1",
+		"@types/glob": "^8.1.0",
 		"@types/html-minifier": "^4.0.2",
 		"@types/lodash": "^4.14.194",
 		"@types/mime": "^3.0.1",

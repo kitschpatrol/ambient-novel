@@ -10,6 +10,8 @@ brew install dust
 
 Certain data and assets are generated from the source data in `/data` and ouput to `/static`, `/data-generated` and `/src/lib/data`.
 
+Takes about half an hour on my M1 Air to generate everything from scratch.
+
 The content generator does a number of things depending on the config object in `/data/book.json`.
 
 - Generates voice audio files to narrate each chapter if no recordings are provided.
