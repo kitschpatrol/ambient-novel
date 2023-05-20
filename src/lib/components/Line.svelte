@@ -2,8 +2,8 @@
 	import type { LineData } from '$lib/schemas/bookSchema';
 	export let isPlaying = false;
 	export let lineData: LineData;
-	export let currentTime: number = 0;
-	export let timingOffsetSeconds: number = 0.5;
+	export let currentTime = 0;
+	export let timingOffsetSeconds = 0.5;
 
 	let lineElement: HTMLDivElement;
 
@@ -55,7 +55,7 @@
 		let text = lineData.text;
 		let cursor = 0;
 
-		for (const [wordIndex, wordTiming] of lineData.wordTimings.entries()) {
+		for (const wordTiming of lineData.wordTimings) {
 			const regex = generateRegexForString(wordTiming.word);
 			let match = regexMatchInRange(text, regex, cursor);
 

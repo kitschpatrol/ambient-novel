@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Button from '$lib/components/Button.svelte';
 	import {
-		faB,
 		faBackward,
 		faBackwardStep,
 		faForward,

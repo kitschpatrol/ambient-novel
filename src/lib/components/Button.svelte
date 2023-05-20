@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
 	import Fa from 'svelte-fa';
 
 	export let isDown = false;
@@ -7,8 +6,6 @@
 	export let label: string | null = null;
 	export let icon: unknown | null; // Using IconDefinition causes type errors...
 	export let isEnabled = true;
-
-	const dispatch = createEventDispatcher();
 
 	const iconConfig = {
 		translateY: 0.05

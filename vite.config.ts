@@ -1,6 +1,6 @@
 import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig } from 'vitest/config';
 import mkcert from 'vite-plugin-mkcert';
+import { defineConfig } from 'vitest/config';
 
 process.env.BROWSER = 'google chrome';
 

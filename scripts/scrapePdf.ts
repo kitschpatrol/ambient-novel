@@ -1,6 +1,6 @@
-import fs from 'fs';
 import pdf from '@cyber2024/pdf-parse-fixed';
-import { saveFormattedJson, getTextBetween } from './utils';
+import fs from 'fs';
+import { getTextBetween, saveFormattedJson } from './utils';
 
 // kind of a one-shot shortcut to getting the novel text
 // too much work to really create consistent output without

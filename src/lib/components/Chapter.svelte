@@ -13,8 +13,8 @@
 
 	export let isPlaying = false;
 	export let chapterData: ChapterData;
-	export let activeLine: number = 0;
-	export let currentTime: number = 0;
+	export let activeLine = 0;
+	export let currentTime = 0;
 	export let maxVolumeMusic = 0.5;
 	export let maxVolumeSpeech = 1.0;
 	export let lineOrder = Array.from(Array(chapterData.lines.length).keys());
@@ -37,7 +37,7 @@
 		scrollToLineIndex(activeLine, 0);
 	});
 
-	function scrollToLineIndex(lineIndex: number, duration: number = 600) {
+	function scrollToLineIndex(lineIndex: number, duration = 600) {
 		if (chapterElement) {
 			// can't just bind to clientHeight because that's rounded
 			const chapterHeight = chapterElement.getBoundingClientRect().height;
@@ -94,9 +94,7 @@
 		if (chapterElement) {
 			const chapterHeight = chapterElement.getBoundingClientRect().height;
 			chapterScrollTop;
-			for (const [i, lineContainer] of Array.from(
-				chapterElement.children as HTMLCollectionOf<HTMLDivElement>
-			).entries()) {
+			for (const lineContainer of chapterElement.children as HTMLCollectionOf<HTMLDivElement>) {
 				const distanceFromCenter = clamp(
 					mapValue(
 						Math.abs(chapterScrollTop - lineContainer.offsetTop),
