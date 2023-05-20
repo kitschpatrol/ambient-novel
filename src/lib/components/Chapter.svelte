@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
 	import Audio from '$lib/components/Audio.svelte';
 	import Line from '$lib/components/Line.svelte';
 	import Playlist from '$lib/components/Playlist.svelte';
 	import type { ChapterData } from '$lib/schemas/bookSchema';
 	import { mapValue } from '$lib/utils/math/mapValue';
 	import clamp from 'lodash/clamp';
+	import isEqual from 'lodash/isEqual';
 	import { createEventDispatcher, onMount, tick } from 'svelte';
 	import { quadInOut } from 'svelte/easing';
 	import { tweened } from 'svelte/motion';
@@ -125,6 +125,8 @@
 			scrollToLineIndex(getActiveLine(), 0);
 		});
 	}
+
+	$: isSorted = isEqual(lineOrder, Array.from(Array(chapterData.lines.length).keys()));
 </script>
 
 <svelte:window
@@ -151,6 +153,7 @@
 	class="absolute bottom-0 right-0 px-3 pb-3 text-right font-serif text-sm italic text-gray-400"
 >
 	Chapter {chapterData.index + 1} § {activeLine + 1}&hairsp;/&hairsp;{chapterData.lines.length}
+	{#if !isSorted}(Shuffled){/if}
 </p>
 
 <Playlist
