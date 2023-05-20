@@ -77,7 +77,6 @@
 	// watch for the end of a line's audio and tell book to advance
 	$: {
 		const { end } = chapterData.lines[activeLine].timing;
-		const currentLineIndex = lineOrder.indexOf(activeLine);
 
 		// magic  math so we can go "back" while playing
 		if (isPlaying && currentTime >= end && currentTime < end + 0.1) {

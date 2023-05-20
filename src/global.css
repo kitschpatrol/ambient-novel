@@ -19,12 +19,21 @@
 	initial-value: 0deg;
 } */
 
+body,
+html {
+	width: 100%;
+	height: 100%;
+	background: theme(colors.vm-magenta);
+	overscroll-behavior: none; /* for safari mobile */
+}
+
 body {
-	background: linear-gradient(
-		/* var(--backgroundGradientAngle), */ 0deg,
-		theme('colors.vm-magenta') 0%,
-		theme('colors.vm-blue') 100%
-	);
+	position: fixed; /* for safari mobile */
+
+	/* var(--backgroundGradientAngle), 0deg, */
+	background: linear-gradient(theme(colors.vm-magenta) 0%, theme(colors.vm-blue) 100%);
+	/* background: -webkit-linear-gradient(red, green, blue); */
+
 	/* too slow on safari? */
 	/* animation: spin 30s infinite linear; */
 }

@@ -1,8 +1,6 @@
 <script lang="ts">
 	import { fadeVolume } from '$lib/utils/transition/fadeVolume';
 	import { getType } from 'mime';
-	import { createEventDispatcher, onDestroy } from 'svelte';
-	import round from 'lodash/round';
 
 	export let audioSources: string[];
 	export let isPlaying = false;
@@ -16,10 +14,21 @@
 
 	// have to use this instead of onMount to avoid null reference issues in Chapter
 	function onAudioElementMounted(node: HTMLAudioElement) {
+		// forcing load fixes safari bugs changing chapters while playing
+		// https://stackoverflow.com/a/73441313/2437832
+		node.load();
 		node.currentTime = targetTime;
 		node.volume = maxVolume;
 		node.muted = false;
-		if (isPlaying) node.play();
+		if (isPlaying)
+			node
+				.play()
+				.then(() => {
+					// all good
+				})
+				.catch((error) => {
+					console.error(error);
+				});
 	}
 
 	function playAudio() {
@@ -48,12 +57,15 @@
 	}
 </script>
 
+<!-- // adding prelad="none" was key to currentTime bugs on mobile safari -->
+<!-- // but CF pages doesn't yet return 206s, so maybe keeping preload on deployment? -->
 <audio
 	muted
 	{loop}
 	use:onAudioElementMounted
 	bind:currentTime
 	on:ended
+	preload="none"
 	bind:this={audioElement}
 	bind:seeking
 	transition:fadeVolume={{ duration: 1000 }}
