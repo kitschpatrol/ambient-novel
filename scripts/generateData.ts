@@ -1,23 +1,23 @@
 import fs from 'fs';
-import path from 'path';
-import { bookSourceSchema } from './bookSourceSchema';
-import { type BookData, bookSchema } from '../src/lib/schemas/bookSchema';
 import round from 'lodash/round';
+import path from 'path';
+import { bookSchema, type BookData } from '../src/lib/schemas/bookSchema';
+import { bookSourceSchema } from './bookSourceSchema';
 import {
+	actionWordTrimmer,
+	alignTranscriptToAudioWithWordLevelTimings,
 	checkForBinaryOnPath,
 	compressTo,
 	createIntermediatePaths,
 	getAudioDuration,
 	kebabCase,
-	saveFormattedJson,
-	stripHtmlTags,
-	stripEmojis,
 	normalizeWord,
-	truncateWithEllipsis,
-	transcribe,
-	alignTranscriptToAudioWithWordLevelTimings,
+	saveFormattedJson,
 	sayToFileCoqui,
-	actionWordTrimmer
+	stripEmojis,
+	stripHtmlTags,
+	transcribe,
+	truncateWithEllipsis
 } from './utils';
 
 // Prerequisites ----------------------------------------------------------------------
@@ -50,37 +50,42 @@ const config = {
 	},
 	speechSettings: {
 		regenerateSource: false,
-		regenerate: false,
+		regenerateCompressed: true,
+		regenerateTranscript: false,
 		generatedDataDir: './data-generated',
 		sourceDir: '/Users/mika/Documents/Projects/Ambient Novel with Scott Wayne Indiana/Voice Over', // will generate using say if missing
 		outputDir: './static/speech',
 		outputs: [
 			{
 				format: 'm4a', // aac
-				quality: 0.2,
-				sampleRate: 44100
+				quality: 0,
+				sampleRate: 22050,
+				vbr: false
 			},
 			{
 				format: 'mp3',
-				quality: 0.2,
-				sampleRate: 44100
+				quality: 0,
+				sampleRate: 22050,
+				vbr: false
 			}
 		]
 	},
 	musicSettings: {
-		regenerate: false,
+		regenerateCompressed: true,
 		sourceDir: '/Users/mika/Documents/Projects/Ambient Novel with Scott Wayne Indiana/Soundtrack',
 		outputDir: './static/music',
 		outputs: [
 			{
 				format: 'm4a', // aac
-				quality: 0.2,
-				sampleRate: 44100
+				quality: 0,
+				sampleRate: 22050,
+				vbr: false
 			},
 			{
 				format: 'mp3',
-				quality: 0.2,
-				sampleRate: 44100
+				quality: 0,
+				sampleRate: 22050,
+				vbr: false
 			}
 		]
 	}
@@ -97,8 +102,11 @@ if (config.speechSettings.regenerateSource) {
 	createIntermediatePaths(config.speechSettings.sourceDir, true);
 }
 createIntermediatePaths(config.jsonSettings.outputFile, true);
-createIntermediatePaths(config.speechSettings.outputDir, config.speechSettings.regenerate);
-createIntermediatePaths(config.musicSettings.outputDir, config.musicSettings.regenerate);
+createIntermediatePaths(
+	config.speechSettings.outputDir,
+	config.speechSettings.regenerateCompressed
+);
+createIntermediatePaths(config.musicSettings.outputDir, config.musicSettings.regenerateCompressed);
 
 // Load the text
 
@@ -196,14 +204,14 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 	chapter.voiceOver.originalFile = voiceOverSourceFile;
 
 	// compress the audio if needed
-	for (const { format, quality, sampleRate } of config.speechSettings.outputs) {
+	for (const { format, quality, sampleRate, vbr } of config.speechSettings.outputs) {
 		const speechFile = `${config.speechSettings.outputDir}/${chapterNumber}.${format}`;
 
-		if (fs.existsSync(speechFile) && !config.speechSettings.regenerate) {
+		if (fs.existsSync(speechFile) && !config.speechSettings.regenerateCompressed) {
 			console.log(`Already found voice over output file ${speechFile}, nothing to generate...`);
 		} else {
 			console.log(`Compressing ${voiceOverSourceFile} speech to ${format}`);
-			compressTo(voiceOverSourceFile, speechFile, quality, sampleRate);
+			compressTo(voiceOverSourceFile, speechFile, quality, sampleRate, vbr);
 		}
 
 		chapter.voiceOver.files.push(speechFile.replace('./static/', ''));
@@ -216,7 +224,7 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 	// theoretically we could feed the whole perfect transcript to the audio and skip this step,
 	// but whisperx can not handle alignment tasks of that size
 	const transcriptRawFile = `${config.speechSettings.generatedDataDir}/chapter-${chapterNumber}-audio-transcript-raw.json`;
-	if (fs.existsSync(transcriptRawFile) && !config.speechSettings.regenerate) {
+	if (fs.existsSync(transcriptRawFile) && !config.speechSettings.regenerateTranscript) {
 		console.log('Already found audio transcript file, nothing to generate...');
 	} else {
 		console.log(`Transcribing ${voiceOverSourceFile} with whisperx...`);
@@ -225,7 +233,7 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 
 	// align the perfect transcript to the audio, using timing chunks from the whisperx transcript
 	const wordTimingsFile = `${config.speechSettings.generatedDataDir}/chapter-${chapterNumber}-word-timings.json`;
-	if (fs.existsSync(wordTimingsFile) && !config.speechSettings.regenerate) {
+	if (fs.existsSync(wordTimingsFile) && !config.speechSettings.regenerateTranscript) {
 		console.log(
 			`Already found word-level timings file for ${chapterNumber}, nothing to generate...`
 		);
@@ -311,16 +319,16 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 		// compressToMp3(filePathLosslessTrimmed, filePathCompressedMp3, ambientMusicQuality);
 		// fs.rmSync(filePathLosslessTrimmed, { force: true });
 
-		for (const { format, quality, sampleRate } of config.musicSettings.outputs) {
+		for (const { format, quality, sampleRate, vbr } of config.musicSettings.outputs) {
 			const outputFile = `${config.musicSettings.outputDir}/${cleanFilename}.${format}`;
 
 			// generate only if needed, since there might be multiple references to
 			// the same ambient track
-			if (fs.existsSync(outputFile) && !config.musicSettings.regenerate) {
+			if (fs.existsSync(outputFile) && !config.musicSettings.regenerateCompressed) {
 				console.log(`Already compressed ambient track ${outputFile}`);
 			} else {
 				console.log(`Compressing ambient ${sourceFile} to ${format}`);
-				compressTo(sourceFile, outputFile, quality, sampleRate);
+				compressTo(sourceFile, outputFile, quality, sampleRate, vbr);
 			}
 
 			ambientTrack.files.push(outputFile.replace('./static/', ''));

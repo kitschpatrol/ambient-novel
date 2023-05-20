@@ -1,8 +1,8 @@
-import fs from 'fs';
-import path from 'path';
 import { execSync } from 'child_process';
-import prettier from 'prettier';
+import fs from 'fs';
 import leven from 'leven';
+import path from 'path';
+import prettier from 'prettier';
 import { stripHtml } from 'string-strip-html';
 
 // utility functions used by generateData.ts
@@ -192,12 +192,18 @@ function mapFloatToInt(input: number, minOut: number, maxOut: number): number {
 	return Math.max(Math.min(mappedValue, Math.max(minOut, maxOut)), Math.min(minOut, maxOut));
 }
 
+function mapFloatToCbr(quality: number): string {
+	const CBR_QUALITY_RANGE = ['32k', '64k', '96k', '128k', '256k'];
+	return CBR_QUALITY_RANGE[mapFloatToInt(quality, 0, CBR_QUALITY_RANGE.length - 1)];
+}
+
 // 0 is lowest quality, 1 is highest
 function compressToAac(
 	sourceFile: string,
 	outputFile: string,
 	quality: number,
-	sampleRate = 22050
+	sampleRate = 22050,
+	vbr = false
 ): void {
 	if (!fs.existsSync(sourceFile)) {
 		console.error('Source file does not exist');
@@ -208,12 +214,23 @@ function compressToAac(
 	const bitrateMode = mapFloatToInt(quality, 1, 5);
 	const tempOutputFile = generateTempFilename(outputFile);
 
+	const cbrQuality = mapFloatToCbr(quality);
+
 	console.log(
-		`Encoding ${sourceFile} to AAC with quality ${quality} (Codec-native: ${bitrateMode}) at ${sampleRate}kHz`
+		`Encoding ${sourceFile} to AAC with quality ${quality} ${
+			vbr ? `VBR (Codec-native quality: ${bitrateMode})` : `CBR ${cbrQuality}`
+		} at ${sampleRate}kHz`
 	);
-	runCommand(
-		`ffmpeg -y -vn -i "${sourceFile}" -c:a libfdk_aac -ar ${sampleRate} -vbr ${bitrateMode} "${tempOutputFile}"`
-	);
+
+	if (vbr) {
+		runCommand(
+			`ffmpeg -y -vn -i "${sourceFile}" -c:a libfdk_aac -ar ${sampleRate} -vbr ${bitrateMode} "${tempOutputFile}"`
+		);
+	} else {
+		runCommand(
+			`ffmpeg -y -vn -i "${sourceFile}" -c:a libfdk_aac -ar ${sampleRate} -b:a ${cbrQuality} "${tempOutputFile}"`
+		);
+	}
 	fs.renameSync(tempOutputFile, outputFile);
 }
 
@@ -222,7 +239,8 @@ function compressToMp3(
 	sourceFile: string,
 	outputFile: string,
 	quality: number,
-	sampleRate = 22050
+	sampleRate = 22050,
+	vbr = false
 ): void {
 	if (!fs.existsSync(sourceFile)) {
 		console.error('Source file does not exist');
@@ -233,12 +251,24 @@ function compressToMp3(
 	const bitrateMode = mapFloatToInt(quality, 9, 0);
 	const tempOutputFile = generateTempFilename(outputFile);
 
+	const cbrQuality = mapFloatToCbr(quality);
+
 	console.log(
-		`Encoding ${sourceFile} to MP3 with quality ${quality} (Codec-native: ${bitrateMode}) at ${sampleRate}kHz`
+		`Encoding ${sourceFile} to MP3 with quality ${quality} ${
+			vbr ? `VBR (Codec-native quality: ${bitrateMode})` : `CBR ${cbrQuality}`
+		} at ${sampleRate}kHz`
 	);
-	runCommand(
-		`ffmpeg -y -vn -i "${sourceFile}" -codec:a libmp3lame -ar ${sampleRate} -qscale:a ${bitrateMode} "${tempOutputFile}"`
-	);
+
+	if (vbr) {
+		runCommand(
+			`ffmpeg -y -vn -i "${sourceFile}" -codec:a libmp3lame -ar ${sampleRate} -qscale:a ${bitrateMode} "${tempOutputFile}"`
+		);
+	} else {
+		runCommand(
+			`ffmpeg -y -vn -i "${sourceFile}" -codec:a libmp3lame -ar ${sampleRate} -b:a ${cbrQuality} "${tempOutputFile}"`
+		);
+	}
+
 	fs.renameSync(tempOutputFile, outputFile);
 }
 
@@ -248,17 +278,18 @@ export function compressTo(
 	sourceFile: string,
 	outputFile: string,
 	quality: number,
-	sampleRate = 22050
+	sampleRate = 22050,
+	vbr = false
 ): void {
 	const extension = outputFile.split('.').pop();
 
 	switch (extension) {
 		case 'm4a':
 		case 'aac':
-			compressToAac(sourceFile, outputFile, quality, sampleRate);
+			compressToAac(sourceFile, outputFile, quality, sampleRate, vbr);
 			break;
 		case 'mp3':
-			compressToMp3(sourceFile, outputFile, quality, sampleRate);
+			compressToMp3(sourceFile, outputFile, quality, sampleRate, vbr);
 			break;
 		default:
 			throw new Error(`compressTo function hasn't implemented output file extension: ${extension}`);
