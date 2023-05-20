@@ -8,7 +8,6 @@
 	import clamp from 'lodash/clamp';
 	import isEqual from 'lodash/isEqual';
 	import sample from 'lodash/sample';
-	import { fade } from 'svelte/transition';
 	import { activeChapter, chapterState, isPlaying } from '../../store';
 
 	export let bookData: BookData;
@@ -137,12 +136,7 @@
 <div class="flex h-full flex-col">
 	<ul class="flex flex-row gap-1 overflow-hidden">
 		{#each bookData.chapters as chapter, i}
-			<li
-				class="group relative flex-col whitespace-nowrap text-center {i === $activeChapter
-					? 'shrink-0 max-sm:grow'
-					: // needs truncate?
-					  'shrink grow'}"
-			>
+			<li class="group relative flex-1 flex-col whitespace-nowrap text-center">
 				<a
 					on:click={() => {
 						$activeChapter = i;
