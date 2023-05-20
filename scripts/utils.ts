@@ -64,6 +64,11 @@ export function stripEmojis(text: string): string {
 	return text.replace(emojiRegex, '');
 }
 
+export function stripUnspeakables(text: string): string {
+	// TODO any others?
+	return text.replace(/\*/gu, '');
+}
+
 export function kebabCase(input: string): string {
 	const cleanedString = input.replace(/[^a-zA-Z0-9\s_.-]+/g, '');
 	return cleanedString.trim().replace(/\s+/g, '-').toLowerCase();
@@ -312,6 +317,20 @@ export function transcribe(sourceAudioFile: string, destinationJsonFile: string)
 	saveFormattedJson(destinationJsonFile, transcriptRawJson.segments);
 }
 
+export function normalizeUnicode(str: string): string {
+	return (
+		str
+			.normalize('NFD') // Normalize to decomposed form
+			.replace(/[\u0300-\u036f]/g, '') // Remove combining diacritical marks
+			// eslint-disable-next-line no-control-regex
+			.replace(/[^\u0000-\u007f]/g, (char) => {
+				// Replace non-ASCII characters with their closest ASCII equivalent
+				const asciiChar = char.normalize('NFKD').replace(/[\u0300-\u036f]/g, '');
+				return /[a-zA-Z0-9]/.test(asciiChar) ? asciiChar : '';
+			})
+	);
+}
+
 export function normalizeWord(s: string): string {
 	const regex = /[^A-Za-z0-9]/g;
 	const filtered = s.toLowerCase().replace(regex, '');
@@ -348,13 +367,13 @@ export function alignTranscriptToAudioWithWordLevelTimings(
 	const transcriptRaw = JSON.parse(fs.readFileSync(sourceRawTranscriptFile, 'utf8'));
 
 	// go through the raw transcript, try to replace the detected words with the perfect transcript from book.json
-	const targetWordsArray = perfectTranscriptString.split(' ');
+	const perfectWordsArray = perfectTranscriptString.split(' ');
 
 	for (const chunk of transcriptRaw) {
 		const rawWords: string = chunk.text.trim();
 		const rawWordsArray = rawWords
 			.split(' ')
-			.map((word) => spellOutNumbers(actionWordTrimmer(normalizeWord(word))));
+			.map((word) => spellOutNumbers(actionWordTrimmer(normalizeWord(normalizeUnicode(word)))));
 
 		// find peak similarity
 		let minSimilarity = Number.MAX_SAFE_INTEGER;
@@ -362,14 +381,14 @@ export function alignTranscriptToAudioWithWordLevelTimings(
 
 		for (
 			let i = 0;
-			i <= Math.min(Math.floor(rawWordsArray.length * 1.5), targetWordsArray.length);
+			i <= Math.min(Math.floor(rawWordsArray.length * 1.5), perfectWordsArray.length);
 			i++
 		) {
 			const similarity = getLevenSentenceDistance(
 				rawWordsArray.join(' '),
-				targetWordsArray
+				perfectWordsArray
 					.slice(0, i)
-					.map((word) => spellOutNumbers(actionWordTrimmer(normalizeWord(word))))
+					.map((word) => spellOutNumbers(actionWordTrimmer(normalizeWord(normalizeUnicode(word)))))
 					.join(' ')
 			);
 
@@ -381,19 +400,19 @@ export function alignTranscriptToAudioWithWordLevelTimings(
 		}
 
 		// swap the raw words for the matched words in the raw transcript
-		chunk.text = targetWordsArray.splice(0, minSimilarityIndex).join(' ');
+		chunk.text = perfectWordsArray.splice(0, minSimilarityIndex).join(' ');
 
 		console.log(`Raw: ${rawWords}`);
 		console.log(`Mat: ${chunk.text}\n\n`);
 	}
 
 	// add any straggler words to the last entry, TODO this is ugly
-	if (targetWordsArray.length > 0) {
+	if (perfectWordsArray.length > 0) {
 		console.warn(
-			`There were ${targetWordsArray.length} left over words... adding them to the last chunk`
+			`There were ${perfectWordsArray.length} left over words... adding them to the last chunk`
 		);
 		transcriptRaw[transcriptRaw.length - 1].text =
-			transcriptRaw[transcriptRaw.length - 1].text + ' ' + targetWordsArray.join(' ');
+			transcriptRaw[transcriptRaw.length - 1].text + ' ' + perfectWordsArray.join(' ');
 	}
 
 	if (destinationTranscriptMatchedFile) {
@@ -424,4 +443,48 @@ export function alignTranscriptToAudioWithWordLevelTimings(
 	}
 
 	saveFormattedJson(destinationTimingsFile, timings);
+}
+
+// word timing html embedding stuff
+
+export function escapeRegex(inputString: string): string {
+	return inputString.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&');
+}
+
+// hard coded to escape span for now
+// takes "vermillion."
+// returns "(<span.*>)?v(<\/span>)?e(<\/span>)?r(<\/span>)?m(<\/span>)?i(<\/span>)?l(<\/span>)?l(<\/span>)?i(<\/span>)?o(<\/span>)?n(<\/span>)?\.(<\/span>)?"
+export function generateRegexForString(inputString: string): RegExp {
+	const emojiRegex = '([\uD800-\uDBFF][\uDC00-\uDFFF]|p{Emoji_Presentation}|p{Emoji}\uFE0F)?';
+
+	return new RegExp(
+		[
+			'(<span.*>)?',
+			...inputString.split('').map((c) => escapeRegex(c) + '(</span>)?' + emojiRegex)
+		].join('')
+	);
+}
+
+export function regexMatchInRange(inputStr: string, regex: RegExp, start: number): string | null {
+	const subString = inputStr.slice(start);
+
+	const match = regex.exec(subString);
+
+	if (match && match.length > 0) {
+		return match[0];
+	} else {
+		throw new Error('Bad regex');
+	}
+}
+
+export function replaceSubstring(
+	inputStr: string,
+	replacement: string,
+	start: number,
+	end: number
+): string {
+	if (start < 0 || end > inputStr.length || start > end) {
+		throw new Error('Invalid start or end');
+	}
+	return inputStr.slice(0, start) + replacement + inputStr.slice(end);
 }

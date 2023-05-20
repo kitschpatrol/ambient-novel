@@ -9,13 +9,18 @@ import {
 	checkForBinaryOnPath,
 	compressTo,
 	createIntermediatePaths,
+	generateRegexForString,
 	getAudioDuration,
 	kebabCase,
+	normalizeUnicode,
 	normalizeWord,
+	regexMatchInRange,
+	replaceSubstring,
 	saveFormattedJson,
 	sayToFileCoqui,
 	stripEmojis,
 	stripHtmlTags,
+	stripUnspeakables,
 	transcribe,
 	truncateWithEllipsis
 } from './utils';
@@ -46,11 +51,13 @@ import {
 const config = {
 	jsonSettings: {
 		sourceFile: './data/book.json',
-		outputFile: './src/lib/data/book.json'
+		outputFile: './src/lib/data/book.json',
+		includeWordTimingsArray: false, // puts, technically all this data is present if embedWordTimingsInHtml is true
+		embedWordTimingsInHtml: true // puts <spans> with timing data round words in the line's text
 	},
 	speechSettings: {
 		regenerateSource: false,
-		regenerateCompressed: true,
+		regenerateCompressed: false,
 		regenerateTranscript: false,
 		generatedDataDir: './data-generated',
 		sourceDir: '/Users/mika/Documents/Projects/Ambient Novel with Scott Wayne Indiana/Voice Over', // will generate using say if missing
@@ -71,7 +78,7 @@ const config = {
 		]
 	},
 	musicSettings: {
-		regenerateCompressed: true,
+		regenerateCompressed: false,
 		sourceDir: '/Users/mika/Documents/Projects/Ambient Novel with Scott Wayne Indiana/Soundtrack',
 		outputDir: './static/music',
 		outputs: [
@@ -166,7 +173,7 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 		// longer pauses at the start
 		// longer pauses between lines
 		// shorter pauses between line breaks
-		// const chapterTextWithPauses =
+		// const chapterTextClean =
 		// 	'[[slnc 1500]]' +
 		// 	chapterSource.lines
 		// 		.reduce(
@@ -182,20 +189,20 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 		// 		.replace(/–/gu, '')
 		// 		.replace(/([A-Za-z])\1{3,}/gu, '$1');
 
-		// console.log(chapterTextWithPauses);
-		//sayToFile(chapterTextWithPauses, voiceOverSourceFile);
+		// console.log(chapterTextClean);
+		//sayToFile(chapterTextClean, voiceOverSourceFile);
 
 		// doesn't seem to be a way to command pauses in coqui
-		let chapterTextWithPauses = chapterSource.lines
+		let chapterTextClean = chapterSource.lines
 			.reduce((prev, curr) => prev + stripEmojis(stripHtmlTags(curr.replace('<br />', ' '))), '')
 			.trim()
 			// chapter 5 has ridiculous long strings of characters, on which the say command chokes
 			// this replaces and character strings with more than 3 of the same chars with a single char
 			.replace(/–/gu, '');
 
-		chapterTextWithPauses = actionWordTrimmer(chapterTextWithPauses);
+		chapterTextClean = actionWordTrimmer(stripUnspeakables(normalizeUnicode(chapterTextClean)));
 
-		sayToFileCoqui(chapterTextWithPauses, voiceOverSourceFile);
+		sayToFileCoqui(chapterTextClean, voiceOverSourceFile);
 
 		// TODO pad with some silence?
 	}
@@ -369,6 +376,55 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 	}
 
 	bookOutput.chapters?.push(chapter);
+}
+
+// Embed timings in line html
+if (config.jsonSettings.embedWordTimingsInHtml) {
+	console.log('Embedding word timings in HTML');
+
+	bookOutput.chapters?.forEach((chapter) => {
+		chapter.lines?.forEach((line) => {
+			if (line.wordTimings === undefined) {
+				throw new Error('Must have word timings array to perform html embedding');
+			}
+
+			if (line.text === undefined) {
+				throw new Error('Must have a line of text to perform html embedding');
+			}
+
+			let text = line.text;
+			let cursor = 0;
+
+			for (const wordTiming of line.wordTimings) {
+				const regex = generateRegexForString(wordTiming.word);
+				const match = regexMatchInRange(text, regex, cursor);
+
+				if (match === null) {
+					throw new Error('no match');
+				}
+
+				const cursorStart = text.indexOf(match, cursor);
+				const cursorEnd = cursorStart + match.length;
+
+				const replacement = `<span class="timing" data-time-start=${wordTiming.start} data-time-end=${wordTiming.end}>${match}</span>`;
+
+				text = replaceSubstring(text, replacement, cursorStart, cursorEnd);
+				cursor = cursorStart + replacement.length;
+			}
+
+			line.text = text;
+		});
+	});
+}
+
+if (config.jsonSettings.includeWordTimingsArray) {
+	console.log('Including word timings array in book.json');
+} else {
+	bookOutput.chapters?.forEach((chapter) => {
+		chapter.lines?.forEach((line) => {
+			delete line.wordTimings;
+		});
+	});
 }
 
 // Check for errors

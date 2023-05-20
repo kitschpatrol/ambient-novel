@@ -36,6 +36,7 @@ export const bookSchema = z.object({
 								start: z.number(),
 								end: z.number()
 							}),
+							// embedding in the text instead...
 							wordTimings: z
 								.array(
 									z.object({
@@ -44,7 +45,7 @@ export const bookSchema = z.object({
 										end: z.number()
 									})
 								)
-								.nonempty()
+								.optional()
 						})
 					)
 					.nonempty()
