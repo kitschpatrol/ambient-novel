@@ -2,7 +2,7 @@
 	import { browser } from '$app/environment';
 	import { fadeVolume } from '$lib/utils/transition/fadeVolume';
 	import { getType } from 'mime';
-	import { onMount, tick } from 'svelte';
+	import { onMount } from 'svelte';
 
 	export let audioSources: string[];
 	export let isPlaying = false;
@@ -91,19 +91,6 @@
 	use:onAudioElementMounted
 	bind:currentTime
 	on:ended
-	on:canplaythrough={(e) => {
-		console.log('canplaythrough!');
-		// https://stackoverflow.com/questions/37044064/html-audio-cant-set-currenttime
-		if (isPlaying && audioElement.currentTime !== targetTime) {
-			console.log(audioElement.currentTime);
-			audioElement.pause();
-			tick().then(() => {
-				audioElement.currentTime = targetTime;
-				audioElement.play();
-				console.log(audioElement.currentTime);
-			});
-		}
-	}}
 	bind:this={audioElement}
 	bind:seeking
 	transition:fadeVolume={{ duration: 1000 }}
