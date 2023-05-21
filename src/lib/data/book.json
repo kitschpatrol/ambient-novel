@@ -563,12 +563,12 @@
 				}
 			],
 			"voiceOver": {
-				"files": ["speech/0.b812b0e8.m4a", "speech/0.5eace72e.mp3"],
+				"files": ["speech/0.5eace72e.mp3"],
 				"durationSeconds": 840.2039
 			},
 			"ambientTracks": [
 				{
-					"files": ["music/bell-vibes.27b43122.m4a", "music/bell-vibes.a2032f27.mp3"],
+					"files": ["music/bell-vibes.a2032f27.mp3"],
 					"durationSeconds": 1233.13542
 				}
 			]
@@ -1075,15 +1075,12 @@
 				}
 			],
 			"voiceOver": {
-				"files": ["speech/1.fe454021.m4a", "speech/1.7e451d7d.mp3"],
+				"files": ["speech/1.7e451d7d.mp3"],
 				"durationSeconds": 522.524444
 			},
 			"ambientTracks": [
 				{
-					"files": [
-						"music/the-valentine-mob-track-2.ea37e59c.m4a",
-						"music/the-valentine-mob-track-2.f058c308.mp3"
-					],
+					"files": ["music/the-valentine-mob-track-2.f058c308.mp3"],
 					"durationSeconds": 1059.405283
 				}
 			]
@@ -1290,15 +1287,12 @@
 				}
 			],
 			"voiceOver": {
-				"files": ["speech/2.5e6ebddc.m4a", "speech/2.16878148.mp3"],
+				"files": ["speech/2.16878148.mp3"],
 				"durationSeconds": 155.305941
 			},
 			"ambientTracks": [
 				{
-					"files": [
-						"music/the-valentine-mob-track-3.1cbd851b.m4a",
-						"music/the-valentine-mob-track-3.75df7322.mp3"
-					],
+					"files": ["music/the-valentine-mob-track-3.75df7322.mp3"],
 					"durationSeconds": 1047.684354
 				}
 			]
@@ -1815,15 +1809,12 @@
 				}
 			],
 			"voiceOver": {
-				"files": ["speech/3.bd061176.m4a", "speech/3.becaf779.mp3"],
+				"files": ["speech/3.becaf779.mp3"],
 				"durationSeconds": 690.315465
 			},
 			"ambientTracks": [
 				{
-					"files": [
-						"music/the-valentine-mob-track-4.25617066.m4a",
-						"music/the-valentine-mob-track-4.7a4c28cf.mp3"
-					],
+					"files": ["music/the-valentine-mob-track-4.7a4c28cf.mp3"],
 					"durationSeconds": 1109.799002
 				}
 			]
@@ -2325,96 +2316,60 @@
 				}
 			],
 			"voiceOver": {
-				"files": ["speech/4.07490050.m4a", "speech/4.4cef4f6f.mp3"],
+				"files": ["speech/4.4cef4f6f.mp3"],
 				"durationSeconds": 529.166077
 			},
 			"ambientTracks": [
 				{
-					"files": ["music/bell-vibes.27b43122.m4a", "music/bell-vibes.a2032f27.mp3"],
+					"files": ["music/bell-vibes.a2032f27.mp3"],
 					"durationSeconds": 1233.13542
 				},
 				{
-					"files": [
-						"music/the-valentine-mob-track-2.ea37e59c.m4a",
-						"music/the-valentine-mob-track-2.f058c308.mp3"
-					],
+					"files": ["music/the-valentine-mob-track-2.f058c308.mp3"],
 					"durationSeconds": 1059.405283
 				},
 				{
-					"files": [
-						"music/the-valentine-mob-track-3.1cbd851b.m4a",
-						"music/the-valentine-mob-track-3.75df7322.mp3"
-					],
+					"files": ["music/the-valentine-mob-track-3.75df7322.mp3"],
 					"durationSeconds": 1047.684354
 				},
 				{
-					"files": [
-						"music/the-valentine-mob-track-4.25617066.m4a",
-						"music/the-valentine-mob-track-4.7a4c28cf.mp3"
-					],
+					"files": ["music/the-valentine-mob-track-4.7a4c28cf.mp3"],
 					"durationSeconds": 1109.799002
 				},
 				{
-					"files": [
-						"music/the-valentine-mob-track-5.77e2a365.m4a",
-						"music/the-valentine-mob-track-5.454c0082.mp3"
-					],
+					"files": ["music/the-valentine-mob-track-5.454c0082.mp3"],
 					"durationSeconds": 1243.900113
 				},
 				{
-					"files": [
-						"music/the-valentine-mob-track-6.009a3e05.m4a",
-						"music/the-valentine-mob-track-6.0d535fc3.mp3"
-					],
+					"files": ["music/the-valentine-mob-track-6.0d535fc3.mp3"],
 					"durationSeconds": 921.051973
 				},
 				{
-					"files": [
-						"music/the-valentine-mob-track-7.7d39b64e.m4a",
-						"music/the-valentine-mob-track-7.6f344c36.mp3"
-					],
+					"files": ["music/the-valentine-mob-track-7.6f344c36.mp3"],
 					"durationSeconds": 838.313515
 				},
 				{
-					"files": [
-						"music/the-valentine-mob-track-8.47dfe86d.m4a",
-						"music/the-valentine-mob-track-8.49a30208.mp3"
-					],
+					"files": ["music/the-valentine-mob-track-8.49a30208.mp3"],
 					"durationSeconds": 411.721066
 				},
 				{
-					"files": [
-						"music/the-valentine-mob-track-9.04ac7ff0.m4a",
-						"music/the-valentine-mob-track-9.4f2af42e.mp3"
-					],
+					"files": ["music/the-valentine-mob-track-9.4f2af42e.mp3"],
 					"durationSeconds": 696.532698
 				},
 				{
-					"files": [
-						"music/the-valentine-mob-track-10.b15c4c97.m4a",
-						"music/the-valentine-mob-track-10.98836fe1.mp3"
-					],
+					"files": ["music/the-valentine-mob-track-10.98836fe1.mp3"],
 					"durationSeconds": 278.015057
 				},
 				{
-					"files": [
-						"music/the-valentine-mob-track-11.6d59679c.m4a",
-						"music/the-valentine-mob-track-11.498e2e04.mp3"
-					],
+					"files": ["music/the-valentine-mob-track-11.498e2e04.mp3"],
 					"durationSeconds": 633.626122
 				},
 				{
-					"files": [
-						"music/the-valentine-mob-track-12.5ecb7174.m4a",
-						"music/the-valentine-mob-track-12.a8338410.mp3"
-					],
+					"files": ["music/the-valentine-mob-track-12.a8338410.mp3"],
 					"durationSeconds": 271.987664
 				},
 				{
-					"files": [
-						"music/the-valentine-mob-track-13.01c0fa23.m4a",
-						"music/the-valentine-mob-track-13.41297e83.mp3"
-					],
+					"files": ["music/the-valentine-mob-track-13.41297e83.mp3"],
 					"durationSeconds": 707.566667
 				}
 			]
@@ -2446,15 +2401,12 @@
 				}
 			],
 			"voiceOver": {
-				"files": ["speech/5.093bb63a.m4a", "speech/5.b18c6143.mp3"],
+				"files": ["speech/5.b18c6143.mp3"],
 				"durationSeconds": 26.663039
 			},
 			"ambientTracks": [
 				{
-					"files": [
-						"music/the-valentine-mob-track-6.009a3e05.m4a",
-						"music/the-valentine-mob-track-6.0d535fc3.mp3"
-					],
+					"files": ["music/the-valentine-mob-track-6.0d535fc3.mp3"],
 					"durationSeconds": 921.051973
 				}
 			]
@@ -2481,15 +2433,12 @@
 				}
 			],
 			"voiceOver": {
-				"files": ["speech/6.ba581807.m4a", "speech/6.3920bf3e.mp3"],
+				"files": ["speech/6.3920bf3e.mp3"],
 				"durationSeconds": 33.71102
 			},
 			"ambientTracks": [
 				{
-					"files": [
-						"music/the-valentine-mob-track-7.7d39b64e.m4a",
-						"music/the-valentine-mob-track-7.6f344c36.mp3"
-					],
+					"files": ["music/the-valentine-mob-track-7.6f344c36.mp3"],
 					"durationSeconds": 838.313515
 				}
 			]
@@ -2516,15 +2465,12 @@
 				}
 			],
 			"voiceOver": {
-				"files": ["speech/7.cb51ad33.m4a", "speech/7.2de4b3b8.mp3"],
+				"files": ["speech/7.2de4b3b8.mp3"],
 				"durationSeconds": 22.168526
 			},
 			"ambientTracks": [
 				{
-					"files": [
-						"music/the-valentine-mob-track-8.47dfe86d.m4a",
-						"music/the-valentine-mob-track-8.49a30208.mp3"
-					],
+					"files": ["music/the-valentine-mob-track-8.49a30208.mp3"],
 					"durationSeconds": 411.721066
 				}
 			]
@@ -2556,15 +2502,12 @@
 				}
 			],
 			"voiceOver": {
-				"files": ["speech/8.7828b868.m4a", "speech/8.ed704905.mp3"],
+				"files": ["speech/8.ed704905.mp3"],
 				"durationSeconds": 39.450703
 			},
 			"ambientTracks": [
 				{
-					"files": [
-						"music/the-valentine-mob-track-9.04ac7ff0.m4a",
-						"music/the-valentine-mob-track-9.4f2af42e.mp3"
-					],
+					"files": ["music/the-valentine-mob-track-9.4f2af42e.mp3"],
 					"durationSeconds": 696.532698
 				}
 			]
@@ -2591,15 +2534,12 @@
 				}
 			],
 			"voiceOver": {
-				"files": ["speech/9.953d1d66.m4a", "speech/9.a4161fd3.mp3"],
+				"files": ["speech/9.a4161fd3.mp3"],
 				"durationSeconds": 40.504308
 			},
 			"ambientTracks": [
 				{
-					"files": [
-						"music/the-valentine-mob-track-10.b15c4c97.m4a",
-						"music/the-valentine-mob-track-10.98836fe1.mp3"
-					],
+					"files": ["music/the-valentine-mob-track-10.98836fe1.mp3"],
 					"durationSeconds": 278.015057
 				}
 			]

@@ -46,24 +46,24 @@
 		}
 	}
 
-	onMount(() => {
-		if (browser && audioElement) {
-			console.log(
-				`setting preoad from user agent ${window.navigator.userAgent} on ${audioElement}`
-			);
+	// onMount(() => {
+	// 	if (browser && audioElement) {
+	// 		console.log(
+	// 			`setting preoad from user agent ${window.navigator.userAgent} on ${audioElement}`
+	// 		);
 
-			let index = window.navigator.userAgent.indexOf('Chrome');
-			if (index === -1) {
-				console.log('setting none');
-				audioElement.preload = 'none';
-			} else {
-				console.log('setting auto');
-				audioElement.preload = 'auto';
-			}
+	// 		let index = window.navigator.userAgent.indexOf('Chrome');
+	// 		if (index === -1) {
+	// 			console.log('setting none');
+	// 			audioElement.preload = 'none';
+	// 		} else {
+	// 			console.log('setting auto');
+	// 			audioElement.preload = 'auto';
+	// 		}
 
-			console.log(`${audioElement.preload}`);
-		}
-	});
+	// 		console.log(`${audioElement.preload}`);
+	// 	}
+	// });
 
 	function pauseAudio() {
 		if (audioElement) audioElement.pause();
@@ -87,6 +87,7 @@
 <audio
 	muted
 	{loop}
+	preload="none"
 	use:onAudioElementMounted
 	bind:currentTime
 	on:ended
