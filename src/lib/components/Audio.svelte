@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { fadeVolume } from '$lib/utils/transition/fadeVolume';
 	import { getType } from 'mime';
+	import { onMount } from 'svelte';
 
 	export let audioSources: string[];
 	export let isPlaying = false;
@@ -44,6 +46,25 @@
 		}
 	}
 
+	onMount(() => {
+		if (browser && audioElement) {
+			console.log(
+				`setting preoad from user agent ${window.navigator.userAgent} on ${audioElement}`
+			);
+
+			let index = window.navigator.userAgent.indexOf('Chrome');
+			if (index === -1) {
+				console.log('setting none');
+				audioElement.preload = 'none';
+			} else {
+				console.log('setting auto');
+				audioElement.preload = 'auto';
+			}
+
+			console.log(`${audioElement.preload}`);
+		}
+	});
+
 	function pauseAudio() {
 		if (audioElement) audioElement.pause();
 	}
@@ -53,7 +74,11 @@
 	}
 
 	$: {
-		if (audioElement) audioElement.currentTime = targetTime;
+		if (audioElement) {
+			audioElement.currentTime = targetTime;
+			console.log(`targetTime: ${targetTime}`);
+			console.log(`currentTime: ${audioElement.currentTime}`);
+		}
 	}
 </script>
 
@@ -65,7 +90,6 @@
 	use:onAudioElementMounted
 	bind:currentTime
 	on:ended
-	preload="none"
 	bind:this={audioElement}
 	bind:seeking
 	transition:fadeVolume={{ duration: 1000 }}

@@ -69,7 +69,7 @@
 			(currentTime < start || currentTime >= end + 0.1) &&
 			(!isPlaying || targetTime < start || targetTime >= end)
 		) {
-			// console.log(`setting audio start time to ${start}`);
+			console.log(`setting audio start time to ${start}`);
 			targetTime = start;
 		}
 	}
