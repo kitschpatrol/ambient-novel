@@ -8,7 +8,7 @@
 	export let isPlaying = false;
 	export let maxVolume = 1.0;
 	export let loop = false;
-	export let currentTime = 0;
+	export let currentTime: number; // leaving this undefined is critical on chrome
 	export let seeking = false;
 	export let targetTime = 0;
 
