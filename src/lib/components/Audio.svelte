@@ -1,14 +1,12 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
 	import { fadeVolume } from '$lib/utils/transition/fadeVolume';
 	import { getType } from 'mime';
-	import { onMount, tick } from 'svelte';
 
 	export let audioSources: string[];
 	export let isPlaying = false;
 	export let maxVolume = 1.0;
 	export let loop = false;
-	export let currentTime: number = 0;
+	export let currentTime = 0;
 	export let seeking = false;
 	export let targetTime = 0;
 
@@ -46,25 +44,6 @@
 		}
 	}
 
-	// onMount(() => {
-	// 	if (browser && audioElement) {
-	// 		console.log(
-	// 			`setting preoad from user agent ${window.navigator.userAgent} on ${audioElement}`
-	// 		);
-
-	// 		let index = window.navigator.userAgent.indexOf('Chrome');
-	// 		if (index === -1) {
-	// 			console.log('setting none');
-	// 			audioElement.preload = 'none';
-	// 		} else {
-	// 			console.log('setting auto');
-	// 			audioElement.preload = 'auto';
-	// 		}
-
-	// 		console.log(`${audioElement.preload}`);
-	// 	}
-	// });
-
 	function pauseAudio() {
 		if (audioElement) audioElement.pause();
 	}
@@ -73,23 +52,12 @@
 		isPlaying ? playAudio() : pauseAudio();
 	}
 
-	let jumpToTime = (time: number) => {
-		if (audioElement) {
-			console.log(`targetTime: ${time}`);
-			pauseAudio();
-			tick().then(() => {
-				audioElement.currentTime = time;
-				if (isPlaying) {
-					playAudio();
-				}
-				console.log(`currentTime: ${audioElement.currentTime}`);
-			});
-		}
-	};
-
 	$: {
-		targetTime;
-		jumpToTime(targetTime);
+		if (audioElement) {
+			audioElement.currentTime = targetTime;
+			console.log(`targetTime: ${targetTime}`);
+			console.log(`currentTime: ${audioElement.currentTime}`);
+		}
 	}
 </script>
 
@@ -98,7 +66,6 @@
 <audio
 	muted
 	{loop}
-	preload="none"
 	use:onAudioElementMounted
 	bind:currentTime
 	on:ended
