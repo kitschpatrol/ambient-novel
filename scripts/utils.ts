@@ -11,13 +11,10 @@ import { stripHtml } from 'string-strip-html';
 
 export function findHashedFile(filePath: string): string | null {
 	// Match the hash area
-	console.log(`filePath: ${filePath}`);
-
 	const parts = filePath.split('.');
 	parts.splice(-1, 0, '*');
 	const pattern = parts.join('.');
 
-	console.log(`pattern: ${pattern}`);
 	// Synchronously get all files matching the pattern
 	const files = glob.sync(pattern);
 

@@ -3,21 +3,26 @@
 	export let isPlaying = false;
 	export let lineData: LineData;
 	export let currentTime = 0;
-	export let timingOffsetSeconds = 0.5;
+	export let timingOffsetSeconds = 0;
 
 	let lineElement: HTMLDivElement;
 
+	$: timedElements =
+		lineElement &&
+		(lineElement.querySelectorAll('li[data-time], span[data-time]') as NodeListOf<HTMLElement>);
+
 	$: {
-		if (lineElement) {
-			const spans = lineElement.getElementsByTagName('span');
-			for (const span of spans) {
-				const timeStart = span.getAttribute('data-time-start');
-				if (timeStart) {
-					if (!isPlaying || currentTime + timingOffsetSeconds >= parseFloat(timeStart)) {
-						span.style.opacity = '1.0';
-					} else {
-						span.style.opacity = '0.0';
-					}
+		// TODO optimize hot path, don't need to do this on all lines at the same time?
+		// many are out of view...
+		if (timedElements) {
+			for (const element of timedElements) {
+				if (
+					!isPlaying ||
+					currentTime + timingOffsetSeconds >= parseFloat(element.getAttribute('data-time') ?? '0')
+				) {
+					element.style.opacity = '1.0';
+				} else {
+					element.style.opacity = '0.0';
 				}
 			}
 		}
@@ -31,7 +36,11 @@
 </div>
 
 <style>
-	.line :global(.timing) {
+	:global([data-time]) {
 		transition: opacity 800ms;
+	}
+
+	:global(.line ul) {
+		list-style-type: disc;
 	}
 </style>

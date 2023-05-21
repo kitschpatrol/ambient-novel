@@ -29,8 +29,10 @@ import {
 } from './utils';
 
 // Prerequisites ----------------------------------------------------------------------
-
-// Mac only (because of "say" command)
+//
+// See readme for dependency installation instructions
+//
+// Mac only (because of `say` command, though `coqui` is typically used)
 // You must have ffmpeg (with the fdk-aac codec) and ffprobe on your path.
 // The bundled mac build of ffmpeg does not include fdk-aac, and the ffmpeg
 // libraries available on npm do not include fdk-aac.
@@ -38,17 +40,6 @@ import {
 // We bother because AAC files generated with the aac codec bundled
 // with normal ffmpeg are not supported in Safari.
 //
-// Recommended installation procedure:
-// $ brew tap homebrew-ffmpeg/ffmpeg
-// $ brew install homebrew-ffmpeg/ffmpeg/ffmpeg --with-fdk-aacbrew tap homebrew-ffmpeg/ffmpeg
-// You must also have access to the lossless ambient audio files.
-// These are too large to bundle in the repo
-
-// WIP
-// brew install mecab
-
-// this duration is applied to both the head and tail
-// so total additional duration is this times 2
 
 // Customize this to your liking
 const config = {
@@ -467,11 +458,28 @@ if (config.jsonSettings.embedWordTimingsInHtml) {
 				const cursorStart = text.indexOf(match, cursor);
 				const cursorEnd = cursorStart + match.length;
 
-				const replacement = `<span class="timing" data-time-start=${wordTiming.start} data-time-end=${wordTiming.end}>${match}</span>`;
+				const replacement = `<span data-time=${wordTiming.start}>${match}</span>`;
 
 				text = replaceSubstring(text, replacement, cursorStart, cursorEnd);
 				cursor = cursorStart + replacement.length;
 			}
+
+			// special case for list items, where we need the bullet to fade in as well
+			// so we give any li elements the data-time from their closest span
+			// include the </li> in the split
+			const listParts = text.split(/(?<=<\/li>)/giu);
+
+			text = listParts
+				.map((listPart) => {
+					// get the first time value after the list
+					const matches = listPart.match(/data-time=([0-9.]+)/iu);
+					if (matches) {
+						return listPart.replace('<li>', `<li ${matches[0]}>`);
+					} else {
+						return listPart;
+					}
+				})
+				.join('');
 
 			line.text = text;
 		});
