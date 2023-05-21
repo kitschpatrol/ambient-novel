@@ -42,10 +42,4 @@
 	$: currentTrackInfo = tracks[currentTrackIndex];
 </script>
 
-<Audio
-	audioSources={currentTrackInfo.files}
-	{isPlaying}
-	{maxVolume}
-	on:ended={onTrackEnded}
-	usePreciseCurrentTime={false}
-/>
+<Audio audioSources={currentTrackInfo.files} {isPlaying} {maxVolume} on:ended={onTrackEnded} />
