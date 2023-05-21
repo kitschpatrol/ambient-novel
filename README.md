@@ -6,6 +6,8 @@ Uses [`dust`](https://github.com/bootandy/dust) in the `build-report` NPM script
 brew install dust
 ```
 
+Deployment server MUST support HTTP 206 range requests to successfuly set `currentTime` on audio elements on chrome.
+
 ## Updating the content
 
 Certain data and assets are generated from the source data in `/data` and ouput to `/static`, `/data-generated` and `/src/lib/data`.

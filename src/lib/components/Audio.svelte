@@ -18,7 +18,8 @@
 	function onAudioElementMounted(node: HTMLAudioElement) {
 		// forcing load fixes safari bugs changing chapters while playing
 		// https://stackoverflow.com/a/73441313/2437832
-		node.load();
+		// but so does a server that supports 206s
+		// node.load();
 		node.currentTime = targetTime;
 		node.volume = maxVolume;
 		node.muted = false;
@@ -46,25 +47,6 @@
 		}
 	}
 
-	// onMount(() => {
-	// 	if (browser && audioElement) {
-	// 		console.log(
-	// 			`setting preoad from user agent ${window.navigator.userAgent} on ${audioElement}`
-	// 		);
-
-	// 		let index = window.navigator.userAgent.indexOf('Chrome');
-	// 		if (index === -1) {
-	// 			console.log('setting none');
-	// 			audioElement.preload = 'none';
-	// 		} else {
-	// 			console.log('setting auto');
-	// 			audioElement.preload = 'auto';
-	// 		}
-
-	// 		console.log(`${audioElement.preload}`);
-	// 	}
-	// });
-
 	function pauseAudio() {
 		if (audioElement) audioElement.pause();
 	}
@@ -74,20 +56,16 @@
 	}
 
 	$: {
-		if (audioElement) {
-			audioElement.currentTime = targetTime;
-			console.log(`targetTime: ${targetTime}`);
-			console.log(`currentTime: ${audioElement.currentTime}`);
-		}
+		if (audioElement) audioElement.currentTime = targetTime;
 	}
 </script>
 
 <!-- // adding prelad="none" was key to currentTime bugs on mobile safari -->
+<!-- // but wasn't necessary after switching to netlify with 206 support? -->
 <!-- // but CF pages doesn't yet return 206s, so maybe keeping preload on deployment? -->
 <audio
 	muted
 	{loop}
-	preload="none"
 	use:onAudioElementMounted
 	bind:currentTime
 	on:ended
