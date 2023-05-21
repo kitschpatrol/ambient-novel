@@ -47,7 +47,7 @@
 		"prettier-plugin-svelte": "^2.10.0",
 		"prettier-plugin-tailwindcss": "^0.3.0",
 		"seedrandom": "^3.0.5",
-		"string-strip-html": "^13.2.4",
+		"string-strip-html": "^13.4.1",
 		"svelte": "^3.59.1",
 		"svelte-check": "^3.3.2",
 		"svelte-fa": "^3.0.3",

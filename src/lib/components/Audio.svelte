@@ -1,8 +1,6 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
 	import { fadeVolume } from '$lib/utils/transition/fadeVolume';
 	import { getType } from 'mime';
-	import { onMount } from 'svelte';
 
 	export let audioSources: string[];
 	export let isPlaying = false;
@@ -61,8 +59,8 @@
 </script>
 
 <!-- // adding prelad="none" was key to currentTime bugs on mobile safari -->
-<!-- // but wasn't necessary after switching to netlify with 206 support? -->
-<!-- // but CF pages doesn't yet return 206s, so maybe keeping preload on deployment? -->
+<!-- // but only on CF pages which doesn't yet handle 206s range responses -->
+<!-- // now apparently not necessary after switching to netlify with 206 support -->
 <audio
 	muted
 	{loop}
