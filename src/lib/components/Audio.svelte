@@ -18,8 +18,8 @@
 	function onAudioElementMounted(node: HTMLAudioElement) {
 		// forcing load fixes safari bugs changing chapters while playing
 		// https://stackoverflow.com/a/73441313/2437832
-		// but so does a server that supports 206s
-		// node.load();
+		// needed even on a server that supports 206s
+		node.load();
 		node.currentTime = targetTime;
 		node.volume = maxVolume;
 		node.muted = false;
