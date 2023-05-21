@@ -91,6 +91,13 @@
 	use:onAudioElementMounted
 	bind:currentTime
 	on:ended
+	on:canplay={(e) => {
+		console.log('canplay!');
+		// https://stackoverflow.com/questions/37044064/html-audio-cant-set-currenttime
+		if (isPlaying && audioElement.currentTime !== targetTime) {
+			audioElement.currentTime = targetTime;
+		}
+	}}
 	bind:this={audioElement}
 	bind:seeking
 	transition:fadeVolume={{ duration: 1000 }}
