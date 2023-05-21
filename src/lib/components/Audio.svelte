@@ -74,9 +74,14 @@
 	}
 
 	$: {
+		targetTime;
 		if (audioElement) {
-			audioElement.currentTime = targetTime;
 			console.log(`targetTime: ${targetTime}`);
+			pauseAudio();
+			audioElement.currentTime = targetTime;
+			if (isPlaying) {
+				playAudio();
+			}
 			console.log(`currentTime: ${audioElement.currentTime}`);
 		}
 	}
