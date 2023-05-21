@@ -1,16 +1,19 @@
 <script lang="ts">
 	import { fadeVolume } from '$lib/utils/transition/fadeVolume';
+	import round from 'lodash/round';
 	import { getType } from 'mime';
+	import { onDestroy } from 'svelte';
 
 	export let audioSources: string[];
 	export let isPlaying = false;
 	export let maxVolume = 1.0;
 	export let loop = false;
-	export let currentTime = 0;
-	export let seeking = false;
 	export let targetTime = 0;
+	export let currentTime = 0;
+	export let usePreciseCurrentTime = true;
 
 	let audioElement: HTMLAudioElement;
+	let requestAnimationFrameId: number | null = null;
 
 	// have to use this instead of onMount to avoid null reference issues in Chapter
 	function onAudioElementMounted(node: HTMLAudioElement) {
@@ -30,7 +33,27 @@
 				.catch((error) => {
 					console.error(error);
 				});
+
+		// precise currentTime updates
+		if (usePreciseCurrentTime) {
+			const loop = () => {
+				if (!node.seeking && isPlaying) {
+					const latestAudioTime = round(node.currentTime, 3);
+					if (currentTime !== latestAudioTime) {
+						currentTime = latestAudioTime;
+					}
+				}
+				requestAnimationFrameId = requestAnimationFrame(loop);
+			};
+			loop();
+		}
 	}
+
+	onDestroy(() => {
+		if (requestAnimationFrameId) {
+			cancelAnimationFrame(requestAnimationFrameId);
+		}
+	});
 
 	function playAudio() {
 		if (audioElement) {
@@ -64,10 +87,8 @@
 	muted
 	{loop}
 	use:onAudioElementMounted
-	bind:currentTime
 	on:ended
 	bind:this={audioElement}
-	bind:seeking
 	transition:fadeVolume={{ duration: 1000 }}
 >
 	{#each audioSources as source}

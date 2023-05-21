@@ -9,8 +9,8 @@
 	import Audio from './Audio.svelte';
 	// https://www.blazemeter.com/blog/import-lodash-libraries
 	import range from 'lodash/range';
-	import without from 'lodash/without';
 	import sample from 'lodash/sample';
+	import without from 'lodash/without';
 
 	// props
 	export let tracks: TrackInfo[] = [];
@@ -42,4 +42,10 @@
 	$: currentTrackInfo = tracks[currentTrackIndex];
 </script>
 
-<Audio audioSources={currentTrackInfo.files} {isPlaying} {maxVolume} on:ended={onTrackEnded} />
+<Audio
+	audioSources={currentTrackInfo.files}
+	{isPlaying}
+	{maxVolume}
+	on:ended={onTrackEnded}
+	usePreciseCurrentTime={false}
+/>
