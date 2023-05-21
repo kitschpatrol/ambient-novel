@@ -16,7 +16,8 @@
 	function onAudioElementMounted(node: HTMLAudioElement) {
 		// forcing load fixes safari bugs changing chapters while playing
 		// https://stackoverflow.com/a/73441313/2437832
-		node.load();
+		// temp disabled due to chrome regressions
+		// node.load();
 		node.currentTime = targetTime;
 		node.volume = maxVolume;
 		node.muted = false;
@@ -53,11 +54,7 @@
 	}
 
 	$: {
-		if (audioElement) {
-			audioElement.currentTime = targetTime;
-			console.log(`targetTime: ${targetTime}`);
-			console.log(`currentTime: ${audioElement.currentTime}`);
-		}
+		if (audioElement) audioElement.currentTime = targetTime;
 	}
 </script>
 
