@@ -12,12 +12,14 @@ export default {
 
 		extend: {
 			boxShadow: {
-				DEFAULT: '-3px 3px 5px var(--tw-shadow-color)'
+				DEFAULT: '-3px 3px 5px var(--tw-shadow-color)',
+				button: '-3px 3px 5px rgb(0 0 0 / .4)'
 			},
 			textShadow: {
-				DEFAULT: '-3px 3px 5px var(--tw-shadow-color)'
+				DEFAULT: '-.05em .05em .125em var(--tw-shadow-color)'
 			},
 			colors: {
+				'vm-magenta-mild': '#C63BEE',
 				'vm-magenta': '#f01ef6',
 				'vm-magenta-highlight': '#F6CDFB',
 				'vm-blue': '#4447fb',

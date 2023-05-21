@@ -148,10 +148,10 @@
 </div>
 <p
 	transition:fade={{ duration: 300 }}
-	class="absolute bottom-0 right-0 px-3 pb-3 text-right font-serif text-sm italic text-gray-400"
+	class="absolute bottom-0 right-0 px-3 pb-3 text-right font-serif text-xs italic text-gray-400 sm:text-sm"
 >
 	Chapter {chapterData.index + 1} § {activeLine + 1}&hairsp;/&hairsp;{chapterData.lines.length}
-	{#if !isSorted}(Shuffled){/if}
+	{#if !isSorted}(Mixed){/if}
 </p>
 
 <Playlist

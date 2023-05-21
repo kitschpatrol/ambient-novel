@@ -141,31 +141,23 @@
 					on:click={() => {
 						$activeChapter = i;
 					}}
-					class="link relative block h-full rounded-t-xl pt-2 font-display text-sm sm:text-base {i ===
+					class="link relative block h-full rounded-t-xl pt-2 font-display text-sm tracking-wider sm:text-base {i ===
 					$activeChapter
-						? 'bg-white pb-2 max-sm:min-w-full sm:px-4'
-						: 'mt-1 min-w-full bg-white bg-opacity-40 bg-gradient-to-t from-vm-inner-shadow-dark to-transparent to-45% text-white text-opacity-70 transition-[margin] duration-300 group-hover:mt-0 group-hover:transition-none'}"
+						? 'bg-white pb-2 text-vm-blue shadow-vm-inner-shadow-dark text-shadow max-sm:min-w-full sm:px-4'
+						: 'mt-1 min-w-full bg-white bg-opacity-40 bg-gradient-to-t from-vm-inner-shadow-dark to-transparent to-45% text-white text-opacity-80 transition-[margin] duration-300 group-hover:mt-0 group-hover:transition-none'}"
 					href="?chapter={i}"
 				>
-					<span
-						class={i === $activeChapter
-							? 'bg-gradient-to-br from-vm-magenta to-vm-blue bg-clip-text font-extrabold text-transparent'
-							: ''}
-					>
-						{i + 1}<span class={i === $activeChapter ? 'max-sm:hidden' : 'hidden'}
-							>. {chapter.title}</span
-						></span
+					{i + 1}<span class={i === $activeChapter ? 'max-sm:hidden' : 'hidden'}
+						>. {chapter.title}</span
 					></a
 				>
 			</li>
 		{/each}
 	</ul>
 	<h2
-		class="bg-white bg-gradient-to-t from-vm-inner-shadow-light to-transparent to-45% py-1 text-center font-display sm:hidden"
+		class="bg-white bg-gradient-to-t from-vm-inner-shadow-light to-transparent to-45% py-2 text-center font-display tracking-wider text-vm-blue shadow-vm-inner-shadow-dark text-shadow sm:hidden"
 	>
-		<span class="bg-gradient-to-br from-vm-magenta to-vm-blue bg-clip-text text-transparent">
-			Chapter {$activeChapter + 1}: {bookData.chapters[$activeChapter].title}
-		</span>
+		Chapter {$activeChapter + 1}: {bookData.chapters[$activeChapter].title}
 	</h2>
 	<div class="grow-1 relative h-full flex-1 overflow-hidden bg-white">
 		{#key $activeChapter}
@@ -183,7 +175,7 @@
 	</div>
 
 	<div
-		class="rounded-b-xl bg-white bg-opacity-40 bg-gradient-to-b from-vm-inner-shadow to-transparent to-45%"
+		class="rounded-b-xl bg-white bg-opacity-20 bg-gradient-to-b from-vm-inner-shadow to-transparent to-45%"
 	>
 		<Controls
 			isShuffleEnable={bookData.chapters[$activeChapter].lineShuffleAllowed}

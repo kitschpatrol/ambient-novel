@@ -25,8 +25,8 @@
 	const dispatch = createEventDispatcher();
 </script>
 
-<div id="controls" class="flex justify-between px-3 py-2">
-	<span>
+<div id="controls" class="md-s flex w-full gap-6 max-sm:gap-1">
+	<span class="flex flex-1 items-center justify-start">
 		<Button
 			icon={faPlay}
 			label="Play"
@@ -34,9 +34,15 @@
 			isEnabled={!isPlaying}
 			on:click={() => dispatch('play')}
 		/>
-		<Button icon={faPause} label="Pause" isEnabled={isPlaying} on:click={() => dispatch('pause')} />
+		<Button
+			icon={faPause}
+			label="Pause"
+			isDown={!isPlaying}
+			isEnabled={isPlaying}
+			on:click={() => dispatch('pause')}
+		/>
 	</span>
-	<span>
+	<span class="flex flex-1 items-center justify-start">
 		{#if showChapterButtons}
 			<Button
 				icon={faBackwardStep}
@@ -45,22 +51,19 @@
 				on:click={() => dispatch('previousChapter')}
 			/>
 		{/if}
-
 		<Button
 			icon={faBackward}
-			label="Previous Line"
+			label="Prev"
 			isEnabled={!isFirstLine}
 			on:click={() => dispatch('previousLine')}
 		/>
-
 		<Button
 			icon={faForward}
-			label="Next Line"
+			label="Next"
 			isEnabled={!isLastLine}
 			iconAlign="right"
 			on:click={() => dispatch('nextLine')}
 		/>
-
 		{#if showChapterButtons}
 			<Button
 				icon={faForwardStep}
@@ -71,12 +74,12 @@
 			/>
 		{/if}
 	</span>
-
-	<span>
+	<span class="flex flex-1 items-center justify-end">
 		{#if showSortButton}
 			<Button
 				icon={faGripLines}
 				label="Sort"
+				isDown={isSorted}
 				isEnabled={!isSorted && isShuffleEnable}
 				on:click={() => dispatch('sort')}
 			/>
@@ -84,7 +87,7 @@
 
 		<Button
 			icon={faShuffle}
-			label="Shuffle"
+			label="Mix"
 			isEnabled={isShuffleEnable}
 			on:click={() => dispatch('shuffle')}
 		/>
