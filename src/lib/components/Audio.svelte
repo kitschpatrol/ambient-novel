@@ -2,13 +2,13 @@
 	import { browser } from '$app/environment';
 	import { fadeVolume } from '$lib/utils/transition/fadeVolume';
 	import { getType } from 'mime';
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 
 	export let audioSources: string[];
 	export let isPlaying = false;
 	export let maxVolume = 1.0;
 	export let loop = false;
-	export let currentTime: number; // leaving this undefined is critical on chrome
+	export let currentTime: number = 0;
 	export let seeking = false;
 	export let targetTime = 0;
 
@@ -73,17 +73,23 @@
 		isPlaying ? playAudio() : pauseAudio();
 	}
 
+	let jumpToTime = (time: number) => {
+		if (audioElement) {
+			console.log(`targetTime: ${time}`);
+			pauseAudio();
+			tick().then(() => {
+				audioElement.currentTime = time;
+				if (isPlaying) {
+					playAudio();
+				}
+				console.log(`currentTime: ${audioElement.currentTime}`);
+			});
+		}
+	};
+
 	$: {
 		targetTime;
-		if (audioElement) {
-			console.log(`targetTime: ${targetTime}`);
-			pauseAudio();
-			audioElement.currentTime = targetTime;
-			if (isPlaying) {
-				playAudio();
-			}
-			console.log(`currentTime: ${audioElement.currentTime}`);
-		}
+		jumpToTime(targetTime);
 	}
 </script>
 
