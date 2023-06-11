@@ -19,11 +19,16 @@
 	initial-value: 0deg;
 } */
 
+:root {
+	--background-color-gradient-1: theme(colors.vm-magenta);
+	--background-color-gradient-2: theme(colors.vm-blue);
+}
+
 body,
 html {
 	width: 100%;
 	height: 100%;
-	background: theme(colors.vm-magenta);
+	background: var(--background-color-gradient-1);
 	overscroll-behavior: none; /* for safari mobile */
 }
 
@@ -31,7 +36,10 @@ body {
 	position: fixed; /* for safari mobile */
 
 	/* var(--backgroundGradientAngle), 0deg, */
-	background: linear-gradient(theme(colors.vm-magenta) 0%, theme(colors.vm-blue) 100%);
+	background: linear-gradient(
+		var(--background-color-gradient-1) 0%,
+		var(--background-color-gradient-2) 100%
+	);
 	/* background: -webkit-linear-gradient(red, green, blue); */
 
 	/* too slow on safari? */
