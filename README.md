@@ -22,7 +22,7 @@ The content generator does a number of things depending on the config object in 
 - Aligns the transcription output to the text of the book, preserving the line-level timings
 - Runs a word-level timing inference on the modified transcript against the original voice over file
 - Compresses the ambient music to a number of formats.
-- Information gathered in the above steps is merged with data from `/data/book.json` to tield the final `/src/lib/data`
+- Information gathered in the above steps is merged with data from `/data/book.json` to yield the final `/src/lib/data`
 
 To install dependencies for the content generation process, run:
 
@@ -52,7 +52,7 @@ To set up the environment:
 ```bash
 # install brew if you haven't already
 # install ffmpeg with fddk-aac
-# whisperx doesn't care about specific versions, but safari does
+# whisperx doesn't care about specific encoder implementations, but safari does
 # and we also use ffmpeg in the data generation step
 # TODO does this install ffprobe as well?
 brew tap homebrew-ffmpeg/ffmpeg

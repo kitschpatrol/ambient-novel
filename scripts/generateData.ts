@@ -59,6 +59,7 @@ const config = {
 		regenerateCompressed: false,
 		regenerateTranscript: false,
 		regenerateWordAlignment: false,
+		annunciateTitles: true, // true if scott reads the chapter name at the start of the track, or if we want the generated audio to include this
 		generatedDataDir: './data-generated',
 		sourceDir: '/Users/mika/Documents/Projects/Ambient Novel with Scott Wayne Indiana/Voice Over', // will generate using say if missing
 		outputDir: './static/speech',
@@ -194,6 +195,9 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 	chapter.voiceOver = {};
 	chapter.voiceOver.files = [];
 
+	// the period is important for timing inference in both tts and transcription
+	const chapterAnnunciationText = `Chapter ${chapterNumber + 1}, ${chapterSource.title}. `;
+
 	// glue together lines
 
 	// say if needed
@@ -231,7 +235,10 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 		//sayToFile(chapterTextClean, voiceOverSourceFile);
 
 		// doesn't seem to be a way to command pauses in coqui
-		let chapterTextClean = chapterSource.lines
+		let chapterTextClean = [
+			config.speechSettings.annunciateTitles ? chapterAnnunciationText : '',
+			...chapterSource.lines
+		]
 			.reduce((prev, curr) => prev + stripEmojis(stripHtmlTags(curr.replace('<br />', ' '))), '')
 			.trim()
 			// chapter 5 has ridiculous long strings of characters, on which the say command chokes
@@ -295,7 +302,11 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 
 		const transcriptMatchedFile = `${config.speechSettings.generatedDataDir}/chapter-${chapterNumber}-audio-transcript-matched.json`;
 
-		const chapterText = chapterSource.lines
+		// append chapter annunciation text, which is not in book.js
+		const chapterText = [
+			config.speechSettings.annunciateTitles ? chapterAnnunciationText : '',
+			...chapterSource.lines
+		]
 			.reduce((prev, curr) => prev + stripEmojis(stripHtmlTags(curr)) + ' ', '')
 			.trim();
 
@@ -311,7 +322,16 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 	// -------------------
 
 	// add word timings to the output
-	const wordTimings = JSON.parse(fs.readFileSync(wordTimingsFile, 'utf8'));
+	let wordTimings = JSON.parse(fs.readFileSync(wordTimingsFile, 'utf8'));
+
+	// special handling to ignore chapter annunciation in word timings transcript
+	if (config.speechSettings.annunciateTitles) {
+		const chapterAnnunciationWordCount = stripEmojis(stripHtmlTags(chapterAnnunciationText))
+			.trim()
+			.split(' ').length;
+
+		wordTimings = wordTimings.slice(chapterAnnunciationWordCount);
+	}
 
 	for (const [lineNumber, lineSource] of chapterSource.lines.entries()) {
 		// console.log(
@@ -332,7 +352,7 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 			const wordTiming = wordTimings.shift();
 
 			if (normalizeWord(wordSource) !== normalizeWord(wordTiming.word)) {
-				throw new Error(`mismatched words ${wordSource} vs. ${wordTiming.word}`);
+				throw new Error(`mismatched words "${wordSource}" vs. "${wordTiming.word}"`);
 			}
 
 			if (line.wordTimings) {
@@ -500,7 +520,7 @@ if (config.jsonSettings.includeWordTimingsArray) {
 bookSchema.parse(bookOutput);
 // console.log(`bookSchema: ${bookSchema}`);
 
+// rewrite the json file with speech file names and duration
 saveFormattedJson(config.jsonSettings.outputFile, bookOutput);
 
-// rewrite the json file with speech file names and duration
 console.log('...Done');

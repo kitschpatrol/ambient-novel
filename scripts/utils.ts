@@ -542,7 +542,7 @@ export function regexMatchInRange(inputStr: string, regex: RegExp, start: number
 	if (match && match.length > 0) {
 		return match[0];
 	} else {
-		throw new Error('Bad regex');
+		throw new Error(`Bad regex in "${subString}"`);
 	}
 }
 
