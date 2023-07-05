@@ -110,7 +110,7 @@
 					window.getComputedStyle(document.documentElement).getPropertyValue(variableName)
 				);
 				return acc;
-			}, {} as Record<string, any>)
+			}, {} as Record<string, number | string>)
 		);
 
 		// clean up stale keys in the store
@@ -227,13 +227,15 @@
 		dragBarElement.addEventListener('pointerdown', downListener);
 
 		// add width adjuster
-		const widthHandleElement = dragBarElement.parentElement!.appendChild(
+		const widthHandleElement = dragBarElement.parentElement?.appendChild(
 			document.createElement('div')
 		);
-		widthHandleElement.className = 'tp-custom-width-handle';
-		widthHandleElement.innerText = '↔';
-		widthHandleElement.addEventListener('click', clickBlocker);
-		widthHandleElement.addEventListener('pointerdown', downListener);
+		if (widthHandleElement) {
+			widthHandleElement.className = 'tp-custom-width-handle';
+			widthHandleElement.innerText = '↔';
+			widthHandleElement.addEventListener('click', clickBlocker);
+			widthHandleElement.addEventListener('pointerdown', downListener);
+		}
 
 		return () => {
 			console.log('destroying');
@@ -242,10 +244,13 @@
 			dragBarElement.removeEventListener('pointermove', moveListener);
 			dragBarElement.removeEventListener('pointerup', upListener);
 			dragBarElement.removeEventListener('pointerdown', downListener);
-			widthHandleElement.removeEventListener('click', clickBlocker);
-			widthHandleElement.removeEventListener('pointermove', moveListener);
-			widthHandleElement.removeEventListener('pointerup', upListener);
-			widthHandleElement.removeEventListener('pointerdown', downListener);
+
+			if (widthHandleElement) {
+				widthHandleElement.removeEventListener('click', clickBlocker);
+				widthHandleElement.removeEventListener('pointermove', moveListener);
+				widthHandleElement.removeEventListener('pointerup', upListener);
+				widthHandleElement.removeEventListener('pointerdown', downListener);
+			}
 			pane.dispose();
 		};
 	});

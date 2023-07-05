@@ -15,7 +15,7 @@
 	export let chapterData: ChapterData;
 	export let activeLine = 0;
 	export let currentTime = 0;
-	export let maxVolumeMusic = 0.5;
+	export let maxVolumeMusic = 0.1;
 	export let maxVolumeSpeech = 1.0;
 	export let lineOrder = Array.from(Array(chapterData.lines.length).keys());
 
