@@ -8,10 +8,22 @@
 	import clamp from 'lodash/clamp';
 	import isEqual from 'lodash/isEqual';
 	import sample from 'lodash/sample';
-	import { activeChapter, chapterState, isPlaying } from '../../store';
+	import { writable } from 'svelte/store';
 
+	export let style = '';
 	export let bookData: BookData;
+	export let initialChapter: number = 3;
+	export let useQueryStore: boolean = false;
 	let lineOrder: number[]; // generated for active chapter
+
+	const isPlaying = writable(false);
+	const activeChapter = writable(initialChapter);
+	const chapterState = writable<{
+		[key: number]: {
+			line: number;
+			shuffleSeed: string;
+		};
+	}>({});
 
 	// populate store
 	bookData.chapters.forEach((chapter, i) => {
@@ -22,18 +34,20 @@
 	});
 
 	// set from query string
-	const searchParams = $page.url.searchParams;
-	if (searchParams) {
-		$activeChapter =
-			clamp(parseInt(searchParams.get('chapter') ?? '1'), 1, bookData.chapters.length) - 1;
-		$chapterState[$activeChapter].line =
-			clamp(
-				parseInt(searchParams.get('line') ?? '1'),
-				1,
-				bookData.chapters[$activeChapter].lines.length
-			) - 1;
+	if (useQueryStore) {
+		const searchParams = $page.url.searchParams;
+		if (searchParams) {
+			$activeChapter =
+				clamp(parseInt(searchParams.get('chapter') ?? '1'), 1, bookData.chapters.length) - 1;
+			$chapterState[$activeChapter].line =
+				clamp(
+					parseInt(searchParams.get('line') ?? '1'),
+					1,
+					bookData.chapters[$activeChapter].lines.length
+				) - 1;
 
-		$chapterState[$activeChapter].shuffleSeed = searchParams.get('seed') ?? '0';
+			$chapterState[$activeChapter].shuffleSeed = searchParams.get('seed') ?? '0';
+		}
 	}
 
 	function onPreviousChapter() {
@@ -119,21 +133,24 @@
 
 	// update query params, don't push history
 	$: {
-		$page.url.searchParams.set('chapter', ($activeChapter + 1).toString());
-		$page.url.searchParams.set('line', ($chapterState[$activeChapter].line + 1).toString());
+		if (useQueryStore) {
+			console.log(`useQueryStore`);
+			$page.url.searchParams.set('chapter', ($activeChapter + 1).toString());
+			$page.url.searchParams.set('line', ($chapterState[$activeChapter].line + 1).toString());
 
-		if ($chapterState[$activeChapter].shuffleSeed !== '0') {
-			$page.url.searchParams.set('seed', $chapterState[$activeChapter].shuffleSeed);
-		} else {
-			$page.url.searchParams.delete('seed');
+			if ($chapterState[$activeChapter].shuffleSeed !== '0') {
+				$page.url.searchParams.set('seed', $chapterState[$activeChapter].shuffleSeed);
+			} else {
+				$page.url.searchParams.delete('seed');
+			}
+
+			goto(`?${$page.url.searchParams.toString()}`, { replaceState: true });
 		}
-
-		goto(`?${$page.url.searchParams.toString()}`, { replaceState: true });
 	}
 </script>
 
 <!-- drop-shadow-2xl insanely slow on safari :( -->
-<div class="flex h-full flex-col">
+<div class="flex h-full flex-col" {style}>
 	<ul class="flex flex-row gap-1 overflow-hidden">
 		{#each bookData.chapters as chapter, i}
 			<li class="group relative flex-1 flex-col whitespace-nowrap text-center">
@@ -145,7 +162,7 @@
 					$activeChapter
 						? 'bg-white pb-2 text-vm-blue shadow-vm-inner-shadow-dark text-shadow max-sm:min-w-full sm:px-4'
 						: 'mt-1 min-w-full bg-white bg-opacity-40 bg-gradient-to-t from-vm-inner-shadow-dark to-transparent to-45% text-white text-opacity-80 transition-[margin] duration-300 group-hover:mt-0 group-hover:transition-none'}"
-					href="?chapter={i}"
+					href={useQueryStore ? `?chapter=${i}` : ``}
 				>
 					{i + 1}<span class={i === $activeChapter ? 'max-sm:hidden' : 'hidden'}
 						>. {chapter.title}</span

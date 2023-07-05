@@ -6,5 +6,5 @@
 	const bookData = bookDataRaw as BookData;
 </script>
 
-<Book {bookData} />
+<Book {bookData} useQueryStore={true} />
 <!-- <Tweakpane /> -->
