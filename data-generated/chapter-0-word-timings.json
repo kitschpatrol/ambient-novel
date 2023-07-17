@@ -1630,7 +1630,7 @@
 	{ "word": "of", "start": 1020.249, "end": 1020.349, "score": 0.666 },
 	{ "word": "the", "start": 1020.349, "end": 1020.429, "score": 0.984 },
 	{ "word": "fingers.", "start": 1020.429, "end": 1020.909, "score": 0.852 },
-	{ "word": "<" },
+	{ "word": "<", "start": 1020.909, "end": 1020.929, "score": 0.852 },
 	{ "word": "They", "start": 1020.929, "end": 1022.07, "score": 0.77 },
 	{ "word": "all", "start": 1022.07, "end": 1022.29, "score": 0.745 },
 	{ "word": "snap", "start": 1022.29, "end": 1022.77, "score": 0.836 },

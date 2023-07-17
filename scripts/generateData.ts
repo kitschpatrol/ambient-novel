@@ -51,7 +51,7 @@ const config = {
 	jsonSettings: {
 		sourceFile: './data/book.json',
 		outputFile: './src/lib/data/book.json',
-		includeWordTimingsArray: false, // puts, technically all this data is present if embedWordTimingsInHtml is true
+		includeWordTimingsArray: true, // puts, technically all this data is present if embedWordTimingsInHtml is true
 		embedWordTimingsInHtml: true // puts <spans> with timing data round words in the line's text
 	},
 	speechSettings: {
