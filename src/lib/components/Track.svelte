@@ -1,21 +1,24 @@
 <script lang="ts">
 	import Audio from '$lib/components/Audio.svelte';
 	import type { ChapterData, LineData } from '$lib/schemas/bookSchema';
+	import ScrollBooster from 'scrollbooster';
 	import { onMount } from 'svelte';
+
 	import { quadInOut } from 'svelte/easing';
 	import { spring } from 'svelte/motion';
 	// export let isPlaying = false;
 	export let chapterData: ChapterData;
 	const duration = chapterData.voiceOver.durationSeconds;
-	export let isPlaying = true;
+	export let isPlaying = false;
 	export let currentTime = 0;
 	export let maxVolumeMusic = 0.1;
 	export let maxVolumeSpeech = 1.0;
 
-	let chapterElement: HTMLDivElement;
+	let scrollWrapperElement: HTMLDivElement;
+	let scrollAreaElement: HTMLDivElement;
 	let scrollTween = spring(0, {
-		stiffness: 0.01,
-		damping: 1.0
+		stiffness: 0.005,
+		damping: 0.2 // setting > 1 gives crazy effect
 	});
 
 	let targetOffset = 0;
@@ -26,26 +29,44 @@
 		// jump immediately to the correct line,
 		// e.g. when switching chapters
 		//scrollTo(0);
+
+		new ScrollBooster({
+			viewport: scrollWrapperElement,
+			content: scrollAreaElement,
+			direction: 'horizontal',
+			scrollMode: 'native',
+			bounce: false,
+			pointerMode: 'mouse',
+			/* @ts-ignore */
+			onPointerDown: () => {
+				// this is weirdly slow
+				// document.body.classList.add('cursor-grabbing-important');
+			},
+			/* @ts-ignore */
+			onPointerUp: () => {
+				// document.body.classList.remove('cursor-grabbing-important');
+			}
+		});
 	});
 
+	function onMouseUpDocument() {}
+
 	$: timedElements =
-		chapterElement &&
-		(chapterElement.querySelectorAll('li[data-time], span[data-time]') as NodeListOf<HTMLElement>);
+		scrollWrapperElement &&
+		(scrollWrapperElement.querySelectorAll(
+			'li[data-time], span[data-time]'
+		) as NodeListOf<HTMLElement>);
 
 	function scrollTo(offset: number) {
-		if (chapterElement && rowWidth > 0) {
+		if (scrollWrapperElement && rowWidth > 0) {
 			$scrollTween = offset - rowWidth / 2;
 		}
 	}
 
 	$: {
-		if (chapterElement) {
-			chapterElement.scrollLeft = $scrollTween;
+		if (scrollWrapperElement) {
+			scrollWrapperElement.scrollLeft = $scrollTween;
 		}
-	}
-
-	$: {
-		scrollTo(targetOffset);
 	}
 
 	$: {
@@ -59,10 +80,11 @@
 					continue;
 				} else {
 					if (currentElement) {
-						const newOffset = currentElement.offsetLeft + currentElement.clientWidth / 2;
+						const newOffset = currentElement.offsetLeft; // + currentElement.offsetWidth * 2;
 						if (newOffset != targetOffset) {
+							scrollTo(targetOffset);
+							currentElement.classList.remove('opacity-10');
 							targetOffset = newOffset;
-							currentElement.style.opacity = '1.0';
 						}
 					}
 					break;
@@ -71,47 +93,34 @@
 		}
 	}
 
-	// $: {
-	// 	// TODO merge with above
-	// 	// TODO optimize hot path, don't need to do this on all lines at the same time?
-	// 	// many are out of view...
-	// 	if (timedElements) {
-	// 		for (const element of timedElements) {
-	// 			if (!isPlaying || currentTime >= parseFloat(element.getAttribute('data-time') ?? '0')) {
-	// 				element.style.opacity = '1.0';
-	// 			} else {
-	// 				element.style.opacity = '0.2';
-	// 			}
-	// 		}
-	// 	}
-	// }
-
-	$: {
-		console.log(rowWidth);
-	}
-
 	const { lines } = chapterData;
 </script>
 
-<!-- HTML -->
+<svelte:body />
+
 <div
-	bind:this={chapterElement}
-	class="no-scrollbar flex flex-1 items-center overflow-y-hidden overflow-x-scroll whitespace-nowrap font-serif text-[5vh] text-white"
+	bind:this={scrollWrapperElement}
+	bind:clientWidth={rowWidth}
+	class="scroll-wrapper no-scrollbar"
 >
-	<div bind:clientWidth={rowWidth} class="flex min-w-[100vw] justify-center">
-		{chapterData.title}
-	</div>
-	{#each lines as line}
-		{#if line.wordTimings}
-			{#each line.wordTimings as wordTiming}
-				<span style={`opacity: 0.2`} data-time={wordTiming.start}>{wordTiming.word}</span>&nbsp;
-			{/each}
-		{/if}
-		<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-	{/each}
-	<button class="absolute left-0 bg-red-300" on:click={() => (isPlaying = !isPlaying)}>
+	<button class="fixed left-0 bg-red-300" on:click={() => (isPlaying = !isPlaying)}>
 		{isPlaying ? 'Pause' : 'Play'}
 	</button>
+
+	<div bind:this={scrollAreaElement} class="scroll-area">
+		<div class="spacer">hi hi hi</div>
+		<div class="chapter-text font-serif text-[5vh] text-white">
+			{#each lines as line}
+				{#if line.wordTimings}
+					{#each line.wordTimings as wordTiming}
+						<span class="opacity-50" data-time={wordTiming.start}>{wordTiming.word}</span>&nbsp;
+					{/each}
+				{/if}
+				<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+			{/each}
+		</div>
+		<div class="spacer" />
+	</div>
 </div>
 
 <Audio
@@ -126,6 +135,37 @@
 
 <style>
 	:global([data-time]) {
+		/* transition: color 800ms; */
 		transition: opacity 800ms;
+	}
+
+	:global(body.cursor-grabbing-important *) {
+		cursor: grabbing !important;
+	}
+
+	div.scroll-wrapper {
+		width: 100vw;
+		overflow-x: scroll;
+		white-space: nowrap;
+		height: 10vh;
+		will-change: scroll-position;
+	}
+
+	div.scroll-area {
+		cursor: grab;
+		display: inline-block;
+	}
+
+	div.scroll-area:active {
+		cursor: grabbing;
+	}
+
+	div.spacer {
+		display: inline-block;
+		width: 100vw;
+	}
+
+	div.chapter-text {
+		display: inline-block;
 	}
 </style>

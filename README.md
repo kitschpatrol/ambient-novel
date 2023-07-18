@@ -116,3 +116,8 @@ npm run build
 ```
 
 You can preview the production build with `npm run preview`.
+
+## Dev notes
+
+- https://github.com/studio-freight/lenis
+- https://github.com/Adoratorio/hades
