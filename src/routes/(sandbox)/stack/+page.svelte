@@ -5,12 +5,12 @@
 	const bookData = bookDataRaw as BookData;
 </script>
 
-<div class="flex h-screen flex-col">
+<div>
+	<!-- <Track chapterData={bookData.chapters[0]} /> -->
+
 	{#each bookData.chapters as chapter}
 		<Track chapterData={chapter} />
 	{/each}
 </div>
-
-Gonna have stuff here
 
 <!-- <Tweakpane /> -->
