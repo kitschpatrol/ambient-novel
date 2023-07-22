@@ -11,5 +11,6 @@
 		"prettier-plugin-pkg"
 	],
 	"pluginSearchDirs": false,
+	"htmlWhitespaceSensitivity": "ignore",
 	"overrides": [{ "files": "*.svelte", "options": { "parser": "svelte" } }]
 }
