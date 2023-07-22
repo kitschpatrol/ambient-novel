@@ -6,10 +6,11 @@
 </script>
 
 <div>
-	<!-- <Track chapterData={bookData.chapters[0]} /> -->
+	<Track chapterData={bookData.chapters[7]} />
+	<Track chapterData={bookData.chapters[8]} />
 
 	{#each bookData.chapters as chapter}
-		<Track chapterData={chapter} />
+		<!-- <Track chapterData={chapter} /> -->
 	{/each}
 </div>
 
