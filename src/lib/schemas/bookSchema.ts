@@ -29,6 +29,7 @@ export const bookSchema = z.object({
 					.array(
 						z.object({
 							text: z.string().nonempty(),
+							textStack: z.string().nonempty().optional(),
 							index: z.number().int().nonnegative(),
 							timing: z.object({
 								start: z.number(),

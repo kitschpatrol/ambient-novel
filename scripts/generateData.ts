@@ -46,13 +46,14 @@ const config = {
 	bookAuditSettings: {
 		lineLengthWarningThreshold: 1100, // characters
 		lineLengthSingle: 98, // average full-width line, for calculating breaks
-		abortOnLineLengthWarnings: true
+		abortOnLineLengthWarnings: false
 	},
 	jsonSettings: {
 		sourceFile: './data/book.json',
 		outputFile: './src/lib/data/book.json',
 		includeWordTimingsArray: true, // puts, technically all this data is present if embedWordTimingsInHtml is true
-		embedWordTimingsInHtml: true // puts <spans> with timing data round words in the line's text
+		embedWordTimingsInHtml: true, // puts <spans> with timing data round words in the line's text
+		generateStackText: true // processes the text field to make it suitable for stack mode, embedWordTimingsInHtml and includeWordTimingsArray must be true!
 	},
 	speechSettings: {
 		regenerateSource: false,
@@ -478,7 +479,12 @@ if (config.jsonSettings.embedWordTimingsInHtml) {
 				const cursorStart = text.indexOf(match, cursor);
 				const cursorEnd = cursorStart + match.length;
 
-				const replacement = `<span data-time=${wordTiming.start}>${match}</span>`;
+				let replacement = `<span data-time=${wordTiming.start}>${match}</span>`;
+
+				// merge any existing span attributes
+				replacement = replacement
+					.replace(/<span(.+?)><span(.+?)>/g, '<span $1$2>')
+					.replace(/<\/span>.+<\/span>/g, '</span>');
 
 				text = replaceSubstring(text, replacement, cursorStart, cursorEnd);
 				cursor = cursorStart + replacement.length;
@@ -487,6 +493,7 @@ if (config.jsonSettings.embedWordTimingsInHtml) {
 			// special case for list items, where we need the bullet to fade in as well
 			// so we give any li elements the data-time from their closest span
 			// include the </li> in the split
+
 			const listParts = text.split(/(?<=<\/li>)/giu);
 
 			text = listParts
@@ -502,6 +509,29 @@ if (config.jsonSettings.embedWordTimingsInHtml) {
 				.join('');
 
 			line.text = text;
+		});
+	});
+}
+
+// Strip breaks
+if (config.jsonSettings.generateStackText) {
+	console.log('Generating stack text');
+	bookOutput.chapters?.forEach((chapter) => {
+		chapter.lines?.forEach((line) => {
+			if (line.text === undefined) {
+				throw new Error('Must have a line of text to generate stack text');
+			}
+
+			// strip breaks
+			let textStack = line.text.replace(/(<br \/>)+/giu, ' ');
+
+			// strip time data
+			textStack = textStack.replace(/\s*data-time=[0-9.]+/g, '');
+
+			// Strip style on non-span elements, e.g. <strong style=\"display: block; text-align: center;\">
+			textStack = textStack.replace(/(<strong)( style=.+?")/giu, '$1');
+
+			line.textStack = textStack;
 		});
 	});
 }
