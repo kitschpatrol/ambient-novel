@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Fa from 'svelte-fa';
+	import { fade } from 'svelte/transition';
 	export let isDown = false;
 	export let iconAlign: 'left' | 'right' = 'left';
 	export let label: string | null = null;
@@ -8,6 +9,7 @@
 </script>
 
 <button
+	transition:fade={{ duration: 500 }}
 	disabled={!isEnabled}
 	on:click
 	class="h-full w-full px-1 pb-3 pt-2 first:pl-2.5 last:pr-2.5"
@@ -18,9 +20,10 @@
 			? 'flex-row'
 			: 'flex-row-reverse'} {isDown ? 'down' : ''}"
 	>
-		<Fa {icon} translateY="-.05" /><span class="label tracking-wider max-sm:hidden">{label}</span>
-	</div></button
->
+		<Fa {icon} translateY="-.05" />
+		<span class="label tracking-wider max-sm:hidden">{label}</span>
+	</div>
+</button>
 
 <style>
 	button {

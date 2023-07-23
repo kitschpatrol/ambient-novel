@@ -531,6 +531,9 @@ if (config.jsonSettings.generateStackText) {
 			// Strip style on non-span elements, e.g. <strong style=\"display: block; text-align: center;\">
 			textStack = textStack.replace(/(<strong)( style=.+?")/giu, '$1');
 
+			// Add bullets to text, since timing is handled differently for now...
+			textStack = textStack.replace(/(<li><span.*?>)/g, '$1• ');
+
 			line.textStack = textStack;
 		});
 	});
