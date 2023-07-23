@@ -372,17 +372,13 @@
 		</h2>
 	{/if}
 
-	<div class="absolute left-0 top-0 flex h-full">
+	<div class:w-full={isReset} class="absolute left-0 top-0 flex h-full">
 		<Button
-			label={isPlaying ? 'Pause' : 'Play'}
 			icon={isPlaying ? faPause : faPlay}
 			on:click={() => {
 				isPlaying = !isPlaying;
 			}}
 		/>
-		{#if !isReset}
-			<Button label={'Reset'} icon={faRotateBack} on:click={reset} />
-		{/if}
 
 		{#if debug}
 			<!-- <p class="inline-block">seeking: {isSeeking}</p> -->
@@ -393,6 +389,12 @@
 			<p class="inline-block">activeWordElement: {activeWordElement}</p>
 		{/if}
 	</div>
+
+	{#if !isReset}
+		<div class="absolute right-0 top-0 flex h-full">
+			<Button icon={faRotateBack} on:click={reset} />
+		</div>
+	{/if}
 </div>
 
 <Audio
@@ -453,6 +455,7 @@
 		will-change: scroll-position; /* harms or helps? */
 		/* background-color: #ffffff22; */
 		cursor: grab;
+		mask-image: linear-gradient(90deg, transparent, rgba(0, 0, 0, 1) 10% 90%, transparent);
 	}
 
 	div.spacer {

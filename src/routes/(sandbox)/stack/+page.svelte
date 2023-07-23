@@ -6,6 +6,9 @@
 	import {
 		faBackward,
 		faBackwardStep,
+		faBook,
+		faBookOpen,
+		faBookReader,
 		faDiceD20,
 		faForward,
 		faForwardStep,
@@ -41,23 +44,16 @@
 		/>
 	{/each}
 	<footer>
-		<div id="controls" class="md-s flex w-full gap-6 max-sm:gap-1">
-			{somethingPlaying}
+		<div id="controls" class="md-s flex h-full w-full gap-6 max-sm:gap-1">
 			<span class="flex flex-1 items-center justify-start">
-				<Button icon={faPlay} label="Play Linear" />
-				<Button icon={faDiceD20} label="Play Blended" />
+				<Button icon={faBookReader} label="Play Through" />
+				<Button icon={faDiceD20} label="Lucky Blend" />
 			</span>
-			<span class="flex flex-1 items-center justify-start">
-				<Button
-					icon={faPlay}
-					label="all"
-					on:click={() => {
-						playStatus = playStatus.map(() => true);
-					}}
-				/>
+			<span class="flex flex-grow items-center justify-center max-lg:hidden" />
+			<span class="flex flex-1 items-center justify-end">
 				<Button
 					icon={faPause}
-					label="all"
+					label="Pause all"
 					isEnabled={somethingPlaying}
 					isDown={!somethingPlaying}
 					on:click={() => {
@@ -66,7 +62,7 @@
 				/>
 				<Button
 					icon={faRotateBack}
-					label="all"
+					label="Reset all"
 					isEnabled={somethingNotReset}
 					isDown={!somethingNotReset}
 					on:click={() => {

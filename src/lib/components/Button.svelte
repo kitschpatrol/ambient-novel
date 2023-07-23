@@ -15,13 +15,16 @@
 	class="h-full w-full px-1 pb-3 pt-2 first:pl-2.5 last:pr-2.5"
 >
 	<div
-		class="flex h-8 flex-1 items-center justify-center gap-2 rounded-lg bg-gray-300 bg-opacity-40 font-display text-base text-white text-opacity-80 {iconAlign ===
-		'left'
-			? 'flex-row'
-			: 'flex-row-reverse'} {isDown ? 'down' : ''}"
+		class:aspect-square={!label}
+		class:flex-row={iconAlign === 'left'}
+		class:flex-row-reverse={iconAlign === 'right'}
+		class:down={isDown}
+		class="flex h-8 flex-1 items-center justify-center gap-2 rounded-lg bg-gray-300 bg-opacity-40 font-display text-base text-white text-opacity-80"
 	>
 		<Fa {icon} translateY="-.05" />
-		<span class="label tracking-wider max-sm:hidden">{label}</span>
+		{#if label}
+			<span class="label tracking-wider max-md:hidden">{label}</span>
+		{/if}
 	</div>
 </button>
 
@@ -51,7 +54,7 @@
 		/* } */
 	}
 
-	button div:active {
+	button:active div {
 		top: 2px;
 		right: 2px;
 		/* text-shadow: 0 0 3px rgba(255, 255, 255, 0.587); */
