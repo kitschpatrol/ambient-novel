@@ -49,6 +49,16 @@ html {
 }
 
 body {
+  min-height: 100vh;
+  /* mobile viewport bug fix */
+  min-height: -webkit-fill-available;
+}
+
+html {
+  height: -webkit-fill-available;
+}
+
+body {
 	position: fixed; /* for safari mobile */
 
 	/* var(--backgroundGradientAngle), 0deg, */
