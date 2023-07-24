@@ -3,12 +3,11 @@
 <script lang="ts">
 	import Audio from '$lib/components/Audio.svelte';
 	import Button from '$lib/components/Button.svelte';
-	import type { ChapterData, LineData } from '$lib/schemas/bookSchema';
+	import type { ChapterData } from '$lib/schemas/bookSchema';
 	import { mapValue } from '$lib/utils/math/mapValue';
 	import { faPause, faPlay, faRotateBack } from '@fortawesome/free-solid-svg-icons';
 	import ScrollBooster from 'scrollbooster';
-	import { onDestroy, onMount, tick } from 'svelte';
-	import { cubicInOut } from 'svelte/easing';
+	import { onDestroy, onMount } from 'svelte';
 	import { spring } from 'svelte/motion';
 	import { fade } from 'svelte/transition';
 
@@ -17,8 +16,21 @@
 	export let maxVolumeSpeech = 1.0;
 	export let isPlaying = false;
 	export let isReset = true;
-
 	export let currentTime = 0;
+
+	export const reset = () => {
+		isSeeking = false;
+		isPlaying = false;
+		if (targetTime === 0) {
+			currentTime = 0;
+		} else {
+			targetTime = 0;
+		}
+		activeWordElement = null;
+
+		scrollTo(0, false);
+	};
+
 	let currentTimeMusic = currentTime;
 	let targetTime = currentTime;
 	let targetTimeMusic = targetTime;
@@ -275,19 +287,6 @@
 
 	$: showChapterTitle = currentTime === 0;
 
-	export const reset = () => {
-		isSeeking = false;
-		isPlaying = false;
-		if (targetTime === 0) {
-			currentTime = 0;
-		} else {
-			targetTime = 0;
-		}
-		activeWordElement = null;
-
-		scrollTo(0, false);
-	};
-
 	$: {
 		isReset = targetTime === 0 && currentTime === 0;
 	}
@@ -305,9 +304,6 @@
 			/* @ts-ignore */
 			scrollLeftBinding = e.target.scrollLeft;
 		}}
-		on:ended={(e) => {
-			console.log(`ended`);
-		}}
 		on:pointerdown={(e) => {
 			isSeeking = true;
 			isUserHoldingDownFingerOrMouse = true;
@@ -320,7 +316,7 @@
 		on:pointerup={(e) => {
 			isUserHoldingDownFingerOrMouse = false;
 		}}
-		on:wheel={(e) => {
+		on:wheel|passive={(e) => {
 			if (Math.abs(e.deltaX) > 0) {
 				isSeeking = true;
 				isUserHoldingDownFingerOrMouse = true;
@@ -362,13 +358,11 @@
 	{#if showChapterTitle}
 		<h2
 			style={`background-color: ${chapterColors[chapterData.index]}`}
-			on:introstart={(e) => {
-				console.log(e);
-			}}
 			transition:fade={{ duration: 2500 }}
 			class="chapter-title absolute left-0 top-0 h-full w-full text-center font-display tracking-wider text-white text-opacity-80 shadow-vm-shadow text-shadow"
 		>
-			Chapter {chapterData.index + 1} — {chapterData.title}
+			<span class="max-sm:hidden">Chapter</span>
+			{chapterData.index + 1} — {chapterData.title}
 		</h2>
 	{/if}
 
@@ -403,6 +397,10 @@
 	maxVolume={maxVolumeSpeech}
 	{targetTime}
 	bind:currentTime
+	on:ended
+	on:ended={() => {
+		reset();
+	}}
 />
 
 <Audio
