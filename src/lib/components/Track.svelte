@@ -12,7 +12,7 @@
 	import { fade } from 'svelte/transition';
 
 	export let chapterData: ChapterData;
-	export let maxVolumeMusic = 0.1;
+	export let maxVolumeMusic = 0.2;
 	export let maxVolumeSpeech = 1.0;
 	export let isPlaying = false;
 	export let isReset = true;
@@ -399,7 +399,8 @@
 	bind:currentTime
 	on:ended
 	on:ended={() => {
-		reset();
+		// handle this in parent instead
+		//reset();
 	}}
 />
 
@@ -464,7 +465,7 @@
 	div.scroll-area {
 		color: white;
 		font-family: serif;
-		font-size: calc(100vh / 36);
+		font-size: min(calc(100vh / 36), 1.75rem);
 		line-height: calc(100vh / 12);
 		height: calc(100vh / 12);
 	}
@@ -474,7 +475,7 @@
 	}
 
 	h2.chapter-title {
-		font-size: min(calc(100vh / 36), calc(100vw / 24));
+		font-size: min(calc(100vh / 36), 1.75rem);
 		line-height: calc(100vh / 12);
 	}
 </style>

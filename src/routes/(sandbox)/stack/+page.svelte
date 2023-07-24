@@ -34,10 +34,7 @@
 
 		// pick three random chapters, and start playing
 		const chapterNumbers = Array.from({ length: chapters.length }, (_, i) => i);
-		console.log(`chapterNumbers: ${chapterNumbers}`);
-
 		const randomChapters = shuffle(chapterNumbers).slice(0, 3);
-		console.log(`randomChapters: ${randomChapters}`);
 
 		playStatus = playStatus.map((_, i) => randomChapters.includes(i));
 	}
@@ -57,8 +54,12 @@
 			bind:reset={resetFunctions[index]}
 			on:ended={() => {
 				if (isPlayingThrough) {
-					// start next chapter
 					const nextChapter = playStatus.indexOf(true) + 1;
+
+					// reset everything
+					resetFunctions.forEach((reset) => reset());
+
+					// start next chapter
 					playStatus = playStatus.map((_, i) => i === nextChapter);
 				}
 			}}

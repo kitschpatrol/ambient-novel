@@ -10,5 +10,5 @@
 <Book {bookData} useQueryStore={true} />
 
 {#if dev}
-	<Tweakpane />
+	<!-- <Tweakpane /> -->
 {/if}
