@@ -11,9 +11,9 @@ export const bookSourceSchema = z.object({
 		.array(
 			z.object({
 				title: z.string().nonempty(),
-				ambientTracks: z.array(z.string().nonempty()),
+				audioMix: z.string().nonempty(),
+				audioVoiceSolo: z.string().nonempty(),
 				lineShuffleAllowed: z.boolean(),
-				voiceOver: z.string().nonempty(),
 				lines: z.array(z.string().nonempty()).nonempty()
 			})
 		)

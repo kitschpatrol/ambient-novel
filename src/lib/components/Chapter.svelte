@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Audio from '$lib/components/Audio.svelte';
 	import Line from '$lib/components/Line.svelte';
-	import Playlist from '$lib/components/Playlist.svelte';
 	import type { ChapterData } from '$lib/schemas/bookSchema';
 	import { mapValue } from '$lib/utils/math/mapValue';
 	import clamp from 'lodash/clamp';
@@ -15,8 +14,7 @@
 	export let chapterData: ChapterData;
 	export let activeLine = 0;
 	export let currentTime = 0;
-	export let maxVolumeMusic = 0.1;
-	export let maxVolumeSpeech = 1.0;
+	export let maxVolume = 1.0;
 	export let lineOrder = Array.from(Array(chapterData.lines.length).keys());
 
 	let chapterElement: HTMLDivElement;
@@ -154,17 +152,10 @@
 	{#if !isSorted}(Mixed){/if}
 </p>
 
-<Playlist
-	isShuffleOn={true}
-	tracks={chapterData.ambientTracks}
-	maxVolume={maxVolumeMusic}
-	{isPlaying}
-/>
-
 <Audio
-	audioSources={chapterData.voiceOver.files}
+	audioSources={chapterData.audio.files}
 	{isPlaying}
-	maxVolume={maxVolumeSpeech}
+	{maxVolume}
 	{targetTime}
 	bind:currentTime
 />

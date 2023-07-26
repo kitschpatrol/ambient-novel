@@ -74,10 +74,4 @@
 	button:disabled {
 		opacity: 0.5;
 	}
-
-	button:disabled div {
-		/* background-color: black; */
-
-		/* text-shadow: 0 0 3px white; */
-	}
 </style>

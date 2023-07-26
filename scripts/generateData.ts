@@ -62,27 +62,13 @@ const config = {
 		regenerateWordAlignment: false,
 		annunciateTitles: true, // true if scott reads the chapter name at the start of the track, or if we want the generated audio to include this
 		generatedDataDir: './data-generated',
-		sourceDir: '/Users/mika/Documents/Projects/Ambient Novel with Scott Wayne Indiana/Voice Over', // will generate using say if missing
-		outputDir: './static/speech',
-		outputs: [
-			{
-				format: 'm4a', // aac
-				quality: 0,
-				sampleRate: 22050,
-				vbr: false
-			},
-			{
-				format: 'mp3',
-				quality: 0,
-				sampleRate: 22050,
-				vbr: false
-			}
-		]
+		sourceDir: '/Users/mika/Documents/Projects/Ambient Novel with Scott Wayne Indiana/Audio/Voice', // will generate using say if missing
+		outputDir: null
 	},
-	musicSettings: {
+	audioMixSettings: {
 		regenerateCompressed: false,
-		sourceDir: '/Users/mika/Documents/Projects/Ambient Novel with Scott Wayne Indiana/Soundtrack',
-		outputDir: './static/music',
+		sourceDir: '/Users/mika/Documents/Projects/Ambient Novel with Scott Wayne Indiana/Audio/Mix',
+		outputDir: './static/audio',
 		outputs: [
 			{
 				format: 'm4a', // aac
@@ -176,11 +162,18 @@ if (config.speechSettings.regenerateSource) {
 	createIntermediatePaths(config.speechSettings.sourceDir, true);
 }
 createIntermediatePaths(config.jsonSettings.outputFile, true);
+
+if (config.speechSettings.outputDir) {
+	createIntermediatePaths(
+		config.speechSettings.outputDir,
+		config.speechSettings.regenerateCompressed
+	);
+}
+
 createIntermediatePaths(
-	config.speechSettings.outputDir,
-	config.speechSettings.regenerateCompressed
+	config.audioMixSettings.outputDir,
+	config.audioMixSettings.regenerateCompressed
 );
-createIntermediatePaths(config.musicSettings.outputDir, config.musicSettings.regenerateCompressed);
 
 // generate speech and compress
 for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
@@ -193,8 +186,8 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 	chapter.index = chapterNumber;
 	chapter.lineShuffleAllowed = chapterSource.lineShuffleAllowed;
 	chapter.lines = [];
-	chapter.voiceOver = {};
-	chapter.voiceOver.files = [];
+	chapter.audio = {};
+	chapter.audio.files = [];
 
 	// the period is important for timing inference in both tts and transcription
 	const chapterAnnunciationText = `Chapter ${chapterNumber + 1}, ${chapterSource.title}. `;
@@ -202,7 +195,7 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 	// glue together lines
 
 	// say if needed
-	const voiceOverSourceFile = `${config.speechSettings.sourceDir}/${chapterSource.voiceOver}`;
+	const voiceOverSourceFile = `${config.speechSettings.sourceDir}/${chapterSource.audioVoiceSolo}`;
 	console.log(`voiceOverSourceFile: ${JSON.stringify(voiceOverSourceFile, null, 2)}`);
 	if (fs.existsSync(voiceOverSourceFile) && !config.speechSettings.regenerateSource) {
 		console.log(
@@ -251,31 +244,6 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 		sayToFileCoqui(chapterTextClean, voiceOverSourceFile);
 
 		// TODO pad with some silence?
-	}
-
-	chapter.voiceOver.durationSeconds = getAudioDuration(voiceOverSourceFile);
-
-	// compress the audio if needed
-	for (const { format, quality, sampleRate, vbr } of config.speechSettings.outputs) {
-		const speechFileUnhashed = `${config.speechSettings.outputDir}/${chapterNumber}.${format}`;
-		let speechFile = findHashedFile(speechFileUnhashed);
-
-		if (speechFile && !config.speechSettings.regenerateCompressed) {
-			console.log(`Already found voice over output file ${speechFile}, nothing to generate...`);
-		} else {
-			// clean up existing
-			if (speechFile) {
-				fs.rmSync(speechFile, { force: true });
-			}
-
-			console.log(`Compressing ${voiceOverSourceFile} speech to ${format}`);
-			compressTo(voiceOverSourceFile, speechFileUnhashed, quality, sampleRate, vbr);
-
-			// hash it
-			speechFile = renameFileWithHash(speechFileUnhashed);
-		}
-
-		chapter.voiceOver.files.push(speechFile.replace('./static/', ''));
 	}
 
 	//---------------
@@ -368,62 +336,41 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 		chapter.lines.push(line);
 	}
 
-	// ambient tracks
-	console.log(`Processing chapter ${chapterNumber} ambient tracks`);
-	chapter.ambientTracks = [];
+	// mixed audio
+	console.log(`Processing chapter ${chapterNumber} ambient track ${chapterSource.audioMix}`);
 
-	for (const ambientTracksSource of chapterSource.ambientTracks) {
-		console.log(`Processing chapter ${chapterNumber} ambient track ${ambientTracksSource}`);
-		const ambientTrack: StripArray<DeepPartial<BookData['chapters'][0]['ambientTracks']>> = {};
-		ambientTrack.files = [];
+	const cleanFilename = kebabCase(path.parse(path.basename(chapterSource.audioMix)).name);
+	const sourceFile = `${config.audioMixSettings.sourceDir}/${chapterSource.audioMix}`;
+	chapter.audio.durationSeconds = getAudioDuration(sourceFile);
 
-		const cleanFilename = kebabCase(path.parse(path.basename(ambientTracksSource)).name);
+	for (const { format, quality, sampleRate, vbr } of config.audioMixSettings.outputs) {
+		const audioFileUnhashed = `${config.audioMixSettings.outputDir}/${cleanFilename}.${format}`;
+		let audioFile = findHashedFile(audioFileUnhashed);
 
-		const sourceFile = `${config.musicSettings.sourceDir}/${ambientTracksSource}`;
-		ambientTrack.durationSeconds = getAudioDuration(sourceFile);
-
-		// too wonky
-		// const filePathLosslessTrimmed = generateTempFilename(filePathLossless);
-		// trimSilence(filePathLossless, filePathLosslessTrimmed);
-		// const secondsTrimmed =
-		// 	getAudioDuration(filePathLossless) - getAudioDuration(filePathLosslessTrimmed);
-		// console.log(`Trimmed ${secondsTrimmed} seconds of silence`);
-		// compressToAac(filePathLosslessTrimmed, filePathCompressedAac, ambientMusicQuality);
-		// compressToMp3(filePathLosslessTrimmed, filePathCompressedMp3, ambientMusicQuality);
-		// fs.rmSync(filePathLosslessTrimmed, { force: true });
-
-		for (const { format, quality, sampleRate, vbr } of config.musicSettings.outputs) {
-			const musicFileUnhashed = `${config.musicSettings.outputDir}/${cleanFilename}.${format}`;
-			let musicFile = findHashedFile(musicFileUnhashed);
-
-			if (musicFile && !config.speechSettings.regenerateCompressed) {
-				console.log(`Already found ambient music track ${musicFile}, nothing to generate...`);
-			} else {
-				// clean up existing
-				if (musicFile) {
-					fs.rmSync(musicFile, { force: true });
-				}
-
-				console.log(`Compressing ambient ${sourceFile} speech to ${format}`);
-				compressTo(sourceFile, musicFileUnhashed, quality, sampleRate, vbr);
-
-				// hash it
-				musicFile = renameFileWithHash(musicFileUnhashed);
+		if (audioFile && !config.audioMixSettings.regenerateCompressed) {
+			console.log(`Already found audio track ${audioFile}, nothing to generate...`);
+		} else {
+			// clean up existing
+			if (audioFile) {
+				fs.rmSync(audioFile, { force: true });
 			}
 
-			ambientTrack.files.push(musicFile.replace('./static/', ''));
+			console.log(`Compressing audio file ${sourceFile} to ${format}`);
+			compressTo(sourceFile, audioFileUnhashed, quality, sampleRate, vbr);
+
+			// hash it
+			audioFile = renameFileWithHash(audioFileUnhashed);
 		}
 
-		chapter.ambientTracks?.push(ambientTrack);
+		chapter.audio.files!.push(audioFile.replace('./static/', ''));
 	}
 
 	// Figure out the per-line timing based on word timing
 	// we could calculate this in app, but nice to have it AOT
 	for (const [lineNumber, line] of chapter.lines.entries()) {
 		const previousLine = lineNumber > 0 ? chapter.lines[lineNumber - 1] : null;
-		const previousLineEndTime = previousLine?.wordTimings?.at(
-			previousLine?.wordTimings.length - 1
-		)?.end;
+		const previousLineEndTime = previousLine?.wordTimings?.at(previousLine?.wordTimings.length - 1)
+			?.end;
 
 		const nextLine = lineNumber < chapter.lines.length - 1 ? chapter.lines[lineNumber + 1] : null;
 		const nextLineStartTime = nextLine?.wordTimings?.at(0)?.start;
@@ -442,7 +389,7 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 			end: round(
 				nextLineStartTime
 					? (currentLineEndTime + nextLineStartTime) / 2
-					: chapter.voiceOver.durationSeconds,
+					: chapter.audio.durationSeconds,
 				3
 			)
 		};
@@ -554,6 +501,6 @@ bookSchema.parse(bookOutput);
 // console.log(`bookSchema: ${bookSchema}`);
 
 // rewrite the json file with speech file names and duration
-saveFormattedJson(config.jsonSettings.outputFile, bookOutput);
+await saveFormattedJson(config.jsonSettings.outputFile, bookOutput);
 
 console.log('...Done');

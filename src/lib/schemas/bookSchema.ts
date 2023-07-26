@@ -14,13 +14,7 @@ export const bookSchema = z.object({
 			z.object({
 				title: z.string().nonempty(),
 				index: z.number().int().nonnegative(),
-				ambientTracks: z.array(
-					z.object({
-						files: z.array(z.string().nonempty()),
-						durationSeconds: z.number().positive()
-					})
-				),
-				voiceOver: z.object({
+				audio: z.object({
 					files: z.array(z.string().nonempty()),
 					durationSeconds: z.number().positive()
 				}),

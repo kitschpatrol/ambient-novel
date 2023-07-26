@@ -1,10 +1,10 @@
+import synchronizedPrettier from '@prettier/sync';
 import { execSync } from 'child_process';
 import crypto from 'crypto';
 import fs from 'fs';
 import glob from 'glob';
 import leven from 'leven';
 import path from 'path';
-import prettier from 'prettier';
 import { stripHtml } from 'string-strip-html';
 
 // utility functions used by generateData.ts
@@ -178,8 +178,8 @@ export function actionWordTrimmer(text: string): string {
 }
 
 export function formatJson(jsonString: string): string {
-	const prettierConfig = prettier.resolveConfig.sync(process.cwd());
-	return prettier.format(jsonString, { ...prettierConfig, parser: 'json' });
+	const prettierConfig = synchronizedPrettier.resolveConfig(process.cwd());
+	return synchronizedPrettier.format(jsonString, { ...prettierConfig, parser: 'json' });
 }
 
 export function sayToFile(textToSay: string, ouputFile: string) {

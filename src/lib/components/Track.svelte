@@ -12,8 +12,7 @@
 	import { fade } from 'svelte/transition';
 
 	export let chapterData: ChapterData;
-	export let maxVolumeMusic = 0.2;
-	export let maxVolumeSpeech = 1.0;
+	export let maxVolume = 1.0;
 	export let isPlaying = false;
 	export let isReset = true;
 	export let currentTime = 0;
@@ -31,9 +30,7 @@
 		scrollTo(0, false);
 	};
 
-	let currentTimeMusic = currentTime;
 	let targetTime = currentTime;
-	let targetTimeMusic = targetTime;
 	let isSeeking = false;
 	const debug = false;
 	let isSpringEnabled = true;
@@ -278,13 +275,6 @@
 		}
 	}
 
-	// keep music in sync with audio (until they're one file)
-	$: {
-		if (isSeeking) {
-			targetTimeMusic = targetTime;
-		}
-	}
-
 	$: showChapterTitle = currentTime === 0;
 
 	$: {
@@ -295,7 +285,7 @@
 	$: isPlayingAndNotSeeking = isPlaying && !isSeeking;
 </script>
 
-<div class="track" style={`background-color: ${chapterColors[chapterData.index]}`}>
+<div class="track">
 	<div
 		class="scroll-wrapper no-scrollbar"
 		bind:this={scrollWrapperElement}
@@ -392,9 +382,9 @@
 </div>
 
 <Audio
-	audioSources={chapterData.voiceOver.files}
+	audioSources={chapterData.audio.files}
 	isPlaying={isPlayingAndNotSeeking}
-	maxVolume={maxVolumeSpeech}
+	{maxVolume}
 	{targetTime}
 	bind:currentTime
 	on:ended
@@ -404,19 +394,13 @@
 	}}
 />
 
-<Audio
-	audioSources={chapterData.ambientTracks[0].files}
-	isPlaying={isPlayingAndNotSeeking}
-	targetTime={targetTimeMusic}
-	maxVolume={maxVolumeMusic}
-	bind:currentTime={currentTimeMusic}
-/>
-
 <style>
 	div.track {
 		width: 100vw;
 		height: calc(100vh / 12);
 		position: relative;
+		/* background-color: white; */
+		background: linear-gradient(0deg, #f8f8f8 0%, white 13%, white 100%);
 	}
 
 	:global(div.track ul) {
@@ -463,7 +447,7 @@
 	}
 
 	div.scroll-area {
-		color: white;
+		color: black;
 		font-family: serif;
 		font-size: min(calc(100vh / 36), 1.75rem);
 		line-height: calc(100vh / 12);

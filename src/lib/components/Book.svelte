@@ -164,10 +164,9 @@
 						: 'mt-1 min-w-full bg-white bg-opacity-40 bg-gradient-to-t from-vm-inner-shadow-dark to-transparent to-45% text-white text-opacity-80 transition-[margin] duration-300 group-hover:mt-0 group-hover:transition-none'}"
 					href={useQueryStore ? `?chapter=${i}` : ``}
 				>
-					{i + 1}<span class={i === $activeChapter ? 'max-sm:hidden' : 'hidden'}
-						>. {chapter.title}</span
-					></a
-				>
+					{i + 1}
+					<span class={i === $activeChapter ? 'max-sm:hidden' : 'hidden'}>. {chapter.title}</span>
+				</a>
 			</li>
 		{/each}
 	</ul>

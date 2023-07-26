@@ -8,9 +8,9 @@
 	"chapters": [
 		{
 			"title": "The Valentine Mob",
-			"ambientTracks": ["The Valentine Mob Track 14.wav"],
 			"lineShuffleAllowed": true,
-			"voiceOver": "CH 1 Voice.wav",
+			"audioMix": "Chapter 1 Mix Bounce.wav",
+			"audioVoiceSolo": "Chapter 1 voice Bounce.wav",
 			"lines": [
 				"We sit here together on low, sturdy, mahogany deck chairs, taking inventory of the scene. There’s the silent still water of the illuminated swimming pool. The night sky is a dotted blur of normal <span style=\"color: #000000;\">black</span>. The unfamiliar landscaping trails off in the dark like a giant sleepwalking cat. The warm subtle breeze is three notches into the realm of perceptible.",
 				"It’s our new rental. We’ll be here for eight weeks and this is the first hour.",
@@ -126,9 +126,9 @@
 		},
 		{
 			"title": "Motel Van Been Hit",
-			"ambientTracks": ["The Valentine Mob Track 4.wav"],
 			"lineShuffleAllowed": true,
-			"voiceOver": "CH 2 Voice.wav",
+			"audioMix": "Chapter 2 Mix Bounce.wav",
+			"audioVoiceSolo": "Chapter 2 Voice Bounce.wav",
 			"lines": [
 				"Back inside, the collective hum of the air conditioner and three ceiling fans was a murmuring whir rustling us from the blur.",
 				"I was glad to be with my friend and they shared the good feelings of togetherness.",
@@ -233,9 +233,9 @@
 		},
 		{
 			"title": "Mobile Tent Haven",
-			"ambientTracks": ["The Valentine Mob Track 13.wav"],
 			"lineShuffleAllowed": true,
-			"voiceOver": "CH 3 Voice.wav",
+			"audioMix": "Chapter 3 Mix Bounce.wav",
+			"audioVoiceSolo": "Chapter 3 Voice Bounce.wav",
 			"lines": [
 				"Binky pulled the van into the parking lot of the most run down hotel you’ve ever seen.",
 				"The Last Resort, I said, reading the neon sign that was missing the A.",
@@ -280,9 +280,9 @@
 		},
 		{
 			"title": "Nova Bent The Lime",
-			"ambientTracks": ["The Valentine Mob Track 11.wav"],
 			"lineShuffleAllowed": true,
-			"voiceOver": "CH 4 Voice.wav",
+			"audioMix": "Chapter 4 Mix Bounce.wav",
+			"audioVoiceSolo": "Chapter 4 Voice Bounce.wav",
 			"lines": [
 				"I held the cube and not only continued to hear the noise of the broken art, faint as it was, but there was also a subtle vibration that felt like it might have been growing stronger. Perhaps becoming more broken, it seemed.",
 				"I turned the slick bright cube over in my hands and was surprised to find a small button that hitherto, on account of it being seamlessly integrated into the surface, I’d failed to notice.",
@@ -390,8 +390,8 @@
 		{
 			"title": "The Ambient Novel",
 			"lineShuffleAllowed": true,
-			"voiceOver": "CH 5 Voice.wav",
-			"ambientTracks": ["The Valentine Mob Track 2.wav"],
+			"audioMix": "Chapter 5 Mix Bounce.wav",
+			"audioVoiceSolo": "Chapter 5 Voice Bounce.wav",
 			"lines": [
 				"A leisurely stir of the cauldron–<br />Scaffolding the darkness<br />Of memory and mischief.",
 				"Dirigible dune<br />One afternoon<br />This way then that<br />Like a vault on the moon,<br />An exit from the room.",
@@ -453,9 +453,9 @@
 		},
 		{
 			"title": "Hot In Lane TV Beam",
-			"ambientTracks": ["The Valentine Mob Track 3.wav"],
 			"lineShuffleAllowed": true,
-			"voiceOver": "CH 6 Voice.wav",
+			"audioMix": "Chapter 6 Mix Bounce.wav",
+			"audioVoiceSolo": "Chapter 6 Voice Bounce.wav",
 			"lines": [
 				"The Artist watches us, reclined and sunken in their couch<br />My friend<br />Myself",
 				"The Velvet Mob gathers<br />They’re all here now",
@@ -482,9 +482,9 @@
 		},
 		{
 			"title": "Abilene Moth Vent",
-			"ambientTracks": ["The Valentine Mob Track 6.wav"],
 			"lineShuffleAllowed": true,
-			"voiceOver": "CH 7 Voice_1.wav",
+			"audioMix": "Chapter 7 Mix Bounce.wav",
+			"audioVoiceSolo": "Chapter 7 Voice Bounce.wav",
 			"lines": [
 				"Three days had passed but–<br />We crashed into the soft furniture of our rental house.<br />And slept.<br />My body ached, in a good way,<br />The way bodies do after adventures.",
 				"Twelve hours later it was coffee and poolside sitting<br />In the warm sun.<br />We did that for a few hours,<br />In and out of the pool.",
@@ -497,8 +497,8 @@
 		{
 			"title": "The Noble Vietnam",
 			"lineShuffleAllowed": true,
-			"ambientTracks": ["Bell Vibes.wav"],
-			"voiceOver": "CH 8 Voice_1.wav",
+			"audioMix": "Chapter 8 Mix Bounce.wav",
+			"audioVoiceSolo": "Chapter 8 Voice Bounce.wav",
 			"lines": [
 				"The next afternoon: Hội An.<br />A retrieval of stolen artifacts.<br />A workshop for new initiates.<br />Various lessons mostly involving style, breathing, and–<br />Wondrous wondering with open minds.",
 				"Before Bozo84 delivered us back to our temporary home<br />We got lost at Yen Tu Mountain for days.<br />Weeks, maybe?<br />My friend<br />And I",
@@ -507,9 +507,9 @@
 		},
 		{
 			"title": "Invent Home Table",
-			"ambientTracks": ["The Valentine Mob Track 9.wav"],
 			"lineShuffleAllowed": true,
-			"voiceOver": "CH 9 Voice_1.wav",
+			"audioMix": "Chapter 9 Mix Bounce.wav",
+			"audioVoiceSolo": "Chapter 9 Voice Bounce.wav",
 			"lines": [
 				"Then nothing happened for awhile.<br />Our vacation duration was coming to a close.<br />Checked everything off the list,<br />And then some.<br />I finished the mystery novel,<br />It was, afterall, the bellhop.",
 				"Wonderment regarding–<br />The Valentine Mob",
@@ -519,9 +519,9 @@
 		},
 		{
 			"title": "Viable Tenth Omen",
-			"ambientTracks": ["The Valentine Mob Track 5.wav"],
 			"lineShuffleAllowed": true,
-			"voiceOver": "CH 10 Voice_1.wav",
+			"audioMix": "Chapter 10 Mix Bounce.wav",
+			"audioVoiceSolo": "Chapter 10 Voice Bounce.wav",
 			"lines": [
 				"We moved in.<br />Truly joined.<br />It had all been foreseen on some planet’s moon–<br />Out There.<br />Out Here.<br />They actually needed us,<br />It turned out,<br />With more sobering gravity than we needed them.",
 				"Newly minted nomads now equalling fifteen, in number.<br />As many members as letters arranged and stacked<br />Side-by-side as we are,<br />Adjacent nuance,<br />Able and above and outside–<br />The. Context.<br />Classified and for your eyes only:<br />The Valentine Mob.<br />Adorned in all the <span style=\"color: #D8BFD8;\">thistle</span> and <span style=\"color: #C54B8C;\">mulberry</span>, velvety rags and robes.<br />Shades and hats and belts and trunk-fulls more, for the choosing.",
