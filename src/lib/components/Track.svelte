@@ -417,18 +417,21 @@
 	}
 
 	/* Unread words */
+	/* Changing opacity here was forcing reflows in safari */
 	:global(div.scroll-area span) {
-		transition: opacity 800ms;
-		opacity: 20%;
+		transition: color 800ms;
+		color: lightgray;
 	}
 
 	/* Read words */
+	/* TODO THIS IS WHAT IS SLOW IN SAFARI */
 	:global(div.scroll-area span.read) {
-		opacity: 100%;
+		color: black;
 	}
 
+	/* TODO THIS IS WHAT IS SLOW IN SAFARI */
 	:global(div.scroll-area span.current) {
-		opacity: 100%;
+		color: black;
 	}
 
 	div.scroll-wrapper {
