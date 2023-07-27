@@ -431,7 +431,7 @@ if (config.jsonSettings.embedWordTimingsInHtml) {
 				// merge any existing span attributes
 				replacement = replacement
 					.replace(/<span(.+?)><span(.+?)>/g, '<span $1$2>')
-					.replace(/<\/span>.+<\/span>/g, '</span>');
+					.replace(/<\/span>(.+)<\/span>/g, '$1</span>');
 
 				text = replaceSubstring(text, replacement, cursorStart, cursorEnd);
 				cursor = cursorStart + replacement.length;
