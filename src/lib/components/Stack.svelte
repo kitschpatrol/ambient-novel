@@ -13,6 +13,19 @@
 	export let bookData: BookData;
 	const { chapters, title } = bookData;
 
+	const chapterColors = [
+		'#f01ef6',
+		'#d827ff',
+		'#c427ff',
+		'#b127ff',
+		'#9d3bff',
+		'#893bff',
+		'#763bff',
+		'#623bff',
+		'#5043f5',
+		'#4e3bff'
+	];
+
 	let playStatus = Array.from({ length: chapters.length }, () => false);
 	let resetStatus = Array.from({ length: chapters.length }, () => true);
 	let resetFunctions: (() => void)[] = Array.from({ length: chapters.length });
@@ -50,6 +63,7 @@
 	{#each chapters as chapter, index}
 		<Track
 			chapterData={chapter}
+			chapterColor={chapterColors[index]}
 			bind:isPlaying={playStatus[index]}
 			bind:isReset={resetStatus[index]}
 			bind:reset={resetFunctions[index]}

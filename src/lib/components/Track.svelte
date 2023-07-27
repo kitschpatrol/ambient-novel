@@ -16,6 +16,7 @@
 	export let isPlaying = false;
 	export let isReset = true;
 	export let currentTime = 0;
+	export let chapterColor = '#ff0000';
 
 	export const reset = () => {
 		isSeeking = false;
@@ -30,21 +31,20 @@
 		scrollTo(0, false);
 	};
 
-	let targetTime = currentTime;
-	let isSeeking = false;
+	const isScrollBoosterEnabled = true;
 	const debug = false;
-	let isSpringEnabled = true;
-
-	let scrollWrapperElement: HTMLDivElement;
-	let scrollAreaElement: HTMLDivElement;
-	let activeWordElement: HTMLSpanElement | null;
-	let scrollLeftBinding: number = 0; // optimization? or just use scrollLeft?
-
-	let springConfig = {
+	const isSpringEnabled = true;
+	const springConfig = {
 		stiffness: 0.005,
 		damping: 0.2 // setting > 1 gives crazy effect
 	};
 
+	let targetTime = currentTime;
+	let isSeeking = false;
+	let scrollWrapperElement: HTMLDivElement;
+	let scrollAreaElement: HTMLDivElement;
+	let activeWordElement: HTMLSpanElement | null;
+	let scrollLeftBinding: number = 0; // optimization? or just use scrollLeft?
 	let scrollTween = spring(0, springConfig);
 	let scrollAreaWidth = 0;
 	let rowWidth = 0;
@@ -56,33 +56,23 @@
 	let scrollLeftDelta = 0;
 	let intervalId: NodeJS.Timer | undefined;
 
-	const chapterColors = [
-		'#f01ef6',
-		'#d827ff',
-		'#c427ff',
-		'#b127ff',
-		'#9d3bff',
-		'#893bff',
-		'#763bff',
-		'#623bff',
-		'#5043f5',
-		'#4e3bff'
-	];
-
 	onMount(() => {
 		// allow drag scrolling on desktop
-		const scrollBooster = new ScrollBooster({
-			viewport: scrollWrapperElement,
-			content: scrollAreaElement,
-			direction: 'horizontal',
-			scrollMode: 'native',
-			bounce: true,
-			pointerMode: 'mouse',
-			/* @ts-ignore */
-			onPointerDown: () => {
-				isSeeking = true;
-			}
-		});
+
+		const scrollBooster = isScrollBoosterEnabled
+			? new ScrollBooster({
+					viewport: scrollWrapperElement,
+					content: scrollAreaElement,
+					direction: 'horizontal',
+					scrollMode: 'native',
+					bounce: true,
+					pointerMode: 'mouse',
+					/* @ts-ignore */
+					onPointerDown: () => {
+						isSeeking = true;
+					}
+			  })
+			: undefined;
 
 		// watch scroll velocity
 		// have to do this instead of an on:scroll handler so we can calculate velocity / delta
@@ -97,7 +87,7 @@
 					isSeeking = false;
 
 					// stop the scroll booster which can "flicker" between 0 and .5 as it slows down
-					if (scrollBooster.getState().isMoving) {
+					if (scrollBooster && scrollBooster.getState().isMoving) {
 						scrollBooster.setPosition({
 							x: scrollLeft,
 							y: 0
@@ -347,7 +337,7 @@
 
 	{#if showChapterTitle}
 		<h2
-			style={`background-color: ${chapterColors[chapterData.index]}`}
+			style={`background-color: ${chapterColor}`}
 			transition:fade={{ duration: 2500 }}
 			class="chapter-title absolute left-0 top-0 h-full w-full text-center font-display tracking-wider text-white text-opacity-80 shadow-vm-shadow text-shadow"
 		>
@@ -401,6 +391,7 @@
 		position: relative;
 		/* background-color: white; */
 		background: linear-gradient(0deg, #f8f8f8 0%, white 13%, white 100%);
+		user-select: none;
 	}
 
 	:global(div.track ul) {
@@ -455,6 +446,8 @@
 		font-size: min(calc(100vh / 36), 1.75rem);
 		line-height: calc(100vh / 12);
 		height: calc(100vh / 12);
+		pointer-events: none;
+		touch-action: none;
 	}
 
 	div.scroll-wrapper:active {
