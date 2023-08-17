@@ -61,11 +61,11 @@
 		"end": 336.783
 	},
 	{
-		"text": "Ahhhh-ommmmmmmmmmm",
+		"text": " Ahhhh-ommmmmmmmmmm Fathoms below, Shalom. Harlam. Shalom.",
 		"start": 338.774,
-		"end": 361.64
+		"end": 372.592
 	},
-	{ "text": " Fathoms below, Shalom. Harlam. Shalom.", "start": 363.074, "end": 372.592 },
+
 	{
 		"text": " Glob, trotter, gobs, stopper, never ending gobs, smack, and snowpacked, wham, whack, hack the sack, and snooze, 15 more minutes, 14, 13, to 1198, 76.",
 		"start": 377.452,
@@ -181,6 +181,5 @@
 		"text": " Our smiling bubbles rise. We're in you and me, my friend. We got this. We enter.",
 		"start": 927.256,
 		"end": 935.542
-	},
-	{ "text": " you", "start": 1065.884, "end": 1065.935 }
+	}
 ]

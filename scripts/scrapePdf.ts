@@ -15,7 +15,7 @@ import { getTextBetween, saveFormattedJson } from './utils';
 // pdf-parse-fixed fails to load them correctly, but doesn't throw
 
 // investigated using a proper parser like parsimmon, but just not worth it
-// for the small scale and finickines present here
+// for the small scale and finickiness present here
 
 // Helpers ----------------------------------------------------------------------
 

@@ -53,7 +53,8 @@ const config = {
 		outputFile: './src/lib/data/book.json',
 		includeWordTimingsArray: true, // puts, technically all this data is present if embedWordTimingsInHtml is true
 		embedWordTimingsInHtml: true, // puts <spans> with timing data round words in the line's text
-		generateStackText: true // processes the text field to make it suitable for stack mode, embedWordTimingsInHtml and includeWordTimingsArray must be true!
+		generateStackText: true, // processes the text field to make it suitable for stack mode, embedWordTimingsInHtml and includeWordTimingsArray must be true!
+		abortOnSchemaErrors: false // useful for outputting the resulting book.json with minor errors
 	},
 	speechSettings: {
 		regenerateSource: false,
@@ -497,10 +498,15 @@ if (config.jsonSettings.includeWordTimingsArray) {
 }
 
 // Check for errors
-bookSchema.parse(bookOutput);
-// console.log(`bookSchema: ${bookSchema}`);
+
+try {
+	bookSchema.parse(bookOutput);
+} catch (error) {
+	console.log(`Error: ${error}`);
+	config.jsonSettings.abortOnSchemaErrors && process.exit(1);
+}
 
 // rewrite the json file with speech file names and duration
-await saveFormattedJson(config.jsonSettings.outputFile, bookOutput);
+saveFormattedJson(config.jsonSettings.outputFile, bookOutput);
 
 console.log('...Done');
