@@ -41,3 +41,5 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           source: 'build/*'
           target: ${{ vars.SERVER_PATH }}${{ env.BASE_PATH }}
+          rm: true
+          strip_components: 1
