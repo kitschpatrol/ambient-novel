@@ -10,7 +10,8 @@ const config = {
 		adapter: adapter({
 			// cloudflare pages does this for us...
 			// precompress: true
-		})
+		}),
+		paths: { base: '/super-secret-tvm-test' }
 		// hmm https://stackoverflow.com/questions/74931516/in-svete-what-to-use-instead-of-html-to-avoid-xss-attacks
 		// csp: {
 		// 	directives: {

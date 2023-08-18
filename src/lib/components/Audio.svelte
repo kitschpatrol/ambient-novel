@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import { fadeVolume } from '$lib/utils/transition/fadeVolume';
 	import { getType } from 'mime';
 
@@ -72,7 +73,7 @@
 	transition:fadeVolume={{ duration: 1000 }}
 >
 	{#each audioSources as source}
-		<source src={source} type={getType(source)} />
+		<source src={`${base}/${source}`} type={getType(source)} />
 	{/each}
 	Your browser does not support the audio element.
 </audio>

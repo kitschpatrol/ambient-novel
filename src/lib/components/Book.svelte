@@ -134,7 +134,6 @@
 	// update query params, don't push history
 	$: {
 		if (useQueryStore) {
-			console.log(`useQueryStore`);
 			$page.url.searchParams.set('chapter', ($activeChapter + 1).toString());
 			$page.url.searchParams.set('line', ($chapterState[$activeChapter].line + 1).toString());
 
