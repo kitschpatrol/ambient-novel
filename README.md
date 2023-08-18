@@ -117,6 +117,35 @@ npm run build
 
 You can preview the production build with `npm run preview`.
 
+## Deployment
+
+The app is deployed via a GitHub action to Scott's DreamHost server, which runs automatically on deployment to the `main` or `develop` branches. Each branch deploys to a different subdirectory on the server. Configuration and secrets are stored in the GitHub repo settings.
+
+**Required GitHub [secrets](https://github.com/kitschpatrol/ambient-novel/settings/secrets/actions):**
+
+- `SERVER_HOST`  
+  DreamHost server host name
+
+- `SERVER_USERNAME`  
+  DreamHost server SSH user
+
+- `SERVER_PASSWORD`  
+  DreamHost server SSH password
+
+**Required GitHub [variables](https://github.com/kitschpatrol/ambient-novel/settings/variables/actions):**
+
+- `BASE_PATH_PRODUCTION`  
+  Name of subfolder to copy the site to. During the build process, this variable is also used in `svelte.config.js`. copied. Must start with `/` and end without `/`.  
+  Example: `/thevalentinemob`
+
+- `BASE_PATH_STAGING`  
+  As above, but for the develop branch.  
+  Example: `/thevalentinemob-staging`
+
+- `SERVER_PATH`  
+  DreamHost server path, this is prepended to the base path when files are copied. Must start with `/` and end without `/`.  
+  Example: `/home/someuser/somefolder`
+
 ## Dev notes
 
 - https://github.com/studio-freight/lenis
