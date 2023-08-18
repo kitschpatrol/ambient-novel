@@ -12,7 +12,7 @@ const config = {
 			// cloudflare pages does this for us...
 			// precompress: true
 		}),
-		paths: { base: process.env.BASE_PATH || '/' }
+		paths: { base: process.env.BASE_PATH }
 		// hmm https://stackoverflow.com/questions/74931516/in-svete-what-to-use-instead-of-html-to-avoid-xss-attacks
 		// csp: {
 		// 	directives: {

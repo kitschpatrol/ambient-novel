@@ -24,11 +24,11 @@ jobs:
 
       - name: Set BASE_PATH for develop
         if: github.ref == 'refs/heads/develop'
-        run: echo "BASE_PATH==${{ vars.BASE_PATH_STAGING }}" >> $GITHUB_ENV
+        run: echo "BASE_PATH=${{ vars.BASE_PATH_STAGING }}" >> $GITHUB_ENV
 
       - name: Set BASE_PATH for main
         if: github.ref == 'refs/heads/main'
-        run: echo "BASE_PATH==${{ vars.BASE_PATH_PRODUCTION }}" >> $GITHUB_ENV
+        run: echo "BASE_PATH=${{ vars.BASE_PATH_PRODUCTION }}" >> $GITHUB_ENV
 
       - name: Build project
         run: npm run build
