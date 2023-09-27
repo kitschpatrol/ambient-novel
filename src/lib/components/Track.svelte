@@ -17,6 +17,7 @@
 	export let isReset = true;
 	export let currentTime = 0;
 	export let chapterColor = '#ff0000';
+	export let clickToTogglePlayPause = false;
 
 	export const reset = () => {
 		isSeeking = false;
@@ -58,10 +59,11 @@
 
 	let scrollBoosterStart = 0;
 
+	let scrollBooster: ScrollBooster | undefined;
 	onMount(() => {
 		// allow drag scrolling on desktop
 
-		const scrollBooster = isScrollBoosterEnabled
+		scrollBooster = isScrollBoosterEnabled
 			? new ScrollBooster({
 					viewport: scrollWrapperElement,
 					content: scrollAreaElement,
@@ -73,13 +75,20 @@
 					onPointerDown: (e) => {
 						isSeeking = true;
 
+						// seem to have to set this to avoid jumps
+						scrollBooster?.setPosition({
+							x: scrollWrapperElement.scrollLeft,
+							y: 0
+						});
+
 						// track position to distinguish between click and drag
 						scrollBoosterStart = e.position.x;
 					},
 					onPointerUp: (e) => {
 						// Play / pause on click without drag
-						if (isSeeking) {
+						if (clickToTogglePlayPause && isSeeking) {
 							const dragDistance = Math.abs(scrollBoosterStart - e.position.x);
+							// TODO Don't play / pause if we "stab" during an inertial scroll?
 							if (dragDistance < 3) {
 								isSeeking = false;
 								isPlaying = !isPlaying;
@@ -150,15 +159,20 @@
 			} else {
 				scrollWrapperElement.scrollLeft = offset;
 			}
-			// scrollWrapperElement.scrollLeft = $scrollTween;
 		}
 	}
 
-	$: {
-		if (isSpringEnabled && scrollWrapperElement && (isPlayingAndNotSeeking || showChapterTitle)) {
-			scrollWrapperElement.scrollLeft = $scrollTween;
+	function scrollFromTween(offset: number) {
+		if (
+			isSpringEnabled &&
+			scrollWrapperElement &&
+			(!isSeeking || showChapterTitle || (scrollBooster && !scrollBooster.getState().isMoving))
+		) {
+			scrollWrapperElement.scrollLeft = offset;
 		}
 	}
+
+	$: scrollFromTween($scrollTween);
 
 	// seek audio time to active word when scrolling
 	$: {
@@ -347,9 +361,9 @@
 	</div>
 
 	{#if debug}
-		<!-- <div
+		<div
 			class="mouse pointer-events-none absolute left-[50%] top-0 h-[10vh] w-1 touch-none bg-red-500"
-		/> -->
+		/>
 	{/if}
 
 	{#if showChapterTitle}

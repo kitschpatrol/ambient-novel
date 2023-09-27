@@ -22,6 +22,13 @@ const config = {
 		// 		'script-src': ['self']
 		// 	}
 		// }
+	},
+	vitePlugin: {
+		experimental: {
+			inspector: {
+				showToggleButton: 'always'
+			}
+		}
 	}
 };
 
