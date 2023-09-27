@@ -8,6 +8,10 @@ brew install dust
 
 Deployment server MUST support HTTP 206 range requests to successfuly set `currentTime` on audio elements on chrome.
 
+Currently deployed to:
+https://39forks.com/thevalentinemob-staging
+https://39forks.com/thevalentinemob-production-tbd
+
 ## Updating the content
 
 Certain data and assets are generated from the source data in `/data` and ouput to `/static`, `/data-generated` and `/src/lib/data`.

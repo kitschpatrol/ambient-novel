@@ -2,6 +2,7 @@
 
 <script lang="ts">
 	import Audio from '$lib/components/Audio.svelte';
+	import AudioFadeProxy from '$lib/components/AudioFadeProxy.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import type { ChapterData } from '$lib/schemas/bookSchema';
 	import { mapValue } from '$lib/utils/math/mapValue';
@@ -33,7 +34,7 @@
 	};
 
 	const isScrollBoosterEnabled = true;
-	const debug = true;
+	const debug = false;
 	const isSpringEnabled = true;
 	const springConfig = {
 		stiffness: 0.005,
@@ -408,7 +409,7 @@
 	{/if}
 </div>
 
-<Audio
+<AudioFadeProxy
 	audioSources={chapterData.audio.files}
 	isPlaying={isPlayingAndNotSeeking}
 	{maxVolume}
@@ -416,6 +417,7 @@
 	bind:currentTime
 	on:ended
 	on:ended={() => {
+		console.log('ENDED!');
 		// handle this in parent instead
 		//reset();
 	}}
