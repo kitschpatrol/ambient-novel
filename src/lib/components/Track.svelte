@@ -32,7 +32,7 @@
 	};
 
 	const isScrollBoosterEnabled = true;
-	const debug = false;
+	const debug = true;
 	const isSpringEnabled = true;
 	const springConfig = {
 		stiffness: 0.005,
@@ -56,6 +56,8 @@
 	let scrollLeftDelta = 0;
 	let intervalId: NodeJS.Timer | undefined;
 
+	let scrollBoosterStart = 0;
+
 	onMount(() => {
 		// allow drag scrolling on desktop
 
@@ -68,8 +70,21 @@
 					bounce: true,
 					pointerMode: 'mouse',
 					/* @ts-ignore */
-					onPointerDown: () => {
+					onPointerDown: (e) => {
 						isSeeking = true;
+
+						// track position to distinguish between click and drag
+						scrollBoosterStart = e.position.x;
+					},
+					onPointerUp: (e) => {
+						// Play / pause on click without drag
+						if (isSeeking) {
+							const dragDistance = Math.abs(scrollBoosterStart - e.position.x);
+							if (dragDistance < 3) {
+								isSeeking = false;
+								isPlaying = !isPlaying;
+							}
+						}
 					}
 			  })
 			: undefined;
@@ -297,6 +312,7 @@
 			isUserHoldingDownFingerOrMouse = false;
 		}}
 		on:wheel|passive={(e) => {
+			// allow gesture / wheel scrolling, e.g. two finger drag on mac trackpad
 			if (Math.abs(e.deltaX) > 0) {
 				isSeeking = true;
 				isUserHoldingDownFingerOrMouse = true;
@@ -314,6 +330,7 @@
 			}
 		}}
 	>
+		<!-- funky comments here to avoid implicit white space issues -->
 		<!-- prettier-ignore -->
 		<div bind:this={scrollAreaElement} bind:clientWidth={scrollAreaWidth} class="scroll-area"><!--
 		--><div class="spacer" /><!--
@@ -330,9 +347,9 @@
 	</div>
 
 	{#if debug}
-		<div
+		<!-- <div
 			class="mouse pointer-events-none absolute left-[50%] top-0 h-[10vh] w-1 touch-none bg-red-500"
-		/>
+		/> -->
 	{/if}
 
 	{#if showChapterTitle}
@@ -353,20 +370,26 @@
 				isPlaying = !isPlaying;
 			}}
 		/>
-
-		{#if debug}
-			<!-- <p class="inline-block">seeking: {isSeeking}</p> -->
-			<!-- <p class="inline-block">scrollLeftDelta: {scrollLeftDelta}</p> -->
-			<!-- <p class="inline-block">down: {isUserHoldingDownFingerOrMouse}</p> -->
-			<p class="inline-block">targetTime: {targetTime}</p>
-			<p class="inline-block">currentTime: {currentTime}</p>
-			<p class="inline-block">activeWordElement: {activeWordElement}</p>
-		{/if}
 	</div>
 
 	{#if !isReset}
 		<div class="absolute right-0 top-0 flex h-full">
 			<Button icon={faRotateBack} on:click={reset} />
+		</div>
+	{/if}
+
+	{#if debug}
+		<div
+			class="pointer-events-none absolute left-0 top-0 h-full cursor-none touch-none text-red-400"
+		>
+			<p>isplaying: {isPlaying}</p>
+			<p>targetTime: {Math.round(targetTime)}</p>
+			<p>currentTime: {Math.round(currentTime)}</p>
+			<p>seeking: {isSeeking}</p>
+			<p>isUserHoldingDownFingerOrMouse: {isUserHoldingDownFingerOrMouse}</p>
+			<!-- <p class="inline-block">scrollLeftDelta: {scrollLeftDelta}</p> -->
+
+			<p>activeWordElement: {activeWordElement}</p>
 		</div>
 	{/if}
 </div>
