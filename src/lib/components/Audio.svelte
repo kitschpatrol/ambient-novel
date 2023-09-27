@@ -63,9 +63,6 @@
 	let isInOutro = false;
 
 	$: !isInOutro && (currentTime = currentTimeProxy);
-
-	// const [send, receive] = crossfadeVolume;
-	// transition:
 </script>
 
 <!-- // adding prelad="none" was key to currentTime bugs on mobile safari -->
@@ -81,22 +78,17 @@
 	bind:seeking
 	transition:fadeVolume={{ duration: 1000 }}
 	on:outrostart={() => {
-		console.log('outrostart');
 		// don't send time updates during transitions
 		isInOutro = true;
 	}}
 	on:outroend={() => {
 		isInOutro = false;
-		console.log('outroend');
 	}}
 	on:introstart={() => {
-		console.log('introstart');
 		// accommodates resumption during a transition, if that happenns before a new Audio player is created
 		isInOutro = false;
 	}}
-	on:introend={() => {
-		console.log('introend');
-	}}
+	on:introend={() => {}}
 >
 	{#each audioSources as source}
 		<source src={`${base}/${source}`} type={getType(source)} />
