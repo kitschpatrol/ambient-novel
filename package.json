@@ -3,6 +3,7 @@
 	"version": "0.0.3",
 	"type": "module",
 	"private": true,
+	"license": "CC BY-NC-SA 4.0",
 	"scripts": {
 		"align-transcript": "ts-node ./scripts/alignTranscriptToAudio.ts",
 		"build": "vite build",
@@ -12,6 +13,7 @@
 		"dev": "vite dev",
 		"format": "prettier --plugin-search-dir . --write .",
 		"generate-data": "ts-node ./scripts/generateData.ts",
+		"generate-licenses": "license-checker --json > ./src/lib/data/licenses.json",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
 		"preview": "vite preview",
 		"scrape-pdf": "ts-node ./scripts/scrapePdf.ts",
@@ -43,6 +45,7 @@
 		"eslint-plugin-svelte": "^2.32.4",
 		"html-minifier": "^4.0.0",
 		"leven": "^4.0.0",
+		"license-checker": "^25.0.1",
 		"lodash": "^4.17.21",
 		"mime": "^3.0.0",
 		"postcss": "^8.4.28",

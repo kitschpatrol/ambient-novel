@@ -113,6 +113,7 @@ const bookOutput: DeepPartial<BookData> = {
 	year: bookSource.year,
 	publisher: bookSource.publisher,
 	country: bookSource.country,
+	license: bookSource.license,
 	chapters: []
 };
 

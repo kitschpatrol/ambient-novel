@@ -150,3 +150,15 @@ The app is deployed via a GitHub action to Scott's DreamHost server, which runs 
 
 - https://github.com/studio-freight/lenis
 - https://github.com/Adoratorio/hades
+
+## License
+
+The website's code and the book's text are shared under different licenses:
+
+### Website
+
+The Ambient Novel website project is licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License][http://creativecommons.org/licenses/by-nc-sa/4.0/]. See [`LICENSE.txt`](./LICENSE.txt).
+
+### Book
+
+The text of The Valentine Mob book (e.g. [`/data/book.json`](./data/book.json) and its derivatives throughout the project) is ©39forks Publishing USA 2023 All Rights Reserved. See [`/data/LICENSE.txt`](./data/LICENSE.txt).

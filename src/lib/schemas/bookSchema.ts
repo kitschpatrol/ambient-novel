@@ -9,6 +9,7 @@ export const bookSchema = z.object({
 	year: z.number().int().positive(),
 	publisher: z.string().nonempty(),
 	country: z.string().nonempty(),
+	license: z.string().nonempty(),
 	chapters: z
 		.array(
 			z.object({
