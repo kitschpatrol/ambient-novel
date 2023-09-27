@@ -57,14 +57,14 @@ const config = {
 		abortOnSchemaErrors: false // useful for outputting the resulting book.json with minor errors
 	},
 	speechSettings: {
-		regenerateSource: false,
+		regenerateSource: false, // runs TTS on the script
 		regenerateCompressed: false,
 		regenerateTranscript: false,
 		regenerateWordAlignment: false,
 		annunciateTitles: true, // true if scott reads the chapter name at the start of the track, or if we want the generated audio to include this
 		generatedDataDir: './data-generated',
 		sourceDir: '/Users/mika/Documents/Projects/Ambient Novel with Scott Wayne Indiana/Audio/Voice', // will generate using say if missing
-		outputDir: null
+		outputDir: null // where generated TTS ends up
 	},
 	audioMixSettings: {
 		regenerateCompressed: false,
