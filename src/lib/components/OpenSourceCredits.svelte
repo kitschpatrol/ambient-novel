@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { LicenseData } from '$lib/schemas/licensesSchema';
-	import sanitizeHtml from 'sanitize-html';
+	// import sanitizeHtml from 'sanitize-html';
 	export let licenseData: LicenseData;
 
 	const licenses = Object.keys(licenseData).map((packageName) => ({
@@ -9,13 +9,13 @@
 	}));
 
 	function sanitize(input: string): string {
-		// return input;
-		return sanitizeHtml(input, {
-			allowedTags: ['a'],
-			allowedAttributes: {
-				a: ['href']
-			}
-		});
+		return input;
+		// return sanitizeHtml(input, {
+		// 	allowedTags: ['a'],
+		// 	allowedAttributes: {
+		// 		a: ['href']
+		// 	}
+		// });
 	}
 
 	function stripVersion(input: string): string {
@@ -24,7 +24,6 @@
 
 	function cleanUrl(url: string): string {
 		let cleanUrl = url.replace(/^\+git/, '');
-		console.log(`cleanUrl: ${cleanUrl}`);
 		if (!cleanUrl.startsWith('http')) {
 			cleanUrl = 'https://' + cleanUrl;
 		}

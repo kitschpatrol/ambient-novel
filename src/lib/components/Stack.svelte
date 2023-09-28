@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { base } from '$app/paths';
 	import Button from '$lib/components/Button.svelte';
 	import Track from '$lib/components/Track.svelte';
 	import type { BookData } from '$lib/schemas/bookSchema';
@@ -55,111 +54,77 @@
 	}
 </script>
 
-<div>
-	<header class="grid grid-cols-3 items-stretch justify-center">
-		<div class="justify-self-start">
-			<a
-				class="flex h-full items-center justify-center px-6 font-display text-base text-white text-opacity-90"
-				href="{base}/about"
-			>
-				About
-			</a>
-		</div>
-		<h1
-			class="justify-self-center font-display tracking-wider text-white shadow-vm-shadow text-shadow"
-		>
-			{title.replaceAll('a', 'A')}
-		</h1>
-		<div class="justify-self-end">
-			<a
-				class="flex h-full items-center justify-center px-6 font-display text-base text-white text-opacity-90"
-				href="https://39forks.com"
-			>
-				Buy the Book
-			</a>
-		</div>
-	</header>
-	{#each chapters as chapter, index}
-		<Track
-			chapterData={chapter}
-			chapterColor={chapterColors[index]}
-			bind:isPlaying={playStatus[index]}
-			bind:isReset={resetStatus[index]}
-			bind:reset={resetFunctions[index]}
-			on:ended={() => {
-				if (isPlayingThrough) {
-					const nextChapter = playStatus.indexOf(true) + 1;
+{#each chapters as chapter, index}
+	<Track
+		chapterData={chapter}
+		chapterColor={chapterColors[index]}
+		bind:isPlaying={playStatus[index]}
+		bind:isReset={resetStatus[index]}
+		bind:reset={resetFunctions[index]}
+		on:ended={() => {
+			if (isPlayingThrough) {
+				const nextChapter = playStatus.indexOf(true) + 1;
 
+				// reset everything
+				resetFunctions.forEach((reset) => reset());
+
+				// start next chapter
+				playStatus = playStatus.map((_, i) => i === nextChapter);
+			}
+		}}
+	/>
+{/each}
+
+<footer>
+	<div id="controls" class="md-s flex h-full w-full gap-6 max-sm:gap-1">
+		<span class="flex max-w-lg flex-1 items-center justify-start">
+			<Button
+				icon={faBookReader}
+				label="Play Through"
+				isEnabled={!isPlayingThrough}
+				isDown={isPlayingThrough}
+				on:click={() => {
+					isPlayingThrough = true;
 					// reset everything
 					resetFunctions.forEach((reset) => reset());
 
-					// start next chapter
-					playStatus = playStatus.map((_, i) => i === nextChapter);
-				}
-			}}
-		/>
-	{/each}
-	<footer>
-		<div id="controls" class="md-s flex h-full w-full gap-6 max-sm:gap-1">
-			<span class="flex flex-1 items-center justify-start">
-				<Button
-					icon={faBookReader}
-					label="Play Through"
-					isEnabled={!isPlayingThrough}
-					isDown={isPlayingThrough}
-					on:click={() => {
-						isPlayingThrough = true;
-						// reset everything
-						resetFunctions.forEach((reset) => reset());
-
-						// start first chapter
-						playStatus = playStatus.map((_, i) => i === 0);
-					}}
-				/>
-				<Button icon={faDiceD20} label="Lucky Blend" on:click={onLuckyBlend} />
-			</span>
-			<span class="flex flex-grow items-center justify-center max-lg:hidden" />
-			<span class="flex flex-1 items-center justify-end">
-				<Button
-					icon={faPause}
-					label="Pause all"
-					isEnabled={somethingPlaying}
-					on:click={() => {
-						playStatus = playStatus.map(() => false);
-					}}
-				/>
-				<Button
-					icon={faRotateBack}
-					label="Reset all"
-					isEnabled={somethingNotReset}
-					on:click={() => {
-						resetFunctions.forEach((reset) => reset());
-						isPlayingThrough = false;
-					}}
-				/>
-			</span>
-		</div>
-	</footer>
-</div>
+					// start first chapter
+					playStatus = playStatus.map((_, i) => i === 0);
+				}}
+			/>
+			<Button icon={faDiceD20} label="Lucky Blend" on:click={onLuckyBlend} />
+		</span>
+		<span class="flex flex-grow items-center justify-center max-lg:hidden" />
+		<span class="flex max-w-lg flex-1 items-center justify-end">
+			<Button
+				icon={faPause}
+				label="Pause all"
+				isEnabled={somethingPlaying}
+				on:click={() => {
+					playStatus = playStatus.map(() => false);
+				}}
+			/>
+			<Button
+				icon={faRotateBack}
+				label="Reset all"
+				isEnabled={somethingNotReset}
+				on:click={() => {
+					resetFunctions.forEach((reset) => reset());
+					isPlayingThrough = false;
+				}}
+			/>
+		</span>
+	</div>
+</footer>
 
 <style>
-	:global(body) {
-		background: unset;
+	div#controls {
+		background: linear-gradient(#00000053 0%, rgba(86, 86, 86, 0.502) 100%);
 	}
 
-	header,
 	footer {
 		width: 100vw;
 		height: calc(100vh / 12);
-	}
-
-	header {
-		background: #f01ef6;
-		background: linear-gradient(#afafaf80 10%, #0000006b 100%);
-	}
-	header h1 {
-		font-size: min(calc(100vh / 24), calc(100vw / 14));
-		line-height: calc(100vh / 12);
 	}
 
 	footer {
@@ -167,9 +132,5 @@
 		user-select: none;
 		-webkit-user-select: none;
 		-ms-user-select: none;
-	}
-
-	footer div#controls {
-		background: linear-gradient(#00000053 0%, rgba(86, 86, 86, 0.502) 100%);
 	}
 </style>

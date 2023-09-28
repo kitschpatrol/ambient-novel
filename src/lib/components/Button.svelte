@@ -12,7 +12,7 @@
 	transition:fade={{ duration: 200 }}
 	disabled={!isEnabled}
 	on:click
-	class="h-full w-full px-1 pb-3 pt-2 first:pl-2.5 last:pr-2.5"
+	class="h-full w-full px-1 pb-3 pt-2 first:pl-5 last:pr-5"
 >
 	<div
 		class:aspect-square={!label}

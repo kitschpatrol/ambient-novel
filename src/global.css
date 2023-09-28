@@ -22,7 +22,8 @@
 /* and https://transfonter.org */
 @font-face {
 	font-family: 'Nasalization Extended';
-	src: url('/fonts/nasalization/nasalization-extended-light.woff2') format('woff2'),
+	src:
+		url('/fonts/nasalization/nasalization-extended-light.woff2') format('woff2'),
 		url('/fonts/nasalization/nasalization-extended-light.woff') format('woff'),
 		url('/fonts/nasalization/nasalization-extended-light.ttf') format('truetype');
 	/* TODO good idea? */
@@ -49,17 +50,19 @@ html {
 }
 
 body {
-  min-height: 100vh;
-  /* mobile viewport bug fix */
-  min-height: -webkit-fill-available;
+	min-height: 100vh;
+	/* mobile viewport bug fix */
+	min-height: -webkit-fill-available;
 }
 
 html {
-  height: -webkit-fill-available;
+	height: -webkit-fill-available;
 }
 
 body {
 	position: fixed; /* for safari mobile */
+	overflow-x: hidden;
+	background-attachment: fixed;
 
 	/* var(--backgroundGradientAngle), 0deg, */
 	background: linear-gradient(
