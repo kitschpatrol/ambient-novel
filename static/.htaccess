@@ -1,0 +1,51 @@
+RewriteEngine On
+
+# Ensure the rewrite base is set correctly
+RewriteBase {__BASE_PATH__}
+
+# Special case for index.html
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ {__BASE_PATH__}/index(\.html|/)?\ HTTP
+RewriteRule ^index\.html$ {__BASE_PATH__} [R=301,L]
+
+# Remove .html extension for other files
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ {__BASE_PATH__}/([^\s]+)\.html\ HTTP [NC]
+RewriteRule ^(.+)\.html$ {__BASE_PATH__}/$1 [R=301,L]
+
+# Remove trailing slash
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ {__BASE_PATH__}/([^\s]+)/\ HTTP
+RewriteRule ^(.+)/$ {__BASE_PATH__}/$1 [R=301,L]
+
+# Internally redirect to actual .html file if it exists
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.html -f
+RewriteRule ^(.+)$ $1.html [L]
+
+# Handle 404 errors - Route all other invalid URLs to index.html
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . index.html [L]
+
+# Serve Brotli compressed files if they exist
+RewriteCond %{HTTP:Accept-Encoding} br
+RewriteCond %{REQUEST_FILENAME}\.br -s
+RewriteRule ^(.*)$ $1\.br [QSA,L]
+
+# Set appropriate Brotli encoding type
+<FilesMatch "\.br$">
+  Header set Content-Encoding br
+</FilesMatch>
+
+# Serve Gzip compressed files if they exist
+RewriteCond %{HTTP:Accept-Encoding} gzip
+RewriteCond %{REQUEST_FILENAME}\.gz -s
+RewriteRule ^(.*)$ $1\.gz [QSA,L]
+
+# Set appropriate Gzip encoding type
+<FilesMatch "\.gz$">
+  Header set Content-Encoding gzip
+</FilesMatch>
+
+# Prevent double compression
+RewriteRule \.br$ - [E=no-gzip:1]
+RewriteRule \.gz$ - [E=no-gzip:1]

@@ -6,7 +6,7 @@
 	"private": true,
 	"scripts": {
 		"align-transcript": "ts-node ./scripts/alignTranscriptToAudio.ts",
-		"build": "vite build",
+		"build": "vite build && ts-node ./scripts/setHtaccessBasePath.ts",
 		"build-report": "dust -t -b ./build",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
