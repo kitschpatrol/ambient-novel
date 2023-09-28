@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import Button from '$lib/components/Button.svelte';
 	import Track from '$lib/components/Track.svelte';
 	import type { BookData } from '$lib/schemas/bookSchema';
@@ -55,10 +56,28 @@
 </script>
 
 <div>
-	<header>
-		<h1 class="text-center font-display tracking-wider text-white shadow-vm-shadow text-shadow">
+	<header class="grid grid-cols-3 items-stretch justify-center">
+		<div class="justify-self-start">
+			<a
+				class="flex h-full items-center justify-center px-6 font-display text-base text-white text-opacity-90"
+				href="{base}/about"
+			>
+				About
+			</a>
+		</div>
+		<h1
+			class="justify-self-center font-display tracking-wider text-white shadow-vm-shadow text-shadow"
+		>
 			{title.replaceAll('a', 'A')}
 		</h1>
+		<div class="justify-self-end">
+			<a
+				class="flex h-full items-center justify-center px-6 font-display text-base text-white text-opacity-90"
+				href="https://39forks.com"
+			>
+				Buy the Book
+			</a>
+		</div>
 	</header>
 	{#each chapters as chapter, index}
 		<Track
@@ -136,10 +155,9 @@
 
 	header {
 		background: #f01ef6;
-	}
-
-	header h1 {
 		background: linear-gradient(#afafaf80 10%, #0000006b 100%);
+	}
+	header h1 {
 		font-size: min(calc(100vh / 24), calc(100vw / 14));
 		line-height: calc(100vh / 12);
 	}

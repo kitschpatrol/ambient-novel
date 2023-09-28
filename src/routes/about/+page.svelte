@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { base } from '$app/paths';
+
 	import OpenSourceCredits from '$lib/components/OpenSourceCredits.svelte';
 	import licenseDataRaw from '$lib/data/licenses.json';
 	import { licenseSchema } from '$lib/schemas/licensesSchema';
@@ -6,6 +8,7 @@
 	const licenseData = licenseSchema.parse(licenseDataRaw);
 </script>
 
+<a href={`${base}/`}>Home</a>
 <h2>The story</h2>
 <p>
 	Two friends on vacation become entangled with an eccentric troupe of cosmic artists who call
