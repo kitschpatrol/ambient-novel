@@ -19,17 +19,18 @@ export const bookSchema = z.object({
 					files: z.array(z.string().nonempty()),
 					durationSeconds: z.number().positive()
 				}),
-				lineShuffleAllowed: z.boolean(),
 				lines: z
 					.array(
 						z.object({
-							text: z.string().nonempty(),
+							text: z.string().nonempty().optional(),
 							textStack: z.string().nonempty().optional(),
-							index: z.number().int().nonnegative(),
-							timing: z.object({
-								start: z.number(),
-								end: z.number()
-							}),
+							index: z.number().int().nonnegative().optional(),
+							timing: z
+								.object({
+									start: z.number(),
+									end: z.number()
+								})
+								.optional(),
 							// embedding in the text instead...
 							wordTimings: z
 								.array(

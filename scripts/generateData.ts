@@ -54,7 +54,8 @@ const config = {
 		includeWordTimingsArray: true, // puts, technically all this data is present if embedWordTimingsInHtml is true
 		embedWordTimingsInHtml: true, // puts <spans> with timing data round words in the line's text
 		generateStackText: true, // processes the text field to make it suitable for stack mode, embedWordTimingsInHtml and includeWordTimingsArray must be true!
-		abortOnSchemaErrors: false // useful for outputting the resulting book.json with minor errors
+		abortOnSchemaErrors: false, // useful for outputting the resulting book.json with minor errors
+		stripFieldsFromLines: ['text', 'index', 'timing'] // generate more compact ui-specific json
 	},
 	speechSettings: {
 		regenerateSource: false, // runs TTS on the script
@@ -186,7 +187,6 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 	const chapter: StripArray<typeof bookOutput.chapters> = {};
 	chapter.title = chapterSource.title;
 	chapter.index = chapterNumber;
-	chapter.lineShuffleAllowed = chapterSource.lineShuffleAllowed;
 	chapter.lines = [];
 	chapter.audio = {};
 	chapter.audio.files = [];
@@ -483,6 +483,10 @@ if (config.jsonSettings.generateStackText) {
 			// Add bullets to text, since timing is handled differently for now...
 			textStack = textStack.replace(/(<li><span.*?>)/g, '$1• ');
 
+			// Sanitize less than '<' and greater than '>' characters which confuse svelte
+			textStack = textStack.replace(/<</g, '&lt;<');
+			textStack = textStack.replace(/>>/g, '>&gt;');
+
 			line.textStack = textStack;
 		});
 	});
@@ -497,6 +501,16 @@ if (config.jsonSettings.includeWordTimingsArray) {
 		});
 	});
 }
+
+config.jsonSettings.stripFieldsFromLines.forEach((field) => {
+	console.log(`Stripping ${field} from lines`);
+	bookOutput.chapters?.forEach((chapter) => {
+		chapter.lines?.forEach((line) => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			delete (line as any)[field];
+		});
+	});
+});
 
 // Check for errors
 

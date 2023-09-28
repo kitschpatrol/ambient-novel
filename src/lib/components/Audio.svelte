@@ -2,7 +2,9 @@
 	import { base } from '$app/paths';
 	import { crossfadeVolume } from '$lib/utils/transition/crossfadeVolume';
 	import { fadeVolume } from '$lib/utils/transition/fadeVolume';
-	import { getType } from 'mime';
+	import pkg from 'mime';
+	const { getType } = pkg;
+	// import { getType } from 'mime';
 
 	export let audioSources: string[];
 	export let isPlaying = false;

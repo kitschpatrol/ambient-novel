@@ -9,7 +9,6 @@
 	"chapters": [
 		{
 			"title": "The Valentine Mob",
-			"lineShuffleAllowed": true,
 			"audioMix": "Chapter 1 Mix Bounce v2.wav",
 			"audioVoiceSolo": "Chapter 1 Voice Bounce v2.wav",
 			"lines": [
@@ -127,7 +126,6 @@
 		},
 		{
 			"title": "Motel Van Been Hit",
-			"lineShuffleAllowed": true,
 			"audioMix": "Chapter 2 Mix Bounce v2.wav",
 			"audioVoiceSolo": "Chapter 2 Voice Bounce v2.wav",
 			"lines": [
@@ -234,7 +232,6 @@
 		},
 		{
 			"title": "Mobile Tent Haven",
-			"lineShuffleAllowed": true,
 			"audioMix": "Chapter 3 Mix Bounce v2.wav",
 			"audioVoiceSolo": "Chapter 3 Voice Bounce v2.wav",
 			"lines": [
@@ -281,7 +278,6 @@
 		},
 		{
 			"title": "Nova Bent The Lime",
-			"lineShuffleAllowed": true,
 			"audioMix": "Chapter 4 Mix Bounce v3.wav",
 			"audioVoiceSolo": "Chapter 4 Voice Bounce v3.wav",
 			"lines": [
@@ -390,7 +386,6 @@
 		},
 		{
 			"title": "The Ambient Novel",
-			"lineShuffleAllowed": true,
 			"audioMix": "Chapter 5 Mix Bounce v2.wav",
 			"audioVoiceSolo": "Chapter 5 Voice Bounce v2.wav",
 			"lines": [
@@ -454,7 +449,6 @@
 		},
 		{
 			"title": "Hot In Lane TV Beam",
-			"lineShuffleAllowed": true,
 			"audioMix": "Chapter 6 Mix Bounce v2.wav",
 			"audioVoiceSolo": "Chapter 6 Voice Bounce v2.wav",
 			"lines": [
@@ -483,7 +477,6 @@
 		},
 		{
 			"title": "Abilene Moth Vent",
-			"lineShuffleAllowed": true,
 			"audioMix": "Chapter 7 Mix Bounce v2.wav",
 			"audioVoiceSolo": "Chapter 7 Voice Bounce v2.wav",
 			"lines": [
@@ -497,7 +490,6 @@
 		},
 		{
 			"title": "The Noble Vietnam",
-			"lineShuffleAllowed": true,
 			"audioMix": "Chapter 8 Mix Bounce v2.wav",
 			"audioVoiceSolo": "Chapter 8 Voice Bounce v2.wav",
 			"lines": [
@@ -508,7 +500,6 @@
 		},
 		{
 			"title": "Invent Home Table",
-			"lineShuffleAllowed": true,
 			"audioMix": "Chapter 9 Mix Bounce v2.wav",
 			"audioVoiceSolo": "Chapter 9 Voice Bounce v2.wav",
 			"lines": [
@@ -520,7 +511,6 @@
 		},
 		{
 			"title": "Viable Tenth Omen",
-			"lineShuffleAllowed": true,
 			"audioMix": "Chapter 10 Mix Bounce v2.wav",
 			"audioVoiceSolo": "Chapter 10 Voice Bounce v2.wav",
 			"lines": [

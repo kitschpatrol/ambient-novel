@@ -21,14 +21,11 @@
 			targetTimeProxy = targetTime;
 			currentTime = targetTime;
 			isPlayingProxy = true;
-
-			console.log('playing');
 		} else if (isPlaying && isPlayingProxy) {
 			// Playing
 			targetTimeProxy = targetTime;
 			currentTime = currentTimeProxy;
 		} else if (!isPlaying && isPlayingProxy) {
-			console.log('pausing');
 			// Starting to pause
 			targetTimeProxy = currentTime;
 			targetTime = currentTime;

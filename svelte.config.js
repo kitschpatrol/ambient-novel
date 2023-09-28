@@ -10,7 +10,7 @@ const config = {
 	kit: {
 		adapter: adapter({
 			// cloudflare pages does this for us...
-			// precompress: true
+			precompress: true
 		}),
 		paths: { base: process.env.BASE_PATH }
 		// hmm https://stackoverflow.com/questions/74931516/in-svete-what-to-use-instead-of-html-to-avoid-xss-attacks
@@ -22,14 +22,14 @@ const config = {
 		// 		'script-src': ['self']
 		// 	}
 		// }
-	},
-	vitePlugin: {
-		experimental: {
-			inspector: {
-				showToggleButton: 'always'
-			}
-		}
 	}
+	// vitePlugin: {
+	// 	experimental: {
+	// 		inspector: {
+	// 			showToggleButton: 'always'
+	// 		}
+	// 	}
+	// }
 };
 
 export default config;
