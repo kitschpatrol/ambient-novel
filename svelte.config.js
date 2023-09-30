@@ -13,6 +13,9 @@ const config = {
 			precompress: true,
 			fallback: 'index.html'
 		}),
+		// serviceWorker: {
+		// 	register: false // TODO necessary?
+		// },
 		paths: { base: process.env.BASE_PATH }
 		// hmm https://stackoverflow.com/questions/74931516/in-svete-what-to-use-instead-of-html-to-avoid-xss-attacks
 		// csp: {

@@ -155,6 +155,13 @@ The app is deployed via a GitHub action to Scott's DreamHost server, which runs 
 - https://github.com/studio-freight/lenis
 - https://github.com/Adoratorio/hades
 
+## PWA
+
+- https://stackoverflow.com/questions/76007716/how-do-i-use-workbox-range-requests-plugin-with-vite-pwa
+- https://github.com/userquin/sveltesociety.dev/tree/pwa
+- https://www.sarcevic.dev/offline-first-installable-pwa-sveltekit-workbox-precaching
+- https://github.com/daffinm/audio-cache-test
+
 ## License
 
 The website's code and the book's text are shared under different licenses:
