@@ -96,7 +96,7 @@ To test... currently does NOT work, but the alignment-only model in whisperx doe
 ```bash
 conda activate whisperx
 export PYTORCH_ENABLE_MPS_FALLBACK=1
-whisperx ./static/speech/0-78.mp3 --device mps --model tiny --language en --verbose True --fp16 Fals
+whisperx ./static/speech/0-78.`mp3` --device mps --model tiny --language en --verbose True --fp16 Fals
 conda deactivate
 ```
 
@@ -161,6 +161,8 @@ The app is deployed via a GitHub action to Scott's DreamHost server, which runs 
 - https://github.com/userquin/sveltesociety.dev/tree/pwa
 - https://www.sarcevic.dev/offline-first-installable-pwa-sveltekit-workbox-precaching
 - https://github.com/daffinm/audio-cache-test
+
+Tried @vite-pwa/sveltekit, but too many issues getting correct behavior around range requests.
 
 ## License
 

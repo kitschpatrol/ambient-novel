@@ -10,12 +10,20 @@
 	export let currentTime = 0; // reports time to parent (does not write)
 	export let targetTime = 0; // parent uses to set requested time (does not read)
 
+	// don't load the audio until it's first played,
+	// this is an optimization to play well with the service worker
+	// precaching and cut down initial load time
+	let hasPlayed = false;
+
 	let targetTimeProxy: number = targetTime;
 	let currentTimeProxy: number = currentTime;
 	let isPlayingProxy = isPlaying;
 
 	// a bit precarious
 	$: {
+		if (!hasPlayed && isPlaying) {
+			hasPlayed = true;
+		}
 		if (isPlaying && !isPlayingProxy) {
 			// Starting to play
 			targetTimeProxy = targetTime;
@@ -36,6 +44,7 @@
 			currentTime = targetTimeProxy;
 		}
 	}
+
 	// Crossfade...
 	// https://github.com/sveltejs/svelte/issues/1469
 	// https://github.com/sveltejs/svelte/issues/4593
@@ -43,13 +52,15 @@
 	// TODO  disable on ended in out-transitioning stuff?
 </script>
 
-{#key isPlaying === true}
-	<Audio
-		{audioSources}
-		isPlaying={isPlayingProxy}
-		{maxVolume}
-		targetTime={targetTimeProxy}
-		bind:currentTime={currentTimeProxy}
-		on:ended
-	/>
-{/key}
+{#if hasPlayed}
+	{#key isPlaying}
+		<Audio
+			{audioSources}
+			isPlaying={isPlayingProxy}
+			{maxVolume}
+			targetTime={targetTimeProxy}
+			bind:currentTime={currentTimeProxy}
+			on:ended
+		/>
+	{/key}
+{/if}

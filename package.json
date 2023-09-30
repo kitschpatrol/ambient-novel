@@ -20,6 +20,7 @@
 		"test": "playwright test",
 		"test:unit": "vitest"
 	},
+	"dependencies": {},
 	"devDependencies": {
 		"@cyber2024/pdf-parse-fixed": "^1.2.5",
 		"@fortawesome/free-solid-svg-icons": "^6.4.2",
@@ -31,7 +32,7 @@
 		"@types/glob": "^8.1.0",
 		"@types/html-minifier": "^4.0.3",
 		"@types/lodash": "^4.14.199",
-		"@types/mime": "^3.0.1",
+		"@types/mime": "^3.0.2",
 		"@types/pdf-parse": "^1.1.2",
 		"@types/prettier": "^2.7.3",
 		"@types/sanitize-html": "^2.9.1",
@@ -39,7 +40,6 @@
 		"@types/seedrandom": "^3.0.6",
 		"@typescript-eslint/eslint-plugin": "^6.7.3",
 		"@typescript-eslint/parser": "^6.7.3",
-		"@vite-pwa/sveltekit": "^0.2.7",
 		"autoprefixer": "^10.4.16",
 		"dotenv": "^16.3.1",
 		"eslint": "^8.50.0",
@@ -50,7 +50,7 @@
 		"license-checker-rseidelsohn": "^4.2.8",
 		"lodash": "^4.17.21",
 		"mime": "^3.0.0",
-		"postcss": "^8.4.30",
+		"postcss": "^8.4.31",
 		"prettier": "^3.0.3",
 		"prettier-plugin-organize-imports": "^3.2.3",
 		"prettier-plugin-pkg": "^0.18.0",
@@ -70,7 +70,8 @@
 		"typescript": "^5.2.2",
 		"vite": "^4.4.9",
 		"vite-plugin-mkcert": "^1.16.0",
-		"vitest": "^0.34.5",
+		"vitest": "^0.34.6",
+		"workbox-build": "^7.0.0",
 		"zod": "^3.22.2"
 	}
 }
