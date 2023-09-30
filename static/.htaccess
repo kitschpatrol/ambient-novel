@@ -1,3 +1,5 @@
+# A bunch of contortions for Dreamhost
+
 RewriteEngine On
 
 # Ensure the rewrite base is set correctly
