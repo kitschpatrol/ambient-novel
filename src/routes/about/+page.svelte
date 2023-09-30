@@ -56,9 +56,23 @@
 		<p>Welcome.</p>
 
 		<h2>Credits</h2>
+		<p>
+			Scott Wayne Indiana — <em>author and narrator</em>
+			<br />
+			<a href="https://ericmika.com">Eric Mika</a>
+			—
+			<em>website</em>
+			<br />
+			Alex McCarl —
+			<em>original ambient tracks</em>
+			<br />
 
-		<h3>Open-Source Projects</h3>
-		<OpenSourceCredits {licenseData} />
+			Mike Budd —
+			<em>audio recording and mixing</em>
+		</p>
+
+		<!-- <h3>Open-Source Projects</h3> -->
+		<!-- <OpenSourceCredits {licenseData} /> -->
 	</main>
 </div>
 
