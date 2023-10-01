@@ -306,6 +306,32 @@
 		scrollTween = spring(startPoint, springConfig);
 	}
 
+	function findActiveWordIndexFromScroll(scrollLeft: number) {
+		const scrollOffset = scrollLeft + rowWidth / 2;
+
+		if (scrollOffset <= wordElements[0].offsetLeft) {
+			// before first word
+			activeWordIndex = -1;
+		} else if (
+			scrollOffset >=
+			wordElements[wordElements.length - 1].offsetLeft +
+				wordElements[wordElements.length - 1].offsetWidth
+		) {
+			// after last word
+			activeWordIndex = wordElements.length;
+		} else {
+			// somewhere between
+			for (let i = 0; i < wordElements.length - 1; i++) {
+				const element = wordElements[i];
+
+				if (scrollOffset < element.offsetLeft) {
+					activeWordIndex = i - 1;
+					return;
+				}
+			}
+		}
+	}
+
 	// scroll to center of word active word element
 	function scrollToActiveWordIndex(index: number) {
 		let scrollOffset = 0;
@@ -349,9 +375,10 @@
 	$: isReset = targetTime === 0 && currentTime === 0;
 	$: isPlayingAndNotSeeking = isPlaying && !isSeeking; // only really play the audio if we're not seeking
 
-	$: wordElements && wordElements.length > 0 && findActiveWordIndex(currentTime);
-	$: wordElements && wordElements.length > 0 && updateWordStyles(activeWordIndex);
-	$: isSeeking && updateSpringStartPoint(scrollLeftBinding);
+	// While Playing / paused
+
+	$: wordElements && wordElements.length > 0 && !isSeeking && findActiveWordIndex(currentTime);
+
 	$: wordElements &&
 		wordElements.length > 0 &&
 		isPlayingAndNotSeeking &&
@@ -359,15 +386,28 @@
 		scrollToActiveWordIndex(activeWordIndex);
 
 	// seek audio time to active word when scrolling
-	$: wordElements && wordElements.length > 0 && isSeeking && seekTimeFromScroll(scrollLeftBinding);
-	// $: wordElements &&
-	// 	wordElements.length > 0 &&
-	// 	isSeeking &&
-	// 	seekTimeFromActiveIndex(activeWordIndex);
+	// $: wordElements && wordElements.length > 0 && isSeeking && seekTimeFromScroll(scrollLeftBinding);
+
 	$: isSpringEnabled &&
 		scrollWrapperElement &&
 		(!isSeeking || showChapterTitle || (scrollBooster && !scrollBooster.getState().isMoving)) &&
 		scrollFromTween($scrollTween);
+
+	// Special seeking behavior
+	$: isSeeking && updateSpringStartPoint(scrollLeftBinding);
+
+	$: wordElements &&
+		wordElements.length > 0 &&
+		isSeeking &&
+		findActiveWordIndexFromScroll(scrollLeftBinding);
+
+	$: wordElements &&
+		wordElements.length > 0 &&
+		isSeeking &&
+		seekTimeFromActiveIndex(activeWordIndex);
+
+	// style
+	$: wordElements && wordElements.length > 0 && updateWordStyles(activeWordIndex);
 </script>
 
 <div class="track">
