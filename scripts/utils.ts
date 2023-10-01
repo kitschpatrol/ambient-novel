@@ -275,11 +275,11 @@ function compressToAac(
 
 	if (vbr) {
 		runCommand(
-			`ffmpeg -y -vn -i "${sourceFile}" -c:a libfdk_aac -ar ${sampleRate} -vbr ${bitrateMode} "${tempOutputFile}"`
+			`ffmpeg -y -vn -i "${sourceFile}" -c:a libfdk_aac -ar ${sampleRate} -vbr ${bitrateMode} -movflags +faststart "${tempOutputFile}"`
 		);
 	} else {
 		runCommand(
-			`ffmpeg -y -vn -i "${sourceFile}" -c:a libfdk_aac -ar ${sampleRate} -b:a ${cbrQuality} "${tempOutputFile}"`
+			`ffmpeg -y -vn -i "${sourceFile}" -c:a libfdk_aac -ar ${sampleRate} -b:a ${cbrQuality} -movflags +faststart "${tempOutputFile}"`
 		);
 	}
 	fs.renameSync(tempOutputFile, outputFile);
