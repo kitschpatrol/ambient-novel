@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { base } from '$app/paths';
+
 	import { Howl } from 'howler';
 	import { onDestroy } from 'svelte';
 
@@ -9,14 +11,17 @@
 	export let currentTime = 0; // actual time of audio
 	export let targetTime = 0; // time we're requesting
 
-	console.log(`audioSources: ${audioSources}`);
+	let loaded = false;
+
+	// TODO forward end event
+
 	const sound = new Howl({
 		src: audioSources,
 		html5: false,
-		preload: true
+		preload: false // service worker should keep it hot
 	});
 
-	function updateSeekTime() {
+	function updateCurrentTime() {
 		const time = sound.seek();
 		if (time !== currentTime) {
 			currentTime = time;
@@ -24,7 +29,7 @@
 	}
 
 	const seekInterval = setInterval(() => {
-		updateSeekTime();
+		updateCurrentTime();
 	}, 100);
 
 	onDestroy(() => {
@@ -36,11 +41,17 @@
 
 	$: {
 		if (isPlaying) {
-			sound.play();
-			updateSeekTime();
+			if (!loaded) {
+				sound.load();
+				loaded = true;
+			}
+			if (!sound.playing()) {
+				sound.play();
+			}
+			updateCurrentTime();
 		} else {
 			sound.pause();
-			updateSeekTime();
+			updateCurrentTime();
 		}
 	}
 

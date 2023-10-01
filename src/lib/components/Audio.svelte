@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { base } from '$app/paths';
 	import { crossfadeVolume } from '$lib/utils/transition/crossfadeVolume';
 	import { fadeVolume } from '$lib/utils/transition/fadeVolume';
 	import pkg from 'mime';
@@ -91,7 +90,7 @@
 	on:introend={() => {}}
 >
 	{#each audioSources as source}
-		<source src={`${base}/${source}`} type={getType(source)} />
+		<source src={`${source}`} type={getType(source)} />
 	{/each}
 	Your browser does not support the audio element.
 </audio>

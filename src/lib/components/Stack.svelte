@@ -54,35 +54,31 @@
 
 		playStatus = playStatus.map((_, i) => randomChapters.includes(i));
 	}
-
-	$: console.log(`width: ${width}`);
 </script>
 
 <svelte:window bind:innerWidth={width} />
 
 {#if width > 0}
 	{#each chapters as chapter, index}
-		{#if index >= 0}
-			<Track
-				chapterData={chapter}
-				chapterColor={chapterColors[index]}
-				rowWidth={width}
-				bind:isPlaying={playStatus[index]}
-				bind:isReset={resetStatus[index]}
-				bind:reset={resetFunctions[index]}
-				on:ended={() => {
-					if (isPlayingThrough) {
-						const nextChapter = playStatus.indexOf(true) + 1;
+		<Track
+			chapterData={chapter}
+			chapterColor={chapterColors[index]}
+			rowWidth={width}
+			bind:isPlaying={playStatus[index]}
+			bind:isReset={resetStatus[index]}
+			bind:reset={resetFunctions[index]}
+			on:ended={() => {
+				if (isPlayingThrough) {
+					const nextChapter = playStatus.indexOf(true) + 1;
 
-						// reset everything
-						resetFunctions.forEach((reset) => reset());
+					// reset everything
+					resetFunctions.forEach((reset) => reset());
 
-						// start next chapter
-						playStatus = playStatus.map((_, i) => i === nextChapter);
-					}
-				}}
-			/>
-		{/if}
+					// start next chapter
+					playStatus = playStatus.map((_, i) => i === nextChapter);
+				}
+			}}
+		/>
 	{/each}
 
 	<footer>

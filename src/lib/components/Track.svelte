@@ -1,6 +1,8 @@
 <svelte:options immutable={true} />
 
 <script lang="ts">
+	import { base } from '$app/paths';
+
 	// import Audio from '$lib/components/Audio.svelte';
 	// import Auduio from '$lib/components/AudioFadeProxy.svelte';
 	import AudioHowler from '$lib/components/AudioHowler.svelte';
@@ -21,6 +23,8 @@
 	export let chapterColor = '#ff0000';
 	export let clickToTogglePlayPause = false;
 	export let rowWidth = 0; // performance thing to set this externally...
+
+	export let ready = () => {};
 
 	export const reset = () => {
 		isSeeking = false;
@@ -127,6 +131,8 @@
 		intervalId = setInterval(function () {
 			loop();
 		}, 100);
+
+		ready();
 	});
 
 	onDestroy(() => {
@@ -304,8 +310,6 @@
 
 	// only really play the audio if we're not seeking
 	$: isPlayingAndNotSeeking = isPlaying && !isSeeking;
-
-	$: console.log(`rowWidth: ${rowWidth}`);
 </script>
 
 <div class="track">
@@ -412,7 +416,7 @@
 </div>
 
 <AudioHowler
-	audioSources={chapterData.audio.files}
+	audioSources={chapterData.audio.files.map((file) => `${base}/${file}`)}
 	isPlaying={isPlayingAndNotSeeking}
 	{maxVolume}
 	{targetTime}
