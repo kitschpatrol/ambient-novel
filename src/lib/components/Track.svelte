@@ -28,6 +28,7 @@
 	export const reset = () => {
 		isSeeking = false;
 		isPlaying = false;
+		// TODO hmm
 		if (targetTime === 0) {
 			currentTime = 0;
 		} else {
@@ -143,17 +144,38 @@
 		}
 	});
 
-	$: timeCacheStart = chapterData.lines
-		.map((line) => (line.wordTimings ? line.wordTimings.map((word) => word.start) : []))
-		.flat();
+	function generateTimeCache(data: ChapterData, wordSpans: HTMLSpanElement[]): number[] {
+		const timeCache: number[] = [];
 
-	$: timeCacheEnd = chapterData.lines
-		.map((line) => (line.wordTimings ? line.wordTimings.map((word) => word.end) : []))
-		.flat();
+		// Iterate through each span element
+		wordSpans.forEach((span) => {
+			const dataTime = span.getAttribute('data-time');
 
-	$: wordElements = scrollAreaElement
-		? Array.from(scrollAreaElement.getElementsByTagName('span'))
-		: [];
+			if (dataTime === null) {
+				console.warn(
+					`data-time attribute is missing from word ${span.innerHTML} in chapter ${chapterData.title}`
+				);
+			} else {
+				timeCache.push(parseFloat(dataTime));
+			}
+		});
+
+		// Add the final time
+		timeCache.push(chapterData.narrationTime.end);
+
+		return timeCache;
+	}
+
+	let wordElements: HTMLSpanElement[];
+	$: scrollAreaElement &&
+		(wordElements = Array.from(scrollAreaElement.querySelectorAll<HTMLElement>('span[data-time]')));
+
+	// one element longer than the number of words, to accommodate the "end" time of the last word
+	let timeCache: number[];
+	$: chapterData &&
+		wordElements &&
+		wordElements.length > 0 &&
+		(timeCache = generateTimeCache(chapterData, wordElements));
 
 	function scrollTo(offset: number, rightOnly = true) {
 		// ony scroll to the right
@@ -191,14 +213,14 @@
 			const scrollCenter = scrollLeftBinding + rowWidth / 2;
 
 			if (scrollCenter <= wordElements[0].offsetLeft) {
-				// scrolled before first word
-				targetTime = timeCacheStart[0];
+				// scrolled before first word... can't scroll back to chapter reading?
+				targetTime = timeCache[0];
 			} else if (
 				scrollCenter >=
 				wordElements[wordElements.length - 1].offsetLeft +
 					wordElements[wordElements.length - 1].offsetWidth
 			) {
-				targetTime = timeCacheEnd[wordElements.length - 1]; // gets final time
+				targetTime = timeCache[wordElements.length]; // gets final time from special extra element in timeCache
 			} else {
 				for (let i = 0; i < wordElements.length - 1; i++) {
 					const element = wordElements[i];
@@ -211,11 +233,11 @@
 								scrollCenter,
 								element.offsetLeft,
 								element.offsetLeft + element.offsetWidth,
-								timeCacheStart[i],
-								timeCacheEnd[i]
+								timeCache[i],
+								timeCache[i + 1]
 							);
 						} else {
-							targetTime = timeCacheEnd[i];
+							targetTime = timeCache[i + 1];
 						}
 
 						break;
@@ -226,11 +248,11 @@
 	}
 
 	// get and highlight active word based on audio time
-	$: {
+	$: if (wordElements && wordElements.length > 0) {
 		// TODO optimize hot path, don't need to do this on all lines at the same time?
 		// many are out of view...
 		// activeWordElement = null;
-		if (currentTime <= timeCacheStart[0]) {
+		if (currentTime <= timeCache[0]) {
 			// before first word
 			activeWordElement = null;
 
@@ -238,7 +260,7 @@
 				element.classList.remove('read');
 				element.classList.remove('current');
 			});
-		} else if (currentTime >= timeCacheEnd[timeCacheEnd.length - 1]) {
+		} else if (currentTime >= timeCache[timeCache.length - 1]) {
 			// after last word
 			activeWordElement = null;
 
@@ -248,16 +270,15 @@
 			});
 		} else {
 			// somewhere betwixt
-
 			for (let i = 0; i < wordElements.length; i++) {
 				const element = wordElements[i];
 
-				if (currentTime >= timeCacheStart[i] && currentTime < timeCacheEnd[i]) {
+				if (currentTime >= timeCache[i] && currentTime < timeCache[i + 1]) {
 					// currently active word
 					element.classList.add('current');
 					element.classList.remove('read');
 					activeWordElement = element;
-				} else if (currentTime > timeCacheStart[i]) {
+				} else if (currentTime > timeCache[i]) {
 					// read
 					element.classList.add('read');
 					element.classList.remove('current');
@@ -279,17 +300,17 @@
 
 	// scroll to active word element
 	$: {
-		if (isPlayingAndNotSeeking && scrollWrapperElement) {
+		if (wordElements && wordElements.length > 0 && isPlayingAndNotSeeking && scrollWrapperElement) {
 			// scroll to center of word
 
 			let scrollOffset = 0;
 			if (activeWordElement) {
 				scrollOffset =
 					activeWordElement.offsetLeft + activeWordElement.offsetWidth / 2 - rowWidth / 2;
-			} else if (currentTime < timeCacheStart[0]) {
+			} else if (currentTime < timeCache[0]) {
 				// before first word
 				scrollOffset = wordElements[0].offsetLeft - rowWidth / 2;
-			} else if (currentTime >= timeCacheEnd[timeCacheEnd.length - 1]) {
+			} else if (currentTime >= timeCache[timeCache.length - 1]) {
 				// after last word
 				scrollOffset =
 					wordElements[wordElements.length - 1].offsetLeft +
@@ -304,6 +325,7 @@
 		}
 	}
 
+	// TODO bugs here
 	$: showChapterTitle = currentTime === 0;
 
 	$: {
@@ -358,12 +380,7 @@
 		<div bind:this={scrollAreaElement} class="scroll-area"><!--
 		--><div class="spacer" /><!--
 			-->{#each chapterData.lines as line, chapterIndex}<!--
-				-->{#if line.textStack}<!--
-					-->{@html line.textStack}<!--
-				-->{/if}<!--
-				-->{#if chapterIndex < chapterData.lines.length - 1}<!--
-					-->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<!--
-				-->{/if}<!--
+					-->{@html line}<!--
 		-->{/each}<!--
 		--><div class="spacer" />
 		</div>
@@ -460,17 +477,23 @@
 		user-select: none;
 	}
 
-	:global(div.track ul) {
-		display: inline;
-	}
-
-	:global(div.track li) {
-		display: inline;
-		margin-left: 2rem;
-	}
-
 	:global(body.cursor-grabbing-important *) {
 		cursor: grabbing !important;
+	}
+
+	/* Horizontal space between lines */
+	:global(div.scroll-area span.line) {
+		margin-left: 5em;
+	}
+
+	/* Manual bullets since browser won't draw them on inline lists */
+	:global(div.scroll-area span.list)::before {
+		content: '•';
+		margin-right: 0.25em;
+	}
+
+	:global(div.scroll-area span.list) {
+		margin-left: 1em;
 	}
 
 	/* Unread words */

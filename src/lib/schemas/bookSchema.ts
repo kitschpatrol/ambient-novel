@@ -16,34 +16,14 @@ export const bookSchema = z.object({
 				title: z.string().nonempty(),
 				index: z.number().int().nonnegative(),
 				audio: z.object({
-					files: z.array(z.string().nonempty()),
+					files: z.array(z.string().nonempty()).nonempty(),
 					durationSeconds: z.number().positive()
 				}),
-				lines: z
-					.array(
-						z.object({
-							text: z.string().nonempty().optional(),
-							textStack: z.string().nonempty().optional(),
-							index: z.number().int().nonnegative().optional(),
-							timing: z
-								.object({
-									start: z.number(),
-									end: z.number()
-								})
-								.optional(),
-							// embedding in the text instead...
-							wordTimings: z
-								.array(
-									z.object({
-										word: z.string().nonempty(),
-										start: z.number(),
-										end: z.number()
-									})
-								)
-								.optional()
-						})
-					)
-					.nonempty()
+				narrationTime: z.object({
+					start: z.number().positive(),
+					end: z.number().positive()
+				}),
+				lines: z.array(z.string().nonempty()).nonempty()
 			})
 		)
 		.nonempty()

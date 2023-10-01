@@ -4,6 +4,7 @@ import crypto from 'crypto';
 import fs from 'fs';
 import { glob } from 'glob';
 import leven from 'leven';
+import { HTMLElement, TextNode, type Node } from 'node-html-parser';
 import path from 'path';
 import { stripHtml } from 'string-strip-html';
 
@@ -84,11 +85,6 @@ export function saveFormattedJson(file: string, theObject: object) {
 		encoding: 'utf8'
 	});
 }
-
-// export function stripHtmlTags(input: string): string {
-// 	const htmlRegex = /<\/?[^>]+(>|$)/g;
-// 	return input.replace(htmlRegex, '');
-// }
 
 export function stripHtmlTags(html: string): string {
 	return stripHtml(html).result;
@@ -556,4 +552,43 @@ export function replaceSubstring(
 		throw new Error('Invalid start or end');
 	}
 	return inputStr.slice(0, start) + replacement + inputStr.slice(end);
+}
+
+export function stripTagNodeHtml(rootNode: HTMLElement, tagName: string): void {
+	// Find all elements with the given tag name
+	const elements = rootNode.querySelectorAll(tagName);
+
+	if (tagName === 'li') {
+		console.log('found li');
+		console.log(elements);
+	}
+
+	elements.forEach((element: HTMLElement) => {
+		const parentElement = element.parentNode as HTMLElement;
+
+		if (!parentElement) return; // Skip if the element has no parent
+
+		// Find index of the element within its parent's children array
+		const index = parentElement.childNodes.indexOf(element);
+
+		// Remove the element
+		parentElement.childNodes.splice(index, 1);
+
+		// Insert the children of the element back in place
+		element.childNodes.forEach((child: Node, i: number) => {
+			parentElement.childNodes.splice(index + i, 0, child);
+		});
+	});
+}
+
+export function replaceTextNodeHtml(element: HTMLElement, find: RegExp, replace: string): void {
+	element.childNodes.forEach((node: Node) => {
+		// Text nodes have a nodeType of 3
+		if (node instanceof TextNode) {
+			node.rawText = node.rawText.replace(find, replace);
+		} else if (node instanceof HTMLElement) {
+			// Recursively sanitize child elements
+			replaceTextNodeHtml(node, find, replace);
+		}
+	});
 }
