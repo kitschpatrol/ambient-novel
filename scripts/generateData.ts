@@ -72,18 +72,18 @@ const config = {
 		sourceDir: '/Users/mika/Documents/Projects/Ambient Novel with Scott Wayne Indiana/Audio/Mix',
 		outputDir: './static/audio',
 		outputs: [
-			// {
-			// 	format: 'm4a', // aac
-			// 	quality: 0,
-			// 	sampleRate: 22050,
-			// 	vbr: false
-			// },
 			{
-				format: 'mp3',
+				format: 'm4a', // aac
 				quality: 0,
 				sampleRate: 22050,
 				vbr: false
 			}
+			// {
+			// 	format: 'mp3',
+			// 	quality: 0,
+			// 	sampleRate: 22050,
+			// 	vbr: false
+			// }
 		]
 	}
 };

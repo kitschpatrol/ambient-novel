@@ -13,6 +13,8 @@
 	export let bookData: BookData;
 	const { chapters, title } = bookData;
 
+	let width = 0;
+
 	const chapterColors = [
 		'#f01ef6',
 		'#d827ff',
@@ -52,70 +54,79 @@
 
 		playStatus = playStatus.map((_, i) => randomChapters.includes(i));
 	}
+
+	$: console.log(`width: ${width}`);
 </script>
 
-{#each chapters as chapter, index}
-	<Track
-		chapterData={chapter}
-		chapterColor={chapterColors[index]}
-		bind:isPlaying={playStatus[index]}
-		bind:isReset={resetStatus[index]}
-		bind:reset={resetFunctions[index]}
-		on:ended={() => {
-			if (isPlayingThrough) {
-				const nextChapter = playStatus.indexOf(true) + 1;
+<svelte:window bind:innerWidth={width} />
 
-				// reset everything
-				resetFunctions.forEach((reset) => reset());
+{#if width > 0}
+	{#each chapters as chapter, index}
+		{#if index >= 0}
+			<Track
+				chapterData={chapter}
+				chapterColor={chapterColors[index]}
+				rowWidth={width}
+				bind:isPlaying={playStatus[index]}
+				bind:isReset={resetStatus[index]}
+				bind:reset={resetFunctions[index]}
+				on:ended={() => {
+					if (isPlayingThrough) {
+						const nextChapter = playStatus.indexOf(true) + 1;
 
-				// start next chapter
-				playStatus = playStatus.map((_, i) => i === nextChapter);
-			}
-		}}
-	/>
-{/each}
+						// reset everything
+						resetFunctions.forEach((reset) => reset());
 
-<footer>
-	<div id="controls" class="md-s flex h-full w-full gap-6 max-sm:gap-1">
-		<span class="flex max-w-lg flex-1 items-center justify-start">
-			<Button
-				icon={faBookReader}
-				label="Play Through"
-				isEnabled={!isPlayingThrough}
-				isDown={isPlayingThrough}
-				on:click={() => {
-					isPlayingThrough = true;
-					// reset everything
-					resetFunctions.forEach((reset) => reset());
-
-					// start first chapter
-					playStatus = playStatus.map((_, i) => i === 0);
+						// start next chapter
+						playStatus = playStatus.map((_, i) => i === nextChapter);
+					}
 				}}
 			/>
-			<Button icon={faDiceD20} label="Lucky Blend" on:click={onLuckyBlend} />
-		</span>
-		<span class="flex flex-grow items-center justify-center max-lg:hidden" />
-		<span class="flex max-w-lg flex-1 items-center justify-end">
-			<Button
-				icon={faPause}
-				label="Pause all"
-				isEnabled={somethingPlaying}
-				on:click={() => {
-					playStatus = playStatus.map(() => false);
-				}}
-			/>
-			<Button
-				icon={faRotateBack}
-				label="Reset all"
-				isEnabled={somethingNotReset}
-				on:click={() => {
-					resetFunctions.forEach((reset) => reset());
-					isPlayingThrough = false;
-				}}
-			/>
-		</span>
-	</div>
-</footer>
+		{/if}
+	{/each}
+
+	<footer>
+		<div id="controls" class="md-s flex h-full w-full gap-6 max-sm:gap-1">
+			<span class="flex max-w-lg flex-1 items-center justify-start">
+				<Button
+					icon={faBookReader}
+					label="Play Through"
+					isEnabled={!isPlayingThrough}
+					isDown={isPlayingThrough}
+					on:click={() => {
+						isPlayingThrough = true;
+						// reset everything
+						resetFunctions.forEach((reset) => reset());
+
+						// start first chapter
+						playStatus = playStatus.map((_, i) => i === 0);
+					}}
+				/>
+				<Button icon={faDiceD20} label="Lucky Blend" on:click={onLuckyBlend} />
+			</span>
+			<span class="flex flex-grow items-center justify-center max-lg:hidden" />
+			<span class="flex max-w-lg flex-1 items-center justify-end">
+				<Button
+					icon={faPause}
+					label="Pause all"
+					isEnabled={somethingPlaying}
+					on:click={() => {
+						playStatus = playStatus.map(() => false);
+					}}
+				/>
+				<Button
+					icon={faRotateBack}
+					label="Reset all"
+					isEnabled={somethingNotReset}
+					on:click={() => {
+						resetFunctions.forEach((reset) => reset());
+						isPlayingThrough = false;
+					}}
+				/>
+			</span>
+		</div>
+	</footer>
+{/if}
 
 <style>
 	div#controls {

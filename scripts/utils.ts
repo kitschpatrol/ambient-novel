@@ -2,7 +2,7 @@ import synchronizedPrettier from '@prettier/sync';
 import { execSync } from 'child_process';
 import crypto from 'crypto';
 import fs from 'fs';
-import glob from 'glob';
+import { glob } from 'glob';
 import leven from 'leven';
 import path from 'path';
 import { stripHtml } from 'string-strip-html';

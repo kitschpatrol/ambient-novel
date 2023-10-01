@@ -14,7 +14,7 @@ console.log('worker', { build, files, prerendered, version });
 // can't use automatic vite-plugin-pwa injection because we need to
 // manage the range responses
 
-const filesToCache = files.filter((f) => f.endsWith('mp3'));
+const filesToCache = files.filter((f) => f.endsWith('m4a'));
 const cacheName = `tvm-audio-cache-${getCacheContentHash(filesToCache)}`;
 
 self.addEventListener('activate', () => {
@@ -42,7 +42,7 @@ self.addEventListener('install', () => {
 registerRoute(
 	// ({ request: e }) => 'audio' === e.destination,
 
-	new RegExp(/.*\.(mp3)$/),
+	new RegExp(/.*\.(m4a)$/),
 	new CacheFirst({
 		cacheName,
 		matchOptions: {
@@ -60,10 +60,22 @@ registerRoute(
 );
 
 // precacheAndRoute wasn't playing nice with ranged responses?
-caches.open(cacheName).then((cache) => {
-	const filesToCache = files.filter((f) => f.endsWith('mp3'));
+caches.open(cacheName).then(async (cache) => {
+	const newFilesToCache: string[] = [];
 
-	cache.addAll(filesToCache);
+	for (const file of filesToCache) {
+		const match = await cache.match(file);
+		if (!match) {
+			newFilesToCache.push(file);
+		}
+	}
+
+	if (newFilesToCache.length > 0) {
+		cache.addAll(newFilesToCache);
+		console.log(`cached ${newFilesToCache.length} new files`);
+	} else {
+		console.log('No new files to cache');
+	}
 });
 
 // Helpers
@@ -75,7 +87,7 @@ function simpleHash(str: string): string {
 		hash = (hash << 5) - hash + char;
 		hash = hash & hash; // Convert to 32-bit integer
 	}
-	return hash.toString(16);
+	return Math.abs(hash).toString(16);
 }
 
 function getCacheContentHash(files: string[]): string {

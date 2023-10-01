@@ -19,6 +19,7 @@
 	export let currentTime = 0;
 	export let chapterColor = '#ff0000';
 	export let clickToTogglePlayPause = false;
+	export let rowWidth = 0; // performance thing to set this externally...
 
 	export const reset = () => {
 		isSeeking = false;
@@ -48,8 +49,7 @@
 	let activeWordElement: HTMLSpanElement | null;
 	let scrollLeftBinding: number = 0; // optimization? or just use scrollLeft?
 	let scrollTween = spring(0, springConfig);
-	let scrollAreaWidth = 0;
-	let rowWidth = 0;
+
 	let isUserHoldingDownFingerOrMouse = false;
 	let wheelTimer: NodeJS.Timeout | undefined;
 
@@ -303,13 +303,14 @@
 
 	// only really play the audio if we're not seeking
 	$: isPlayingAndNotSeeking = isPlaying && !isSeeking;
+
+	$: console.log(`rowWidth: ${rowWidth}`);
 </script>
 
 <div class="track">
 	<div
 		class="scroll-wrapper no-scrollbar"
 		bind:this={scrollWrapperElement}
-		bind:clientWidth={rowWidth}
 		on:scroll={(e) => {
 			/* @ts-ignore */
 			scrollLeftBinding = e.target.scrollLeft;
@@ -347,7 +348,7 @@
 	>
 		<!-- funky comments here to avoid implicit white space issues -->
 		<!-- prettier-ignore -->
-		<div bind:this={scrollAreaElement} bind:clientWidth={scrollAreaWidth} class="scroll-area"><!--
+		<div bind:this={scrollAreaElement} class="scroll-area"><!--
 		--><div class="spacer" /><!--
 			-->{#each chapterData.lines as line, chapterIndex}<!--
 				-->{#if line.textStack}<!--
