@@ -2,10 +2,7 @@
 
 <script lang="ts">
 	import { base } from '$app/paths';
-
-	// import Audio from '$lib/components/Audio.svelte';
-	// import Auduio from '$lib/components/AudioFadeProxy.svelte';
-	// import AudioHowler from '$lib/components/AudioHowler.svelte';
+	import AudioHowler from '$lib/components/AudioHowler.svelte';
 	import AudioHowlerFadeProxy from '$lib/components/AudioHowlerFadeProxy.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import type { ChapterData } from '$lib/schemas/bookSchema';
@@ -15,6 +12,7 @@
 	import { onDestroy, onMount, tick } from 'svelte';
 	import { spring } from 'svelte/motion';
 	import { fade } from 'svelte/transition';
+	import UAParser from 'ua-parser-js';
 
 	export let chapterData: ChapterData;
 	export let maxVolume = 1.0;
@@ -67,9 +65,10 @@
 	let scrollBoosterStart = 0;
 
 	let scrollBooster: ScrollBooster | undefined;
+
+	const isMobile = (new UAParser().getDevice().type ?? '') === 'mobile';
 	onMount(() => {
 		// allow drag scrolling on desktop
-
 		scrollBooster = isScrollBoosterEnabled
 			? new ScrollBooster({
 					viewport: scrollWrapperElement,
@@ -383,7 +382,9 @@
 			class="chapter-title absolute left-0 top-0 h-full w-full text-center font-display tracking-wider text-white text-opacity-80 shadow-vm-shadow text-shadow"
 		>
 			<span class="max-sm:hidden">Chapter</span>
-			{chapterData.index + 1}: {chapterData.title}
+			{chapterData.index + 1}
+			<span class="max-sm:hidden">:</span>
+			{chapterData.title}
 		</h2>
 	{/if}
 
@@ -419,19 +420,35 @@
 	{/if}
 </div>
 
-<AudioHowlerFadeProxy
-	audioSources={chapterData.audio.files.map((file) => `${base}/${file}`)}
-	isPlaying={isPlayingAndNotSeeking}
-	{maxVolume}
-	{targetTime}
-	bind:currentTime
-	on:ended
-	on:ended={() => {
-		console.log('ENDED!');
-		// handle this in parent instead
-		//reset();
-	}}
-/>
+{#if isMobile}
+	<AudioHowler
+		audioSources={chapterData.audio.files.map((file) => `${base}/${file}`)}
+		isPlaying={isPlayingAndNotSeeking}
+		{maxVolume}
+		{targetTime}
+		bind:currentTime
+		on:ended
+		on:ended={() => {
+			console.log('ENDED!');
+			// handle this in parent instead
+			//reset();
+		}}
+	/>
+{:else}
+	<AudioHowlerFadeProxy
+		audioSources={chapterData.audio.files.map((file) => `${base}/${file}`)}
+		isPlaying={isPlayingAndNotSeeking}
+		{maxVolume}
+		{targetTime}
+		bind:currentTime
+		on:ended
+		on:ended={() => {
+			console.log('ENDED!');
+			// handle this in parent instead
+			//reset();
+		}}
+	/>
+{/if}
 
 <style>
 	div.track {

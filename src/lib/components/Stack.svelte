@@ -92,18 +92,17 @@
 				bind:isReset={resetStatus[index]}
 				bind:reset={resetFunctions[index]}
 				on:ended={() => {
-					if (isPlayingThrough) {
-						const nextChapter = playStatus.indexOf(true) + 1;
-
-						// reset everything
-						resetFunctions.forEach((reset) => reset());
-
-						// start next chapter
-						playStatus = playStatus.map((_, i) => i === nextChapter);
-					} else {
-						// TODO bugs
-						resetFunctions[index]();
-					}
+					// TODO bugs
+					// if (isPlayingThrough) {
+					// 	const nextChapter = playStatus.indexOf(true) + 1;
+					// 	// reset everything
+					// 	resetFunctions.forEach((reset) => reset());
+					// 	// start next chapter
+					// 	playStatus = playStatus.map((_, i) => i === nextChapter);
+					// } else {
+					// 	// TODO bugs
+					// 	resetFunctions[index]();
+					// }
 				}}
 			/>
 		{:else}

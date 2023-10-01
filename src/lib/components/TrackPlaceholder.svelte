@@ -15,7 +15,9 @@
 		class="chapter-title absolute left-0 top-0 h-full w-full text-center font-display tracking-wider text-white text-opacity-80 shadow-vm-shadow text-shadow"
 	>
 		<span class="max-sm:hidden">Chapter</span>
-		{chapterData.index + 1}: {chapterData.title}
+		{chapterData.index + 1}
+		<span class="max-sm:hidden">:</span>
+		{chapterData.title}
 	</h2>
 </div>
 
