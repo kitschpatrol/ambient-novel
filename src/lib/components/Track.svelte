@@ -2,6 +2,8 @@
 
 <script lang="ts">
 	import { base } from '$app/paths';
+	import Audio from '$lib/components/Audio.svelte';
+	import AudioFadeProxy from '$lib/components/AudioFadeProxy.svelte';
 	import AudioHowler from '$lib/components/AudioHowler.svelte';
 	import AudioHowlerFadeProxy from '$lib/components/AudioHowlerFadeProxy.svelte';
 	import Button from '$lib/components/Button.svelte';
@@ -34,13 +36,13 @@
 		} else {
 			targetTime = 0;
 		}
-		activeWordElement = null;
 
 		scrollTo(0, false);
 	};
 
+	// config
 	const isScrollBoosterEnabled = true;
-	const debug = false;
+	const debug = true;
 	const isSpringEnabled = true;
 	const springConfig = {
 		stiffness: 0.005,
@@ -51,21 +53,18 @@
 	let isSeeking = false;
 	let scrollWrapperElement: HTMLDivElement;
 	let scrollAreaElement: HTMLDivElement;
-	let activeWordElement: HTMLSpanElement | null;
 	let scrollLeftBinding: number = 0; // optimization? or just use scrollLeft?
 	let scrollTween = spring(0, springConfig);
-
+	let activeWordIndex = -1; // optimization vs. referencing the element... -1 means before first word, > wordElements.length means after last word
 	let isUserHoldingDownFingerOrMouse = false;
 	let wheelTimer: NodeJS.Timeout | undefined;
+	let scrollBooster: ScrollBooster | undefined;
 
 	// frame loop
 	let scrollLeft = 0;
 	let scrollLeftDelta = 0;
 	let intervalId: NodeJS.Timer | undefined;
-
 	let scrollBoosterStart = 0;
-
-	let scrollBooster: ScrollBooster | undefined;
 
 	const isMobile = (new UAParser().getDevice().type ?? '') === 'mobile';
 	onMount(() => {
@@ -166,17 +165,6 @@
 		return timeCache;
 	}
 
-	let wordElements: HTMLSpanElement[];
-	$: scrollAreaElement &&
-		(wordElements = Array.from(scrollAreaElement.querySelectorAll<HTMLElement>('span[data-time]')));
-
-	// one element longer than the number of words, to accommodate the "end" time of the last word
-	let timeCache: number[];
-	$: chapterData &&
-		wordElements &&
-		wordElements.length > 0 &&
-		(timeCache = generateTimeCache(chapterData, wordElements));
-
 	function scrollTo(offset: number, rightOnly = true) {
 		// ony scroll to the right
 		if (
@@ -195,145 +183,191 @@
 	}
 
 	function scrollFromTween(offset: number) {
-		if (
-			isSpringEnabled &&
-			scrollWrapperElement &&
-			(!isSeeking || showChapterTitle || (scrollBooster && !scrollBooster.getState().isMoving))
-		) {
-			scrollWrapperElement.scrollLeft = offset;
+		scrollWrapperElement.scrollLeft = offset;
+	}
+
+	function seekTimeFromActiveIndex(index: number) {
+		if (index === -1) {
+			// optimization
+			// must be after, unread
+			targetTime = timeCache[0];
+		} else if (index > wordElements.length) {
+			// optimization
+			// must be before, read
+			targetTime = timeCache[wordElements.length]; // gets final time from special extra element in timeCache
+		} else {
+			targetTime = timeCache[index];
 		}
 	}
 
-	$: scrollFromTween($scrollTween);
+	function seekTimeFromScroll(scrollLeft: number) {
+		// todo optimize with active index?
+		// get active word under playhead
+		const scrollCenter = scrollLeft + rowWidth / 2;
 
-	// seek audio time to active word when scrolling
-	$: {
-		if (isSeeking && wordElements.length > 0) {
-			// get active word under playhead
-			const scrollCenter = scrollLeftBinding + rowWidth / 2;
+		if (scrollCenter <= wordElements[0].offsetLeft) {
+			// scrolled before first word... can't scroll back to chapter reading?
+			targetTime = timeCache[0];
+		} else if (
+			scrollCenter >=
+			wordElements[wordElements.length - 1].offsetLeft +
+				wordElements[wordElements.length - 1].offsetWidth
+		) {
+			targetTime = timeCache[wordElements.length]; // gets final time from special extra element in timeCache
+		} else {
+			for (let i = 0; i < wordElements.length - 1; i++) {
+				const element = wordElements[i];
+				const nextElement = wordElements[i + 1];
 
-			if (scrollCenter <= wordElements[0].offsetLeft) {
-				// scrolled before first word... can't scroll back to chapter reading?
-				targetTime = timeCache[0];
-			} else if (
-				scrollCenter >=
-				wordElements[wordElements.length - 1].offsetLeft +
-					wordElements[wordElements.length - 1].offsetWidth
-			) {
-				targetTime = timeCache[wordElements.length]; // gets final time from special extra element in timeCache
-			} else {
-				for (let i = 0; i < wordElements.length - 1; i++) {
-					const element = wordElements[i];
-					const nextElement = wordElements[i + 1];
-
-					if (scrollCenter > element.offsetLeft && scrollCenter <= nextElement.offsetLeft) {
-						if (scrollCenter <= element.offsetLeft + element.offsetWidth) {
-							// guess intermediate time
-							targetTime = mapValue(
-								scrollCenter,
-								element.offsetLeft,
-								element.offsetLeft + element.offsetWidth,
-								timeCache[i],
-								timeCache[i + 1]
-							);
-						} else {
-							targetTime = timeCache[i + 1];
-						}
-
-						break;
+				if (scrollCenter > element.offsetLeft && scrollCenter <= nextElement.offsetLeft) {
+					if (scrollCenter <= element.offsetLeft + element.offsetWidth) {
+						// guess intermediate time
+						targetTime = mapValue(
+							scrollCenter,
+							element.offsetLeft,
+							element.offsetLeft + element.offsetWidth,
+							timeCache[i],
+							timeCache[i + 1]
+						);
+					} else {
+						targetTime = timeCache[i + 1];
 					}
+
+					break;
 				}
 			}
 		}
 	}
 
-	// get and highlight active word based on audio time
-	$: if (wordElements && wordElements.length > 0) {
+	function updateWordStyles(index: number) {
+		// console.time('updateWordStyles');
 		// TODO optimize hot path, don't need to do this on all lines at the same time?
 		// many are out of view...
-		// activeWordElement = null;
-		if (currentTime <= timeCache[0]) {
-			// before first word
-			activeWordElement = null;
 
+		if (index === -1) {
+			// optimization
+			// must be after, unread
 			wordElements.forEach((element) => {
-				element.classList.remove('read');
-				element.classList.remove('current');
+				element.classList.contains('read') && element.classList.remove('read');
+				element.classList.contains('current') && element.classList.remove('current');
 			});
-		} else if (currentTime >= timeCache[timeCache.length - 1]) {
-			// after last word
-			activeWordElement = null;
-
+		} else if (index > wordElements.length) {
+			// optimization
+			// must be before, read
 			wordElements.forEach((element) => {
-				element.classList.add('read');
-				element.classList.remove('current');
+				!element.classList.contains('read') && element.classList.add('read');
+				element.classList.contains('current') && element.classList.remove('current');
 			});
 		} else {
-			// somewhere betwixt
 			for (let i = 0; i < wordElements.length; i++) {
 				const element = wordElements[i];
 
-				if (currentTime >= timeCache[i] && currentTime < timeCache[i + 1]) {
-					// currently active word
-					element.classList.add('current');
-					element.classList.remove('read');
-					activeWordElement = element;
-				} else if (currentTime > timeCache[i]) {
-					// read
-					element.classList.add('read');
-					element.classList.remove('current');
+				if (i < index) {
+					// must be before, read
+					!element.classList.contains('read') && element.classList.add('read');
+					element.classList.contains('current') && element.classList.remove('current');
+				} else if (i > index) {
+					// must be after, unread
+					element.classList.contains('read') && element.classList.remove('read');
+					element.classList.contains('current') && element.classList.remove('current');
 				} else {
-					// unread
-					element.classList.remove('read');
-					element.classList.remove('current');
+					// must be equal, current
+					!element.classList.contains('current') && element.classList.add('current');
+					element.classList.contains('read') && element.classList.remove('read');
+				}
+			}
+		}
+
+		// console.timeEnd('updateWordStyles');
+	}
+
+	// TODO only search if time delta is greater than minimum word spacing?
+	// prob not this is pretty fast
+	function findActiveWordIndex(time: number) {
+		if (time <= timeCache[0]) {
+			// before first word
+			activeWordIndex = -1;
+		} else if (time >= timeCache[timeCache.length - 1]) {
+			// after last word
+			activeWordIndex = wordElements.length;
+		} else {
+			// somewhere between
+			for (let i = 0; i < wordElements.length; i++) {
+				if (time < timeCache[i]) {
+					activeWordIndex = i - 1; // why - 1?
+					return;
 				}
 			}
 		}
 	}
 
 	// keep spring starting point up to date if we're scrolling manually
-	$: {
-		if (isSeeking) {
-			scrollTween = spring(scrollLeftBinding, springConfig);
+	function updateSpringStartPoint(startPoint: number) {
+		scrollTween = spring(startPoint, springConfig);
+	}
+
+	// scroll to center of word active word element
+	function scrollToActiveWordIndex(index: number) {
+		let scrollOffset = 0;
+		if (activeWordIndex > 0 && activeWordIndex < wordElements.length) {
+			scrollOffset =
+				wordElements[activeWordIndex].offsetLeft +
+				wordElements[activeWordIndex].offsetWidth / 2 -
+				rowWidth / 2;
+		} else if (currentTime < timeCache[0]) {
+			// before first word
+			scrollOffset = wordElements[0].offsetLeft - rowWidth / 2;
+		} else if (currentTime >= timeCache[timeCache.length - 1]) {
+			// after last word
+			scrollOffset =
+				wordElements[wordElements.length - 1].offsetLeft +
+				wordElements[wordElements.length - 1].offsetWidth -
+				rowWidth / 2;
+		} else {
+			// do nothing
+			scrollOffset = scrollWrapperElement.scrollLeft;
 		}
+
+		scrollTo(scrollOffset);
 	}
 
-	// scroll to active word element
-	$: {
-		if (wordElements && wordElements.length > 0 && isPlayingAndNotSeeking && scrollWrapperElement) {
-			// scroll to center of word
+	//Reactive zone --------------------------
+	$: wordElements =
+		(scrollAreaElement &&
+			Array.from(scrollAreaElement.querySelectorAll<HTMLSpanElement>('span[data-time]'))) ||
+		undefined;
 
-			let scrollOffset = 0;
-			if (activeWordElement) {
-				scrollOffset =
-					activeWordElement.offsetLeft + activeWordElement.offsetWidth / 2 - rowWidth / 2;
-			} else if (currentTime < timeCache[0]) {
-				// before first word
-				scrollOffset = wordElements[0].offsetLeft - rowWidth / 2;
-			} else if (currentTime >= timeCache[timeCache.length - 1]) {
-				// after last word
-				scrollOffset =
-					wordElements[wordElements.length - 1].offsetLeft +
-					wordElements[wordElements.length - 1].offsetWidth -
-					rowWidth / 2;
-			} else {
-				// do nothing
-				scrollOffset = scrollWrapperElement.scrollLeft;
-			}
+	// one element longer than the number of words, to accommodate the "end" time of the last word
+	$: timeCache =
+		(chapterData &&
+			wordElements &&
+			wordElements.length > 0 &&
+			generateTimeCache(chapterData, wordElements)) ||
+		[]; // hmm
 
-			scrollTo(scrollOffset);
-		}
-	}
+	$: showChapterTitle = currentTime === 0; // TODO bugs here
+	$: isReset = targetTime === 0 && currentTime === 0;
+	$: isPlayingAndNotSeeking = isPlaying && !isSeeking; // only really play the audio if we're not seeking
 
-	// TODO bugs here
-	$: showChapterTitle = currentTime === 0;
+	$: wordElements && wordElements.length > 0 && findActiveWordIndex(currentTime);
+	$: wordElements && wordElements.length > 0 && updateWordStyles(activeWordIndex);
+	$: isSeeking && updateSpringStartPoint(scrollLeftBinding);
+	$: wordElements &&
+		wordElements.length > 0 &&
+		isPlayingAndNotSeeking &&
+		scrollWrapperElement &&
+		scrollToActiveWordIndex(activeWordIndex);
 
-	$: {
-		isReset = targetTime === 0 && currentTime === 0;
-	}
-
-	// only really play the audio if we're not seeking
-	$: isPlayingAndNotSeeking = isPlaying && !isSeeking;
+	// seek audio time to active word when scrolling
+	$: wordElements && wordElements.length > 0 && isSeeking && seekTimeFromScroll(scrollLeftBinding);
+	// $: wordElements &&
+	// 	wordElements.length > 0 &&
+	// 	isSeeking &&
+	// 	seekTimeFromActiveIndex(activeWordIndex);
+	$: isSpringEnabled &&
+		scrollWrapperElement &&
+		(!isSeeking || showChapterTitle || (scrollBooster && !scrollBooster.getState().isMoving)) &&
+		scrollFromTween($scrollTween);
 </script>
 
 <div class="track">
@@ -425,20 +459,19 @@
 		<div
 			class="pointer-events-none absolute left-0 top-0 h-full cursor-none touch-none text-red-400"
 		>
-			<p>isplaying: {isPlaying}</p>
+			<p>activeWordIndex: {activeWordIndex}</p>
+			<p>isplaying: {isPlayingAndNotSeeking}</p>
 			<p>targetTime: {Math.round(targetTime)}</p>
 			<p>currentTime: {Math.round(currentTime)}</p>
 			<p>seeking: {isSeeking}</p>
 			<p>isUserHoldingDownFingerOrMouse: {isUserHoldingDownFingerOrMouse}</p>
 			<!-- <p class="inline-block">scrollLeftDelta: {scrollLeftDelta}</p> -->
-
-			<p>activeWordElement: {activeWordElement}</p>
 		</div>
 	{/if}
 </div>
 
 {#if isMobile}
-	<AudioHowler
+	<Audio
 		audioSources={chapterData.audio.files.map((file) => `${base}/${file}`)}
 		isPlaying={isPlayingAndNotSeeking}
 		{maxVolume}
@@ -452,7 +485,7 @@
 		}}
 	/>
 {:else}
-	<AudioHowlerFadeProxy
+	<AudioFadeProxy
 		audioSources={chapterData.audio.files.map((file) => `${base}/${file}`)}
 		isPlaying={isPlayingAndNotSeeking}
 		{maxVolume}
