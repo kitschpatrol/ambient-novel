@@ -1,8 +1,9 @@
 <svelte:options immutable={true} />
 
 <script lang="ts">
-	import Audio from '$lib/components/Audio.svelte';
-	import AudioFadeProxy from '$lib/components/AudioFadeProxy.svelte';
+	// import Audio from '$lib/components/Audio.svelte';
+	// import Auduio from '$lib/components/AudioFadeProxy.svelte';
+	import AudioHowler from '$lib/components/AudioHowler.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import type { ChapterData } from '$lib/schemas/bookSchema';
 	import { mapValue } from '$lib/utils/math/mapValue';
@@ -130,7 +131,7 @@
 
 	onDestroy(() => {
 		if (intervalId) {
-			clearInterval(intervalId);
+			clearInterval(intervalId as any);
 		}
 	});
 
@@ -410,7 +411,7 @@
 	{/if}
 </div>
 
-<AudioFadeProxy
+<AudioHowler
 	audioSources={chapterData.audio.files}
 	isPlaying={isPlayingAndNotSeeking}
 	{maxVolume}

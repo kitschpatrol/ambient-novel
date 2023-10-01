@@ -10,9 +10,8 @@
 	export let isPlaying = false;
 	export let maxVolume = 1.0;
 	export let loop = false;
-	export let currentTime = 0;
-	export let seeking = false;
-	export let targetTime = 0;
+	export let currentTime = 0; // actual time of audio
+	export let targetTime = 0; // time we're requesting
 
 	let audioElement: HTMLAudioElement;
 
@@ -77,7 +76,6 @@
 	bind:currentTime={currentTimeProxy}
 	on:ended
 	bind:this={audioElement}
-	bind:seeking
 	transition:fadeVolume={{ duration: 1000 }}
 	on:outrostart={() => {
 		// don't send time updates during transitions

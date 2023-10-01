@@ -20,7 +20,6 @@
 		"test": "playwright test",
 		"test:unit": "vitest"
 	},
-	"dependencies": {},
 	"devDependencies": {
 		"@cyber2024/pdf-parse-fixed": "^1.2.5",
 		"@fortawesome/free-solid-svg-icons": "^6.4.2",
@@ -30,6 +29,7 @@
 		"@sveltejs/kit": "^1.25.1",
 		"@tailwindcss/container-queries": "^0.1.1",
 		"@types/glob": "^8.1.0",
+		"@types/howler": "^2.2.9",
 		"@types/html-minifier": "^4.0.3",
 		"@types/lodash": "^4.14.199",
 		"@types/mime": "^3.0.2",
@@ -45,6 +45,7 @@
 		"eslint": "^8.50.0",
 		"eslint-config-prettier": "^9.0.0",
 		"eslint-plugin-svelte": "^2.33.2",
+		"howler": "^2.2.4",
 		"html-minifier": "^4.0.0",
 		"leven": "^4.0.0",
 		"license-checker-rseidelsohn": "^4.2.8",
