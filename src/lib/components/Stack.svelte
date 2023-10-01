@@ -1,6 +1,8 @@
 <script lang="ts">
 	import Button from '$lib/components/Button.svelte';
+	import Header from '$lib/components/Header.svelte';
 	import Track from '$lib/components/Track.svelte';
+	import TrackPlacholder from '$lib/components/TrackPlaceholder.svelte';
 	import type { BookData } from '$lib/schemas/bookSchema';
 	import {
 		faBookReader,
@@ -9,9 +11,12 @@
 		faRotateBack
 	} from '@fortawesome/free-solid-svg-icons';
 	import shuffle from 'lodash/shuffle';
+	import { onMount } from 'svelte';
+	import Page from '../../routes/+page.svelte';
 
 	export let bookData: BookData;
 	const { chapters, title } = bookData;
+	const loadDelay = 100;
 
 	let width = 0;
 
@@ -54,31 +59,56 @@
 
 		playStatus = playStatus.map((_, i) => randomChapters.includes(i));
 	}
+
+	let loadCount = -1;
+	let mounted = false;
+	onMount(() => {
+		mounted = true;
+		setTimeout(() => {
+			loadCount++;
+		}, loadDelay);
+	});
+
+	$: isAllLoaded = loadCount === chapters.length;
 </script>
 
 <svelte:window bind:innerWidth={width} />
 
-{#if width > 0}
+{#if mounted}
+	<Header />
+
 	{#each chapters as chapter, index}
-		<Track
-			chapterData={chapter}
-			chapterColor={chapterColors[index]}
-			rowWidth={width}
-			bind:isPlaying={playStatus[index]}
-			bind:isReset={resetStatus[index]}
-			bind:reset={resetFunctions[index]}
-			on:ended={() => {
-				if (isPlayingThrough) {
-					const nextChapter = playStatus.indexOf(true) + 1;
+		{#if loadCount >= index && width > 0}
+			<Track
+				ready={() => {
+					setTimeout(() => {
+						loadCount++;
+					}, loadDelay);
+				}}
+				chapterData={chapters[index]}
+				chapterColor={chapterColors[index]}
+				rowWidth={width}
+				bind:isPlaying={playStatus[index]}
+				bind:isReset={resetStatus[index]}
+				bind:reset={resetFunctions[index]}
+				on:ended={() => {
+					if (isPlayingThrough) {
+						const nextChapter = playStatus.indexOf(true) + 1;
 
-					// reset everything
-					resetFunctions.forEach((reset) => reset());
+						// reset everything
+						resetFunctions.forEach((reset) => reset());
 
-					// start next chapter
-					playStatus = playStatus.map((_, i) => i === nextChapter);
-				}
-			}}
-		/>
+						// start next chapter
+						playStatus = playStatus.map((_, i) => i === nextChapter);
+					} else {
+						// TODO bugs
+						resetFunctions[index]();
+					}
+				}}
+			/>
+		{:else}
+			<TrackPlacholder chapterData={chapters[index]} chapterColor={chapterColors[index]} />
+		{/if}
 	{/each}
 
 	<footer>
@@ -87,7 +117,7 @@
 				<Button
 					icon={faBookReader}
 					label="Play Through"
-					isEnabled={!isPlayingThrough}
+					isEnabled={!isPlayingThrough && isAllLoaded}
 					isDown={isPlayingThrough}
 					on:click={() => {
 						isPlayingThrough = true;
@@ -98,14 +128,19 @@
 						playStatus = playStatus.map((_, i) => i === 0);
 					}}
 				/>
-				<Button icon={faDiceD20} label="Lucky Blend" on:click={onLuckyBlend} />
+				<Button
+					icon={faDiceD20}
+					isEnabled={isAllLoaded}
+					label="Lucky Blend"
+					on:click={onLuckyBlend}
+				/>
 			</span>
 			<span class="flex flex-grow items-center justify-center max-lg:hidden" />
 			<span class="flex max-w-lg flex-1 items-center justify-end">
 				<Button
 					icon={faPause}
 					label="Pause all"
-					isEnabled={somethingPlaying}
+					isEnabled={somethingPlaying && isAllLoaded}
 					on:click={() => {
 						playStatus = playStatus.map(() => false);
 					}}
@@ -113,7 +148,7 @@
 				<Button
 					icon={faRotateBack}
 					label="Reset all"
-					isEnabled={somethingNotReset}
+					isEnabled={somethingNotReset && isAllLoaded}
 					on:click={() => {
 						resetFunctions.forEach((reset) => reset());
 						isPlayingThrough = false;

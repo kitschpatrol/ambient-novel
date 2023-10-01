@@ -5,13 +5,14 @@
 
 	// import Audio from '$lib/components/Audio.svelte';
 	// import Auduio from '$lib/components/AudioFadeProxy.svelte';
-	import AudioHowler from '$lib/components/AudioHowler.svelte';
+	// import AudioHowler from '$lib/components/AudioHowler.svelte';
+	import AudioHowlerFadeProxy from '$lib/components/AudioHowlerFadeProxy.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import type { ChapterData } from '$lib/schemas/bookSchema';
 	import { mapValue } from '$lib/utils/math/mapValue';
 	import { faPause, faPlay, faRotateBack } from '@fortawesome/free-solid-svg-icons';
 	import ScrollBooster from 'scrollbooster';
-	import { onDestroy, onMount } from 'svelte';
+	import { onDestroy, onMount, tick } from 'svelte';
 	import { spring } from 'svelte/motion';
 	import { fade } from 'svelte/transition';
 
@@ -132,7 +133,9 @@
 			loop();
 		}, 100);
 
-		ready();
+		tick().then(() => {
+			ready();
+		});
 	});
 
 	onDestroy(() => {
@@ -386,6 +389,7 @@
 
 	<div class:w-full={isReset} class="absolute left-0 top-0 flex h-full">
 		<Button
+			isTransitionEnabled={true}
 			icon={isPlaying ? faPause : faPlay}
 			on:click={() => {
 				isPlaying = !isPlaying;
@@ -395,7 +399,7 @@
 
 	{#if !isReset}
 		<div class="absolute right-0 top-0 flex h-full">
-			<Button icon={faRotateBack} on:click={reset} />
+			<Button icon={faRotateBack} on:click={reset} isTransitionEnabled={true} />
 		</div>
 	{/if}
 
@@ -415,7 +419,7 @@
 	{/if}
 </div>
 
-<AudioHowler
+<AudioHowlerFadeProxy
 	audioSources={chapterData.audio.files.map((file) => `${base}/${file}`)}
 	isPlaying={isPlayingAndNotSeeking}
 	{maxVolume}

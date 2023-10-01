@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { base } from '$app/paths';
+	import { linear } from 'svelte/easing';
+	import type { FadeParams, TransitionConfig } from 'svelte/transition';
 
 	import { Howl } from 'howler';
-	import { onDestroy } from 'svelte';
+	import { createEventDispatcher, onDestroy } from 'svelte';
 
 	export let audioSources: string[];
 	export let isPlaying = false;
@@ -12,13 +13,37 @@
 	export let targetTime = 0; // time we're requesting
 
 	let loaded = false;
+	let volume = 1.0;
+
+	export function fadeVolumeHowler(
+		_: HTMLDivElement,
+		{ delay = 0, duration = 600, easing = linear }: FadeParams = {}
+	): TransitionConfig {
+		return {
+			delay,
+			duration,
+			easing,
+			tick: (t) => {
+				volume = maxVolume * t;
+			}
+		};
+	}
+
+	// false crashes on ios... but managing through howler still seems better than Audio.svelte???
+	const html5 = true;
+	const dispatch = createEventDispatcher<{ ended: null }>();
 
 	// TODO forward end event
 
 	const sound = new Howl({
 		src: audioSources,
-		html5: true, // false crashes on ios : (
+		html5,
 		preload: false // service worker should keep it hot
+	});
+
+	sound.on('end', () => {
+		// TODO this is weirdly buggy
+		if (isPlaying) dispatch('ended');
 	});
 
 	function updateCurrentTime() {
@@ -37,12 +62,13 @@
 	});
 
 	$: sound.loop(loop);
-	$: sound.volume(maxVolume);
+	$: sound.volume(volume * maxVolume);
 
 	$: {
 		if (isPlaying) {
-			if (!loaded) {
-				// sound.load();
+			// only load on play if we're not using html5 audio
+			if (!html5 && !loaded) {
+				sound.load();
 				loaded = true;
 			}
 			if (!sound.playing()) {
@@ -61,3 +87,4 @@
 </script>
 
 <!-- HTML -->
+<div style="display: none;" transition:fadeVolumeHowler={{ duration: 1000 }} />

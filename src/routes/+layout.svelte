@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Header from '$lib/components/Header.svelte';
 	// import { onMount } from 'svelte';
 	// import { pwaInfo } from 'virtual:pwa-info';
 	import '/src/global.css';
@@ -27,9 +26,4 @@
 	// $: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : '';
 </script>
 
-<svelte:head>
-	<!-- {@html webManifest} -->
-</svelte:head>
-
-<Header />
 <slot />

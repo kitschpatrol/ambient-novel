@@ -6,10 +6,19 @@
 	export let label: string | null = null;
 	export let icon: unknown | null; // Using IconDefinition causes type errors...
 	export let isEnabled = true;
+	export let isTransitionEnabled = false;
+
+	// setting duration to 0 is not enough for a smooth transition
+	// https://stackoverflow.com/a/70629246/2437832
+	function maybe(node: HTMLElement, options: any) {
+		if (isTransitionEnabled) {
+			return options.fn(node, options);
+		}
+	}
 </script>
 
 <button
-	transition:fade={{ duration: 200 }}
+	transition:maybe={{ fn: fade, duration: 250 }}
 	disabled={!isEnabled}
 	on:click
 	class="h-full w-full px-1 pb-3 pt-2 first:pl-5 last:pr-5"
