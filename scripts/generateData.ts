@@ -323,8 +323,8 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 
 		const lineHtml = parse(line);
 
-		// strip breaks
-		stripTagNodeHtml(lineHtml, 'br');
+		// strip breaks and replace with a space
+		stripTagNodeHtml(lineHtml, 'br', ' ');
 
 		// Add bullets via css instead of li elements
 		lineHtml.querySelectorAll('li').forEach((li) => {

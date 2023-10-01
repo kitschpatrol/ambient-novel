@@ -554,8 +554,11 @@ export function replaceSubstring(
 	return inputStr.slice(0, start) + replacement + inputStr.slice(end);
 }
 
-export function stripTagNodeHtml(rootNode: HTMLElement, tagName: string): void {
-	// Find all elements with the given tag name
+export function stripTagNodeHtml(
+	rootNode: HTMLElement,
+	tagName: string,
+	replacementText?: string
+): void {
 	const elements = rootNode.querySelectorAll(tagName);
 
 	elements.forEach((element: HTMLElement) => {
@@ -569,9 +572,15 @@ export function stripTagNodeHtml(rootNode: HTMLElement, tagName: string): void {
 		// Remove the element
 		parentElement.childNodes.splice(index, 1);
 
+		// Create and insert the replacement text node, if specified
+		if (replacementText !== undefined) {
+			const textNode = new TextNode(replacementText);
+			parentElement.childNodes.splice(index, 0, textNode);
+		}
+
 		// Insert the children of the element back in place
 		element.childNodes.forEach((child: Node, i: number) => {
-			parentElement.childNodes.splice(index + i, 0, child);
+			parentElement.childNodes.splice(index + (replacementText ? 1 : 0) + i, 0, child);
 		});
 	});
 }
