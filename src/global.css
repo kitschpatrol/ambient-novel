@@ -50,7 +50,7 @@ html {
 }
 
 body {
-	min-height: 100vh;
+	min-height: 100dvh;
 	/* mobile viewport bug fix */
 	min-height: -webkit-fill-available;
 }
@@ -75,11 +75,11 @@ body {
 	/* animation: spin 30s infinite linear; */
 }
 
-@keyframes spin {
+/* @keyframes spin {
 	to {
 		--backgroundGradientAngle: 360deg;
 	}
-}
+} */
 
 ::selection {
 	color: white;

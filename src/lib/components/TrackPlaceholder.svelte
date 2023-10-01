@@ -24,13 +24,13 @@
 <style>
 	div.track {
 		width: 100vw;
-		height: calc(100vh / 12);
+		height: calc(100dvh / 12);
 		position: relative;
 		user-select: none;
 	}
 
 	h2.chapter-title {
-		font-size: min(calc(100vh / 36), 1.75rem);
-		line-height: calc(100vh / 12);
+		font-size: min(calc(100dvh / 36), 1.75rem);
+		line-height: calc(100dvh / 12);
 	}
 </style>

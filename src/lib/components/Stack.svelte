@@ -165,7 +165,7 @@
 
 	footer {
 		width: 100vw;
-		height: calc(100vh / 12);
+		height: calc(100dvh / 12);
 	}
 
 	footer {

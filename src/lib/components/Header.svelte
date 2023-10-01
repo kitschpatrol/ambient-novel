@@ -41,12 +41,12 @@
 <style>
 	header {
 		width: 100vw;
-		height: calc(100vh / 12);
+		height: calc(100dvh / 12);
 		background: #f01ef6;
 		background: linear-gradient(#afafaf80 10%, #0000006b 100%);
 	}
 	header h1 {
-		font-size: min(calc(100vh / 24), calc(100vw / 14));
-		line-height: calc(100vh / 12);
+		font-size: min(calc(100dvh / 24), calc(100vw / 14));
+		line-height: calc(100dvh / 12);
 	}
 </style>

@@ -371,7 +371,7 @@
 
 	{#if debug}
 		<div
-			class="mouse pointer-events-none absolute left-[50%] top-0 h-[10vh] w-1 touch-none bg-red-500"
+			class="mouse pointer-events-none absolute left-[50%] top-0 h-[10dvh] w-1 touch-none bg-red-500"
 		/>
 	{/if}
 
@@ -453,7 +453,7 @@
 <style>
 	div.track {
 		width: 100vw;
-		height: calc(100vh / 12);
+		height: calc(100dvh / 12);
 		position: relative;
 		/* background-color: white; */
 		background: linear-gradient(0deg, #f8f8f8 0%, white 13%, white 100%);
@@ -509,9 +509,9 @@
 	div.scroll-area {
 		color: black;
 		font-family: serif;
-		font-size: min(calc(100vh / 36), 1.75rem);
-		line-height: calc(100vh / 12);
-		height: calc(100vh / 12);
+		font-size: min(calc(100dvh / 36), 1.75rem);
+		line-height: calc(100dvh / 12);
+		height: calc(100dvh / 12);
 		pointer-events: none;
 		touch-action: none;
 	}
@@ -521,7 +521,7 @@
 	}
 
 	h2.chapter-title {
-		font-size: min(calc(100vh / 36), 1.75rem);
-		line-height: calc(100vh / 12);
+		font-size: min(calc(100dvh / 36), 1.75rem);
+		line-height: calc(100dvh / 12);
 	}
 </style>
