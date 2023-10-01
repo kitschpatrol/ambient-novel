@@ -17,7 +17,7 @@
 
 	const sound = new Howl({
 		src: audioSources,
-		html5: false,
+		html5: true, // false crashes on ios : (
 		preload: false // service worker should keep it hot
 	});
 
@@ -42,7 +42,7 @@
 	$: {
 		if (isPlaying) {
 			if (!loaded) {
-				sound.load();
+				// sound.load();
 				loaded = true;
 			}
 			if (!sound.playing()) {
