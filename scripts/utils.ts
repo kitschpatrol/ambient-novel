@@ -558,11 +558,6 @@ export function stripTagNodeHtml(rootNode: HTMLElement, tagName: string): void {
 	// Find all elements with the given tag name
 	const elements = rootNode.querySelectorAll(tagName);
 
-	if (tagName === 'li') {
-		console.log('found li');
-		console.log(elements);
-	}
-
 	elements.forEach((element: HTMLElement) => {
 		const parentElement = element.parentNode as HTMLElement;
 

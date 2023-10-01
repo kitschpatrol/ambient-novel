@@ -152,6 +152,8 @@ The app is deployed via a GitHub action to Scott's DreamHost server, which runs 
 
 ## Dev notes
 
+No bundle size advantage to moving content preprocessing deps only to their own package.json.
+
 - https://github.com/studio-freight/lenis
 - https://github.com/Adoratorio/hades
 
