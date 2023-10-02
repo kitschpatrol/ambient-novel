@@ -41,6 +41,7 @@
 	let playStatus = Array.from({ length: chapters.length }, () => false);
 	let resetStatus = Array.from({ length: chapters.length }, () => true);
 
+	let isResetting = false;
 	let isPlayingThrough = false;
 
 	$: somethingPlaying = playStatus.indexOf(true) > -1;
@@ -48,7 +49,7 @@
 
 	$: {
 		// messing with anything stops playing through
-		if (isPlayingThrough && playStatus.filter((v) => v).length !== 1) {
+		if (!isResetting && isPlayingThrough && playStatus.filter((v) => v).length !== 1) {
 			isPlayingThrough = false;
 		}
 	}
@@ -100,10 +101,11 @@
 	// returns when all animations are done
 	async function resetAll() {
 		// only reset those in need
-		isPlayingThrough = false;
+		isResetting = true;
 		const chapterIndicesToReset = getIndicesMatchingValue(resetStatus, false);
 		await delayedForEach(chapterIndicesToReset, (index) => (resetStatus[index] = true), resetDelay);
 		await sleep(config.chapterCoverTransitionDuration * chapterIndicesToReset.length);
+		isResetting = false;
 	}
 
 	const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -130,15 +132,22 @@
 				bind:isReset={resetStatus[index]}
 				on:ended={() => {
 					// TODO bugs
-					// if (isPlayingThrough) {
-					// 	const nextChapter = playStatus.indexOf(true) + 1;
-					// 	// reset everything
-					// 	resetFunctions.forEach((reset) => reset());
-					// 	// start next chapter
-					// 	playStatus = playStatus.map((_, i) => i === nextChapter);
-					// } else {
-					// 	resetFunctions[index]();
-					// }
+					console.log('chapter ended');
+					if (isPlayingThrough) {
+						// TODO
+						const currentChapterIndex = playStatus.indexOf(true);
+						resetAll(); // this throws the right flag
+
+						if (currentChapterIndex < chapters.length - 1) {
+							const nextChapterIndex = playStatus.indexOf(true) + 1;
+							playStatus[nextChapterIndex] = true;
+							isPlayingThrough = true;
+						} else {
+							console.log('you reached the end');
+						}
+					} else {
+						resetStatus[index] = true;
+					}
 				}}
 			/>
 		{:else}
@@ -154,13 +163,10 @@
 					label="Play Through"
 					isEnabled={!isPlayingThrough && isAllLoaded}
 					isDown={isPlayingThrough}
-					on:click={() => {
+					on:click={async () => {
+						await resetAll();
+						playStatus[0] = true;
 						isPlayingThrough = true;
-						// reset everything
-						// resetFunctions.forEach((reset) => reset());
-
-						// start first chapter
-						playStatus = playStatus.map((_, i) => i === 0);
 					}}
 				/>
 				<Button

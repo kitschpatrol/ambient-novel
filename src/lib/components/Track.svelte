@@ -9,6 +9,7 @@
 	import ChapterCover from '$lib/components/ChapterCover.svelte';
 	import * as config from '$lib/config';
 	import type { ChapterData } from '$lib/schemas/bookSchema';
+	import { setAndForceInvalidation } from '$lib/utils/svelte/forceInvalidation';
 	import { faPause, faPlay, faRotateBack } from '@fortawesome/free-solid-svg-icons';
 	import ScrollBooster from 'scrollbooster';
 	import { onDestroy, onMount, tick } from 'svelte';
@@ -38,13 +39,17 @@
 
 	let isSeeking = false;
 	let scrollWrapperElement: HTMLDivElement;
-	let scrollAreaElement: HTMLDivElement;
 	let scrollLeftBinding: number = 0; // optimization? or just use scrollLeft?
 	let scrollTween = spring(0, springConfig);
 	let activeWordIndex = -1; // optimization vs. referencing the element... -1 means before first word, > wordElements.length means after last word
 	let wheelTimer: NodeJS.Timeout | undefined;
-	let scrollBooster: ScrollBooster | undefined;
 	let isChapterCoverVisible = true;
+
+	let scrollBooster: ScrollBooster | undefined;
+	let timeCache: number[]; // one element longer than the number of words, to accommodate the "end" time of the last word
+	let wordElements: HTMLSpanElement[];
+	let isMounted = false;
+	let scrollAreaElement: HTMLDivElement;
 
 	// frame loop
 	let isUserHoldingDownFingerOrMouse = false;
@@ -118,6 +123,14 @@
 		intervalId = setInterval(function () {
 			loop();
 		}, 100);
+
+		wordElements = Array.from(
+			scrollAreaElement.querySelectorAll<HTMLSpanElement>('span[data-time]')
+		);
+
+		timeCache = generateTimeCache(chapterData, wordElements) as number[];
+
+		isMounted = true;
 
 		tick().then(() => {
 			ready();
@@ -357,47 +370,24 @@
 	// if we set target time while reset, react immediately
 	// todo mobile safari bugs?
 	function setTargetTime(time: number) {
-		if (isReset && isChapterCoverVisible && wordElements) {
-			console.log('zooming to target');
-			const activeWordIndex = wordIndexFromTime(time);
-			const scrollPosition =
-				activeWordIndex === -1 ? 0 : scrollOffsetFromWordIndex(activeWordIndex);
+		if (isMounted && isReset && isChapterCoverVisible) {
+			const wordIndex = wordIndexFromTime(time);
+			const scrollPosition = wordIndex === -1 ? 0 : scrollOffsetFromWordIndex(wordIndex);
 			scrollToOffset(scrollPosition, false, true);
 		}
 	}
 
 	//Reactive zone --------------------------
 
-	$: wordElements =
-		(scrollAreaElement &&
-			Array.from(scrollAreaElement.querySelectorAll<HTMLSpanElement>('span[data-time]'))) ||
-		undefined;
-
-	// one element longer than the number of words, to accommodate the "end" time of the last word
-	$: timeCache =
-		(chapterData &&
-			wordElements &&
-			wordElements.length > 0 &&
-			generateTimeCache(chapterData, wordElements)) ||
-		[]; // hmm
-
 	$: setPlaying(isPlaying);
 	$: setReset(isReset);
 	$: setTargetTime(targetTime);
-
 	$: isPlayingAndNotSeeking = isPlaying && !isSeeking; // only really play the audio if we're not seeking
 
 	// While Playing / paused --------
-
-	$: wordElements &&
-		wordElements.length > 0 &&
-		!isSeeking &&
-		setActiveWordIndex(wordIndexFromTime(currentTime));
-
-	$: wordElements &&
-		wordElements.length > 0 &&
+	$: isMounted && !isSeeking && setActiveWordIndex(wordIndexFromTime(currentTime));
+	$: isMounted &&
 		isPlayingAndNotSeeking &&
-		scrollWrapperElement &&
 		scrollToOffset(scrollOffsetFromWordIndex(activeWordIndex));
 
 	// seek audio time to active word when scrolling
@@ -405,20 +395,15 @@
 	// $: wordElements && wordElements.length > 0 && isSeeking && seekTimeFromScroll(scrollLeftBinding);
 
 	// save the play time when we pause
-	$: !isPlaying && (targetTime = currentTime);
-	$: isSpringEnabled && scrollWrapperElement && !isSeeking && setScrollOffset($scrollTween);
+	$: isMounted && !isPlaying && (targetTime = currentTime);
+	$: isMounted && isSpringEnabled && !isSeeking && setScrollOffset($scrollTween);
 
 	// Special seeking behavior ------
-
-	$: isSeeking && setSpringStartPoint(scrollLeftBinding);
-
-	$: wordElements &&
-		wordElements.length > 0 &&
-		isSeeking &&
-		setActiveWordIndex(wordIndexFromScrollOffset(scrollLeftBinding));
+	$: isMounted && isSeeking && setSpringStartPoint(scrollLeftBinding);
+	$: isMounted && isSeeking && setActiveWordIndex(wordIndexFromScrollOffset(scrollLeftBinding));
 
 	// style
-	$: wordElements && wordElements.length > 0 && setWordStylesFromActiveWordIndex(activeWordIndex);
+	$: isMounted && setWordStylesFromActiveWordIndex(activeWordIndex);
 </script>
 
 <div class="track">
@@ -482,7 +467,7 @@
 			transition:fade={{ duration: config.chapterCoverTransitionDuration }}
 			on:introend={() => {
 				isChapterCoverVisible = true;
-				// scrollTo(0, false, true);
+				targetTime = -1; // force reactive update...
 				targetTime = 0; // go even further than the first scroll pos
 			}}
 			on:outrostart={() => {
@@ -538,11 +523,6 @@
 		bind:currentTime
 		{targetTime}
 		on:ended
-		on:ended={() => {
-			console.log('ENDED!');
-			// handle this in parent instead
-			//reset();
-		}}
 	/>
 {:else}
 	<AudioFadeProxy
@@ -551,11 +531,6 @@
 		bind:currentTime
 		{targetTime}
 		on:ended
-		on:ended={() => {
-			console.log('ENDED!');
-			// handle this in parent instead
-			//reset();
-		}}
 	/>
 {/if}
 
