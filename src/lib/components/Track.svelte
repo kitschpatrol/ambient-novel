@@ -9,7 +9,7 @@
 	import ChapterCover from '$lib/components/ChapterCover.svelte';
 	import * as config from '$lib/config';
 	import type { ChapterData } from '$lib/schemas/bookSchema';
-	import { faPause, faPlay, faRotateBack, faTicketSimple } from '@fortawesome/free-solid-svg-icons';
+	import { faPause, faPlay, faRotateBack } from '@fortawesome/free-solid-svg-icons';
 	import ScrollBooster from 'scrollbooster';
 	import { onDestroy, onMount, tick } from 'svelte';
 	import { spring } from 'svelte/motion';
@@ -23,10 +23,10 @@
 	export let chapterColor = '#ff0000';
 	export let rowWidth = 0; // performance thing to set this externally...
 	export let targetTime = currentTime;
-
 	export let ready = () => {};
 
 	// config
+	const isMobile = (new UAParser().getDevice().type ?? '') === 'mobile';
 	const clickToTogglePlayPause = false;
 	const isScrollBoosterEnabled = true;
 	const debug = false;
@@ -42,18 +42,17 @@
 	let scrollLeftBinding: number = 0; // optimization? or just use scrollLeft?
 	let scrollTween = spring(0, springConfig);
 	let activeWordIndex = -1; // optimization vs. referencing the element... -1 means before first word, > wordElements.length means after last word
-	let isUserHoldingDownFingerOrMouse = false;
 	let wheelTimer: NodeJS.Timeout | undefined;
 	let scrollBooster: ScrollBooster | undefined;
 	let isChapterCoverVisible = true;
 
 	// frame loop
+	let isUserHoldingDownFingerOrMouse = false;
 	let scrollLeft = 0;
 	let scrollLeftDelta = 0;
 	let intervalId: NodeJS.Timer | undefined;
 	let scrollBoosterStart = 0;
 
-	const isMobile = (new UAParser().getDevice().type ?? '') === 'mobile';
 	onMount(() => {
 		// allow drag scrolling on desktop
 		scrollBooster = isScrollBoosterEnabled
@@ -108,7 +107,7 @@
 					}
 
 					// optimization, only seek audio at the end of a scroll input
-					targetTime = wordIndexToTime(activeWordIndex);
+					targetTime = timeFromWordIndex(activeWordIndex);
 					currentTime = targetTime;
 					isSeeking = false;
 				}
@@ -153,7 +152,7 @@
 		return timeCache;
 	}
 
-	function scrollTo(offset: number, rightOnly = true, immediate = false) {
+	function scrollToOffset(offset: number, rightOnly = true, immediate = false) {
 		// only scroll to the right
 		if (
 			scrollWrapperElement &&
@@ -168,17 +167,125 @@
 			} else {
 				scrollWrapperElement.scrollLeft = offset;
 				if (immediate) {
-					updateSpringStartPoint(offset);
+					setSpringStartPoint(offset);
 				}
 			}
 		}
 	}
 
-	function scrollFromTween(offset: number) {
-		scrollWrapperElement.scrollLeft = offset;
+	// ==== Time / Word index / Scroll offset conversions ============================
+
+	// TODO only search if time delta is greater than minimum word spacing?
+	// prob not this is pretty fast
+	function wordIndexFromTime(time: number): number {
+		if (time <= timeCache[0]) {
+			// before first word
+			return -1;
+		} else if (time >= timeCache[timeCache.length - 1]) {
+			// after last word
+			return wordElements.length;
+		} else {
+			// somewhere between
+			for (let i = 0; i < wordElements.length; i++) {
+				if (time >= timeCache[i] && time < timeCache[i + 1]) {
+					return i;
+				}
+			}
+		}
+
+		console.warn('issues');
+		return 0;
 	}
 
-	function updateWordStyles(index: number) {
+	function timeFromWordIndex(index: number): number {
+		if (index < 0) return timeCache[0];
+		if (index > wordElements.length) return timeCache[wordElements.length];
+		return timeCache[index];
+	}
+
+	function wordIndexFromScrollOffset(offset: number): number {
+		const scrollOffset = offset + rowWidth / 2;
+
+		// before first word
+		if (scrollOffset <= wordElements[0].offsetLeft) {
+			return -1;
+		}
+
+		// after last word
+		if (
+			scrollOffset >=
+			wordElements[wordElements.length - 1].offsetLeft +
+				wordElements[wordElements.length - 1].offsetWidth
+		) {
+			return wordElements.length;
+		}
+
+		// first word
+		// average of right edge of curent word and left edge of previous
+		if (
+			scrollOffset <
+			(wordElements[0].offsetLeft + wordElements[0].offsetWidth + wordElements[1].offsetLeft) / 2
+		) {
+			return 0;
+		}
+
+		// last word
+		if (
+			scrollOffset >=
+			(wordElements[wordElements.length - 1].offsetLeft +
+				wordElements[wordElements.length - 2].offsetLeft +
+				wordElements[wordElements.length - 2].offsetWidth) /
+				2
+		) {
+			return wordElements.length - 1;
+		}
+
+		// between
+		// TODO consider whether any point after the word shoould be the next word...
+		for (let i = 1; i < wordElements.length - 1; i++) {
+			// average of right edge of previous word and left edge of current
+			// const leftEdge =
+			// 	(wordElements[i - 1].offsetLeft +
+			// 		wordElements[i - 1].offsetWidth +
+			// 		wordElements[i].offsetLeft) /
+			// 	2;
+			const rightEdge =
+				(wordElements[i].offsetLeft +
+					wordElements[i].offsetWidth +
+					wordElements[i + 1].offsetLeft) /
+				2;
+
+			if (scrollOffset <= rightEdge) {
+				return i;
+			}
+		}
+
+		console.warn('issues!');
+		return 0;
+	}
+
+	function scrollOffsetFromWordIndex(index: number): number {
+		// before first word
+		if (index < 0) {
+			return wordElements[0].offsetLeft - rowWidth / 2;
+		}
+
+		// after last word
+		if (index >= wordElements.length) {
+			return (
+				wordElements[wordElements.length - 1].offsetLeft +
+				wordElements[wordElements.length - 1].offsetWidth -
+				rowWidth / 2
+			);
+		}
+
+		// between, use the center of the word
+		return wordElements[index].offsetLeft + wordElements[index].offsetWidth / 2 - rowWidth / 2;
+	}
+
+	// ==== Reactive setters ========================================================
+
+	function setWordStylesFromActiveWordIndex(index: number) {
 		// console.time('updateWordStyles');
 		// TODO optimize hot path, don't need to do this on all lines at the same time?
 		// many are out of view...
@@ -220,121 +327,17 @@
 		// console.timeEnd('updateWordStyles');
 	}
 
-	// TODO only search if time delta is greater than minimum word spacing?
-	// prob not this is pretty fast
-	function timeToActiveWordIndex(time: number): number {
-		if (time <= timeCache[0]) {
-			// before first word
-			return -1;
-		} else if (time >= timeCache[timeCache.length - 1]) {
-			// after last word
-			return wordElements.length;
-		} else {
-			// somewhere between
-			for (let i = 0; i < wordElements.length; i++) {
-				if (time >= timeCache[i] && time < timeCache[i + 1]) {
-					return i;
-				}
-			}
-		}
-
-		console.warn('issues');
-		return 0;
-	}
-
 	// keep spring starting point up to date if we're scrolling manually
-	function updateSpringStartPoint(startPoint: number) {
+	function setSpringStartPoint(startPoint: number) {
 		scrollTween = spring(startPoint, springConfig);
-	}
-
-	function wordIndexToTime(index: number): number {
-		if (index < 0) return timeCache[0];
-		if (index > wordElements.length) return timeCache[wordElements.length];
-		return timeCache[index];
-	}
-
-	function scrollPositionToActiveWordIndex(offset: number): number {
-		const scrollOffset = offset + rowWidth / 2;
-
-		// before first word
-		if (scrollOffset <= wordElements[0].offsetLeft) {
-			return -1;
-		}
-
-		// after last word
-		if (
-			scrollOffset >=
-			wordElements[wordElements.length - 1].offsetLeft +
-				wordElements[wordElements.length - 1].offsetWidth
-		) {
-			return wordElements.length;
-		}
-
-		// first word
-		// average of right edge of curent word and left edge of previous
-		if (
-			scrollOffset <
-			(wordElements[0].offsetLeft + wordElements[0].offsetWidth + wordElements[1].offsetLeft) / 2
-		) {
-			return 0;
-		}
-
-		// // last word
-		if (
-			scrollOffset >=
-			(wordElements[wordElements.length - 1].offsetLeft +
-				wordElements[wordElements.length - 2].offsetLeft +
-				wordElements[wordElements.length - 2].offsetWidth) /
-				2
-		) {
-			return wordElements.length - 1;
-		}
-
-		// between
-		// TODO consider whether any point after the word shoould be the next word...
-		for (let i = 1; i < wordElements.length - 1; i++) {
-			// average of right edge of previous word and left edge of current
-			// const leftEdge =
-			// 	(wordElements[i - 1].offsetLeft +
-			// 		wordElements[i - 1].offsetWidth +
-			// 		wordElements[i].offsetLeft) /
-			// 	2;
-			const rightEdge =
-				(wordElements[i].offsetLeft +
-					wordElements[i].offsetWidth +
-					wordElements[i + 1].offsetLeft) /
-				2;
-
-			if (scrollOffset <= rightEdge) {
-				return i;
-			}
-		}
-
-		console.warn('issues!');
-		return 0;
 	}
 
 	function setActiveWordIndex(index: number) {
 		activeWordIndex = index;
 	}
 
-	function wordIndexToScrollPosition(index: number): number {
-		// before first word
-		if (index < 0) {
-			return wordElements[0].offsetLeft - rowWidth / 2;
-		}
-
-		// after last word
-		if (index >= wordElements.length) {
-			return (
-				wordElements[wordElements.length - 1].offsetLeft +
-				wordElements[wordElements.length - 1].offsetWidth -
-				rowWidth / 2
-			);
-		}
-
-		// between, use the center of the word
-		return wordElements[index].offsetLeft + wordElements[index].offsetWidth / 2 - rowWidth / 2;
+	function setScrollOffset(offset: number) {
+		scrollWrapperElement.scrollLeft = offset;
 	}
 
 	// react to reset being set
@@ -352,13 +355,14 @@
 	}
 
 	// if we set target time while reset, react immediately
+	// todo mobile safari bugs?
 	function setTargetTime(time: number) {
 		if (isReset && isChapterCoverVisible && wordElements) {
 			console.log('zooming to target');
-			const activeWordIndex = timeToActiveWordIndex(time);
+			const activeWordIndex = wordIndexFromTime(time);
 			const scrollPosition =
-				activeWordIndex === -1 ? 0 : wordIndexToScrollPosition(activeWordIndex);
-			scrollTo(scrollPosition, false, true);
+				activeWordIndex === -1 ? 0 : scrollOffsetFromWordIndex(activeWordIndex);
+			scrollToOffset(scrollPosition, false, true);
 		}
 	}
 
@@ -388,13 +392,13 @@
 	$: wordElements &&
 		wordElements.length > 0 &&
 		!isSeeking &&
-		setActiveWordIndex(timeToActiveWordIndex(currentTime));
+		setActiveWordIndex(wordIndexFromTime(currentTime));
 
 	$: wordElements &&
 		wordElements.length > 0 &&
 		isPlayingAndNotSeeking &&
 		scrollWrapperElement &&
-		scrollTo(wordIndexToScrollPosition(activeWordIndex));
+		scrollToOffset(scrollOffsetFromWordIndex(activeWordIndex));
 
 	// seek audio time to active word when scrolling
 	// bad for performance?
@@ -402,19 +406,19 @@
 
 	// save the play time when we pause
 	$: !isPlaying && (targetTime = currentTime);
-	$: isSpringEnabled && scrollWrapperElement && !isSeeking && scrollFromTween($scrollTween);
+	$: isSpringEnabled && scrollWrapperElement && !isSeeking && setScrollOffset($scrollTween);
 
 	// Special seeking behavior ------
 
-	$: isSeeking && updateSpringStartPoint(scrollLeftBinding);
+	$: isSeeking && setSpringStartPoint(scrollLeftBinding);
 
 	$: wordElements &&
 		wordElements.length > 0 &&
 		isSeeking &&
-		setActiveWordIndex(scrollPositionToActiveWordIndex(scrollLeftBinding));
+		setActiveWordIndex(wordIndexFromScrollOffset(scrollLeftBinding));
 
 	// style
-	$: wordElements && wordElements.length > 0 && updateWordStyles(activeWordIndex);
+	$: wordElements && wordElements.length > 0 && setWordStylesFromActiveWordIndex(activeWordIndex);
 </script>
 
 <div class="track">
