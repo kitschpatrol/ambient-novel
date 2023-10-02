@@ -13,14 +13,9 @@
 	let currentTimeProxy: number = currentTime;
 
 	onMount(() => {
-		console.log(`created with currentTime ` + currentTimeProxy + ` and play status ` + isPlaying);
 		// audioElement.load();
 		audioElement.currentTime = currentTimeProxy; // critical
 		updatePlay(isPlaying);
-	});
-
-	onDestroy(() => {
-		console.log(`destroyed with currentTime ` + currentTimeProxy + ` and play status ` + isPlaying);
 	});
 
 	// todo retries?
@@ -59,15 +54,12 @@
 	bind:currentTime={currentTimeProxy}
 	transition:fadeVolume={{ duration: 5000 }}
 	on:outrostart={() => {
-		console.log('outrostart');
 		isInOutro = true;
 	}}
 	on:outroend={() => {
-		console.log('outroend');
 		isInOutro = true;
 	}}
 	on:introstart={() => {
-		console.log('introend');
 		// accommodates resumption during a transition, if that happenns before a new Audio player is created
 		isInOutro = false;
 	}}

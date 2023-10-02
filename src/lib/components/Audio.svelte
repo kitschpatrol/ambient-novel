@@ -2,6 +2,7 @@
 	import { crossfadeVolume } from '$lib/utils/transition/crossfadeVolume';
 	import { fadeVolume } from '$lib/utils/transition/fadeVolume';
 	import pkg from 'mime';
+	import { onMount } from 'svelte';
 	const { getType } = pkg;
 	// import { getType } from 'mime';
 
@@ -13,6 +14,10 @@
 	export let targetTime = 0; // time we're requesting
 
 	let audioElement: HTMLAudioElement;
+
+	onMount(() => {
+		audioElement.currentTime = targetTime; // critical
+	});
 
 	// have to use this instead of onMount to avoid null reference issues in Chapter
 	function onAudioElementMounted(node: HTMLAudioElement) {
@@ -35,22 +40,23 @@
 	}
 
 	const seekAudio = (time: number) => {
-		return new Promise((resolve) => {
-			// Event listener for when the seek is complete
-			const onSeeked = () => {
-				console.log('seeked');
-				// Remove the event listener to clean up
-				audioElement.removeEventListener('seeked', onSeeked);
-				// Resolve the promise
-				// resolve();
-			};
+		// return new Promise((resolve) => {
+		// 	// Event listener for when the seek is complete
+		// 	// const onSeeked = () => {
+		// 	// 	// console.log('seeked');
+		// 	// 	// Remove the event listener to clean up
+		// 	// 	audioElement.removeEventListener('seeked', onSeeked);
+		// 	// 	// Resolve the promise
+		// 	// 	// resolve();
+		// 	// };
 
-			// Add the event listener
-			audioElement.addEventListener('seeked', onSeeked);
+		// 	// Add the event listener
+		// 	// audioElement.addEventListener('seeked', onSeeked);
 
-			// Perform the seek
-			audioElement.currentTime = time;
-		});
+		// 	// Perform the seek
+		// 	audioElement.currentTime = time;
+		// });
+		audioElement.currentTime = time;
 	};
 
 	function playAudio() {
@@ -70,18 +76,11 @@
 		if (audioElement) audioElement.pause();
 	}
 
-	$: {
-		isPlaying ? playAudio() : pauseAudio();
-	}
-
-	$: {
-		if (audioElement) seekAudio(targetTime);
-	}
+	$: isPlaying ? playAudio() : pauseAudio();
+	$: audioElement && seekAudio(targetTime);
 
 	let currentTimeProxy: number = currentTime;
 	let isInOutro = false;
-
-	$: console.log(`Audio target time: ${targetTime}`);
 
 	$: !isInOutro && (currentTime = currentTimeProxy);
 </script>
@@ -96,7 +95,7 @@
 	bind:currentTime={currentTimeProxy}
 	on:ended
 	bind:this={audioElement}
-	transition:fadeVolume={{ duration: 1000 }}
+	transition:fadeVolume={{ duration: 600 }}
 	on:outrostart={() => {
 		// don't send time updates during transitions
 		isInOutro = true;

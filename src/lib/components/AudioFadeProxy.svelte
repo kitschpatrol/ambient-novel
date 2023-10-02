@@ -24,6 +24,7 @@
 		if (!hasPlayed && isPlaying) {
 			hasPlayed = true;
 		}
+
 		if (isPlaying && !isPlayingProxy) {
 			// Starting to play
 			targetTimeProxy = targetTime;
@@ -35,10 +36,12 @@
 			currentTime = currentTimeProxy;
 		} else if (!isPlaying && isPlayingProxy) {
 			// Starting to pause
-			targetTimeProxy = currentTime;
-			targetTime = currentTime;
+			// remember play position... this creates the issue...
+			// remember in parent instead
+			// targetTimeProxy = currentTime;
+			// targetTime = currentTime;
 			isPlayingProxy = false;
-		} else if (!isPlaying) {
+		} else if (!isPlaying && !isPlayingProxy) {
 			// Paused
 			targetTimeProxy = targetTime;
 			currentTime = targetTimeProxy;

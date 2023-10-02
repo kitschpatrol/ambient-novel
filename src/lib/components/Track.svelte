@@ -29,22 +29,14 @@
 
 	export let ready = () => {};
 
-	let resetRequested = true;
-
 	export const reset = () => {
-		resetRequested = true;
-		isSeeking = false;
+		isReset = true;
 		isPlaying = false;
-		targetTime = 0;
-		currentTime = 0;
-		tick().then(() => {
-			scrollTo(0, false);
-		});
 	};
 
 	// config
 	const isScrollBoosterEnabled = true;
-	const debug = true;
+	const debug = false;
 	const isSpringEnabled = true;
 	const springConfig = {
 		stiffness: 0.005,
@@ -168,76 +160,29 @@
 		return timeCache;
 	}
 
-	function scrollTo(offset: number, rightOnly = true) {
+	function scrollTo(offset: number, rightOnly = true, immediate = false) {
 		// only scroll to the right
 		if (
 			scrollWrapperElement &&
 			rowWidth > 0 &&
 			(rightOnly ? offset >= scrollWrapperElement.scrollLeft : true)
 		) {
-			if (isSpringEnabled) {
+			if (isSpringEnabled && !immediate) {
 				// this was the trick for the flashes...
 				tick().then(() => {
 					$scrollTween = offset;
 				});
 			} else {
 				scrollWrapperElement.scrollLeft = offset;
+				if (immediate) {
+					updateSpringStartPoint(offset);
+				}
 			}
 		}
 	}
 
 	function scrollFromTween(offset: number) {
 		scrollWrapperElement.scrollLeft = offset;
-	}
-
-	function seekTimeFromScroll(scrollLeft: number): number {
-		let targetTime;
-		// get active word under playhead
-		const scrollCenter = scrollLeft + rowWidth / 2;
-
-		if (scrollCenter <= wordElements[0].offsetLeft) {
-			// scrolled before first word... can't scroll back to chapter reading?
-			targetTime = timeCache[0];
-		} else if (
-			scrollCenter >=
-			wordElements[wordElements.length - 1].offsetLeft +
-				wordElements[wordElements.length - 1].offsetWidth
-		) {
-			targetTime = timeCache[wordElements.length]; // gets final time from special extra element in timeCache
-		} else {
-			for (let i = 0; i < wordElements.length - 1; i++) {
-				const element = wordElements[i];
-				const nextElement = wordElements[i + 1];
-
-				if (scrollCenter >= element.offsetLeft && scrollCenter < nextElement.offsetLeft) {
-					if (scrollCenter < element.offsetLeft + element.offsetWidth) {
-						// guess intermediate time
-						targetTime = mapValue(
-							scrollCenter,
-							element.offsetLeft - element.offsetWidth / 2,
-							element.offsetLeft + element.offsetWidth / 2,
-							timeCache[i],
-							timeCache[i + 1]
-						);
-						return targetTime;
-					} else {
-						// in the gap, pick next word... does this ever happen?
-						console.warn('in gap');
-						targetTime = timeCache[i + 1];
-						return targetTime;
-					}
-
-					// break;
-				}
-			}
-		}
-
-		if (targetTime === undefined) {
-			console.warn('targetTime is undefined');
-			targetTime = 0;
-		}
-
-		return targetTime;
 	}
 
 	function updateWordStyles(index: number) {
@@ -413,9 +358,8 @@
 			generateTimeCache(chapterData, wordElements)) ||
 		[]; // hmm
 
-	$: showChapterTitle = currentTime === 0; // TODO bugs here
-	$: isPlaying && (resetRequested = false);
-	$: isReset = currentTime === 0 && resetRequested;
+	$: isPlaying && (isReset = false);
+
 	$: isPlayingAndNotSeeking = isPlaying && !isSeeking; // only really play the audio if we're not seeking
 
 	// While Playing / paused --------
@@ -435,10 +379,9 @@
 	// bad for performance?
 	// $: wordElements && wordElements.length > 0 && isSeeking && seekTimeFromScroll(scrollLeftBinding);
 
-	$: isSpringEnabled &&
-		scrollWrapperElement &&
-		(!isSeeking || showChapterTitle) &&
-		scrollFromTween($scrollTween);
+	// save the play time when we pause
+	$: !isPlaying && (targetTime = currentTime);
+	$: isSpringEnabled && scrollWrapperElement && !isSeeking && scrollFromTween($scrollTween);
 
 	// Special seeking behavior ------
 
@@ -509,8 +452,14 @@
 		/>
 	{/if}
 
-	{#if showChapterTitle}
-		<div transition:fade={{ duration: 1500 }}>
+	{#if isReset}
+		<div
+			transition:fade={{ duration: 1000 }}
+			on:introend={() => {
+				scrollTo(0, false, true);
+				targetTime = 0; // go even further than the first scroll pos
+			}}
+		>
 			<ChapterCover {chapterColor} {chapterData} />
 		</div>
 	{/if}

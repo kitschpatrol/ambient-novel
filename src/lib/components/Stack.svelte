@@ -72,9 +72,10 @@
 
 	$: isAllLoaded = loadCount === chapters.length;
 
-	function onKeyDown(e: KeyboardEvent) {
-		console.log(e);
-	}
+	// on:keydown={onKeyDown}
+	// function onKeyDown(e: KeyboardEvent) {
+	// 	console.log(e);
+	// }
 
 	function resetAll() {
 		// only reset those in need
@@ -82,14 +83,12 @@
 			return !resetStatus[i];
 		});
 
-		console.log(`needsReset: ${needsReset}`);
-
 		delayedForEach(needsReset, (reset) => reset(), resetDelay);
 		isPlayingThrough = false;
 	}
 </script>
 
-<svelte:window bind:innerWidth={width} on:keydown={onKeyDown} />
+<svelte:window bind:innerWidth={width} />
 
 {#if mounted}
 	<Header />
