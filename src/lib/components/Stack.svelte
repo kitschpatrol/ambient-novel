@@ -4,6 +4,7 @@
 	import Track from '$lib/components/Track.svelte';
 	import TrackPlacholder from '$lib/components/TrackPlaceholder.svelte';
 	import type { BookData } from '$lib/schemas/bookSchema';
+	import { delayedForEach } from '$lib/utils/collection/delayedForEach';
 	import {
 		faBookReader,
 		faDiceD20,
@@ -12,11 +13,11 @@
 	} from '@fortawesome/free-solid-svg-icons';
 	import shuffle from 'lodash/shuffle';
 	import { onMount } from 'svelte';
-	import Page from '../../routes/+page.svelte';
 
 	export let bookData: BookData;
 	const { chapters, title } = bookData;
 	const loadDelay = 100;
+	const resetDelay = 100;
 
 	let width = 0;
 
@@ -70,9 +71,25 @@
 	});
 
 	$: isAllLoaded = loadCount === chapters.length;
+
+	function onKeyDown(e: KeyboardEvent) {
+		console.log(e);
+	}
+
+	function resetAll() {
+		// only reset those in need
+		const needsReset = resetFunctions.filter((_, i) => {
+			return !resetStatus[i];
+		});
+
+		console.log(`needsReset: ${needsReset}`);
+
+		delayedForEach(needsReset, (reset) => reset(), resetDelay);
+		isPlayingThrough = false;
+	}
 </script>
 
-<svelte:window bind:innerWidth={width} />
+<svelte:window bind:innerWidth={width} on:keydown={onKeyDown} />
 
 {#if mounted}
 	<Header />
@@ -100,7 +117,6 @@
 					// 	// start next chapter
 					// 	playStatus = playStatus.map((_, i) => i === nextChapter);
 					// } else {
-					// 	// TODO bugs
 					// 	resetFunctions[index]();
 					// }
 				}}
@@ -148,10 +164,7 @@
 					icon={faRotateBack}
 					label="Reset all"
 					isEnabled={somethingNotReset && isAllLoaded}
-					on:click={() => {
-						resetFunctions.forEach((reset) => reset());
-						isPlayingThrough = false;
-					}}
+					on:click={resetAll}
 				/>
 			</span>
 		</div>
@@ -161,17 +174,23 @@
 <style>
 	div#controls {
 		background: linear-gradient(#00000053 0%, rgba(86, 86, 86, 0.502) 100%);
+		user-select: none;
+		/* autoprefixer? */
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		-webkit-touch-callout: none; /* iOS Safari */
 	}
 
 	footer {
 		width: 100vw;
 		height: calc(100dvh / 12);
-	}
-
-	footer {
 		background: #4e3bff;
 		user-select: none;
+		/* autoprefixer? */
 		-webkit-user-select: none;
+		-moz-user-select: none;
 		-ms-user-select: none;
+		-webkit-touch-callout: none; /* iOS Safari */
 	}
 </style>

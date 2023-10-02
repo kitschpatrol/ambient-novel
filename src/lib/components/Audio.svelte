@@ -34,6 +34,25 @@
 				});
 	}
 
+	const seekAudio = (time: number) => {
+		return new Promise((resolve) => {
+			// Event listener for when the seek is complete
+			const onSeeked = () => {
+				console.log('seeked');
+				// Remove the event listener to clean up
+				audioElement.removeEventListener('seeked', onSeeked);
+				// Resolve the promise
+				// resolve();
+			};
+
+			// Add the event listener
+			audioElement.addEventListener('seeked', onSeeked);
+
+			// Perform the seek
+			audioElement.currentTime = time;
+		});
+	};
+
 	function playAudio() {
 		if (audioElement) {
 			audioElement
@@ -56,11 +75,13 @@
 	}
 
 	$: {
-		if (audioElement) audioElement.currentTime = targetTime;
+		if (audioElement) seekAudio(targetTime);
 	}
 
 	let currentTimeProxy: number = currentTime;
 	let isInOutro = false;
+
+	$: console.log(`Audio target time: ${targetTime}`);
 
 	$: !isInOutro && (currentTime = currentTimeProxy);
 </script>

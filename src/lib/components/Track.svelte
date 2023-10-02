@@ -4,13 +4,15 @@
 	import { base } from '$app/paths';
 	import Audio from '$lib/components/Audio.svelte';
 	import AudioBasic from '$lib/components/AudioBasic.svelte';
+	import AudioBasicFadeProxy from '$lib/components/AudioBasicFadeProxy.svelte';
 	import AudioFadeProxy from '$lib/components/AudioFadeProxy.svelte';
 	import AudioHowler from '$lib/components/AudioHowler.svelte';
 	import AudioHowlerFadeProxy from '$lib/components/AudioHowlerFadeProxy.svelte';
 	import Button from '$lib/components/Button.svelte';
+	import ChapterCover from '$lib/components/ChapterCover.svelte';
 	import type { ChapterData } from '$lib/schemas/bookSchema';
 	import { mapValue } from '$lib/utils/math/mapValue';
-	import { faPause, faPlay, faRotateBack } from '@fortawesome/free-solid-svg-icons';
+	import { faPause, faPlay, faRotateBack, faTicketSimple } from '@fortawesome/free-solid-svg-icons';
 	import ScrollBooster from 'scrollbooster';
 	import { onDestroy, onMount, tick } from 'svelte';
 	import { spring } from 'svelte/motion';
@@ -18,7 +20,6 @@
 	import UAParser from 'ua-parser-js';
 
 	export let chapterData: ChapterData;
-	export let maxVolume = 1.0;
 	export let isPlaying = false;
 	export let isReset = true;
 	export let currentTime = 0;
@@ -28,22 +29,21 @@
 
 	export let ready = () => {};
 
+	let resetRequested = true;
+
 	export const reset = () => {
+		resetRequested = true;
 		isSeeking = false;
 		isPlaying = false;
-		// TODO hmm
-		if (targetTime === 0) {
-			currentTime = 0;
-		} else {
-			targetTime = 0;
-		}
-
-		scrollTo(0, false);
+		currentTime = 0;
+		tick().then(() => {
+			scrollTo(0, false);
+		});
 	};
 
 	// config
 	const isScrollBoosterEnabled = true;
-	const debug = false;
+	const debug = true;
 	const isSpringEnabled = true;
 	const springConfig = {
 		stiffness: 0.005,
@@ -108,7 +108,7 @@
 		// watch scroll velocity
 		// have to do this instead of an on:scroll handler so we can calculate velocity / delta
 		function loop() {
-			if (scrollWrapperElement && isSeeking) {
+			if (scrollWrapperElement && !isReset && isSeeking) {
 				scrollLeftDelta = scrollWrapperElement.scrollLeft - scrollLeft;
 				scrollLeft = scrollWrapperElement.scrollLeft;
 
@@ -412,7 +412,8 @@
 		[]; // hmm
 
 	$: showChapterTitle = currentTime === 0; // TODO bugs here
-	$: isReset = targetTime === 0 && currentTime === 0;
+	$: isPlaying && (resetRequested = false);
+	$: isReset = currentTime === 0 && resetRequested;
 	$: isPlayingAndNotSeeking = isPlaying && !isSeeking; // only really play the audio if we're not seeking
 
 	// While Playing / paused --------
@@ -507,16 +508,9 @@
 	{/if}
 
 	{#if showChapterTitle}
-		<h2
-			style={`background-color: ${chapterColor}`}
-			transition:fade={{ duration: 2500 }}
-			class="chapter-title absolute left-0 top-0 h-full w-full text-center font-display tracking-wider text-white text-opacity-80 shadow-vm-shadow text-shadow"
-		>
-			<span class="max-sm:hidden">Chapter</span>
-			{chapterData.index + 1}
-			<span class="max-sm:hidden">:</span>
-			{chapterData.title}
-		</h2>
+		<div transition:fade={{ duration: 1500 }}>
+			<ChapterCover {chapterColor} {chapterData} />
+		</div>
 	{/if}
 
 	<div class:w-full={isReset} class="absolute left-0 top-0 flex h-full">
@@ -539,18 +533,19 @@
 		<div
 			class="pointer-events-none absolute left-0 top-0 h-full cursor-none touch-none text-red-400"
 		>
-			<p>targetTime: {Math.round(targetTime)}</p>
 			<p>currentTime: {Math.round(currentTime)}</p>
-			<p>activeWordIndex: {activeWordIndex}</p>
 			<p>isplaying: {isPlayingAndNotSeeking}</p>
+			<p>isReset: {isReset}</p>
+			<p>activeWordIndex: {activeWordIndex}</p>
 			<p>seeking: {isSeeking}</p>
 			<p>isUserHoldingDownFingerOrMouse: {isUserHoldingDownFingerOrMouse}</p>
+			<p>targetTime: {Math.round(targetTime)}</p>
 			<!-- <p class="inline-block">scrollLeftDelta: {scrollLeftDelta}</p> -->
 		</div>
 	{/if}
 </div>
 
-{#if true || isMobile}
+{#if isMobile}
 	<AudioBasic
 		audioSources={chapterData.audio.files.map((file) => `${base}/${file}`)}
 		isPlaying={isPlayingAndNotSeeking}
@@ -563,11 +558,9 @@
 		}}
 	/>
 {:else}
-	<AudioFadeProxy
+	<AudioBasicFadeProxy
 		audioSources={chapterData.audio.files.map((file) => `${base}/${file}`)}
 		isPlaying={isPlayingAndNotSeeking}
-		{maxVolume}
-		{targetTime}
 		bind:currentTime
 		on:ended
 		on:ended={() => {
@@ -586,6 +579,11 @@
 		/* background-color: white; */
 		background: linear-gradient(0deg, #f8f8f8 0%, white 13%, white 100%);
 		user-select: none;
+		/* autoprefixer? */
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		-webkit-touch-callout: none; /* iOS Safari */
 	}
 
 	:global(body.cursor-grabbing-important *) {
@@ -652,10 +650,5 @@
 
 	div.scroll-wrapper:active {
 		cursor: grabbing;
-	}
-
-	h2.chapter-title {
-		font-size: min(calc(100dvh / 36), 1.75rem);
-		line-height: calc(100dvh / 12);
 	}
 </style>

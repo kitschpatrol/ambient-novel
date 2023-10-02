@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ChapterCover from '$lib/components/ChapterCover.svelte';
 	import type { ChapterData } from '$lib/schemas/bookSchema';
 
 	export let chapterColor = '#ff0000';
@@ -10,15 +11,7 @@
 </script>
 
 <div class="track">
-	<h2
-		style={`background-color: ${chapterColor}`}
-		class="chapter-title absolute left-0 top-0 h-full w-full text-center font-display tracking-wider text-white text-opacity-80 shadow-vm-shadow text-shadow"
-	>
-		<span class="max-sm:hidden">Chapter</span>
-		{chapterData.index + 1}
-		<span class="max-sm:hidden">:</span>
-		{chapterData.title}
-	</h2>
+	<ChapterCover {chapterData} {chapterColor} />
 </div>
 
 <style>
@@ -27,10 +20,5 @@
 		height: calc(100dvh / 12);
 		position: relative;
 		user-select: none;
-	}
-
-	h2.chapter-title {
-		font-size: min(calc(100dvh / 36), 1.75rem);
-		line-height: calc(100dvh / 12);
 	}
 </style>

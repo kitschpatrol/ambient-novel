@@ -10,6 +10,7 @@
 
 	// setting duration to 0 is not enough for a smooth transition
 	// https://stackoverflow.com/a/70629246/2437832
+	// possibly still flaky
 	function maybe(node: HTMLElement, options: any) {
 		if (isTransitionEnabled) {
 			return options.fn(node, options);
@@ -18,7 +19,7 @@
 </script>
 
 <button
-	transition:maybe={{ fn: fade, duration: 250 }}
+	transition:maybe={{ fn: fade, duration: 500 }}
 	disabled={!isEnabled}
 	on:click
 	class="h-full w-full px-1 pb-3 pt-2 first:pl-5 last:pr-5"

@@ -41,6 +41,10 @@
 		preload: false // service worker should keep it hot
 	});
 
+	sound.on('playerror', () => {
+		console.log('seek completed');
+	});
+
 	sound.on('end', () => {
 		// TODO this is weirdly buggy
 		if (isPlaying) dispatch('ended');
@@ -82,8 +86,12 @@
 	}
 
 	$: {
+		console.log('seeking');
 		sound.seek(targetTime);
+		updateCurrentTime();
 	}
+
+	$: console.log('howler target time', targetTime);
 </script>
 
 <!-- HTML -->
