@@ -35,6 +35,7 @@
 		resetRequested = true;
 		isSeeking = false;
 		isPlaying = false;
+		targetTime = 0;
 		currentTime = 0;
 		tick().then(() => {
 			scrollTo(0, false);
@@ -122,7 +123,8 @@
 					}
 
 					// optimization, only seek audio at the end of a scroll input
-					currentTime = wordIndexToTime(activeWordIndex);
+					targetTime = wordIndexToTime(activeWordIndex);
+					currentTime = targetTime;
 					isSeeking = false;
 				}
 			}
@@ -531,25 +533,26 @@
 
 	{#if debug}
 		<div
-			class="pointer-events-none absolute left-0 top-0 h-full cursor-none touch-none text-red-400"
+			class="pointer-events-none absolute left-0 top-0 h-full cursor-none touch-none text-xs text-red-400"
 		>
-			<p>currentTime: {Math.round(currentTime)}</p>
+			<p>isUserHoldingDownFingerOrMouse: {isUserHoldingDownFingerOrMouse}</p>
 			<p>isplaying: {isPlayingAndNotSeeking}</p>
+			<p>seeking: {isSeeking}</p>
+			<p>targetTime: {Math.round(targetTime)}</p>
+			<p>currentTime: {Math.round(currentTime)}</p>
 			<p>isReset: {isReset}</p>
 			<p>activeWordIndex: {activeWordIndex}</p>
-			<p>seeking: {isSeeking}</p>
-			<p>isUserHoldingDownFingerOrMouse: {isUserHoldingDownFingerOrMouse}</p>
-			<p>targetTime: {Math.round(targetTime)}</p>
 			<!-- <p class="inline-block">scrollLeftDelta: {scrollLeftDelta}</p> -->
 		</div>
 	{/if}
 </div>
 
 {#if isMobile}
-	<AudioBasic
+	<Audio
 		audioSources={chapterData.audio.files.map((file) => `${base}/${file}`)}
 		isPlaying={isPlayingAndNotSeeking}
 		bind:currentTime
+		{targetTime}
 		on:ended
 		on:ended={() => {
 			console.log('ENDED!');
@@ -558,10 +561,11 @@
 		}}
 	/>
 {:else}
-	<AudioBasicFadeProxy
+	<AudioFadeProxy
 		audioSources={chapterData.audio.files.map((file) => `${base}/${file}`)}
 		isPlaying={isPlayingAndNotSeeking}
 		bind:currentTime
+		{targetTime}
 		on:ended
 		on:ended={() => {
 			console.log('ENDED!');
