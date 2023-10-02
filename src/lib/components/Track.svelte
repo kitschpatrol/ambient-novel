@@ -1,17 +1,14 @@
+<!-- WAT? -->
 <svelte:options immutable={true} />
 
 <script lang="ts">
 	import { base } from '$app/paths';
 	import Audio from '$lib/components/Audio.svelte';
-	import AudioBasic from '$lib/components/AudioBasic.svelte';
-	import AudioBasicFadeProxy from '$lib/components/AudioBasicFadeProxy.svelte';
 	import AudioFadeProxy from '$lib/components/AudioFadeProxy.svelte';
-	import AudioHowler from '$lib/components/AudioHowler.svelte';
-	import AudioHowlerFadeProxy from '$lib/components/AudioHowlerFadeProxy.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import ChapterCover from '$lib/components/ChapterCover.svelte';
+	import * as config from '$lib/config';
 	import type { ChapterData } from '$lib/schemas/bookSchema';
-	import { mapValue } from '$lib/utils/math/mapValue';
 	import { faPause, faPlay, faRotateBack, faTicketSimple } from '@fortawesome/free-solid-svg-icons';
 	import ScrollBooster from 'scrollbooster';
 	import { onDestroy, onMount, tick } from 'svelte';
@@ -24,17 +21,13 @@
 	export let isReset = true;
 	export let currentTime = 0;
 	export let chapterColor = '#ff0000';
-	export let clickToTogglePlayPause = false;
 	export let rowWidth = 0; // performance thing to set this externally...
+	export let targetTime = currentTime;
 
 	export let ready = () => {};
 
-	export const reset = () => {
-		isReset = true;
-		isPlaying = false;
-	};
-
 	// config
+	const clickToTogglePlayPause = false;
 	const isScrollBoosterEnabled = true;
 	const debug = false;
 	const isSpringEnabled = true;
@@ -43,7 +36,6 @@
 		damping: 0.2 // setting > 1 gives crazy effect
 	};
 
-	let targetTime = currentTime;
 	let isSeeking = false;
 	let scrollWrapperElement: HTMLDivElement;
 	let scrollAreaElement: HTMLDivElement;
@@ -53,6 +45,7 @@
 	let isUserHoldingDownFingerOrMouse = false;
 	let wheelTimer: NodeJS.Timeout | undefined;
 	let scrollBooster: ScrollBooster | undefined;
+	let isChapterCoverVisible = true;
 
 	// frame loop
 	let scrollLeft = 0;
@@ -325,7 +318,7 @@
 		activeWordIndex = index;
 	}
 
-	function activeWordIndexToScrollPosition(index: number): number {
+	function wordIndexToScrollPosition(index: number): number {
 		// before first word
 		if (index < 0) {
 			return wordElements[0].offsetLeft - rowWidth / 2;
@@ -344,7 +337,33 @@
 		return wordElements[index].offsetLeft + wordElements[index].offsetWidth / 2 - rowWidth / 2;
 	}
 
+	// react to reset being set
+	function setReset(reset: boolean) {
+		if (reset) {
+			isPlaying = false;
+			// placeholder's transition completion does the rest
+		}
+	}
+
+	function setPlaying(playing: boolean) {
+		if (playing) {
+			isReset = false;
+		}
+	}
+
+	// if we set target time while reset, react immediately
+	function setTargetTime(time: number) {
+		if (isReset && isChapterCoverVisible && wordElements) {
+			console.log('zooming to target');
+			const activeWordIndex = timeToActiveWordIndex(time);
+			const scrollPosition =
+				activeWordIndex === -1 ? 0 : wordIndexToScrollPosition(activeWordIndex);
+			scrollTo(scrollPosition, false, true);
+		}
+	}
+
 	//Reactive zone --------------------------
+
 	$: wordElements =
 		(scrollAreaElement &&
 			Array.from(scrollAreaElement.querySelectorAll<HTMLSpanElement>('span[data-time]'))) ||
@@ -358,7 +377,9 @@
 			generateTimeCache(chapterData, wordElements)) ||
 		[]; // hmm
 
-	$: isPlaying && (isReset = false);
+	$: setPlaying(isPlaying);
+	$: setReset(isReset);
+	$: setTargetTime(targetTime);
 
 	$: isPlayingAndNotSeeking = isPlaying && !isSeeking; // only really play the audio if we're not seeking
 
@@ -373,7 +394,7 @@
 		wordElements.length > 0 &&
 		isPlayingAndNotSeeking &&
 		scrollWrapperElement &&
-		scrollTo(activeWordIndexToScrollPosition(activeWordIndex));
+		scrollTo(wordIndexToScrollPosition(activeWordIndex));
 
 	// seek audio time to active word when scrolling
 	// bad for performance?
@@ -454,10 +475,14 @@
 
 	{#if isReset}
 		<div
-			transition:fade={{ duration: 1000 }}
+			transition:fade={{ duration: config.chapterCoverTransitionDuration }}
 			on:introend={() => {
-				scrollTo(0, false, true);
+				isChapterCoverVisible = true;
+				// scrollTo(0, false, true);
 				targetTime = 0; // go even further than the first scroll pos
+			}}
+			on:outrostart={() => {
+				isChapterCoverVisible = false;
 			}}
 		>
 			<ChapterCover {chapterColor} {chapterData} />
@@ -476,7 +501,13 @@
 
 	{#if !isReset}
 		<div class="absolute right-0 top-0 flex h-full">
-			<Button icon={faRotateBack} on:click={reset} isTransitionEnabled={true} />
+			<Button
+				icon={faRotateBack}
+				on:click={() => {
+					isReset = true;
+				}}
+				isTransitionEnabled={true}
+			/>
 		</div>
 	{/if}
 
