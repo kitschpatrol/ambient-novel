@@ -69,6 +69,11 @@ body {
 }
 
 /* TODO eval this */
-* {
+/* * {
 	touch-action: manipulation;
-}
+} */
+
+/* nope */
+/* body {
+	user-select: none;
+} */

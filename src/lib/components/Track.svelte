@@ -610,6 +610,16 @@
 		height: calc(100dvh / 12);
 		pointer-events: none;
 		touch-action: none;
+
+		/* Nothing works */
+		/* -webkit-touch-callout: none;
+		-webkit-text-size-adjust: none;
+		-webkit-user-select: none;
+		user-select: none;
+		-webkit-user-callout: none;
+		-webkit-user-drag: none;
+		-webkit-user-modify: none;
+		-webkit-highlight: none; */
 	}
 
 	div.scroll-wrapper:active {

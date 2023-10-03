@@ -39,7 +39,11 @@
 	</style>
 </svelte:head>
 
-<Header --position="fixed" --shadow="0px 8px 20px 0px rgba(0, 0, 0, 0.2)" />
+<Header
+	--position="fixed"
+	--shadow="0px 8px 20px 0px rgba(0, 0, 0, 0.2)"
+	--height="calc(100svh / 12)"
+/>
 
 <main
 	class="mx-auto mb-16 mt-36 max-w-[70ch] bg-white bg-opacity-90 px-12 pb-8 pt-3 font-serif text-xl max-sm:mx-auto max-sm:mb-16 max-sm:mt-24 max-sm:w-[90vw] max-sm:px-5 max-sm:text-base"

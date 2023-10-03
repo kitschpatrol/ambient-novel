@@ -40,19 +40,19 @@
 <style lang="postcss">
 	header {
 		width: 100%;
-		height: calc(100dvh / 12);
+		height: var(--height);
 		background: linear-gradient(#afafaf80 10%, #00000043 100%) #f01ef6;
 		position: var(--position);
 		top: 0;
 		box-shadow: var(--shadow);
 	}
 	header h1 {
-		font-size: min(calc(100dvh / 26), calc(100vw / 24));
-		line-height: calc(100dvh / 12);
+		font-size: min(calc(100svh / 26), calc(100vw / 24));
+		line-height: var(--height);
 	}
 
 	header a {
-		font-size: min(min(calc(100dvh / 52), calc(100vw / 32), 1rem));
+		font-size: min(min(calc(100svh / 52), calc(100vw / 32), 1rem));
 		line-height: 1em;
 		text-align: center;
 		/* line-height: calc(100dvh / 12); */

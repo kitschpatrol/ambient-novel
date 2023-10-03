@@ -114,7 +114,7 @@
 <svelte:window bind:innerWidth={width} />
 
 {#if mounted}
-	<Header />
+	<Header --height="calc(100dvh / 12)" />
 
 	{#each chapters as chapter, index}
 		{#if loadCount >= index && width > 0}
