@@ -45,14 +45,20 @@
 	class="mx-auto mb-16 mt-36 max-w-[70ch] bg-white bg-opacity-90 px-12 pb-8 pt-3 font-serif text-xl max-sm:mx-auto max-sm:mb-16 max-sm:mt-24 max-sm:w-[90vw] max-sm:px-5 max-sm:text-base"
 >
 	<h2>About the Project</h2>
-	<h3>The story</h3>
+	<h3>
+		<span class="emoji">🗝</span>
+		The story
+	</h3>
 	<p>
 		Two friends on vacation become entangled with an eccentric troupe of cosmic artists who call
 		themselves The Valentine Mob. A series of interdimensional mishaps and a missing artifact lead
 		them to The Artist, who lets them in on a secret and leaves the pair — and the
 		reader — questioning their role in the process and product of story and art.
 	</p>
-	<h3>What is an ambient novel?</h3>
+	<h3>
+		<span class="emoji">🎱</span>
+		What is an ambient novel?
+	</h3>
 	<p>
 		For years, while writing or working I have listened to ambient music — from barely perceptible
 		natural soundscapes to monastic chants to cacophonies of experimental noise. One day, I
@@ -87,7 +93,10 @@
 	</p>
 	<p>Welcome.</p>
 
-	<h3>Credits</h3>
+	<h3>
+		<span class="emoji">🦊</span>
+		Credits
+	</h3>
 
 	<p>
 		Scott Wayne Indiana —
@@ -100,7 +109,6 @@
 		Alex McCarl —
 		<em>original ambient tracks</em>
 		<br />
-
 		Mike Budd —
 		<em>audio recording and mixing</em>
 	</p>
@@ -114,6 +122,10 @@
 	main {
 		box-shadow: 0px 3px 9px #0000005f;
 		line-height: 1.75em;
+	}
+
+	.emoji {
+		font-style: normal;
 	}
 
 	main p {
