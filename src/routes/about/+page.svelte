@@ -116,7 +116,11 @@
 	<!-- <h3>Open-Source Projects</h3> -->
 	<!-- <OpenSourceCredits {licenseData} /> -->
 </main>
-<img class="mx-auto mb-16 w-[10vw] pb-16 opacity-90" src="{base}/heart.svg" alt="heart" />
+<img
+	class="mx-auto mb-16 w-[10vw] max-w-[6rem] pb-16 opacity-90"
+	src="{base}/heart.svg"
+	alt="heart"
+/>
 
 <style lang="postcss">
 	main {

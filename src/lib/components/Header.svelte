@@ -52,7 +52,7 @@
 	}
 
 	header a {
-		font-size: min(calc(100dvh / 52), calc(100vw / 32));
+		font-size: min(min(calc(100dvh / 52), calc(100vw / 32), 1rem));
 		line-height: 1em;
 		text-align: center;
 		/* line-height: calc(100dvh / 12); */
