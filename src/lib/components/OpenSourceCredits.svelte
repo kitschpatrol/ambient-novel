@@ -47,5 +47,5 @@
 	{/each}
 </ul>
 
-<style>
+<style lang="postcss">
 </style>

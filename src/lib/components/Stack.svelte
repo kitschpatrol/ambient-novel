@@ -197,7 +197,7 @@
 	</footer>
 {/if}
 
-<style>
+<style lang="postcss">
 	div#controls {
 		background: linear-gradient(#00000053 0%, rgba(86, 86, 86, 0.502) 100%);
 		user-select: none;

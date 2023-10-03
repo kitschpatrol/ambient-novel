@@ -14,7 +14,7 @@
 	<ChapterCover {chapterData} {chapterColor} />
 </div>
 
-<style>
+<style lang="postcss">
 	div.track {
 		width: 100vw;
 		height: calc(100dvh / 12);

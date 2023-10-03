@@ -9,7 +9,6 @@
 	import ChapterCover from '$lib/components/ChapterCover.svelte';
 	import * as config from '$lib/config';
 	import type { ChapterData } from '$lib/schemas/bookSchema';
-	import { setAndForceInvalidation } from '$lib/utils/svelte/forceInvalidation';
 	import { faPause, faPlay, faRotateBack } from '@fortawesome/free-solid-svg-icons';
 	import ScrollBooster from 'scrollbooster';
 	import { onDestroy, onMount, tick } from 'svelte';
@@ -356,6 +355,7 @@
 	// react to reset being set
 	function setReset(reset: boolean) {
 		if (reset) {
+			// isPlaying = true; // force invalidation
 			isPlaying = false;
 			// placeholder's transition completion does the rest
 		}
@@ -363,6 +363,7 @@
 
 	function setPlaying(playing: boolean) {
 		if (playing) {
+			// isReset = true; // force invalidation
 			isReset = false;
 		}
 	}
@@ -534,7 +535,7 @@
 	/>
 {/if}
 
-<style>
+<style lang="postcss">
 	div.track {
 		width: 100vw;
 		height: calc(100dvh / 12);

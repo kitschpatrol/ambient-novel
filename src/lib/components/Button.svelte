@@ -38,7 +38,7 @@
 	</div>
 </button>
 
-<style>
+<style lang="postcss">
 	button {
 		cursor: pointer;
 		user-select: none;

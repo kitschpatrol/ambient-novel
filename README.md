@@ -157,6 +157,10 @@ No bundle size advantage to moving content preprocessing deps only to their own 
 - https://github.com/studio-freight/lenis
 - https://github.com/Adoratorio/hades
 
+Suppressing Stylelint Tailwind @apply etc. directive errors:
+
+- https://stackoverflow.com/a/76984634/2437832
+
 ## PWA
 
 - https://stackoverflow.com/questions/76007716/how-do-i-use-workbox-range-requests-plugin-with-vite-pwa

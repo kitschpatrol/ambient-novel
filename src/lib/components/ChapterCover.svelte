@@ -12,7 +12,7 @@
 <!-- prettier-ignore -->
 <h2
 	style={`background-color: ${chapterColor}`}
-	class="chapter-title absolute left-0 top-0 h-full w-full text-center font-display tracking-wider text-white text-opacity-80 shadow-vm-shadow text-shadow"
+	class="chapter-title absolute left-0 top-0 h-full w-full text-center font-display tracking-wider text-white shadow-vm-shadow text-shadow"
 >
 	<span class="max-sm:hidden">Chapter </span><!--
   -->{chapterData.index + 1}<!--
@@ -20,9 +20,9 @@
 	--> {chapterData.title}
 </h2>
 
-<style>
+<style lang="postcss">
 	h2.chapter-title {
-		font-size: min(calc(100dvh / 36), 1.75rem);
+		font-size: min(calc(100dvh / 42), 1.75rem);
 		line-height: calc(100dvh / 12);
 	}
 </style>
