@@ -16,21 +16,10 @@
 			overscroll-behavior: unset;
 		}
 
+		/* all the fixed position hacks (like ::before) are subtly broken */
 		body {
 			position: static;
 			overflow-y: auto;
-		}
-
-		/* background-position-fixed doesn't work */
-		body::before {
-			content: '';
-			position: fixed; /* Fixed position */
-			top: 0;
-			right: 0;
-			bottom: 0;
-			left: 0;
-			z-index: -1; /* Place it behind the content */
-
 			background: linear-gradient(
 				var(--background-color-gradient-1) 0%,
 				var(--background-color-gradient-2) 100%
@@ -121,7 +110,7 @@
 	<!-- <OpenSourceCredits {licenseData} /> -->
 </main>
 <img
-	class="mx-auto mb-16 w-[10vw] max-w-[6rem] pb-16 opacity-90"
+	class="heart mx-auto mb-16 w-[10vw] max-w-[6rem] pb-16 opacity-90"
 	src="{base}/heart.svg"
 	alt="heart"
 />
@@ -151,5 +140,10 @@
 	main a:hover {
 		text-decoration: underline;
 		text-underline-offset: 0.2em;
+	}
+
+	img.heart {
+		/* doing the shadow in svg causes blur in mobile safari */
+		filter: drop-shadow(-2px 3px 5px #000000b0);
 	}
 </style>
