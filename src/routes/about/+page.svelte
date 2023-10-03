@@ -91,17 +91,17 @@
 
 	<p>
 		Scott Wayne Indiana —
-		<em>author and narrator</em>
+		<i>author and narrator</i>
 		<br />
 		<a href="https://ericmika.com">Eric Mika</a>
 		—
-		<em>website</em>
+		<i>website</i>
 		<br />
 		Alex McCarl —
-		<em>original ambient tracks</em>
+		<i>original ambient tracks</i>
 		<br />
 		Mike Budd —
-		<em>audio recording and mixing</em>
+		<i>audio recording and mixing</i>
 	</p>
 
 	<!-- <h3>Open-Source Projects</h3> -->

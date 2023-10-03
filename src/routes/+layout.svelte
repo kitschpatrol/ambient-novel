@@ -3,6 +3,16 @@
 	// import { pwaInfo } from 'virtual:pwa-info';
 	import '/src/global.css';
 
+	/// TODO remove this
+	// onMount(() => {
+	// 	navigator.serviceWorker.getRegistrations().then(function (registrations) {
+	// 		for (let registration of registrations) {
+	// 			console.log('unregistering sw');
+	// 			registration.unregister();
+	// 		}
+	// 	});
+	// });
+
 	// onMount(async () => {
 	// if (pwaInfo) {
 	// 	const { registerSW } = await import('virtual:pwa-register');
