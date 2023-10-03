@@ -41,7 +41,7 @@
 	header {
 		width: 100%;
 		height: var(--height);
-		background: linear-gradient(#afafaf80 10%, #00000043 100%) #f01ef6;
+		background: linear-gradient(#00000000 30%, #0000001d 100%) #f01ef6;
 		position: var(--position);
 		top: 0;
 		box-shadow: var(--shadow);

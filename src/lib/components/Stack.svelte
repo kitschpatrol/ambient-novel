@@ -199,7 +199,7 @@
 
 <style lang="postcss">
 	div#controls {
-		background: linear-gradient(#00000053 0%, rgba(86, 86, 86, 0.502) 100%);
+		/* background: linear-gradient(#00000053 0%, rgba(86, 86, 86, 0.502) 100%); */
 		user-select: none;
 		/* autoprefixer? */
 		-webkit-user-select: none;
@@ -209,9 +209,9 @@
 	}
 
 	footer {
+		background: linear-gradient(#0000001d 30%, #00000000 100%) #4e3bff;
 		width: 100vw;
 		height: calc(100dvh / 12);
-		background: #4e3bff;
 		user-select: none;
 		/* autoprefixer? */
 		-webkit-user-select: none;

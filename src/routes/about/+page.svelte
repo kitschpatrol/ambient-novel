@@ -41,7 +41,7 @@
 
 <Header
 	--position="fixed"
-	--shadow="0px 8px 20px 0px rgba(0, 0, 0, 0.2)"
+	--shadow="0px 25px 50px 0px rgba(0, 0, 0, 0.1)"
 	--height="calc(100svh / 12)"
 />
 
