@@ -11,26 +11,24 @@
 <svelte:head>
 	<title>About — The Valentine Mob</title>
 	<style>
-		html,
-		body {
-			overscroll-behavior: unset;
-		}
-
 		/* all the fixed position hacks (like ::before) are subtly broken */
-		body {
+		body,
+		html {
+			overscroll-behavior: unset;
 			position: static;
 			overflow-y: auto;
 			background: linear-gradient(
-				var(--background-color-gradient-1) 0%,
-				var(--background-color-gradient-2) 100%
-			);
+					var(--background-color-gradient-1) 0%,
+					var(--background-color-gradient-2) 100%
+				)
+				var(--background-color-gradient-1);
 		}
 	</style>
 </svelte:head>
 
 <Header
 	--position="fixed"
-	--shadow="0px 25px 50px 0px rgba(0, 0, 0, 0.1)"
+	--shadow="-10px 25px 50px 0px rgba(0, 0, 0, 0.2)"
 	--height="calc(100svh / 12)"
 />
 
