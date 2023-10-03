@@ -118,11 +118,12 @@
 
 	{#each chapters as chapter, index}
 		{#if loadCount >= index && width > 0}
+			<!-- {#if 0 >= index && width > 0} -->
 			<Track
 				ready={() => {
-					setTimeout(() => {
-						loadCount++;
-					}, loadDelay);
+					// setTimeout(() => {
+					loadCount++;
+					// }, loadDelay);
 				}}
 				chapterData={chapters[index]}
 				chapterColor={chapterColors[index]}

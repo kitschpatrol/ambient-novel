@@ -13,23 +13,22 @@
 	export let currentTime = 0; // actual time of audio
 	export let targetTime = 0; // time we're requesting
 
+	let firstLoad = true; // temp for time logging
+	console.time(`load audio ${audioSources[0]}`);
+
 	let audioElement: HTMLAudioElement;
 
 	onMount(() => {
+		console.log('audio mounted', audioElement.readyState);
+		if (firstLoad) {
+			console.log('audio loading');
+			audioElement.load();
+		}
 		audioElement.currentTime = targetTime; // critical
-	});
-
-	// have to use this instead of onMount to avoid null reference issues in Chapter
-	function onAudioElementMounted(node: HTMLAudioElement) {
-		// forcing load fixes safari bugs changing chapters while playing
-		// https://stackoverflow.com/a/73441313/2437832
-		// needed even on a server that supports 206s
-		node.load();
-		node.currentTime = targetTime;
-		node.volume = maxVolume;
-		node.muted = false;
+		audioElement.volume = maxVolume;
+		audioElement.muted = false;
 		if (isPlaying)
-			node
+			audioElement
 				.play()
 				.then(() => {
 					// all good
@@ -37,7 +36,22 @@
 				.catch((error) => {
 					console.error(error);
 				});
-	}
+	});
+
+	// function afterLoaded() {
+
+	// }
+
+	// // have to use this instead of onMount to avoid null reference issues in Chapter
+	// function onAudioElementMounted(node: HTMLAudioElement) {
+	// 	console.log('mount audio');
+	// 	// forcing load fixes safari bugs changing chapters while playing
+	// 	// https://stackoverflow.com/a/73441313/2437832
+	// 	// needed even on a server that supports 206s
+	// 	// node.load();
+	// 	node.currentTime = targetTime;
+	// 	node.
+	// }
 
 	const seekAudio = (time: number) => {
 		// return new Promise((resolve) => {
@@ -88,10 +102,31 @@
 <!-- // adding prelad="none" was key to currentTime bugs on mobile safari -->
 <!-- // but only on CF pages which doesn't yet handle 206s range responses -->
 <!-- // now apparently not necessary after switching to netlify with 206 support -->
+<!-- // preload auto without a manual call to "load" only runs on the first file on mobile safari -->
 <audio
 	muted
 	{loop}
-	use:onAudioElementMounted
+	preload="none"
+	on:abort={() => {
+		console.log('abort');
+	}}
+	on:loadstart={() => {
+		console.log('loadstart');
+	}}
+	on:loadeddata={() => {
+		console.log('loadeddata');
+	}}
+	on:load={() => {
+		console.log('load');
+	}}
+	on:canplaythrough
+	on:canplaythrough={() => {
+		console.log('canplaythrough');
+		if (firstLoad) {
+			console.timeEnd(`load audio ${audioSources[0]}`);
+			firstLoad = false;
+		}
+	}}
 	bind:currentTime={currentTimeProxy}
 	on:ended
 	bind:this={audioElement}
@@ -110,7 +145,7 @@
 	on:introend={() => {}}
 >
 	{#each audioSources as source}
-		<source src={`${source}`} type={getType(source)} />
+		<source src={source} type={getType(source)} />
 	{/each}
 	Your browser does not support the audio element.
 </audio>

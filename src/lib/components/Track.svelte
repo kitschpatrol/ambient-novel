@@ -29,7 +29,7 @@
 	const isMobile = (new UAParser().getDevice().type ?? '') === 'mobile';
 	const clickToTogglePlayPause = false;
 	const isScrollBoosterEnabled = true;
-	const debug = false;
+	const debug = true;
 	const isSpringEnabled = true;
 	const springConfig = {
 		stiffness: 0.005,
@@ -49,6 +49,7 @@
 	let wordElements: HTMLSpanElement[];
 	let isMounted = false;
 	let scrollAreaElement: HTMLDivElement;
+	let isLoaded = false;
 
 	// frame loop
 	let isUserHoldingDownFingerOrMouse = false;
@@ -130,10 +131,6 @@
 		timeCache = generateTimeCache(chapterData, wordElements) as number[];
 
 		isMounted = true;
-
-		tick().then(() => {
-			ready();
-		});
 	});
 
 	onDestroy(() => {
@@ -378,8 +375,18 @@
 		}
 	}
 
+	function setLoaded(loaded: boolean) {
+		if (loaded) {
+			tick().then(() => {
+				console.log('ready', loaded);
+				ready();
+			});
+		}
+	}
+
 	//Reactive zone --------------------------
 
+	$: setLoaded(isLoaded);
 	$: setPlaying(isPlaying);
 	$: setReset(isReset);
 	$: setTargetTime(targetTime);
@@ -524,6 +531,9 @@
 		bind:currentTime
 		{targetTime}
 		on:ended
+		on:canplaythrough={() => {
+			isLoaded = true;
+		}}
 	/>
 {:else}
 	<AudioFadeProxy
@@ -532,6 +542,9 @@
 		bind:currentTime
 		{targetTime}
 		on:ended
+		on:canplaythrough={() => {
+			isLoaded = true;
+		}}
 	/>
 {/if}
 

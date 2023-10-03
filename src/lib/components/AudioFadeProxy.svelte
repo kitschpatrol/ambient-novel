@@ -55,15 +55,16 @@
 	// TODO  disable on ended in out-transitioning stuff?
 </script>
 
-{#if hasPlayed}
-	{#key isPlaying}
-		<Audio
-			{audioSources}
-			isPlaying={isPlayingProxy}
-			{maxVolume}
-			targetTime={targetTimeProxy}
-			bind:currentTime={currentTimeProxy}
-			on:ended
-		/>
-	{/key}
-{/if}
+<!-- {#if hasPlayed} -->
+{#key isPlaying}
+	<Audio
+		{audioSources}
+		isPlaying={isPlayingProxy}
+		{maxVolume}
+		targetTime={targetTimeProxy}
+		bind:currentTime={currentTimeProxy}
+		on:ended
+		on:canplaythrough
+	/>
+{/key}
+<!-- {/if} -->
