@@ -1,4 +1,5 @@
 <script lang="ts">
+	// import { browser } from '$app/environment';
 	// import { onMount } from 'svelte';
 	// import { pwaInfo } from 'virtual:pwa-info';
 	import '/src/global.css';
@@ -34,6 +35,12 @@
 	// });
 
 	// $: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : '';
+
+	// wtf...
+	// https://stackoverflow.com/questions/9811429/html5-audio-tag-on-safari-has-a-delay
+	// if (browser) {
+	// 	const audioContext = new window.AudioContext();
+	// }
 </script>
 
 <slot />

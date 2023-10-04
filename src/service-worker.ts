@@ -3,13 +3,11 @@
 /// <reference lib="esnext" />
 /// <reference lib="webworker" />
 
-import { build, files, prerendered, version } from '$service-worker';
+import { files } from '$service-worker';
 import { CacheableResponsePlugin } from 'workbox-cacheable-response';
 import { RangeRequestsPlugin } from 'workbox-range-requests';
 import { registerRoute } from 'workbox-routing';
 import { CacheFirst } from 'workbox-strategies';
-
-console.log('worker', { build, files, prerendered, version });
 
 // can't use automatic vite-plugin-pwa injection because we need to
 // manage the range responses

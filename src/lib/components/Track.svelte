@@ -27,9 +27,8 @@
 
 	// config
 	const isMobile = (new UAParser().getDevice().type ?? '') === 'mobile';
-	const clickToTogglePlayPause = false;
-	const isScrollBoosterEnabled = true;
-	const debug = true;
+	// const clickToTogglePlayPause = false;
+	const debug = false;
 	const isSpringEnabled = true;
 	const springConfig = {
 		stiffness: 0.005,
@@ -44,72 +43,73 @@
 	let wheelTimer: NodeJS.Timeout | undefined;
 	let isChapterCoverVisible = true;
 
-	let scrollBooster: ScrollBooster | undefined;
 	let timeCache: number[]; // one element longer than the number of words, to accommodate the "end" time of the last word
 	let wordElements: HTMLSpanElement[];
 	let isMounted = false;
 	let scrollAreaElement: HTMLDivElement;
 	let isLoaded = false;
 
-	// frame loop
+	// scroll booster / frame loop
+	let scrollBooster: ScrollBooster;
 	let isUserHoldingDownFingerOrMouse = false;
 	let scrollLeft = 0;
 	let scrollLeftDelta = 0;
 	let intervalId: NodeJS.Timer | undefined;
-	let scrollBoosterStart = 0;
+	// let scrollBoosterStart = 0;
 
 	onMount(() => {
 		// allow drag scrolling on desktop
-		scrollBooster = isScrollBoosterEnabled
-			? new ScrollBooster({
-					viewport: scrollWrapperElement,
-					content: scrollAreaElement,
-					direction: 'horizontal',
-					scrollMode: 'native',
-					bounce: true,
-					pointerMode: 'mouse',
-					/* @ts-ignore */
-					onPointerDown: (e) => {
-						isSeeking = true;
+		scrollBooster = new ScrollBooster({
+			viewport: scrollWrapperElement,
+			content: scrollAreaElement,
+			direction: 'horizontal',
+			scrollMode: 'native',
+			bounce: true,
+			pointerMode: 'mouse',
+			/* @ts-ignore */
+			onPointerDown: () => {
+				// doesn't fire on ios mobile while intertial scroll animation is playing
+				isSeeking = true;
 
-						// seem to have to set this to avoid jumps
-						scrollBooster?.setPosition({
-							x: scrollWrapperElement.scrollLeft,
-							y: 0
-						});
+				// seem to have to set this to avoid jumps
+				scrollBooster.setPosition({
+					x: scrollWrapperElement.scrollLeft,
+					y: 0
+				});
 
-						// track position to distinguish between click and drag
-						scrollBoosterStart = e.position.x;
-					},
-					onPointerUp: (e) => {
-						// Play / pause on click without drag
-						if (clickToTogglePlayPause && isSeeking) {
-							const dragDistance = Math.abs(scrollBoosterStart - e.position.x);
-							// TODO Don't play / pause if we "stab" during an inertial scroll?
-							if (dragDistance < 3) {
-								isSeeking = false;
-								isPlaying = !isPlaying;
-							}
-						}
-					}
-			  })
-			: undefined;
+				// track position to distinguish between click and drag
+				// scrollBoosterStart = e.position.x;
+			}
+			// onPointerUp: (e) => {
+			// 	// Play / pause on click without drag
+			// 	if (clickToTogglePlayPause && isSeeking) {
+			// 		const dragDistance = Math.abs(scrollBoosterStart - e.position.x);
+			// 		// TODO Don't play / pause if we "stab" during an inertial scroll?
+			// 		if (dragDistance < 3) {
+			// 			isSeeking = false;
+			// 			isPlaying = !isPlaying;
+			// 		}
+			// 	}
+			// }
+		});
 
 		// watch scroll velocity
 		// have to do this instead of an on:scroll handler so we can calculate velocity / delta
 		function loop() {
-			if (scrollWrapperElement && !isReset && isSeeking) {
+			if (!isReset && isSeeking) {
 				scrollLeftDelta = scrollWrapperElement.scrollLeft - scrollLeft;
 				scrollLeft = scrollWrapperElement.scrollLeft;
 
+				// doesn't really work on ios...
 				if (!isUserHoldingDownFingerOrMouse && scrollLeftDelta === 0) {
 					// stop the scroll booster which can "flicker" between 0 and .5 as it slows down
-					if (scrollBooster && scrollBooster.getState().isMoving) {
-						scrollBooster.setPosition({
-							x: scrollLeft,
-							y: 0
-						});
-					}
+					// todo is isMoving ever true? isDragging is broken
+					// if (scrollBooster.getState().isMoving) {
+					scrollBooster.setPosition({
+						x: scrollLeft,
+						y: 0
+					});
+					// }
 
 					// optimization, only seek audio at the end of a scroll input
 					targetTime = timeFromWordIndex(activeWordIndex);
@@ -117,7 +117,6 @@
 					isSeeking = false;
 				}
 			}
-			// console.profileEnd('loop');
 		}
 
 		intervalId = setInterval(function () {
@@ -135,6 +134,7 @@
 
 	onDestroy(() => {
 		if (intervalId) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			clearInterval(intervalId as any);
 		}
 	});
@@ -378,7 +378,6 @@
 	function setLoaded(loaded: boolean) {
 		if (loaded) {
 			tick().then(() => {
-				console.log('ready', loaded);
 				ready();
 			});
 		}
@@ -428,10 +427,11 @@
 			/* @ts-ignore */
 			e.target.setPointerCapture(e.pointerId);
 		}}
-		on:pointercancel={(e) => {
-			isUserHoldingDownFingerOrMouse = false;
+		on:pointercancel={() => {
+			// breaks mobile?
+			// isUserHoldingDownFingerOrMouse = false;
 		}}
-		on:pointerup={(e) => {
+		on:pointerup={() => {
 			isUserHoldingDownFingerOrMouse = false;
 		}}
 		on:wheel|passive={(e) => {
@@ -457,7 +457,7 @@
 		<!-- prettier-ignore -->
 		<div bind:this={scrollAreaElement} class="scroll-area"><!--
 		--><div class="spacer" /><!--
-			-->{#each chapterData.lines as line, chapterIndex}<!--
+			-->{#each chapterData.lines as line}<!--
 					-->{@html line}<!--
 		-->{/each}<!--
 		--><div class="spacer" />

@@ -13,12 +13,12 @@
 		faPause,
 		faRotateBack
 	} from '@fortawesome/free-solid-svg-icons';
-	import { forEach, random } from 'lodash';
+	import { random } from 'lodash';
 	import shuffle from 'lodash/shuffle';
 	import { onMount, tick } from 'svelte';
 
 	export let bookData: BookData;
-	const { chapters, title } = bookData;
+	const { chapters } = bookData;
 	const loadDelay = 100;
 	const resetDelay = 100;
 
@@ -116,7 +116,8 @@
 {#if mounted}
 	<Header --height="calc(100dvh / 12)" />
 
-	{#each chapters as chapter, index}
+	<!-- eslint-disable-next-line @typescript-eslint/no-unused-vars -->
+	{#each chapters as _, index}
 		{#if loadCount >= index && width > 0}
 			<!-- {#if 0 >= index && width > 0} -->
 			<Track

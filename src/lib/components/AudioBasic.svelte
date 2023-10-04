@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { fadeVolume } from '$lib/utils/transition/fadeVolume';
 	import pkg from 'mime';
-	import { onDestroy, onMount, tick } from 'svelte';
+	import { onMount } from 'svelte';
 	const { getType } = pkg;
 
 	export let audioSources: string[];

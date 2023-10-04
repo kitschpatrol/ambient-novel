@@ -1,9 +1,9 @@
 <script lang="ts">
 	// import { crossfadeVolume } from '$lib/utils/transition/crossfadeVolume';
 	import { fadeVolume } from '$lib/utils/transition/fadeVolume';
-	import pkg from 'mime';
+	// import pkg from 'mime';
 	import { onMount } from 'svelte';
-	const { getType } = pkg;
+	// const { getType } = pkg;
 	// import { getType } from 'mime';
 
 	export let audioSources: string[];
@@ -14,15 +14,23 @@
 	export let targetTime = 0; // time we're requesting
 
 	let firstLoad = true; // temp for time logging
+
 	console.time(`load audio ${audioSources[0]}`);
 
 	let audioElement: HTMLAudioElement;
 
 	onMount(() => {
-		console.log('audio mounted', audioElement.readyState);
 		if (firstLoad) {
-			console.log('audio loading');
+			// voodoo implementation
+			// not sure if any of this helps
+			// https://stackoverflow.com/a/73910818/2437832
+			let savedCurentTime = audioElement.currentTime;
+			audioElement.src = audioSources[0];
 			audioElement.load();
+			audioElement.currentTime = savedCurentTime;
+
+			// basic implementation
+			// audioElement.load();
 		}
 		audioElement.currentTime = targetTime; // critical
 		audioElement.volume = maxVolume;
@@ -106,22 +114,9 @@
 <audio
 	muted
 	{loop}
-	preload="none"
-	on:abort={() => {
-		console.log('abort');
-	}}
-	on:loadstart={() => {
-		console.log('loadstart');
-	}}
-	on:loadeddata={() => {
-		console.log('loadeddata');
-	}}
-	on:load={() => {
-		console.log('load');
-	}}
+	preload="auto"
 	on:canplaythrough
 	on:canplaythrough={() => {
-		console.log('canplaythrough');
 		if (firstLoad) {
 			console.timeEnd(`load audio ${audioSources[0]}`);
 			firstLoad = false;
@@ -144,8 +139,9 @@
 	}}
 	on:introend={() => {}}
 >
-	{#each audioSources as source}
+	<!-- basic implementation -->
+	<!-- {#each audioSources as source}
 		<source src={source} type={getType(source)} />
-	{/each}
+	{/each} -->
 	Your browser does not support the audio element.
 </audio>

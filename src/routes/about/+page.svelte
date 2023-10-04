@@ -1,15 +1,15 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import Header from '$lib/components/Header.svelte';
-	import OpenSourceCredits from '$lib/components/OpenSourceCredits.svelte';
-	import licenseDataRaw from '$lib/data/licenses.json';
-	import { licenseSchema } from '$lib/schemas/licensesSchema';
+	// import OpenSourceCredits from '$lib/components/OpenSourceCredits.svelte';
+	// import licenseDataRaw from '$lib/data/licenses.json';
+	// import { licenseSchema } from '$lib/schemas/licensesSchema';
 
-	const licenseData = licenseSchema.parse(licenseDataRaw);
+	// const licenseData = licenseSchema.parse(licenseDataRaw);
 </script>
 
 <svelte:head>
-	<title>About — The Valentine Mob</title>
+	<title>About — The Valentine Mob</title>
 	<style>
 		/* all the fixed position hacks (like ::before) are subtly broken */
 		body,

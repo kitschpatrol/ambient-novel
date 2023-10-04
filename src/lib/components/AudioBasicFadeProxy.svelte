@@ -2,7 +2,6 @@
 	// This wraps the Audio component and uses Svelte's transitions functionality
 	// to fade the volume in and out when the audio is played and paused.
 	import AudioBasic from '$lib/components/AudioBasic.svelte';
-	import { afterUpdate, tick } from 'svelte';
 
 	export let audioSources: string[];
 	export let isPlaying = false;

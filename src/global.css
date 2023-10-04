@@ -68,10 +68,10 @@ body {
 	background: theme('colors.vm-magenta');
 }
 
-/* TODO eval this */
-/* * {
+/* This seems to save touchcancel issues (none and pan-x don't work) */
+* {
 	touch-action: manipulation;
-} */
+}
 
 /* nope */
 /* body {

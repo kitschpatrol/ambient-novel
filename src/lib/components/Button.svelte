@@ -11,6 +11,7 @@
 	// setting duration to 0 is not enough for a smooth transition
 	// https://stackoverflow.com/a/70629246/2437832
 	// possibly still flaky
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	function maybe(node: HTMLElement, options: any) {
 		if (isTransitionEnabled) {
 			return options.fn(node, options);

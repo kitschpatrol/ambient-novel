@@ -11,10 +11,10 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"dev": "vite dev --host",
-		"format": "prettier --plugin-search-dir . --write .",
+		"format": "prettier --plugin prettier-plugin-svelte --write .",
 		"generate-data": "ts-node ./scripts/generateData.ts",
 		"generate-licenses": "license-checker-rseidelsohn --direct --excludePrivatePackages --excludePackagesStartingWith '@playwrith;@types;@prettier;prettier;eslint' --json --out ./src/lib/data/licenses.json",
-		"lint": "prettier --plugin-search-dir . --check . && eslint .",
+		"lint": "prettier --plugin prettier-plugin-svelte --check . && eslint .",
 		"preview": "vite preview --host",
 		"scrape-pdf": "ts-node ./scripts/scrapePdf.ts"
 	},
