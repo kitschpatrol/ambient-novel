@@ -19,7 +19,7 @@
 
 	let audioElement: HTMLAudioElement;
 
-	onMount(() => {
+	function mount() {
 		if (firstLoad) {
 			// voodoo implementation
 			// not sure if any of this helps
@@ -43,7 +43,14 @@
 				})
 				.catch((error) => {
 					console.error(error);
+					console.log('retrying...');
+					firstLoad = true;
+					mount();
 				});
+	}
+
+	onMount(() => {
+		mount();
 	});
 
 	// function afterLoaded() {
