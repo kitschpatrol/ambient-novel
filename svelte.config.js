@@ -10,7 +10,7 @@ const config = {
 	kit: {
 		adapter: adapter({
 			// cloudflare pages does this for us...
-			precompress: true,
+			precompress: false,
 			fallback: 'index.html'
 		}),
 		// serviceWorker: {
