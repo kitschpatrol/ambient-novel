@@ -1,5 +1,4 @@
 <script lang="ts">
-	// import { crossfadeVolume } from '$lib/utils/transition/crossfadeVolume';
 	import { fadeVolume } from '$lib/utils/transition/fadeVolume';
 	// import pkg from 'mime';
 	import { onMount } from 'svelte';
@@ -132,7 +131,7 @@
 	bind:currentTime={currentTimeProxy}
 	on:ended
 	bind:this={audioElement}
-	transition:fadeVolume={{ duration: 600 }}
+	transition:fadeVolume|local={{ duration: 600 }}
 	on:outrostart={() => {
 		// don't send time updates during transitions
 		isInOutro = true;

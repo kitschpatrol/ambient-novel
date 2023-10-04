@@ -52,7 +52,7 @@
 	on:ended
 	bind:this={audioElement}
 	bind:currentTime={currentTimeProxy}
-	transition:fadeVolume={{ duration: 5000 }}
+	transition:fadeVolume|local={{ duration: 5000 }}
 	on:outrostart={() => {
 		isInOutro = true;
 	}}

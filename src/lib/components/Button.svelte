@@ -1,6 +1,6 @@
 <script lang="ts">
+	import { fastFadeJs } from '$lib/utils/transition/fastFadeJs';
 	import Fa from 'svelte-fa';
-	import { fade } from 'svelte/transition';
 	export let isDown = false;
 	export let iconAlign: 'left' | 'right' = 'left';
 	export let label: string | null = null;
@@ -19,13 +19,9 @@
 	}
 </script>
 
-<button
-	transition:maybe={{ fn: fade, duration: 500 }}
-	disabled={!isEnabled}
-	on:click
-	class="h-full w-full px-1 pb-3 pt-2 first:pl-5 last:pr-5"
->
+<button disabled={!isEnabled} on:click class="h-full w-full px-1 pb-3 pt-2 first:pl-5 last:pr-5">
 	<div
+		transition:maybe={{ fn: fastFadeJs, duration: 500 }}
 		class:aspect-square={!label}
 		class:flex-row={iconAlign === 'left'}
 		class:flex-row-reverse={iconAlign === 'right'}

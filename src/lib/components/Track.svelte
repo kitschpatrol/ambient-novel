@@ -2,6 +2,7 @@
 <svelte:options immutable={true} />
 
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { base } from '$app/paths';
 	import Audio from '$lib/components/Audio.svelte';
 	import AudioFadeProxy from '$lib/components/AudioFadeProxy.svelte';
@@ -9,11 +10,13 @@
 	import ChapterCover from '$lib/components/ChapterCover.svelte';
 	import * as config from '$lib/config';
 	import type { ChapterData } from '$lib/schemas/bookSchema';
+	import { fastFadeJs } from '$lib/utils/transition/fastFadeJs';
 	import { faPause, faPlay, faRotateBack } from '@fortawesome/free-solid-svg-icons';
 	import ScrollBooster from 'scrollbooster';
 	import { onDestroy, onMount, tick } from 'svelte';
+
 	import { spring } from 'svelte/motion';
-	import { fade } from 'svelte/transition';
+
 	import UAParser from 'ua-parser-js';
 
 	export let chapterData: ChapterData;
@@ -56,6 +59,15 @@
 	let scrollLeftDelta = 0;
 	let intervalId: NodeJS.Timer | undefined;
 	// let scrollBoosterStart = 0;
+
+	// TODO does this help?
+	// wtf...
+	// https://stackoverflow.com/questions/9811429/html5-audio-tag-on-safari-has-a-delay
+	if (browser) {
+		// const audioContext = new window.AudioContext();
+		const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+		const audioCtx = new AudioContext();
+	}
 
 	onMount(() => {
 		// allow drag scrolling on desktop
@@ -276,7 +288,9 @@
 	function scrollOffsetFromWordIndex(index: number): number {
 		// before first word
 		if (index < 0) {
-			return wordElements[0].offsetLeft - rowWidth / 2;
+			// return wordElements[0].offsetLeft - rowWidth / 2;
+			// optimization
+			return 0;
 		}
 
 		// after last word
@@ -472,7 +486,7 @@
 
 	{#if isReset}
 		<div
-			transition:fade={{ duration: config.chapterCoverTransitionDuration }}
+			transition:fastFadeJs|local={{ duration: config.chapterCoverTransitionDuration }}
 			on:introend={() => {
 				isChapterCoverVisible = true;
 				targetTime = -1; // force reactive update...

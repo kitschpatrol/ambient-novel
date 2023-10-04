@@ -22,6 +22,7 @@
 
 <style lang="postcss">
 	h2.chapter-title {
+		/* will-change: opacity; */
 		font-size: min(calc(100dvh / 42), 1.75rem);
 		line-height: calc(100dvh / 12);
 	}

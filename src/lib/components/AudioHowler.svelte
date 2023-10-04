@@ -88,4 +88,4 @@
 </script>
 
 <!-- HTML -->
-<div style="display: none;" transition:fadeVolumeHowler={{ duration: 1000 }} />
+<div style="display: none;" transition:fadeVolumeHowler|local={{ duration: 1000 }} />
