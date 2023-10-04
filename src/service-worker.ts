@@ -4,90 +4,159 @@
 /// <reference lib="webworker" />
 
 import { files } from '$service-worker';
-import { CacheableResponsePlugin } from 'workbox-cacheable-response';
-import { RangeRequestsPlugin } from 'workbox-range-requests';
+
+import { createPartialResponse } from 'workbox-range-requests';
 import { registerRoute } from 'workbox-routing';
-import { CacheFirst } from 'workbox-strategies';
 
 // can't use automatic vite-plugin-pwa injection because we need to
 // manage the range responses
 
 const filesToCache = files.filter((f) => f.endsWith('m4a'));
-const cacheName = `tvm-audio-cache-${getCacheContentHash(filesToCache)}`;
-
-self.addEventListener('activate', () => {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	(self as any).clients.claim();
-
-	// Remove previous cached data from disk
-	async function deleteOldCaches() {
-		for (const key of await caches.keys()) {
-			if (key !== cacheName) {
-				console.log(`Removing stale cache ${key}`);
-				await caches.delete(key);
-			}
-		}
-	}
-
-	deleteOldCaches();
-});
+const cacheName = `tvm-audio-cache`;
 
 self.addEventListener('install', () => {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	(self as any).skipWaiting();
+
+	console.log('SW installed');
 });
 
-registerRoute(
-	// ({ request: e }) => 'audio' === e.destination,
+self.addEventListener('activate', async () => {
+	console.log('SW activated');
 
-	new RegExp(/.*\.(m4a)$/),
-	new CacheFirst({
-		cacheName,
-		matchOptions: {
-			ignoreSearch: true,
-			ignoreVary: true
-		},
-		plugins: [
-			new CacheableResponsePlugin({
-				statuses: [200]
-			}),
-			new RangeRequestsPlugin()
-		]
-	}),
-	'GET'
-);
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	(self as any).clients.claim();
 
-// precacheAndRoute wasn't playing nice with ranged responses?
-caches.open(cacheName).then(async (cache) => {
-	const newFilesToCache: string[] = [];
-
-	for (const file of filesToCache) {
-		const match = await cache.match(file);
-		if (!match) {
-			newFilesToCache.push(file);
+	// delete old caches
+	for (const key of await caches.keys()) {
+		if (key !== cacheName) {
+			console.log(`Removing stale cache ${key}`);
+			await caches.delete(key);
 		}
 	}
 
-	if (newFilesToCache.length > 0) {
-		cache.addAll(newFilesToCache);
-		console.log(`cached ${newFilesToCache.length} new files`);
-	} else {
-		console.log('No new files to cache');
+	// prune any files that are no longer in the files manifest
+	const cache = await caches.open(cacheName);
+	const cachedFiles = await cache.keys();
+
+	for (const cachedFile of cachedFiles) {
+		if (!filesToCache.includes(cachedFile.url)) {
+			console.log(`Removing stale file ${cachedFile.url}`);
+			await cache.delete(cachedFile);
+		}
 	}
 });
 
-// Helpers
+// Tricky handler that fetches and caches the full file if needed
+// even if it's responding to a range request...
+// if the file's already in cache, serve a range response if necessary
+const m4aHandler = async ({ event }) => {
+	const cache = await caches.open(cacheName);
 
-function simpleHash(str: string): string {
-	let hash = 0;
-	for (let i = 0; i < str.length; i++) {
-		const char = str.charCodeAt(i);
-		hash = (hash << 5) - hash + char;
-		hash = hash & hash; // Convert to 32-bit integer
+	console.log('SW handling', event.request.url);
+
+	let response = await cache.match(event.request);
+
+	// cache the request
+	if (response) {
+		console.log('SW found match in cache');
+	} else {
+		// Clone the request to manipulate headers
+		const newHeaders = new Headers(event.request.headers);
+		newHeaders.delete('Range');
+
+		const newRequest = new Request(event.request.url, {
+			method: event.request.method,
+			headers: newHeaders,
+			mode: event.request.mode,
+			credentials: event.request.credentials,
+			redirect: event.request.redirect
+		});
+
+		// Fetch the full .m4a file
+		response = await fetch(newRequest);
+
+		if (response.status === 200) {
+			// Put it in the cache
+			console.log('SW Caching', event.request.url);
+			await cache.put(event.request, response.clone());
+		} else {
+			console.error(`SW failed to fetch ${event.request.url}`);
+		}
 	}
-	return Math.abs(hash).toString(16);
+
+	// Create a partial response if this is a Range request
+	if (event.request.headers.has('Range')) {
+		const partialResponse = await createPartialResponse(event.request, response);
+		return partialResponse;
+	}
+
+	return response;
+};
+
+registerRoute(
+	// ({ request: e }) => 'audio' === e.destination,
+	new RegExp(/.*\.(m4a)$/),
+	m4aHandler
+);
+
+// Messages
+
+interface ServiceWorkerMessageEvent extends Event {
+	data: {
+		action: string;
+	};
 }
 
-function getCacheContentHash(files: string[]): string {
-	return simpleHash(files.join());
-}
+self.addEventListener('message', (event: ServiceWorkerMessageEvent) => {
+	if (event.data && event.data.action === 'clearCache') {
+		// Clear the cache
+		caches
+			.keys()
+			.then((cacheNames: string[]) => {
+				return Promise.all(
+					cacheNames.map((cacheName: string) => {
+						return caches.delete(cacheName);
+					})
+				);
+			})
+			.then(() => {
+				console.log('Caches cleared');
+			})
+			.catch((error: Error) => {
+				console.log('Error clearing caches', error);
+			});
+	}
+});
+
+self.addEventListener('message', async (event: ServiceWorkerMessageEvent) => {
+	if (event.data && event.data.action === 'getCacheCount') {
+		const totalCount = await countCachedItems();
+
+		// Send back the total count to the main thread
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		((event as any).ports[0] as MessagePort).postMessage({
+			cacheCount: totalCount
+		});
+	}
+});
+
+const countCachedItems = async () => {
+	let totalCount = 0;
+
+	// Get the keys of all cache names
+	const cacheNames: string[] = await caches.keys();
+
+	for (const cacheName of cacheNames) {
+		// Open each cache by its name
+		const cache = await caches.open(cacheName);
+
+		// Get keys of all items in this cache
+		const requestKeys: Request[] = (await cache.keys()) as Request[];
+
+		// Add the count of items in this cache to the total count
+		totalCount += requestKeys.length;
+	}
+
+	return totalCount;
+};
