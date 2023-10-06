@@ -1,11 +1,31 @@
 {
 	"name": "ambient-novel",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"type": "module",
+	"description": "Website for nonlinear interactive exploration of The Valentine Mob novel.",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/kitschpatrol/ambient-novel.git"
+	},
+	"homepage": "https://39forks.com/thevalentinemob",
+	"bugs": {
+		"url": "https://github.com/kitschpatrol/ambient-novel/issues",
+		"email": "eric@ericmika.com"
+	},
+	"author": {
+		"name": "Eric Mika",
+		"email": "eric@ericmika.com",
+		"url": "https://ericmika.com"
+	},
 	"license": "CC BY-NC-SA 4.0",
 	"private": true,
+	"keywords": [
+		"book",
+		"novel",
+		"fiction",
+		"interactive"
+	],
 	"scripts": {
-		"align-transcript": "ts-node ./scripts/alignTranscriptToAudio.ts",
 		"build": "vite build && ts-node ./scripts/setHtaccessBasePath.ts",
 		"build-report": "dust -t -b ./build",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -14,8 +34,9 @@
 		"format": "prettier --plugin prettier-plugin-svelte --write .",
 		"generate-data": "ts-node ./scripts/generateData.ts",
 		"generate-licenses": "license-checker-rseidelsohn --direct --excludePrivatePackages --excludePackagesStartingWith '@playwrith;@types;@prettier;prettier;eslint' --json --out ./src/lib/data/licenses.json",
+		"generate-package-info": "jq '{version, name, description}' package.json > ./src/lib/data/pkgInfo.json",
 		"lint": "prettier --plugin prettier-plugin-svelte --check . && eslint .",
-		"prebuild": "jq '{version, name, description}' package.json > ./src/lib/data/pkgInfo.json",
+		"prebuild": "npm run generate-package-info",
 		"preview": "vite preview --host",
 		"scrape-pdf": "ts-node ./scripts/scrapePdf.ts"
 	},

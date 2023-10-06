@@ -111,85 +111,83 @@
 
 <svelte:window bind:innerWidth={width} />
 
-{#if mounted}
-	<Header --height="calc(100dvh / 12)" />
+<Header --height="calc(100dvh / 12)" />
 
-	<!-- eslint-disable-next-line @typescript-eslint/no-unused-vars -->
-	{#each chapters as _, index}
-		{#if loadCount >= index && width > 0}
-			<!-- {#if 0 >= index && width > 0} -->
-			<Track
-				ready={() => {
-					loadCount++;
-				}}
-				chapterData={chapters[index]}
-				chapterColor={chapterColors[index]}
-				rowWidth={width}
-				bind:targetTime={targetTimes[index]}
-				bind:isPlaying={playStatus[index]}
-				bind:isReset={resetStatus[index]}
-				on:ended={() => {
-					if (isPlayingThrough) {
-						// TODO
-						resetAll(); // this throws the right flag
-					} else {
-						resetStatus[index] = true;
-					}
+<!-- eslint-disable-next-line @typescript-eslint/no-unused-vars -->
+{#each chapters as _, index}
+	{#if loadCount >= index && width > 0}
+		<!-- {#if 0 >= index && width > 0} -->
+		<Track
+			ready={() => {
+				loadCount++;
+			}}
+			chapterData={chapters[index]}
+			chapterColor={chapterColors[index]}
+			rowWidth={width}
+			bind:targetTime={targetTimes[index]}
+			bind:isPlaying={playStatus[index]}
+			bind:isReset={resetStatus[index]}
+			on:ended={() => {
+				if (isPlayingThrough) {
+					// TODO
+					resetAll(); // this throws the right flag
+				} else {
+					resetStatus[index] = true;
+				}
 
-					if (index < chapters.length - 1) {
-						const nextChapterIndex = index + 1;
-						if (!playStatus[nextChapterIndex]) playStatus[nextChapterIndex] = true;
-					} else {
-						// reached the end of the book
-					}
+				if (index < chapters.length - 1) {
+					const nextChapterIndex = index + 1;
+					if (!playStatus[nextChapterIndex]) playStatus[nextChapterIndex] = true;
+				} else {
+					// reached the end of the book
+				}
+			}}
+		/>
+	{:else}
+		<TrackPlacholder chapterData={chapters[index]} chapterColor={chapterColors[index]} />
+	{/if}
+{/each}
+
+<footer>
+	<div id="controls" class="flex h-full w-full justify-between gap-6 max-sm:gap-1">
+		<span class="flex basis-[32rem]">
+			<Button
+				icon={faBookReader}
+				label="Play Through"
+				isEnabled={!isPlayingThrough && isAllLoaded}
+				isDown={isPlayingThrough}
+				on:click={async () => {
+					await resetAll();
+					playStatus[0] = true;
+					isPlayingThrough = true;
 				}}
 			/>
-		{:else}
-			<TrackPlacholder chapterData={chapters[index]} chapterColor={chapterColors[index]} />
-		{/if}
-	{/each}
-
-	<footer>
-		<div id="controls" class="flex h-full w-full justify-between gap-6 max-sm:gap-1">
-			<span class="flex basis-[32rem]">
-				<Button
-					icon={faBookReader}
-					label="Play Through"
-					isEnabled={!isPlayingThrough && isAllLoaded}
-					isDown={isPlayingThrough}
-					on:click={async () => {
-						await resetAll();
-						playStatus[0] = true;
-						isPlayingThrough = true;
-					}}
-				/>
-				<Button
-					icon={faDiceD20}
-					isEnabled={isAllLoaded && !blendingInProgress}
-					label="Lucky Blend"
-					on:click={onLuckyBlend}
-				/>
-			</span>
-			<span />
-			<span class="flex basis-[32rem]">
-				<Button
-					icon={faPause}
-					label="Pause all"
-					isEnabled={somethingPlaying && isAllLoaded}
-					on:click={() => {
-						playStatus = playStatus.map(() => false);
-					}}
-				/>
-				<Button
-					icon={faRotateBack}
-					label="Reset all"
-					isEnabled={somethingNotReset && isAllLoaded && !isResetting}
-					on:click={resetAll}
-				/>
-			</span>
-		</div>
-	</footer>
-{/if}
+			<Button
+				icon={faDiceD20}
+				isEnabled={isAllLoaded && !blendingInProgress}
+				label="Lucky Blend"
+				on:click={onLuckyBlend}
+			/>
+		</span>
+		<span />
+		<span class="flex basis-[32rem]">
+			<Button
+				icon={faPause}
+				label="Pause all"
+				isEnabled={somethingPlaying && isAllLoaded}
+				on:click={() => {
+					playStatus = playStatus.map(() => false);
+				}}
+			/>
+			<Button
+				icon={faRotateBack}
+				label="Reset all"
+				isEnabled={somethingNotReset && isAllLoaded && !isResetting}
+				on:click={resetAll}
+			/>
+		</span>
+	</div>
+</footer>
 
 <style lang="postcss">
 	div#controls {

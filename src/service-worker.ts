@@ -40,9 +40,13 @@ self.addEventListener('activate', async () => {
 	const cachedFiles = await cache.keys();
 
 	for (const cachedFile of cachedFiles) {
-		if (!filesToCache.includes(cachedFile.url)) {
-			console.log(`Removing stale file ${cachedFile.url}`);
+		const cachedUrlPath = new URL(cachedFile.url).pathname;
+
+		if (!filesToCache.includes(cachedUrlPath)) {
+			console.log(`Removing stale file ${cachedUrlPath}`);
 			await cache.delete(cachedFile);
+		} else {
+			console.log(`Retaining cache file ${cachedUrlPath}`);
 		}
 	}
 });

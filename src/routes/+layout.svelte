@@ -2,8 +2,9 @@
 	// import { browser } from '$app/environment';
 	// import { onMount } from 'svelte';
 	// import { pwaInfo } from 'virtual:pwa-info';
+	import { page } from '$app/stores';
+	import { canonicalPath } from '$lib/config';
 	import '/src/global.css';
-
 	/// TODO remove this
 	// onMount(() => {
 	// 	navigator.serviceWorker.getRegistrations().then(function (registrations) {
@@ -41,6 +42,12 @@
 	// if (browser) {
 	// 	const audioContext = new window.AudioContext();
 	// }
+
+	$: canonicalUrl = `${canonicalPath}${$page.route.id === '/' ? '' : $page.route.id}`;
 </script>
+
+<svelte:head>
+	<link rel="canonical" href={canonicalUrl} />
+</svelte:head>
 
 <slot />
