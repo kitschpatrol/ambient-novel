@@ -8,14 +8,16 @@
 	import AudioFadeProxy from '$lib/components/AudioFadeProxy.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import ChapterCover from '$lib/components/ChapterCover.svelte';
+	import Starfield from '$lib/components/Starfield.svelte';
 	import * as config from '$lib/config';
 	import type { ChapterData } from '$lib/schemas/bookSchema';
+	import { fastFadeFromJs } from '$lib/utils/transition/fastFadeFromJs';
 	import { fastFadeJs } from '$lib/utils/transition/fastFadeJs';
 	import { faPause, faPlay, faRotateBack } from '@fortawesome/free-solid-svg-icons';
 	import ScrollBooster from 'scrollbooster';
 	import { onDestroy, onMount, tick } from 'svelte';
-
 	import { spring } from 'svelte/motion';
+	import tinycolor from 'tinycolor2';
 
 	import UAParser from 'ua-parser-js';
 
@@ -29,6 +31,8 @@
 	export let ready = () => {};
 
 	// config
+	const showTextBeforeNarrationStarts = false;
+	const isStarfieldEnabled = true;
 	const isMobile = (new UAParser().getDevice().type ?? '') === 'mobile';
 	// const clickToTogglePlayPause = false;
 	const debug = false;
@@ -399,6 +403,8 @@
 
 	//Reactive zone --------------------------
 
+	$: starfieldColor = tinycolor(chapterColor).lighten(10).toHexString();
+
 	$: setLoaded(isLoaded);
 	$: setPlaying(isPlaying);
 	$: setReset(isReset);
@@ -469,13 +475,25 @@
 	>
 		<!-- funky comments here to avoid implicit white space issues -->
 		<!-- prettier-ignore -->
-		<div bind:this={scrollAreaElement} class="scroll-area"><!--
+		<div bind:this={scrollAreaElement} class=scroll-area class:hide-text={!showTextBeforeNarrationStarts && currentTime < chapterData.narrationTime.start}><!--
 		--><div class="spacer" /><!--
 			-->{#each chapterData.lines as line}<!--
 					-->{@html line}<!--
 		-->{/each}<!--
 		--><div class="spacer" />
 		</div>
+
+		{#if isStarfieldEnabled && !isReset && currentTime < chapterData.narrationTime.start - 3.5}
+			<button
+				on:click={() => {
+					targetTime = chapterData.narrationTime.start;
+				}}
+				in:fastFadeFromJs|local={{ delay: 250, duration: 3000 }}
+				out:fastFadeFromJs|local={{ duration: 3000 }}
+			>
+				<Starfield id={`particles-${chapterData.index}`} color={starfieldColor} />
+			</button>
+		{/if}
 	</div>
 
 	{#if debug}
@@ -489,6 +507,7 @@
 			transition:fastFadeJs|local={{ duration: config.chapterCoverTransitionDuration }}
 			on:introend={() => {
 				isChapterCoverVisible = true;
+				// Still broken sometimes?
 				targetTime = -1; // force reactive update...
 				targetTime = 0; // go even further than the first scroll pos
 			}}
@@ -568,7 +587,7 @@
 		height: calc(100dvh / 12);
 		position: relative;
 		/* background-color: white; */
-		background: linear-gradient(0deg, #f8f8f8 0%, white 13%, white 100%);
+		background: linear-gradient(0deg, #f8f8f8 0%, white 13%, white 100%) white;
 		user-select: none;
 		/* autoprefixer? */
 		-webkit-user-select: none;
@@ -577,9 +596,9 @@
 		-webkit-touch-callout: none; /* iOS Safari */
 	}
 
-	:global(body.cursor-grabbing-important *) {
+	/* :global(body.cursor-grabbing-important *) {
 		cursor: grabbing !important;
-	}
+	} */
 
 	/* Horizontal space between lines */
 	:global(div.scroll-area span.line) {
@@ -603,6 +622,10 @@
 		color: lightgray;
 	}
 
+	:global(div.scroll-area.hide-text span) {
+		color: white;
+	}
+
 	/* Read words */
 	/* TODO THIS IS WHAT IS SLOW IN SAFARI */
 	:global(div.scroll-area span.read) {
@@ -621,7 +644,7 @@
 		will-change: scroll-position; /* harms or helps? */
 		/* background-color: #ffffff22; */
 		cursor: grab;
-		mask-image: linear-gradient(90deg, transparent, rgba(0, 0, 0, 1) 10% 90%, transparent);
+		mask-image: linear-gradient(90deg, transparent, rgba(0, 0, 0, 1) 20% 80%, transparent);
 	}
 
 	div.spacer {

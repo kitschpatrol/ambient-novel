@@ -5,6 +5,8 @@
 	import { name, version } from '$lib/data/pkgInfo.json';
 	import { faBomb, faTrash } from '@fortawesome/free-solid-svg-icons';
 
+	import Starfield from '$lib/components/Starfield.svelte';
+
 	async function getServiceWorkerCount() {
 		return (await navigator.serviceWorker.getRegistrations()).length;
 	}
@@ -97,3 +99,4 @@
 	<Button icon={faBomb} label="Uninstall Service Worker" on:click={uninstallServiceWorker} />
 	<Button icon={faTrash} label="Clear Service Worker Cache" on:click={clearServiceWorkerCache} />
 </main>
+<Starfield />
