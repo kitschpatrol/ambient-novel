@@ -483,13 +483,12 @@
 		--><div class="spacer" />
 		</div>
 
-		{#if isStarfieldEnabled && !isReset && currentTime < chapterData.narrationTime.start - 3.5}
+		{#if (isStarfieldEnabled && !isReset && currentTime > 0.5 && currentTime < chapterData.narrationTime.start - 3.5) || currentTime > chapterData.narrationTime.end + 3}
 			<button
 				on:click={() => {
 					targetTime = chapterData.narrationTime.start;
 				}}
-				in:fastFadeFromJs|local={{ delay: 500, duration: 3000 }}
-				out:fastFadeFromJs|local={{ duration: 3000 }}
+				transition:fastFadeFromJs|local={{ duration: 3000 }}
 			>
 				<Starfield id={`particles-${chapterData.index}`} color={starfieldColor} />
 			</button>
