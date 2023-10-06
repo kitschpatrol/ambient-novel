@@ -19,7 +19,7 @@
 
 	export let bookData: BookData;
 	const { chapters } = bookData;
-	const loadDelay = 100;
+	const luckyBlendDelay = 100;
 	const resetDelay = 100;
 
 	let width = 0;
@@ -61,6 +61,8 @@
 		blendingInProgress = true;
 		await resetAll();
 
+		await sleep(luckyBlendDelay);
+
 		// pick some random chapters, and start playing
 		const chapterCount = random(chapters.length * 0.2, chapters.length * 0.5);
 		const chapterNumbers = Array.from({ length: chapters.length }, (_, i) => i);
@@ -68,7 +70,7 @@
 
 		for (const chapterIndex of randomChapters) {
 			const startTime = random(
-				chapters[chapterIndex].narrationTime.start * 1.22,
+				chapters[chapterIndex].narrationTime.start * 1.25,
 				chapters[chapterIndex].narrationTime.end * 0.75,
 				true
 			);
@@ -77,7 +79,7 @@
 			tick().then(() => {
 				playStatus[chapterIndex] = true;
 			});
-			await sleep(250);
+			await sleep(luckyBlendDelay);
 		}
 		blendingInProgress = false;
 	}
@@ -86,9 +88,9 @@
 	let mounted = false;
 	onMount(() => {
 		mounted = true;
-		setTimeout(() => {
-			loadCount++;
-		}, loadDelay);
+		// setTimeout(() => {
+		loadCount++;
+		// }, loadDelay);
 	});
 
 	$: isAllLoaded = loadCount === chapters.length;
@@ -104,7 +106,7 @@
 		isResetting = true;
 		const chapterIndicesToReset = getIndicesMatchingValue(resetStatus, false);
 		await delayedForEach(chapterIndicesToReset, (index) => (resetStatus[index] = true), resetDelay);
-		await sleep(config.chapterCoverTransitionDuration * chapterIndicesToReset.length);
+		await sleep(config.chapterCoverTransitionDuration - resetDelay);
 		isResetting = false;
 	}
 
