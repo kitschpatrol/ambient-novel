@@ -77,3 +77,13 @@ body {
 /* body {
 	user-select: none;
 } */
+
+/* takes care of flashing on mobile links */
+a,
+a:active,
+a:focus,
+button,
+button.active,
+button.focus {
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
