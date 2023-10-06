@@ -159,7 +159,7 @@
 					isDown={isPlayingThrough}
 					on:click={async () => {
 						await resetAll();
-						playStatus[7] = true;
+						playStatus[0] = true;
 						isPlayingThrough = true;
 					}}
 				/>
