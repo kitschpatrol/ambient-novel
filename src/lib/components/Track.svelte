@@ -18,7 +18,6 @@
 	import { onDestroy, onMount, tick } from 'svelte';
 	import { spring } from 'svelte/motion';
 	import tinycolor from 'tinycolor2';
-
 	import UAParser from 'ua-parser-js';
 
 	export let chapterData: ChapterData;
@@ -67,9 +66,10 @@
 	// TODO does this help?
 	// wtf...
 	// https://stackoverflow.com/questions/9811429/html5-audio-tag-on-safari-has-a-delay
-	if (browser) {
-		// const audioContext = new window.AudioContext();
+	if (browser && isMobile) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const audioCtx = new AudioContext();
 	}
 

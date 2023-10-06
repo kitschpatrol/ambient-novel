@@ -29,13 +29,12 @@
 	}
 
 	async function getCacheCount(): Promise<number> {
-		return new Promise<number>(async (resolve, reject) => {
+		return new Promise<number>((resolve, reject) => {
 			if (browser && 'serviceWorker' in navigator && navigator.serviceWorker.controller) {
 				const messageChannel = new MessageChannel();
 
 				// Set up a listener for receiving the count of cached items
 				messageChannel.port1.onmessage = (event) => {
-					console.log(`Total cached items: ${event.data.cacheCount}`);
 					resolve(event.data.cacheCount);
 				};
 

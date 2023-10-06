@@ -42,7 +42,7 @@
 				})
 				.catch((error) => {
 					console.error(error);
-					console.log('retrying...');
+					console.warn('retrying audio loading process...');
 					firstLoad = true;
 					mount();
 				});

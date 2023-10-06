@@ -16,11 +16,13 @@
 	import { random } from 'lodash';
 	import shuffle from 'lodash/shuffle';
 	import { onMount, tick } from 'svelte';
+	import UAParser from 'ua-parser-js';
 
 	export let bookData: BookData;
 	const { chapters } = bookData;
-	const luckyBlendDelay = 100;
+	const luckyBlendDelay = 250;
 	const resetDelay = 100;
+	const isMobile = (new UAParser().getDevice().type ?? '') === 'mobile';
 
 	let width = 0;
 
@@ -64,7 +66,8 @@
 		await sleep(luckyBlendDelay);
 
 		// pick some random chapters, and start playing
-		const chapterCount = random(chapters.length * 0.2, chapters.length * 0.5);
+		// lower max chapters on slow mobile
+		const chapterCount = isMobile ? random(2, 3) : random(2, 8);
 		const chapterNumbers = Array.from({ length: chapters.length }, (_, i) => i);
 		const randomChapters = shuffle(chapterNumbers).slice(0, chapterCount).sort();
 
@@ -88,17 +91,10 @@
 	let mounted = false;
 	onMount(() => {
 		mounted = true;
-		// setTimeout(() => {
 		loadCount++;
-		// }, loadDelay);
 	});
 
 	$: isAllLoaded = loadCount === chapters.length;
-
-	// on:keydown={onKeyDown}
-	// function onKeyDown(e: KeyboardEvent) {
-	// 	console.log(e);
-	// }
 
 	// returns when all animations are done
 	async function resetAll() {
@@ -124,9 +120,7 @@
 			<!-- {#if 0 >= index && width > 0} -->
 			<Track
 				ready={() => {
-					// setTimeout(() => {
 					loadCount++;
-					// }, loadDelay);
 				}}
 				chapterData={chapters[index]}
 				chapterColor={chapterColors[index]}
@@ -135,22 +129,18 @@
 				bind:isPlaying={playStatus[index]}
 				bind:isReset={resetStatus[index]}
 				on:ended={() => {
-					// TODO bugs
-					console.log('chapter ended');
 					if (isPlayingThrough) {
 						// TODO
-						const currentChapterIndex = playStatus.indexOf(true);
 						resetAll(); // this throws the right flag
-
-						if (currentChapterIndex < chapters.length - 1) {
-							const nextChapterIndex = playStatus.indexOf(true) + 1;
-							playStatus[nextChapterIndex] = true;
-							isPlayingThrough = true;
-						} else {
-							console.log('you reached the end');
-						}
 					} else {
 						resetStatus[index] = true;
+					}
+
+					if (index < chapters.length - 1) {
+						const nextChapterIndex = index + 1;
+						if (!playStatus[nextChapterIndex]) playStatus[nextChapterIndex] = true;
+					} else {
+						// reached the end of the book
 					}
 				}}
 			/>
@@ -169,7 +159,7 @@
 					isDown={isPlayingThrough}
 					on:click={async () => {
 						await resetAll();
-						playStatus[0] = true;
+						playStatus[7] = true;
 						isPlayingThrough = true;
 					}}
 				/>

@@ -4,7 +4,6 @@
 	// import OpenSourceCredits from '$lib/components/OpenSourceCredits.svelte';
 	// import licenseDataRaw from '$lib/data/licenses.json';
 	// import { licenseSchema } from '$lib/schemas/licensesSchema';
-
 	// const licenseData = licenseSchema.parse(licenseDataRaw);
 </script>
 
@@ -33,7 +32,7 @@
 />
 
 <main
-	class="mx-auto mb-16 mt-36 max-w-[70ch] bg-white bg-opacity-90 px-12 pb-8 pt-3 font-serif text-xl max-sm:mx-auto max-sm:mb-16 max-sm:mt-24 max-sm:w-[90vw] max-sm:px-5 max-sm:text-base"
+	class="mx-auto mb-16 mt-36 max-w-[70ch] bg-white bg-opacity-90 px-12 pb-8 pt-3 font-serif text-xl max-sm:mx-auto max-sm:mb-16 max-sm:mt-24 max-sm:w-[90vw] max-sm:px-5 max-sm:text-xl"
 >
 	<h2>About the Project</h2>
 	<h3>
@@ -89,7 +88,7 @@
 		Credits
 	</h3>
 
-	<p>
+	<p class="max-[480px]:text-base">
 		Scott Wayne Indiana —
 		<i>author and narrator</i>
 		<br />
@@ -128,11 +127,11 @@
 	}
 
 	main h2 {
-		@apply pb-3 pt-6 text-3xl font-normal max-sm:text-2xl;
+		@apply pb-3 pt-6 text-3xl font-normal;
 	}
 
 	main h3 {
-		@apply pb-3 pt-6 text-2xl font-medium italic max-sm:text-xl;
+		@apply pb-3 pt-6 text-2xl font-medium italic;
 	}
 
 	main a:hover {
