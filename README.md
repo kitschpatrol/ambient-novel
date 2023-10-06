@@ -1,16 +1,8 @@
 # Ambient Novel
 
-Uses [`dust`](https://github.com/bootandy/dust) in the `build-report` NPM script. Install from brew if needed:
+## Overview
 
-```bash
-brew install dust
-```
-
-Deployment server MUST support HTTP 206 range requests to successfuly set `currentTime` on audio elements on chrome.
-
-Currently deployed to:
-https://39forks.com/thevalentinemob-staging
-https://39forks.com/thevalentinemob-production-tbd
+The "Ambient Novel" website was created as a home or Scott Wayne Indiana's book _The Valentine Mob_. After several iterations, an interface approach that allows for simultaneous playack, scrubbing of multiple narrated audio tracks.
 
 ## Updating the content
 
@@ -102,24 +94,16 @@ conda deactivate
 
 ## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
 ```bash
+npm install
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
 ## Building
 
-To create a production version of your app:
-
 ```bash
 npm run build
 ```
-
-You can preview the production build with `npm run preview`.
 
 ## Deployment
 
@@ -154,6 +138,18 @@ The app is deployed via a GitHub action to Scott's DreamHost server, which runs 
 
 No bundle size advantage to moving content preprocessing deps only to their own package.json.
 
+To use the `build-report` npm script, insteall [`dust`](https://github.com/bootandy/dust) via homebrew if needed.
+
+```bash
+brew install dust
+```
+
+### Known issues
+
+- Scrolling issue on mobile safari, no touch up events during inertial scroll animations
+
+### Scrolling
+
 - https://github.com/studio-freight/lenis
 - https://github.com/Adoratorio/hades
 
@@ -161,7 +157,13 @@ Suppressing Stylelint Tailwind @apply etc. directive errors:
 
 - https://stackoverflow.com/a/76984634/2437832
 
-## PWA
+Deployment server MUST support HTTP 206 range requests to successfuly set `currentTime` on audio elements on chrome.
+
+Currently deployed to:
+https://39forks.com/thevalentinemob-staging
+https://39forks.com/thevalentinemob-production-tbd
+
+### PWA
 
 - https://stackoverflow.com/questions/76007716/how-do-i-use-workbox-range-requests-plugin-with-vite-pwa
 - https://github.com/userquin/sveltesociety.dev/tree/pwa
