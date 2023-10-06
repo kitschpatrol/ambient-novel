@@ -21,7 +21,7 @@
 				options: {
 					particles: {
 						number: {
-							value: 8
+							value: 9
 						}
 					}
 				}
@@ -45,15 +45,6 @@
 				distance: 80,
 				zIndex: 1
 			},
-			// lineLinked: {
-			// 	blink: false,
-			// 	color: 'random',
-			// 	consent: false,
-			// 	distance: 30,
-			// 	enable: true,
-			// 	opacity: 0.3,
-			// 	width: 0.5
-			// },
 			rotate: {
 				random: true,
 				direction: 'random',
@@ -138,7 +129,6 @@
 
 	let onParticlesLoaded = (event: CustomEvent<{ particles?: Container | undefined }>) => {
 		console.log('partcles loaded');
-		const particlesContainer = event.detail.particles;
 
 		// you can use particlesContainer to call all the Container class
 		// (from the core library) methods like play, pause, refresh, start, stop

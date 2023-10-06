@@ -488,7 +488,7 @@
 				on:click={() => {
 					targetTime = chapterData.narrationTime.start;
 				}}
-				in:fastFadeFromJs|local={{ delay: 250, duration: 3000 }}
+				in:fastFadeFromJs|local={{ delay: 500, duration: 3000 }}
 				out:fastFadeFromJs|local={{ duration: 3000 }}
 			>
 				<Starfield id={`particles-${chapterData.index}`} color={starfieldColor} />

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { fastFadeJs } from '$lib/utils/transition/fastFadeJs';
+	import { fastFadeCss } from '$lib/utils/transition/fastFadeCss';
 	import Fa from 'svelte-fa';
 	export let isDown = false;
 	export let iconAlign: 'left' | 'right' = 'left';
@@ -21,12 +21,12 @@
 
 <button disabled={!isEnabled} on:click class="h-full w-full px-1 pb-3 pt-2 first:pl-5 last:pr-5">
 	<div
-		transition:maybe={{ fn: fastFadeJs, duration: 500 }}
+		transition:maybe={{ fn: fastFadeCss, duration: 500 }}
 		class:aspect-square={!label}
 		class:flex-row={iconAlign === 'left'}
 		class:flex-row-reverse={iconAlign === 'right'}
 		class:down={isDown}
-		class="flex h-8 flex-1 items-center justify-center gap-2 rounded-lg bg-gray-300 bg-opacity-40 font-display text-base text-white text-opacity-90"
+		class="flex h-8 flex-1 items-center justify-center gap-2 rounded-lg bg-gray-400 bg-opacity-60 font-display text-base text-white text-opacity-90"
 	>
 		<Fa {icon} translateY="-.05" />
 		{#if label}
@@ -41,6 +41,7 @@
 		user-select: none;
 		-webkit-user-select: none;
 		-ms-user-select: none;
+		transition: opacity 500ms;
 	}
 
 	button div {

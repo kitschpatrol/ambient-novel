@@ -160,8 +160,8 @@
 	{/each}
 
 	<footer>
-		<div id="controls" class="md-s flex h-full w-full gap-6 max-sm:gap-1">
-			<span class="flex max-w-lg flex-1 items-center justify-start">
+		<div id="controls" class="flex h-full w-full justify-between gap-6 max-sm:gap-1">
+			<span class="flex basis-[32rem]">
 				<Button
 					icon={faBookReader}
 					label="Play Through"
@@ -180,8 +180,8 @@
 					on:click={onLuckyBlend}
 				/>
 			</span>
-			<span class="flex flex-grow items-center justify-center max-lg:hidden" />
-			<span class="flex max-w-lg flex-1 items-center justify-end">
+			<span />
+			<span class="flex basis-[32rem]">
 				<Button
 					icon={faPause}
 					label="Pause all"
@@ -193,7 +193,7 @@
 				<Button
 					icon={faRotateBack}
 					label="Reset all"
-					isEnabled={somethingNotReset && isAllLoaded}
+					isEnabled={somethingNotReset && isAllLoaded && !isResetting}
 					on:click={resetAll}
 				/>
 			</span>
