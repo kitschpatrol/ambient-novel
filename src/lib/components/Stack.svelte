@@ -129,7 +129,7 @@
 				chapterData={chapters[index]}
 				chapterColor={chapterColors[index]}
 				rowWidth={width}
-				targetTime={targetTimes[index]}
+				bind:targetTime={targetTimes[index]}
 				bind:isPlaying={playStatus[index]}
 				bind:isReset={resetStatus[index]}
 				on:ended={() => {
