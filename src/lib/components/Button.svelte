@@ -1,25 +1,32 @@
 <script lang="ts">
+	import { fastFadeCss } from '$lib/utils/transition/fastFadeCss';
 	import Fa from 'svelte-fa';
-	import { fade } from 'svelte/transition';
 	export let isDown = false;
 	export let iconAlign: 'left' | 'right' = 'left';
 	export let label: string | null = null;
 	export let icon: unknown | null; // Using IconDefinition causes type errors...
 	export let isEnabled = true;
+	export let isTransitionEnabled = false;
+
+	// setting duration to 0 is not enough for a smooth transition
+	// https://stackoverflow.com/a/70629246/2437832
+	// possibly still flaky
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	function maybe(node: HTMLElement, options: any) {
+		if (isTransitionEnabled) {
+			return options.fn(node, options);
+		}
+	}
 </script>
 
-<button
-	transition:fade={{ duration: 200 }}
-	disabled={!isEnabled}
-	on:click
-	class="h-full w-full px-1 pb-3 pt-2 first:pl-2.5 last:pr-2.5"
->
+<button disabled={!isEnabled} on:click class="h-full w-full px-1 pb-3 pt-2 first:pl-5 last:pr-5">
 	<div
+		transition:maybe={{ fn: fastFadeCss, duration: 500 }}
 		class:aspect-square={!label}
 		class:flex-row={iconAlign === 'left'}
 		class:flex-row-reverse={iconAlign === 'right'}
 		class:down={isDown}
-		class="flex h-8 flex-1 items-center justify-center gap-2 rounded-lg bg-gray-300 bg-opacity-40 font-display text-base text-white text-opacity-90"
+		class="flex h-8 flex-1 items-center justify-center gap-2 rounded-lg bg-gray-400 bg-opacity-60 font-display text-base text-white text-opacity-90"
 	>
 		<Fa {icon} translateY="-.05" />
 		{#if label}
@@ -28,12 +35,13 @@
 	</div>
 </button>
 
-<style>
+<style lang="postcss">
 	button {
 		cursor: pointer;
 		user-select: none;
 		-webkit-user-select: none;
 		-ms-user-select: none;
+		transition: opacity 500ms;
 	}
 
 	button div {

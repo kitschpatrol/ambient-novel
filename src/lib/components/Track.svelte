@@ -1,37 +1,39 @@
+<!-- WAT? -->
 <svelte:options immutable={true} />
 
 <script lang="ts">
+	import { browser } from '$app/environment';
+	import { base } from '$app/paths';
 	import Audio from '$lib/components/Audio.svelte';
+	import AudioFadeProxy from '$lib/components/AudioFadeProxy.svelte';
 	import Button from '$lib/components/Button.svelte';
+	import ChapterCover from '$lib/components/ChapterCover.svelte';
+	import Starfield from '$lib/components/Starfield.svelte';
+	import * as config from '$lib/config';
 	import type { ChapterData } from '$lib/schemas/bookSchema';
-	import { mapValue } from '$lib/utils/math/mapValue';
+	import { fastFadeFromJs } from '$lib/utils/transition/fastFadeFromJs';
+	import { fastFadeJs } from '$lib/utils/transition/fastFadeJs';
 	import { faPause, faPlay, faRotateBack } from '@fortawesome/free-solid-svg-icons';
 	import ScrollBooster from 'scrollbooster';
-	import { onDestroy, onMount } from 'svelte';
+	import { onDestroy, onMount, tick } from 'svelte';
 	import { spring } from 'svelte/motion';
-	import { fade } from 'svelte/transition';
+	import tinycolor from 'tinycolor2';
+	import UAParser from 'ua-parser-js';
 
 	export let chapterData: ChapterData;
-	export let maxVolume = 1.0;
 	export let isPlaying = false;
 	export let isReset = true;
 	export let currentTime = 0;
 	export let chapterColor = '#ff0000';
+	export let rowWidth = 0; // performance thing to set this externally...
+	export let targetTime = currentTime;
+	export let ready = () => {};
 
-	export const reset = () => {
-		isSeeking = false;
-		isPlaying = false;
-		if (targetTime === 0) {
-			currentTime = 0;
-		} else {
-			targetTime = 0;
-		}
-		activeWordElement = null;
-
-		scrollTo(0, false);
-	};
-
-	const isScrollBoosterEnabled = true;
+	// config
+	const showTextBeforeNarrationStarts = false;
+	const isStarfieldEnabled = true;
+	const isMobile = (new UAParser().getDevice().type ?? '') === 'mobile';
+	// const clickToTogglePlayPause = false;
 	const debug = false;
 	const isSpringEnabled = true;
 	const springConfig = {
@@ -39,247 +41,402 @@
 		damping: 0.2 // setting > 1 gives crazy effect
 	};
 
-	let targetTime = currentTime;
 	let isSeeking = false;
 	let scrollWrapperElement: HTMLDivElement;
-	let scrollAreaElement: HTMLDivElement;
-	let activeWordElement: HTMLSpanElement | null;
 	let scrollLeftBinding: number = 0; // optimization? or just use scrollLeft?
 	let scrollTween = spring(0, springConfig);
-	let scrollAreaWidth = 0;
-	let rowWidth = 0;
-	let isUserHoldingDownFingerOrMouse = false;
+	let activeWordIndex = -1; // optimization vs. referencing the element... -1 means before first word, > wordElements.length means after last word
 	let wheelTimer: NodeJS.Timeout | undefined;
+	let isChapterCoverVisible = true;
 
-	// frame loop
+	let timeCache: number[]; // one element longer than the number of words, to accommodate the "end" time of the last word
+	let wordElements: HTMLSpanElement[];
+	let isMounted = false;
+	let scrollAreaElement: HTMLDivElement;
+	let isLoaded = false;
+
+	// scroll booster / frame loop
+	let scrollBooster: ScrollBooster;
+	let isUserHoldingDownFingerOrMouse = false;
 	let scrollLeft = 0;
 	let scrollLeftDelta = 0;
 	let intervalId: NodeJS.Timer | undefined;
+	// let scrollBoosterStart = 0;
+
+	// TODO does this help?
+	// wtf...
+	// https://stackoverflow.com/questions/9811429/html5-audio-tag-on-safari-has-a-delay
+	if (browser && isMobile) {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const audioCtx = new AudioContext();
+	}
 
 	onMount(() => {
 		// allow drag scrolling on desktop
+		scrollBooster = new ScrollBooster({
+			viewport: scrollWrapperElement,
+			content: scrollAreaElement,
+			direction: 'horizontal',
+			scrollMode: 'native',
+			bounce: true,
+			pointerMode: 'mouse',
+			/* @ts-ignore */
+			onPointerDown: () => {
+				// doesn't fire on ios mobile while intertial scroll animation is playing
+				isSeeking = true;
 
-		const scrollBooster = isScrollBoosterEnabled
-			? new ScrollBooster({
-					viewport: scrollWrapperElement,
-					content: scrollAreaElement,
-					direction: 'horizontal',
-					scrollMode: 'native',
-					bounce: true,
-					pointerMode: 'mouse',
-					/* @ts-ignore */
-					onPointerDown: () => {
-						isSeeking = true;
-					}
-			  })
-			: undefined;
+				// seem to have to set this to avoid jumps
+				scrollBooster.setPosition({
+					x: scrollWrapperElement.scrollLeft,
+					y: 0
+				});
+
+				// track position to distinguish between click and drag
+				// scrollBoosterStart = e.position.x;
+			}
+			// onPointerUp: (e) => {
+			// 	// Play / pause on click without drag
+			// 	if (clickToTogglePlayPause && isSeeking) {
+			// 		const dragDistance = Math.abs(scrollBoosterStart - e.position.x);
+			// 		// TODO Don't play / pause if we "stab" during an inertial scroll?
+			// 		if (dragDistance < 3) {
+			// 			isSeeking = false;
+			// 			isPlaying = !isPlaying;
+			// 		}
+			// 	}
+			// }
+		});
 
 		// watch scroll velocity
 		// have to do this instead of an on:scroll handler so we can calculate velocity / delta
 		function loop() {
-			// console.profile('loop');
-
-			if (scrollWrapperElement && isSeeking) {
+			if (!isReset && isSeeking) {
 				scrollLeftDelta = scrollWrapperElement.scrollLeft - scrollLeft;
 				scrollLeft = scrollWrapperElement.scrollLeft;
 
+				// doesn't really work on ios...
 				if (!isUserHoldingDownFingerOrMouse && scrollLeftDelta === 0) {
-					isSeeking = false;
-
 					// stop the scroll booster which can "flicker" between 0 and .5 as it slows down
-					if (scrollBooster && scrollBooster.getState().isMoving) {
-						scrollBooster.setPosition({
-							x: scrollLeft,
-							y: 0
-						});
-					}
+					// todo is isMoving ever true? isDragging is broken
+					// if (scrollBooster.getState().isMoving) {
+					scrollBooster.setPosition({
+						x: scrollLeft,
+						y: 0
+					});
+					// }
+
+					// optimization, only seek audio at the end of a scroll input
+					targetTime = timeFromWordIndex(activeWordIndex);
+					currentTime = targetTime;
+					isSeeking = false;
 				}
 			}
-			// console.profileEnd('loop');
 		}
 
 		intervalId = setInterval(function () {
 			loop();
 		}, 100);
+
+		wordElements = Array.from(
+			scrollAreaElement.querySelectorAll<HTMLSpanElement>('span[data-time]')
+		);
+
+		timeCache = generateTimeCache(chapterData, wordElements) as number[];
+
+		isMounted = true;
 	});
 
 	onDestroy(() => {
 		if (intervalId) {
-			clearInterval(intervalId);
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			clearInterval(intervalId as any);
 		}
 	});
 
-	$: timeCacheStart = chapterData.lines
-		.map((line) => (line.wordTimings ? line.wordTimings.map((word) => word.start) : []))
-		.flat();
+	function generateTimeCache(data: ChapterData, wordSpans: HTMLSpanElement[]): number[] {
+		const timeCache: number[] = [];
 
-	$: timeCacheEnd = chapterData.lines
-		.map((line) => (line.wordTimings ? line.wordTimings.map((word) => word.end) : []))
-		.flat();
+		// Iterate through each span element
+		wordSpans.forEach((span) => {
+			const dataTime = span.getAttribute('data-time');
 
-	$: wordElements = scrollAreaElement
-		? Array.from(scrollAreaElement.getElementsByTagName('span'))
-		: [];
+			if (dataTime === null) {
+				console.warn(
+					`data-time attribute is missing from word ${span.innerHTML} in chapter ${chapterData.title}`
+				);
+			} else {
+				timeCache.push(parseFloat(dataTime));
+			}
+		});
 
-	function scrollTo(offset: number, rightOnly = true) {
-		// ony scroll to the right
+		// Add the final time
+		timeCache.push(chapterData.narrationTime.end);
+
+		return timeCache;
+	}
+
+	function scrollToOffset(offset: number, rightOnly = true, immediate = false) {
+		// only scroll to the right
 		if (
 			scrollWrapperElement &&
 			rowWidth > 0 &&
-			(rightOnly ? offset > scrollWrapperElement.scrollLeft : true)
+			(rightOnly ? offset >= scrollWrapperElement.scrollLeft : true)
 		) {
-			// $scrollTween = offset - rowWidth / 2;
-
-			if (isSpringEnabled) {
-				$scrollTween = offset;
+			if (isSpringEnabled && !immediate) {
+				// this was the trick for the flashes...
+				tick().then(() => {
+					$scrollTween = offset;
+				});
 			} else {
 				scrollWrapperElement.scrollLeft = offset;
-			}
-			// scrollWrapperElement.scrollLeft = $scrollTween;
-		}
-	}
-
-	$: {
-		if (isSpringEnabled && scrollWrapperElement && (isPlayingAndNotSeeking || showChapterTitle)) {
-			scrollWrapperElement.scrollLeft = $scrollTween;
-		}
-	}
-
-	// seek audio time to active word when scrolling
-	$: {
-		if (isSeeking && wordElements.length > 0) {
-			// get active word under playhead
-			const scrollCenter = scrollLeftBinding + rowWidth / 2;
-
-			if (scrollCenter <= wordElements[0].offsetLeft) {
-				// scrolled before first word
-				targetTime = timeCacheStart[0];
-			} else if (
-				scrollCenter >=
-				wordElements[wordElements.length - 1].offsetLeft +
-					wordElements[wordElements.length - 1].offsetWidth
-			) {
-				targetTime = timeCacheEnd[wordElements.length - 1]; // gets final time
-			} else {
-				for (let i = 0; i < wordElements.length - 1; i++) {
-					const element = wordElements[i];
-					const nextElement = wordElements[i + 1];
-
-					if (scrollCenter > element.offsetLeft && scrollCenter <= nextElement.offsetLeft) {
-						if (scrollCenter <= element.offsetLeft + element.offsetWidth) {
-							// guess intermediate time
-							targetTime = mapValue(
-								scrollCenter,
-								element.offsetLeft,
-								element.offsetLeft + element.offsetWidth,
-								timeCacheStart[i],
-								timeCacheEnd[i]
-							);
-						} else {
-							targetTime = timeCacheEnd[i];
-						}
-
-						break;
-					}
+				if (immediate) {
+					setSpringStartPoint(offset);
 				}
 			}
 		}
 	}
 
-	// get and highlight active word based on audio time
-	$: {
+	// ==== Time / Word index / Scroll offset conversions ============================
+
+	// TODO only search if time delta is greater than minimum word spacing?
+	// prob not this is pretty fast
+	function wordIndexFromTime(time: number): number {
+		if (time <= timeCache[0]) {
+			// before first word
+			return -1;
+		} else if (time >= timeCache[timeCache.length - 1]) {
+			// after last word
+			return wordElements.length;
+		} else {
+			// somewhere between
+			for (let i = 0; i < wordElements.length; i++) {
+				if (time >= timeCache[i] && time < timeCache[i + 1]) {
+					return i;
+				}
+			}
+		}
+
+		console.warn('issues');
+		return 0;
+	}
+
+	function timeFromWordIndex(index: number): number {
+		if (index < 0) return timeCache[0];
+		if (index > wordElements.length) return timeCache[wordElements.length];
+		return timeCache[index];
+	}
+
+	function wordIndexFromScrollOffset(offset: number): number {
+		const scrollOffset = offset + rowWidth / 2;
+
+		// before first word
+		if (scrollOffset <= wordElements[0].offsetLeft) {
+			return -1;
+		}
+
+		// after last word
+		if (
+			scrollOffset >=
+			wordElements[wordElements.length - 1].offsetLeft +
+				wordElements[wordElements.length - 1].offsetWidth
+		) {
+			return wordElements.length;
+		}
+
+		// first word
+		// average of right edge of curent word and left edge of previous
+		if (
+			scrollOffset <
+			(wordElements[0].offsetLeft + wordElements[0].offsetWidth + wordElements[1].offsetLeft) / 2
+		) {
+			return 0;
+		}
+
+		// last word
+		if (
+			scrollOffset >=
+			(wordElements[wordElements.length - 1].offsetLeft +
+				wordElements[wordElements.length - 2].offsetLeft +
+				wordElements[wordElements.length - 2].offsetWidth) /
+				2
+		) {
+			return wordElements.length - 1;
+		}
+
+		// between
+		// TODO consider whether any point after the word shoould be the next word...
+		for (let i = 1; i < wordElements.length - 1; i++) {
+			// average of right edge of previous word and left edge of current
+			// const leftEdge =
+			// 	(wordElements[i - 1].offsetLeft +
+			// 		wordElements[i - 1].offsetWidth +
+			// 		wordElements[i].offsetLeft) /
+			// 	2;
+			const rightEdge =
+				(wordElements[i].offsetLeft +
+					wordElements[i].offsetWidth +
+					wordElements[i + 1].offsetLeft) /
+				2;
+
+			if (scrollOffset <= rightEdge) {
+				return i;
+			}
+		}
+
+		console.warn('issues!');
+		return 0;
+	}
+
+	function scrollOffsetFromWordIndex(index: number): number {
+		// before first word
+		if (index < 0) {
+			// return wordElements[0].offsetLeft - rowWidth / 2;
+			// optimization
+			return 0;
+		}
+
+		// after last word
+		if (index >= wordElements.length) {
+			return (
+				wordElements[wordElements.length - 1].offsetLeft +
+				wordElements[wordElements.length - 1].offsetWidth -
+				rowWidth / 2
+			);
+		}
+
+		// between, use the center of the word
+		return wordElements[index].offsetLeft + wordElements[index].offsetWidth / 2 - rowWidth / 2;
+	}
+
+	// ==== Reactive setters ========================================================
+
+	function setWordStylesFromActiveWordIndex(index: number) {
+		// console.time('updateWordStyles');
 		// TODO optimize hot path, don't need to do this on all lines at the same time?
 		// many are out of view...
-		// activeWordElement = null;
-		if (currentTime <= timeCacheStart[0]) {
-			// before first word
-			activeWordElement = null;
 
+		if (index === -1) {
+			// optimization
+			// must be after, unread
 			wordElements.forEach((element) => {
-				element.classList.remove('read');
-				element.classList.remove('current');
+				element.classList.contains('read') && element.classList.remove('read');
+				element.classList.contains('current') && element.classList.remove('current');
 			});
-		} else if (currentTime >= timeCacheEnd[timeCacheEnd.length - 1]) {
-			// after last word
-			activeWordElement = null;
-
+		} else if (index > wordElements.length) {
+			// optimization
+			// must be before, read
 			wordElements.forEach((element) => {
-				element.classList.add('read');
-				element.classList.remove('current');
+				!element.classList.contains('read') && element.classList.add('read');
+				element.classList.contains('current') && element.classList.remove('current');
 			});
 		} else {
-			// somewhere betwixt
-
 			for (let i = 0; i < wordElements.length; i++) {
 				const element = wordElements[i];
 
-				if (currentTime >= timeCacheStart[i] && currentTime < timeCacheEnd[i]) {
-					// currently active word
-					element.classList.add('current');
-					element.classList.remove('read');
-					activeWordElement = element;
-				} else if (currentTime > timeCacheStart[i]) {
-					// read
-					element.classList.add('read');
-					element.classList.remove('current');
+				if (i < index) {
+					// must be before, read
+					!element.classList.contains('read') && element.classList.add('read');
+					element.classList.contains('current') && element.classList.remove('current');
+				} else if (i > index) {
+					// must be after, unread
+					element.classList.contains('read') && element.classList.remove('read');
+					element.classList.contains('current') && element.classList.remove('current');
 				} else {
-					// unread
-					element.classList.remove('read');
-					element.classList.remove('current');
+					// must be equal, current
+					!element.classList.contains('current') && element.classList.add('current');
+					element.classList.contains('read') && element.classList.remove('read');
 				}
 			}
 		}
+
+		// console.timeEnd('updateWordStyles');
 	}
 
 	// keep spring starting point up to date if we're scrolling manually
-	$: {
-		if (isSeeking) {
-			scrollTween = spring(scrollLeftBinding, springConfig);
+	function setSpringStartPoint(startPoint: number) {
+		scrollTween = spring(startPoint, springConfig);
+	}
+
+	function setActiveWordIndex(index: number) {
+		activeWordIndex = index;
+	}
+
+	function setScrollOffset(offset: number) {
+		scrollWrapperElement.scrollLeft = offset;
+	}
+
+	// react to reset being set
+	function setReset(reset: boolean) {
+		if (reset) {
+			// isPlaying = true; // force invalidation
+			isPlaying = false;
+			// placeholder's transition completion does the rest
 		}
 	}
 
-	// scroll to active word element
-	$: {
-		if (isPlayingAndNotSeeking && scrollWrapperElement) {
-			// scroll to center of word
-
-			let scrollOffset = 0;
-			if (activeWordElement) {
-				scrollOffset =
-					activeWordElement.offsetLeft + activeWordElement.offsetWidth / 2 - rowWidth / 2;
-			} else if (currentTime < timeCacheStart[0]) {
-				// before first word
-				scrollOffset = wordElements[0].offsetLeft - rowWidth / 2;
-			} else if (currentTime >= timeCacheEnd[timeCacheEnd.length - 1]) {
-				// after last word
-				scrollOffset =
-					wordElements[wordElements.length - 1].offsetLeft +
-					wordElements[wordElements.length - 1].offsetWidth -
-					rowWidth / 2;
-			} else {
-				// do nothing
-				scrollOffset = scrollWrapperElement.scrollLeft;
-			}
-
-			scrollTo(scrollOffset);
+	function setPlaying(playing: boolean) {
+		if (playing) {
+			// isReset = true; // force invalidation
+			isReset = false;
 		}
 	}
 
-	$: showChapterTitle = currentTime === 0;
-
-	$: {
-		isReset = targetTime === 0 && currentTime === 0;
+	// if we set target time while reset, react immediately
+	// todo mobile safari bugs?
+	function setTargetTime(time: number) {
+		if (isMounted && isReset && isChapterCoverVisible) {
+			const wordIndex = wordIndexFromTime(time);
+			const scrollPosition = wordIndex === -1 ? 0 : scrollOffsetFromWordIndex(wordIndex);
+			scrollToOffset(scrollPosition, false, true);
+		}
 	}
 
-	// only really play the audio if we're not seeking
-	$: isPlayingAndNotSeeking = isPlaying && !isSeeking;
+	function setLoaded(loaded: boolean) {
+		if (loaded) {
+			tick().then(() => {
+				ready();
+			});
+		}
+	}
+
+	//Reactive zone --------------------------
+
+	$: starfieldColor = tinycolor(chapterColor).lighten(10).toHexString();
+
+	$: setLoaded(isLoaded);
+	$: setPlaying(isPlaying);
+	$: setReset(isReset);
+	$: setTargetTime(targetTime);
+	$: isPlayingAndNotSeeking = isPlaying && !isSeeking; // only really play the audio if we're not seeking
+
+	// While Playing / paused --------
+	$: isMounted && !isSeeking && setActiveWordIndex(wordIndexFromTime(currentTime));
+	$: isMounted &&
+		isPlayingAndNotSeeking &&
+		scrollToOffset(scrollOffsetFromWordIndex(activeWordIndex));
+
+	// seek audio time to active word when scrolling
+	// bad for performance?
+	// $: wordElements && wordElements.length > 0 && isSeeking && seekTimeFromScroll(scrollLeftBinding);
+
+	// save the play time when we pause
+	$: isMounted && !isPlaying && (targetTime = currentTime);
+	$: isMounted && isSpringEnabled && !isSeeking && setScrollOffset($scrollTween);
+
+	// Special seeking behavior ------
+	$: isMounted && isSeeking && setSpringStartPoint(scrollLeftBinding);
+	$: isMounted && isSeeking && setActiveWordIndex(wordIndexFromScrollOffset(scrollLeftBinding));
+
+	// style
+	$: isMounted && setWordStylesFromActiveWordIndex(activeWordIndex);
 </script>
 
 <div class="track">
 	<div
 		class="scroll-wrapper no-scrollbar"
 		bind:this={scrollWrapperElement}
-		bind:clientWidth={rowWidth}
 		on:scroll={(e) => {
 			/* @ts-ignore */
 			scrollLeftBinding = e.target.scrollLeft;
@@ -290,13 +447,15 @@
 			/* @ts-ignore */
 			e.target.setPointerCapture(e.pointerId);
 		}}
-		on:pointercancel={(e) => {
-			isUserHoldingDownFingerOrMouse = false;
+		on:pointercancel={() => {
+			// breaks mobile?
+			// isUserHoldingDownFingerOrMouse = false;
 		}}
-		on:pointerup={(e) => {
+		on:pointerup={() => {
 			isUserHoldingDownFingerOrMouse = false;
 		}}
 		on:wheel|passive={(e) => {
+			// allow gesture / wheel scrolling, e.g. two finger drag on mac trackpad
 			if (Math.abs(e.deltaX) > 0) {
 				isSeeking = true;
 				isUserHoldingDownFingerOrMouse = true;
@@ -314,97 +473,149 @@
 			}
 		}}
 	>
+		<!-- funky comments here to avoid implicit white space issues -->
 		<!-- prettier-ignore -->
-		<div bind:this={scrollAreaElement} bind:clientWidth={scrollAreaWidth} class="scroll-area"><!--
+		<div bind:this={scrollAreaElement} class=scroll-area class:hide-text={!showTextBeforeNarrationStarts && currentTime < chapterData.narrationTime.start}><!--
 		--><div class="spacer" /><!--
-			-->{#each chapterData.lines as line, chapterIndex}<!--
-				-->{#if line.textStack}<!--
-					-->{@html line.textStack}<!--
-				-->{/if}<!--
-				-->{#if chapterIndex < chapterData.lines.length - 1}<!--
-					-->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<!--
-				-->{/if}<!--
+			-->{#each chapterData.lines as line}<!--
+					-->{@html line}<!--
 		-->{/each}<!--
 		--><div class="spacer" />
 		</div>
+
+		{#if (isStarfieldEnabled && !isReset && currentTime > 0.5 && currentTime < chapterData.narrationTime.start - 3.5) || currentTime > chapterData.narrationTime.end + 3}
+			<button
+				on:click={() => {
+					targetTime = chapterData.narrationTime.start;
+				}}
+				transition:fastFadeFromJs|local={{ duration: 3000 }}
+			>
+				<Starfield
+					id={`particles-${chapterData.index}`}
+					color={starfieldColor}
+					--background="linear-gradient(0deg, #f8f8f8 0%, white 13%, white 100%) white"
+				/>
+			</button>
+		{/if}
 	</div>
 
 	{#if debug}
 		<div
-			class="mouse pointer-events-none absolute left-[50%] top-0 h-[10vh] w-1 touch-none bg-red-500"
+			class="mouse pointer-events-none absolute left-[50%] top-0 h-[10dvh] w-1 touch-none bg-red-500"
 		/>
 	{/if}
 
-	{#if showChapterTitle}
-		<h2
-			style={`background-color: ${chapterColor}`}
-			transition:fade={{ duration: 2500 }}
-			class="chapter-title absolute left-0 top-0 h-full w-full text-center font-display tracking-wider text-white text-opacity-80 shadow-vm-shadow text-shadow"
+	{#if isReset}
+		<div
+			transition:fastFadeJs|local={{ duration: config.chapterCoverTransitionDuration }}
+			on:introend={() => {
+				isChapterCoverVisible = true;
+				// Still broken sometimes?
+				targetTime = -1; // force reactive update...
+				targetTime = 0; // go even further than the first scroll pos
+			}}
+			on:outrostart={() => {
+				isChapterCoverVisible = false;
+			}}
 		>
-			<span class="max-sm:hidden">Chapter</span>
-			{chapterData.index + 1} — {chapterData.title}
-		</h2>
+			<ChapterCover {chapterColor} {chapterData} />
+		</div>
 	{/if}
 
 	<div class:w-full={isReset} class="absolute left-0 top-0 flex h-full">
 		<Button
+			isTransitionEnabled={true}
 			icon={isPlaying ? faPause : faPlay}
 			on:click={() => {
 				isPlaying = !isPlaying;
 			}}
 		/>
-
-		{#if debug}
-			<!-- <p class="inline-block">seeking: {isSeeking}</p> -->
-			<!-- <p class="inline-block">scrollLeftDelta: {scrollLeftDelta}</p> -->
-			<!-- <p class="inline-block">down: {isUserHoldingDownFingerOrMouse}</p> -->
-			<p class="inline-block">targetTime: {targetTime}</p>
-			<p class="inline-block">currentTime: {currentTime}</p>
-			<p class="inline-block">activeWordElement: {activeWordElement}</p>
-		{/if}
 	</div>
 
 	{#if !isReset}
 		<div class="absolute right-0 top-0 flex h-full">
-			<Button icon={faRotateBack} on:click={reset} />
+			<Button
+				icon={faRotateBack}
+				on:click={() => {
+					isReset = true;
+				}}
+				isTransitionEnabled={true}
+			/>
+		</div>
+	{/if}
+
+	{#if debug}
+		<div
+			class="pointer-events-none absolute left-0 top-0 h-full cursor-none touch-none text-xs text-red-400"
+		>
+			<p>isUserHoldingDownFingerOrMouse: {isUserHoldingDownFingerOrMouse}</p>
+			<p>isplaying: {isPlayingAndNotSeeking}</p>
+			<p>seeking: {isSeeking}</p>
+			<p>targetTime: {Math.round(targetTime)}</p>
+			<p>currentTime: {Math.round(currentTime)}</p>
+			<p>isReset: {isReset}</p>
+			<p>activeWordIndex: {activeWordIndex}</p>
+			<!-- <p class="inline-block">scrollLeftDelta: {scrollLeftDelta}</p> -->
 		</div>
 	{/if}
 </div>
 
-<Audio
-	audioSources={chapterData.audio.files}
-	isPlaying={isPlayingAndNotSeeking}
-	{maxVolume}
-	{targetTime}
-	bind:currentTime
-	on:ended
-	on:ended={() => {
-		// handle this in parent instead
-		//reset();
-	}}
-/>
+{#if isMobile}
+	<Audio
+		audioSources={chapterData.audio.files.map((file) => `${base}/${file}`)}
+		isPlaying={isPlayingAndNotSeeking}
+		bind:currentTime
+		{targetTime}
+		on:ended
+		on:canplaythrough={() => {
+			isLoaded = true;
+		}}
+	/>
+{:else}
+	<AudioFadeProxy
+		audioSources={chapterData.audio.files.map((file) => `${base}/${file}`)}
+		isPlaying={isPlayingAndNotSeeking}
+		bind:currentTime
+		{targetTime}
+		on:ended
+		on:canplaythrough={() => {
+			isLoaded = true;
+		}}
+	/>
+{/if}
 
-<style>
+<style lang="postcss">
 	div.track {
 		width: 100vw;
-		height: calc(100vh / 12);
+		height: calc(100dvh / 12);
 		position: relative;
 		/* background-color: white; */
-		background: linear-gradient(0deg, #f8f8f8 0%, white 13%, white 100%);
+		background: linear-gradient(0deg, #f8f8f8 0%, white 13%, white 100%) white;
 		user-select: none;
+		/* autoprefixer? */
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		-webkit-touch-callout: none; /* iOS Safari */
 	}
 
-	:global(div.track ul) {
-		display: inline;
-	}
-
-	:global(div.track li) {
-		display: inline;
-		margin-left: 2rem;
-	}
-
-	:global(body.cursor-grabbing-important *) {
+	/* :global(body.cursor-grabbing-important *) {
 		cursor: grabbing !important;
+	} */
+
+	/* Horizontal space between lines */
+	:global(div.scroll-area span.line) {
+		margin-left: 5em;
+	}
+
+	/* Manual bullets since browser won't draw them on inline lists */
+	:global(div.scroll-area span.list)::before {
+		content: '•';
+		margin-right: 0.25em;
+	}
+
+	:global(div.scroll-area span.list) {
+		margin-left: 1em;
 	}
 
 	/* Unread words */
@@ -412,6 +623,10 @@
 	:global(div.scroll-area span) {
 		transition: color 800ms;
 		color: lightgray;
+	}
+
+	:global(div.scroll-area.hide-text span) {
+		color: white;
 	}
 
 	/* Read words */
@@ -432,7 +647,7 @@
 		will-change: scroll-position; /* harms or helps? */
 		/* background-color: #ffffff22; */
 		cursor: grab;
-		mask-image: linear-gradient(90deg, transparent, rgba(0, 0, 0, 1) 10% 90%, transparent);
+		mask-image: linear-gradient(90deg, transparent, rgba(0, 0, 0, 1) 20% 80%, transparent);
 	}
 
 	div.spacer {
@@ -443,19 +658,24 @@
 	div.scroll-area {
 		color: black;
 		font-family: serif;
-		font-size: min(calc(100vh / 36), 1.75rem);
-		line-height: calc(100vh / 12);
-		height: calc(100vh / 12);
+		font-size: min(calc(100dvh / 36), 1.75rem);
+		line-height: calc(100dvh / 12);
+		height: calc(100dvh / 12);
 		pointer-events: none;
 		touch-action: none;
+
+		/* Nothing works */
+		/* -webkit-touch-callout: none;
+		-webkit-text-size-adjust: none;
+		-webkit-user-select: none;
+		user-select: none;
+		-webkit-user-callout: none;
+		-webkit-user-drag: none;
+		-webkit-user-modify: none;
+		-webkit-highlight: none; */
 	}
 
 	div.scroll-wrapper:active {
 		cursor: grabbing;
-	}
-
-	h2.chapter-title {
-		font-size: min(calc(100vh / 36), 1.75rem);
-		line-height: calc(100vh / 12);
 	}
 </style>

@@ -9,39 +9,21 @@ export const bookSchema = z.object({
 	year: z.number().int().positive(),
 	publisher: z.string().nonempty(),
 	country: z.string().nonempty(),
+	license: z.string().nonempty(),
 	chapters: z
 		.array(
 			z.object({
 				title: z.string().nonempty(),
 				index: z.number().int().nonnegative(),
 				audio: z.object({
-					files: z.array(z.string().nonempty()),
+					files: z.array(z.string().nonempty()).nonempty(),
 					durationSeconds: z.number().positive()
 				}),
-				lineShuffleAllowed: z.boolean(),
-				lines: z
-					.array(
-						z.object({
-							text: z.string().nonempty(),
-							textStack: z.string().nonempty().optional(),
-							index: z.number().int().nonnegative(),
-							timing: z.object({
-								start: z.number(),
-								end: z.number()
-							}),
-							// embedding in the text instead...
-							wordTimings: z
-								.array(
-									z.object({
-										word: z.string().nonempty(),
-										start: z.number(),
-										end: z.number()
-									})
-								)
-								.optional()
-						})
-					)
-					.nonempty()
+				narrationTime: z.object({
+					start: z.number().positive(),
+					end: z.number().positive()
+				}),
+				lines: z.array(z.string().nonempty()).nonempty()
 			})
 		)
 		.nonempty()

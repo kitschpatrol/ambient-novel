@@ -1,12 +1,8 @@
 # Ambient Novel
 
-Uses [`dust`](https://github.com/bootandy/dust) in the `build-report` NPM script. Install from brew if needed:
+## Overview
 
-```bash
-brew install dust
-```
-
-Deployment server MUST support HTTP 206 range requests to successfuly set `currentTime` on audio elements on chrome.
+The "Ambient Novel" website was created as a home or Scott Wayne Indiana's book _The Valentine Mob_. After several iterations, an interface approach that allows for simultaneous playack, scrubbing of multiple narrated audio tracks.
 
 ## Updating the content
 
@@ -92,32 +88,98 @@ To test... currently does NOT work, but the alignment-only model in whisperx doe
 ```bash
 conda activate whisperx
 export PYTORCH_ENABLE_MPS_FALLBACK=1
-whisperx ./static/speech/0-78.mp3 --device mps --model tiny --language en --verbose True --fp16 Fals
+whisperx ./static/speech/0-78.`mp3` --device mps --model tiny --language en --verbose True --fp16 Fals
 conda deactivate
 ```
 
 ## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
 ```bash
+npm install
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
 ## Building
-
-To create a production version of your app:
 
 ```bash
 npm run build
 ```
 
-You can preview the production build with `npm run preview`.
+## Deployment
+
+The app is deployed via a GitHub action to Scott's DreamHost server, which runs automatically on deployment to the `main` or `develop` branches. Each branch deploys to a different subdirectory on the server. Configuration and secrets are stored in the GitHub repo settings.
+
+**Required GitHub [secrets](https://github.com/kitschpatrol/ambient-novel/settings/secrets/actions):**
+
+- `SERVER_HOST`  
+  DreamHost server host name
+
+- `SERVER_USERNAME`  
+  DreamHost server SSH user
+
+- `SERVER_PASSWORD`  
+  DreamHost server SSH password
+
+**Required GitHub [variables](https://github.com/kitschpatrol/ambient-novel/settings/variables/actions):**
+
+- `BASE_PATH_PRODUCTION`  
+  Name of subfolder to copy the site to. During the build process, this variable is also used in `svelte.config.js`. copied. Must start with `/` and end without `/`.  
+  Example: `/thevalentinemob`
+
+- `BASE_PATH_STAGING`  
+  As above, but for the develop branch.  
+  Example: `/thevalentinemob-staging`
+
+- `SERVER_PATH`  
+  DreamHost server path, this is prepended to the base path when files are copied. Must start with `/` and end without `/`.  
+  Example: `/home/someuser/somefolder`
 
 ## Dev notes
 
+No bundle size advantage to moving content preprocessing deps only to their own package.json.
+
+To use the `build-report` npm script, insteall [`dust`](https://github.com/bootandy/dust) via homebrew if needed.
+
+```bash
+brew install dust
+```
+
+### Known issues
+
+- Scrolling issue on mobile safari, no touch up events during inertial scroll animations
+
+### Scrolling
+
 - https://github.com/studio-freight/lenis
 - https://github.com/Adoratorio/hades
+
+Suppressing Stylelint Tailwind @apply etc. directive errors:
+
+- https://stackoverflow.com/a/76984634/2437832
+
+Deployment server MUST support HTTP 206 range requests to successfuly set `currentTime` on audio elements on chrome.
+
+Currently deployed to:
+https://39forks.com/thevalentinemob-staging
+https://39forks.com/thevalentinemob-production-tbd
+
+### PWA
+
+- https://stackoverflow.com/questions/76007716/how-do-i-use-workbox-range-requests-plugin-with-vite-pwa
+- https://github.com/userquin/sveltesociety.dev/tree/pwa
+- https://www.sarcevic.dev/offline-first-installable-pwa-sveltekit-workbox-precaching
+- https://github.com/daffinm/audio-cache-test
+
+Tried @vite-pwa/sveltekit, but too many issues getting correct behavior around range requests.
+
+## License
+
+The website's code and the book's text are shared under different licenses:
+
+### Website
+
+The Ambient Novel website project is licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License][http://creativecommons.org/licenses/by-nc-sa/4.0/]. See [`LICENSE.txt`](./LICENSE.txt).
+
+### Book
+
+The text of The Valentine Mob book (e.g. [`/data/book.json`](./data/book.json) and its derivatives throughout the project) is ©39forks Publishing USA 2023 All Rights Reserved. See [`/data/LICENSE.txt`](./data/LICENSE.txt).

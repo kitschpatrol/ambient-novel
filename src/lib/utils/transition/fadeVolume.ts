@@ -3,7 +3,7 @@ import type { FadeParams, TransitionConfig } from 'svelte/transition';
 
 export function fadeVolume(
 	node: HTMLAudioElement,
-	{ delay = 0, duration = 400, easing = linear }: FadeParams = {}
+	{ delay = 0, duration = 1000, easing = linear }: FadeParams = {}
 ): TransitionConfig {
 	return {
 		delay,
