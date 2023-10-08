@@ -34,11 +34,11 @@
 	</style>
 </svelte:head>
 
+<!-- prettier-ignore -->
 <main>
 	<h1>The VAlentine&nbsp;Mob</h1>
 	<h2>
-		An&nbsp;ambient&nbsp;novel by&nbsp;
-		<a href="https://39forks.com/">Scott&nbsp;Wayne&nbsp;Indiana</a>
+		An&nbsp;ambient&nbsp;novel by&nbsp;<a href="https://39forks.com/">Scott&nbsp;Wayne&nbsp;Indiana</a>
 	</h2>
 	<h3>Launching October 18, 2023</h3>
 </main>
