@@ -1,13 +1,5 @@
 <script lang="ts">
-	import { base } from '$app/paths';
-	import Header from '$lib/components/Header.svelte';
-	// import OpenSourceCredits from '$lib/components/OpenSourceCredits.svelte';
-	// import licenseDataRaw from '$lib/data/licenses.json';
-	// import { licenseSchema } from '$lib/schemas/licensesSchema';
-	// const licenseData = licenseSchema.parse(licenseDataRaw);
 	import Starfield from '$lib/components/Starfield.svelte';
-	import { title } from '$lib/data/book.json';
-	import { fastFadeCss } from '$lib/utils/transition/fastFadeCss';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	let isMounted = false;
@@ -40,7 +32,7 @@
 	<h2>
 		An&nbsp;ambient&nbsp;novel by&nbsp;<a href="https://39forks.com/">Scott&nbsp;Wayne&nbsp;Indiana</a>
 	</h2>
-	<h3>Launching October 18, 2023</h3>
+	<h3>Launching October&nbsp;18,&nbsp;2023</h3>
 </main>
 
 {#if isMounted}
@@ -95,7 +87,7 @@
 	}
 
 	h1 {
-		font-size: min(calc(100svh / 13), calc(100vw / 12));
+		font-size: min(calc(100svh / 13), calc(100vw / 14));
 		line-height: 1em;
 	}
 
