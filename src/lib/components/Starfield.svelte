@@ -8,20 +8,26 @@
 	export let id: string = 'tsparticles';
 	export let color: string = '#cccccc'; // optimization
 
+	export let maxParticlesMobile: number = 9;
+	export let maxParticlesDesktop: number = 18;
+	export let strokeEnabled = true;
+	export let starSpeed = 0.4;
+	export let starRotationSpeed = 3;
+	export let planetSpeed = 0.3;
+
 	let particlesConfig: ISourceOptions;
 	$: particlesConfig = {
 		name: id,
 		pauseOnOutsideViewport: false,
 		detectRetina: true,
 		fullScreen: false,
-
 		responsive: [
 			{
 				maxWidth: 768,
 				options: {
 					particles: {
 						number: {
-							value: 9
+							value: maxParticlesMobile
 						}
 					}
 				}
@@ -32,7 +38,7 @@
 				type: 'image',
 				images: [
 					{
-						src: `${base}/star.svg`,
+						src: strokeEnabled ? `${base}/star.svg` : `${base}/star-nostroke.svg`,
 						fill: true,
 						replaceColor: true
 					}
@@ -50,7 +56,7 @@
 				direction: 'random',
 				animation: {
 					enable: true,
-					speed: 3,
+					speed: starRotationSpeed,
 					sync: false
 				}
 			},
@@ -65,11 +71,11 @@
 			},
 			move: {
 				enable: true,
-				speed: 0.4,
+				speed: starSpeed,
 				random: true
 			},
 			number: {
-				value: 18
+				value: maxParticlesDesktop
 			},
 			collisions: {
 				enable: true
@@ -85,7 +91,7 @@
 						type: 'image',
 						images: [
 							{
-								src: `${base}/saturn.svg`,
+								src: strokeEnabled ? `${base}/saturn.svg` : `${base}/saturn-nostroke.svg`,
 								fill: true,
 								replaceColor: true
 							}
@@ -101,7 +107,7 @@
 						}
 					},
 					move: {
-						speed: 0.3
+						speed: planetSpeed
 					},
 					links: {
 						enable: false
@@ -141,7 +147,7 @@
 
 {#if mounted}
 	<Particles
-		style="position: absolute; left: 0; top: .1px; width: 100%; height: 100%; background: linear-gradient(0deg, #f8f8f8 0%, white 13%, white 100%) white"
+		style="position: absolute; left: 0; top: .1px; width: 100%; height: 100%; background: var(--background);"
 		{id}
 		options={particlesConfig}
 		{particlesInit}

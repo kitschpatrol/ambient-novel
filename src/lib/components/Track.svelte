@@ -490,7 +490,11 @@
 				}}
 				transition:fastFadeFromJs|local={{ duration: 3000 }}
 			>
-				<Starfield id={`particles-${chapterData.index}`} color={starfieldColor} />
+				<Starfield
+					id={`particles-${chapterData.index}`}
+					color={starfieldColor}
+					--background="linear-gradient(0deg, #f8f8f8 0%, white 13%, white 100%) white"
+				/>
 			</button>
 		{/if}
 	</div>
