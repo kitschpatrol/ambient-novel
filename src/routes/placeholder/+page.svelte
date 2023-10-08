@@ -71,7 +71,7 @@
 		align-items: center;
 
 		padding: 0 1rem;
-		height: 100%;
+		height: 100dvh;
 	}
 
 	h1,
