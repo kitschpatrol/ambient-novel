@@ -493,6 +493,9 @@
 				<Starfield
 					id={`particles-${chapterData.index}`}
 					color={starfieldColor}
+					--position="absolute"
+					--top="0.1px"
+					--height="100%"
 					--background="linear-gradient(0deg, #f8f8f8 0%, white 13%, white 100%) white"
 				/>
 			</button>

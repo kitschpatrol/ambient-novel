@@ -38,6 +38,9 @@
 {#if isMounted}
 	<div class="star-wrapper" transition:fade={{ delay: 250, duration: 3000 }}>
 		<Starfield
+			--position="fixed"
+			--top="0"
+			--height="100%"
 			starSpeed={0.2}
 			planetSpeed={0.1}
 			starRotationSpeed={1}

@@ -147,7 +147,7 @@
 
 {#if mounted}
 	<Particles
-		style="position: absolute; left: 0; top: .1px; width: 100%; height: 100%; background: var(--background);"
+		style="position: var(--position); left: 0; top: var(--top); width: 100%; height: var(--height); background: var(--background);"
 		{id}
 		options={particlesConfig}
 		{particlesInit}

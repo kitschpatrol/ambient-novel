@@ -1,10 +1,17 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import Header from '$lib/components/Header.svelte';
+	import Starfield from '$lib/components/Starfield.svelte';
+	import { onMount } from 'svelte';
+	import { fade } from 'svelte/transition';
 	// import OpenSourceCredits from '$lib/components/OpenSourceCredits.svelte';
 	// import licenseDataRaw from '$lib/data/licenses.json';
 	// import { licenseSchema } from '$lib/schemas/licensesSchema';
 	// const licenseData = licenseSchema.parse(licenseDataRaw);
+	let isMounted = false;
+	onMount(() => {
+		isMounted = true;
+	});
 </script>
 
 <svelte:head>
@@ -30,6 +37,23 @@
 	--shadow="-10px 25px 50px 0px rgba(0, 0, 0, 0.2)"
 	--height="calc(100svh / 12)"
 />
+
+{#if isMounted}
+	<div class="star-wrapper" transition:fade={{ delay: 250, duration: 3000 }}>
+		<Starfield
+			--position="fixed"
+			--top="calc(100svh / 12)"
+			--height="calc(100svh - (100svh / 12))"
+			starSpeed={0.2}
+			planetSpeed={0.1}
+			starRotationSpeed={1}
+			strokeEnabled={false}
+			color="#ffffff"
+			maxParticlesMobile={20}
+			maxParticlesDesktop={80}
+		/>
+	</div>
+{/if}
 
 <main
 	class="mx-auto mb-16 mt-36 max-w-[70ch] bg-white bg-opacity-90 px-12 pb-8 pt-3 font-serif text-xl max-sm:mx-auto max-sm:mb-16 max-sm:mt-24 max-sm:w-[90vw] max-sm:px-5 max-sm:text-xl"
@@ -89,14 +113,16 @@
 	</h3>
 
 	<p class="max-[480px]:text-base">
-		Scott Wayne Indiana —
+		<a href="https://39forks.com/">Scott Wayne Indiana</a>
+		—
 		<i>author and narrator</i>
 		<br />
 		<a href="https://ericmika.com">Eric Mika</a>
 		—
 		<i>website</i>
 		<br />
-		Alex McCarl —
+		<a href="https://casinowitch.bandcamp.com">Alex McCarl</a>
+		—
 		<i>original ambient tracks</i>
 		<br />
 		Mike Budd —
@@ -113,6 +139,12 @@
 />
 
 <style lang="postcss">
+	div.star-wrapper {
+		opacity: 0.3;
+		touch-action: none;
+		pointer-events: none;
+	}
+
 	main {
 		box-shadow: 0px 3px 9px #0000005f;
 		line-height: 1.75em;
