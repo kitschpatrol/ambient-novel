@@ -113,25 +113,31 @@
 	</h3>
 
 	<p class="max-[480px]:text-base">
-		<a href="https://39forks.com/">Scott Wayne Indiana</a>
+		<a href="https://39forks.com/" rel="noopener noreferrer" target="_blank">Scott Wayne Indiana</a>
 		—
 		<i>author and narrator</i>
 		<br />
-		<a href="https://ericmika.com">Eric Mika</a>
-		—
-		<i>website</i>
-		<br />
-		<a href="https://casinowitch.bandcamp.com">Alex McCarl</a>
+		<a href="https://casinowitch.bandcamp.com" rel="noopener noreferrer" target="_blank">
+			Alex McCarl
+		</a>
 		—
 		<i>original ambient tracks</i>
 		<br />
 		Mike Budd —
 		<i>audio recording and mixing</i>
+		<br />
+		<a href="https://ericmika.com" rel="noopener noreferrer" target="_blank">Eric Mika</a>
+		—
+		<i>website</i>
 	</p>
 	<p class="mt-[4em] text-base">
 		<em>
 			The Valentine Mob website should work anywhere, but it is best experienced with a pair of
-			headphones and a desktop or laptop computer running <a href="https://www.google.com/chrome/">
+			headphones and a desktop or laptop computer running <a
+				href="https://www.google.com/chrome/"
+				rel="noopener noreferrer"
+				target="_blank"
+			>
 				Chrome
 			</a>
 			. If you run into technical issues, please
