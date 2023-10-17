@@ -56,7 +56,7 @@
 {/if}
 
 <main
-	class="mx-auto mb-16 mt-36 max-w-[70ch] bg-white bg-opacity-90 px-12 pb-8 pt-3 font-serif text-xl max-sm:mx-auto max-sm:mb-16 max-sm:mt-24 max-sm:w-[90vw] max-sm:px-5 max-sm:text-xl"
+	class="mx-auto mb-20 mt-36 max-w-[70ch] bg-white bg-opacity-90 px-12 pb-8 pt-3 font-serif text-xl max-sm:mx-auto max-sm:mb-16 max-sm:mt-24 max-sm:w-[90vw] max-sm:px-5 max-sm:text-xl"
 >
 	<h2>About the Project</h2>
 	<h3>
@@ -128,12 +128,20 @@
 		Mike Budd —
 		<i>audio recording and mixing</i>
 	</p>
-
-	<!-- <h3>Open-Source Projects</h3> -->
-	<!-- <OpenSourceCredits {licenseData} /> -->
+	<p class="mt-[4em] text-base">
+		<em>
+			The Valentine Mob website should work anywhere, but it is best experienced with a pair of
+			headphones and a desktop or laptop computer running <a href="https://www.google.com/chrome/">
+				Chrome
+			</a>
+			. If you run into technical issues, please
+			<a href="mailto:agile.map0694@fastmail.com">let us know</a>
+			.
+		</em>
+	</p>
 </main>
 <img
-	class="heart mx-auto mb-16 w-[10vw] max-w-[6rem] pb-16 opacity-90"
+	class="heart mx-auto mb-16 w-[10vw] max-w-[4rem] pb-16 opacity-90"
 	src="{base}/heart.svg"
 	alt="heart"
 />
@@ -164,6 +172,14 @@
 
 	main h3 {
 		@apply pb-3 pt-6 text-2xl font-medium italic;
+	}
+
+	main a {
+		text-decoration: underline;
+		text-decoration-style: dotted;
+		/* text-decoration-thickness: 1px; */
+		text-underline-offset: 0.2em;
+		text-decoration-color: rgba(0, 0, 0, 0.25);
 	}
 
 	main a:hover {
