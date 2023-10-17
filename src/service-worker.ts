@@ -18,11 +18,11 @@ self.addEventListener('install', () => {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	(self as any).skipWaiting();
 
-	console.log('SW installed');
+	// console.log('SW installed');
 });
 
 self.addEventListener('activate', async () => {
-	console.log('SW activated');
+	// console.log('SW activated');
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	(self as any).clients.claim();
@@ -30,7 +30,7 @@ self.addEventListener('activate', async () => {
 	// delete old caches
 	for (const key of await caches.keys()) {
 		if (key !== cacheName) {
-			console.log(`Removing stale cache ${key}`);
+			// console.log(`Removing stale cache ${key}`);
 			await caches.delete(key);
 		}
 	}
@@ -43,10 +43,10 @@ self.addEventListener('activate', async () => {
 		const cachedUrlPath = new URL(cachedFile.url).pathname;
 
 		if (!filesToCache.includes(cachedUrlPath)) {
-			console.log(`Removing stale file ${cachedUrlPath}`);
+			// console.log(`Removing stale file ${cachedUrlPath}`);
 			await cache.delete(cachedFile);
 		} else {
-			console.log(`Retaining cache file ${cachedUrlPath}`);
+			// console.log(`Retaining cache file ${cachedUrlPath}`);
 		}
 	}
 });
@@ -57,13 +57,13 @@ self.addEventListener('activate', async () => {
 const m4aHandler = async ({ event }) => {
 	const cache = await caches.open(cacheName);
 
-	console.log('SW handling', event.request.url);
+	// console.log('SW handling', event.request.url);
 
 	let response = await cache.match(event.request);
 
 	// cache the request
 	if (response) {
-		console.log('SW found match in cache');
+		// console.log('SW found match in cache');
 	} else {
 		// Clone the request to manipulate headers
 		const newHeaders = new Headers(event.request.headers);
@@ -82,7 +82,7 @@ const m4aHandler = async ({ event }) => {
 
 		if (response.status === 200) {
 			// Put it in the cache
-			console.log('SW Caching', event.request.url);
+			// console.log('SW Caching', event.request.url);
 			await cache.put(event.request, response.clone());
 		} else {
 			console.error(`SW failed to fetch ${event.request.url}`);
@@ -125,10 +125,11 @@ self.addEventListener('message', (event: ServiceWorkerMessageEvent) => {
 				);
 			})
 			.then(() => {
-				console.log('Caches cleared');
+				// console.log('Caches cleared');
 			})
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			.catch((error: Error) => {
-				console.log('Error clearing caches', error);
+				// console.log('Error clearing caches', error);
 			});
 	}
 });
