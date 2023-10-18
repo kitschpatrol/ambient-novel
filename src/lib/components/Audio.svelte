@@ -14,7 +14,7 @@
 
 	let firstLoad = true; // temp for time logging
 
-	console.time(`load audio ${audioSources[0]}`);
+	// console.time(`load audio ${audioSources[0]}`);
 
 	let audioElement: HTMLAudioElement;
 
@@ -124,7 +124,7 @@
 	on:canplaythrough
 	on:canplaythrough={() => {
 		if (firstLoad) {
-			console.timeEnd(`load audio ${audioSources[0]}`);
+			// console.timeEnd(`load audio ${audioSources[0]}`);
 			firstLoad = false;
 		}
 	}}
