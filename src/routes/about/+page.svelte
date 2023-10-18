@@ -180,7 +180,7 @@
 	main a {
 		text-decoration: underline;
 		text-decoration-style: dotted;
-		/* text-decoration-thickness: 1px; */
+		text-decoration-thickness: 0.1em;
 		text-underline-offset: 0.2em;
 		text-decoration-color: rgba(0, 0, 0, 0.25);
 	}
@@ -188,6 +188,9 @@
 	main a:hover {
 		text-decoration: underline;
 		text-underline-offset: 0.2em;
+		text-decoration-thickness: 0.1em;
+		text-decoration-style: solid;
+		text-decoration-color: rgba(0, 0, 0, 1);
 	}
 
 	img.heart {
