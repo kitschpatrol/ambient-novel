@@ -138,7 +138,7 @@
 				Chrome
 			</a>
 			. If you run into technical issues, please
-			<a href="mailto:agile.map0694@fastmail.com">let us know</a>
+			<a href="mailto:swift.rain6251@fastmail.com">let us know</a>
 			.
 		</em>
 	</p>
