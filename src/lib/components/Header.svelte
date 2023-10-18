@@ -18,7 +18,13 @@
 		{title.replaceAll('a', 'A')}
 	</h1>
 	<div class="justify-self-end">
-		<a href="https://39forks.com">Buy the Book</a>
+		<a
+			href="https://39forkspublishing.square.site/s/shop"
+			rel="noopener noreferrer"
+			target="_blank"
+		>
+			Buy the Book
+		</a>
 	</div>
 </header>
 

@@ -67,7 +67,7 @@
 
 		// pick some random chapters, and start playing
 		// lower max chapters on slow mobile
-		const chapterCount = isMobile ? random(2, 3) : random(2, 8);
+		const chapterCount = isMobile ? random(2, 3) : random(2, 6);
 		const chapterNumbers = Array.from({ length: chapters.length }, (_, i) => i);
 		const randomChapters = shuffle(chapterNumbers).slice(0, chapterCount).sort();
 

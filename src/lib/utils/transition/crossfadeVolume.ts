@@ -13,9 +13,8 @@ import { fadeVolume } from './fadeVolume';
 
 export const crossfadeVolume = crossfade({
 	duration: 5000,
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	fallback: (node: Element, params: CrossfadeParams, intro: boolean) => {
-		console.log(params);
-		console.log(intro);
 		return fadeVolume(node as HTMLAudioElement, {});
 	}
 });
