@@ -99,7 +99,7 @@
 		them forward or backward, even play multiple tracks at once. You control the experience. But if
 		you want our suggestion, it’s this: Try listening to the story once all the way through, then go
 		back and play with it, building your own rhythms and layers. As you do, you’ll extend the story
-		beyond the single linear thread of the given narrative and create your own compositions
+		beyond the single linear thread of the given narrative and create your own compositions.
 	</p>
 	<p>
 		And then <em>you</em>
@@ -117,10 +117,7 @@
 		—
 		<i>author and narrator</i>
 		<br />
-		<a href="https://casinowitch.bandcamp.com" rel="noopener noreferrer" target="_blank">
-			Alex McCarl
-		</a>
-		—
+		Alex McCarl —
 		<i>original ambient tracks</i>
 		<br />
 		Mike Budd —
