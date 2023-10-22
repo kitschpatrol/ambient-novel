@@ -1,9 +1,8 @@
 <script lang="ts">
 	import { fadeVolume } from '$lib/utils/transition/fadeVolume';
-	// import pkg from 'mime';
+	import pkg from 'mime';
 	import { onMount } from 'svelte';
-	// const { getType } = pkg;
-	// import { getType } from 'mime';
+	const { getType } = pkg;
 
 	export let audioSources: string[];
 	export let isPlaying = false;
@@ -12,25 +11,43 @@
 	export let currentTime = 0; // actual time of audio
 	export let targetTime = 0; // time we're requesting
 
-	let firstLoad = true; // temp for time logging
-
-	// console.time(`load audio ${audioSources[0]}`);
-
 	let audioElement: HTMLAudioElement;
 
-	function mount() {
-		if (firstLoad) {
-			// voodoo implementation
-			// not sure if any of this helps
-			// https://stackoverflow.com/a/73910818/2437832
-			let savedCurentTime = audioElement.currentTime;
-			audioElement.src = audioSources[0];
-			audioElement.load();
-			audioElement.currentTime = savedCurentTime;
+	const retryIntervalMs = 5000;
+	let maxRetry = 3;
 
-			// basic implementation
-			// audioElement.load();
+	function retry() {
+		maxRetry--;
+
+		if (maxRetry <= 0) {
+			console.warn('max retries reached...');
+		} else {
+			console.warn(
+				`retrying audio loading process in ${
+					retryIntervalMs / 1000
+				} seconds... ${maxRetry} retries left`
+			);
+			setTimeout(() => {
+				if (audioElement) {
+					mount();
+				} else {
+					console.error('audioElement is null');
+				}
+			}, retryIntervalMs);
 		}
+	}
+
+	function mount() {
+		// voodoo implementation
+		// not sure if any of this helps
+		// https://stackoverflow.com/a/73910818/2437832
+		let savedCurentTime = audioElement.currentTime;
+		// audioElement.src = audioSources[0];
+
+		audioElement.load();
+
+		audioElement.currentTime = savedCurentTime;
+
 		audioElement.currentTime = targetTime; // critical
 		audioElement.volume = maxVolume;
 		audioElement.muted = false;
@@ -42,9 +59,7 @@
 				})
 				.catch((error) => {
 					console.error(error);
-					console.warn('retrying audio loading process...');
-					firstLoad = true;
-					mount();
+					retry();
 				});
 	}
 
@@ -122,12 +137,6 @@
 	{loop}
 	preload="auto"
 	on:canplaythrough
-	on:canplaythrough={() => {
-		if (firstLoad) {
-			// console.timeEnd(`load audio ${audioSources[0]}`);
-			firstLoad = false;
-		}
-	}}
 	bind:currentTime={currentTimeProxy}
 	on:ended
 	bind:this={audioElement}
@@ -144,10 +153,20 @@
 		isInOutro = false;
 	}}
 	on:introend={() => {}}
+	on:error={() => {
+		console.error(`audio error for "${audioSources}"`);
+		retry();
+	}}
 >
-	<!-- basic implementation -->
-	<!-- {#each audioSources as source}
-		<source src={source} type={getType(source)} />
-	{/each} -->
+	{#each audioSources as source}
+		<source
+			src={source}
+			type={getType(source)}
+			on:error={() => {
+				console.error(`audio source error for "${source}"`);
+				retry();
+			}}
+		/>
+	{/each}
 	Your browser does not support the audio element.
 </audio>

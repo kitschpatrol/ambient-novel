@@ -4,6 +4,7 @@
 	import Header from '$lib/components/Header.svelte';
 	import { name, version } from '$lib/data/pkgInfo.json';
 	import { faBomb, faTrash } from '@fortawesome/free-solid-svg-icons';
+	import UAParser from 'ua-parser-js';
 
 	async function getServiceWorkerCount() {
 		return (await navigator.serviceWorker.getRegistrations()).length;
@@ -49,6 +50,7 @@
 		});
 	}
 
+	const isMobile = (new UAParser().getDevice().type ?? '') === 'mobile';
 	let cacheCount = getCacheCount();
 	let swCount = getServiceWorkerCount();
 </script>
@@ -95,4 +97,7 @@
 	</p>
 	<Button icon={faBomb} label="Uninstall Service Worker" on:click={uninstallServiceWorker} />
 	<Button icon={faTrash} label="Clear Service Worker Cache" on:click={clearServiceWorkerCache} />
+	<p class="font-display text-white">
+		Mobile detected: {isMobile}
+	</p>
 </main>

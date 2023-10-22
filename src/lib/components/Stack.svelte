@@ -88,9 +88,7 @@
 	}
 
 	let loadCount = -1;
-	let mounted = false;
 	onMount(() => {
-		mounted = true;
 		loadCount++;
 	});
 

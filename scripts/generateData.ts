@@ -70,13 +70,13 @@ const config = {
 				quality: 0,
 				sampleRate: 22050,
 				vbr: false
+			},
+			{
+				format: 'mp3',
+				quality: 0,
+				sampleRate: 22050,
+				vbr: false
 			}
-			// {
-			// 	format: 'mp3',
-			// 	quality: 0,
-			// 	sampleRate: 22050,
-			// 	vbr: false
-			// }
 		]
 	}
 };
