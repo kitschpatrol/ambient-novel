@@ -123,7 +123,10 @@
 				"<span data-time=\"1380.324\" class=\"line\">We</span> <span data-time=\"1380.424\">could</span> <span data-time=\"1380.704\">have</span> <span data-time=\"1381.004\">and</span> <span data-time=\"1381.824\">would</span> <span data-time=\"1382.084\">have</span> <span data-time=\"1382.405\">and</span> <span data-time=\"1383.185\">maybe</span> <span data-time=\"1383.465\">should</span> <span data-time=\"1383.805\">have</span> <span data-time=\"1384.085\">just</span> <span data-time=\"1384.745\">stayed</span> <span data-time=\"1385.045\">with</span> <span data-time=\"1385.225\">them</span> <span data-time=\"1385.446\">forever,</span> <span data-time=\"1385.966\">we</span> <span data-time=\"1386.706\">agreed.</span> <span data-time=\"1388.346\">But,</span> <span data-time=\"1388.527\">our</span> <span data-time=\"1389.287\">time</span> <span data-time=\"1389.567\">was</span> <span data-time=\"1389.767\">up.</span> <span data-time=\"1391.027\">We</span> <span data-time=\"1391.147\">had</span> <span data-time=\"1391.327\">to</span> <span data-time=\"1391.467\">accept</span> <span data-time=\"1391.928\">it.</span> <span data-time=\"1392.988\">Alas,</span> <span data-time=\"1393.388\">we</span> <span data-time=\"1394.248\">were</span> <span data-time=\"1394.448\">only</span> <span data-time=\"1394.769\">temporary</span> <span data-time=\"1395.469\">guests.</span>"
 			],
 			"audio": {
-				"files": ["audio/chapter-1-mix-bounce-v2.fe03a9a6.m4a"],
+				"files": [
+					"audio/chapter-1-mix-bounce-v2.fe03a9a6.m4a",
+					"audio/chapter-1-mix-bounce-v2.ef2ce979.mp3"
+				],
 				"durationSeconds": 1402.374989
 			},
 			"narrationTime": { "start": 14.658, "end": 1395.949 }
@@ -232,7 +235,13 @@
 				"<span data-time=\"779.05\" class=\"line\">Ok,</span> <span data-time=\"779.35\">I</span> <span data-time=\"779.45\">say,</span> <span data-time=\"779.771\">yeah,</span> <span data-time=\"780.131\">we</span> <span data-time=\"780.411\">got</span> <span data-time=\"780.672\">this.</span>",
 				"<span data-time=\"782.013\" class=\"line\">Ok</span> <span data-time=\"782.253\">then,</span> <span data-time=\"782.433\">said</span> <span data-time=\"782.654\">Binky,</span> <span data-time=\"783.034\">ok,</span> <span data-time=\"783.435\">thank</span> <span data-time=\"783.715\">you.</span>"
 			],
-			"audio": { "files": ["audio/chapter-2-mix-bounce-v2.34077f55.m4a"], "durationSeconds": 790 },
+			"audio": {
+				"files": [
+					"audio/chapter-2-mix-bounce-v2.34077f55.m4a",
+					"audio/chapter-2-mix-bounce-v2.d6cf2f10.mp3"
+				],
+				"durationSeconds": 790
+			},
 			"narrationTime": { "start": 32.826, "end": 783.815 }
 		},
 		{
@@ -279,7 +288,13 @@
 				"<span data-time=\"198.584\" class=\"line\">A</span> <span data-time=\"198.604\">different</span> <span data-time=\"200.606\">limo</span> <span data-time=\"200.946\">appeared,</span> <span data-time=\"201.367\">as</span> <span data-time=\"202.948\">the</span> <span data-time=\"203.068\">mob</span> <span data-time=\"203.348\">apparently</span> <span data-time=\"203.809\">called</span> <span data-time=\"204.149\">their</span> <span data-time=\"204.329\">floating</span> <span data-time=\"204.809\">intergalactic</span> <span data-time=\"205.53\">surfboards.</span> <span data-time=\"207.852\">This</span> <span data-time=\"207.992\">one</span> <span data-time=\"208.232\">was</span> <span data-time=\"208.412\">all</span> <span data-time=\"208.592\">tiled</span> <span data-time=\"209.113\">in</span> <span data-time=\"209.253\">chrome</span> <span data-time=\"209.773\">like</span> <span data-time=\"209.953\">a</span> <span data-time=\"210.053\">mirror</span> <span data-time=\"210.434\">ball.</span>",
 				"<span data-time=\"213.053\" class=\"line\">And,</span> <span data-time=\"213.193\">off</span> <span data-time=\"213.414\">we</span> <span data-time=\"213.554\">went.</span> <span data-time=\"214.975\">Through</span> <span data-time=\"215.215\">all</span> <span data-time=\"215.356\">the</span> <span data-time=\"215.456\">portals</span> <span data-time=\"216.036\">and</span> <span data-time=\"216.196\">tunnels</span> <span data-time=\"216.717\">and</span> <span data-time=\"216.897\">slides</span> <span data-time=\"217.638\">and</span> <span data-time=\"218.318\">ways</span> <span data-time=\"218.839\">and</span> <span data-time=\"218.999\">means</span> <span data-time=\"219.48\">and</span> <span data-time=\"219.64\">avenues</span> <span data-time=\"220.18\">and</span> <span data-time=\"220.34\">trenches</span> <span data-time=\"220.961\">in</span> <span data-time=\"221.502\">and</span> <span data-time=\"221.702\">out</span> <span data-time=\"222.022\">above</span> <span data-time=\"222.583\">and</span> <span data-time=\"222.703\">below</span> <span data-time=\"223.083\">this</span> <span data-time=\"223.303\">way</span> <span data-time=\"223.544\">and</span> <span data-time=\"223.684\">that,</span> <span data-time=\"223.964\">all</span> <span data-time=\"224.985\">the</span> <span data-time=\"225.065\">sorts</span> <span data-time=\"225.426\">of</span> <span data-time=\"225.546\">connecting</span> <span data-time=\"226.126\">cosmic</span> <span data-time=\"226.727\">arteries</span> <span data-time=\"227.307\">that</span> <span data-time=\"227.508\">we’d</span> <span data-time=\"227.688\">recently</span> <span data-time=\"228.108\">become</span> <span data-time=\"228.409\">familiar</span> <span data-time=\"228.829\">with</span> <span data-time=\"229.029\">during</span> <span data-time=\"229.95\">our</span> <span data-time=\"230.09\">three</span> <span data-time=\"230.391\">days</span> <span data-time=\"230.751\">with</span> <span data-time=\"231.792\">The</span> <span data-time=\"231.912\">Valentine</span> <span data-time=\"232.513\">Mob.</span>"
 			],
-			"audio": { "files": ["audio/chapter-3-mix-bounce-v2.2fce2c77.m4a"], "durationSeconds": 240 },
+			"audio": {
+				"files": [
+					"audio/chapter-3-mix-bounce-v2.2fce2c77.m4a",
+					"audio/chapter-3-mix-bounce-v2.7ae4de7c.mp3"
+				],
+				"durationSeconds": 240
+			},
 			"narrationTime": { "start": 18.496, "end": 232.793 }
 		},
 		{
@@ -388,7 +403,13 @@
 				"<span data-time=\"975.356\" class=\"line\">The</span> <span data-time=\"975.476\">Artist</span> <span data-time=\"975.936\">tapped</span> <span data-time=\"976.477\">the</span> <span data-time=\"976.637\">PLAY</span> <span data-time=\"976.957\">button</span> <span data-time=\"977.317\">and</span> <span data-time=\"977.577\">sat</span> <span data-time=\"977.897\">back.</span>",
 				"<span data-time=\"980.38\" class=\"line\">Now</span> <span data-time=\"980.52\">published</span> <span data-time=\"981.08\">in</span> <span data-time=\"981.22\">both</span> <span data-time=\"981.501\">print,</span> <span data-time=\"981.961\">digital</span> <span data-time=\"982.921\">and</span> <span data-time=\"983.081\">audio</span> <span data-time=\"983.481\">forms</span> <span data-time=\"984.062\">across</span> <span data-time=\"984.522\">countless</span> <span data-time=\"985.142\">editions</span> <span data-time=\"985.782\">and</span> <span data-time=\"986.002\">narrated</span> <span data-time=\"986.503\">by</span> <span data-time=\"986.723\">dozens</span> <span data-time=\"987.263\">of</span> <span data-time=\"987.363\">actors</span> <span data-time=\"987.843\">and</span> <span data-time=\"988.003\">other</span> <span data-time=\"988.203\">media</span> <span data-time=\"988.543\">personalities,</span> <span data-time=\"989.364\">the</span> <span data-time=\"990.404\">inspiration</span> <span data-time=\"991.064\">for</span> <span data-time=\"991.244\">countless</span> <span data-time=\"991.925\">motion</span> <span data-time=\"992.305\">pictures,</span> <span data-time=\"992.845\">we</span> <span data-time=\"994.766\">had</span> <span data-time=\"994.926\">the</span> <span data-time=\"995.026\">good</span> <span data-time=\"995.206\">fortune</span> <span data-time=\"995.626\">to</span> <span data-time=\"995.766\">experience</span> <span data-time=\"996.527\">the</span> <span data-time=\"996.687\">very</span> <span data-time=\"997.007\">first</span> <span data-time=\"997.447\">emanation</span> <span data-time=\"998.247\">from</span> <span data-time=\"998.607\">the</span> <span data-time=\"998.727\">fountain</span> <span data-time=\"999.168\">that</span> <span data-time=\"999.388\">is–</span>"
 			],
-			"audio": { "files": ["audio/chapter-4-mix-bounce-v3.742421f9.m4a"], "durationSeconds": 1010 },
+			"audio": {
+				"files": [
+					"audio/chapter-4-mix-bounce-v3.742421f9.m4a",
+					"audio/chapter-4-mix-bounce-v3.6ce213fb.mp3"
+				],
+				"durationSeconds": 1010
+			},
 			"narrationTime": { "start": 24.043, "end": 999.628 }
 		},
 		{
@@ -452,7 +473,13 @@
 				"<span data-time=\"915.321\" class=\"line\">Telepathy</span> <span data-time=\"915.881\">from</span> <span data-time=\"916.102\">the</span> <span data-time=\"916.222\">keys:</span> <span data-time=\"916.923\">Ok,</span> <span data-time=\"918.644\">we</span> <span data-time=\"919.405\">got</span> <span data-time=\"919.605\">this</span> <span data-time=\"919.886\">Telepathy</span> <span data-time=\"922.768\">form</span> <span data-time=\"922.989\">the</span> <span data-time=\"923.089\">keys:</span> <span data-time=\"923.749\">Enter</span>",
 				"<span data-time=\"927.396\" class=\"line\">Our</span> <span data-time=\"927.516\">smiling</span> <span data-time=\"928.117\">bubbles</span> <span data-time=\"928.577\">rise.</span> <span data-time=\"930.118\">We’re</span> <span data-time=\"930.618\">in,</span> <span data-time=\"930.678\">you</span> <span data-time=\"930.939\">and</span> <span data-time=\"931.079\">me,</span> <span data-time=\"931.299\">my</span> <span data-time=\"931.499\">friend.</span> <span data-time=\"932.82\">We</span> <span data-time=\"932.94\">got</span> <span data-time=\"933.16\">this.</span> <span data-time=\"934.982\">We</span> <span data-time=\"935.122\">enter.</span>"
 			],
-			"audio": { "files": ["audio/chapter-5-mix-bounce-v2.0fd99283.m4a"], "durationSeconds": 944 },
+			"audio": {
+				"files": [
+					"audio/chapter-5-mix-bounce-v2.0fd99283.m4a",
+					"audio/chapter-5-mix-bounce-v2.391c192d.mp3"
+				],
+				"durationSeconds": 944
+			},
 			"narrationTime": { "start": 35.379, "end": 935.442 }
 		},
 		{
@@ -481,7 +508,13 @@
 				"<span data-time=\"353.572\" class=\"line\">My</span> <span data-time=\"353.692\">friend</span> <span data-time=\"353.992\">and</span> <span data-time=\"354.152\">I</span> <span data-time=\"354.292\">were</span> <span data-time=\"354.512\">blown</span> <span data-time=\"354.832\">away</span> <span data-time=\"355.093\">by</span> <span data-time=\"355.353\">it</span> <span data-time=\"355.433\">all</span> <span data-time=\"355.753\">Does</span> <span data-time=\"357.133\">this</span> <span data-time=\"357.353\">mean</span> <span data-time=\"357.673\">we’ll</span> <span data-time=\"357.934\">live</span> <span data-time=\"358.194\">forever?</span> <span data-time=\"359.034\">We</span> <span data-time=\"359.134\">wondered</span> <span data-time=\"359.454\">together,</span> <span data-time=\"359.854\">With</span> <span data-time=\"360.554\">telepathic</span> <span data-time=\"361.255\">powers.</span> <span data-time=\"362.875\">Yes,</span> <span data-time=\"363.195\">said</span> <span data-time=\"364.216\">The</span> <span data-time=\"364.356\">Artist,</span> <span data-time=\"364.756\">aloud.</span>",
 				"<span data-time=\"367.617\" class=\"line\">Back</span> <span data-time=\"367.857\">out</span> <span data-time=\"368.117\">the</span> <span data-time=\"368.257\">way</span> <span data-time=\"368.557\">we</span> <span data-time=\"368.757\">came,</span> <span data-time=\"369.157\">Up</span> <span data-time=\"370.058\">up</span> <span data-time=\"370.418\">and</span> <span data-time=\"370.678\">away.</span> <span data-time=\"372.299\">My</span> <span data-time=\"372.439\">friend</span> <span data-time=\"372.819\">and</span> <span data-time=\"372.979\">I</span> <span data-time=\"373.299\">have</span> <span data-time=\"373.719\">left</span> <span data-time=\"374.179\">the</span> <span data-time=\"374.359\">aquarium.</span> <span data-time=\"376.22\">Transmuted,</span> <span data-time=\"377.16\">operational,</span> <span data-time=\"378.861\">and</span> <span data-time=\"379.621\">flowing–</span> <span data-time=\"380.181\">Zoetic.</span>"
 			],
-			"audio": { "files": ["audio/chapter-6-mix-bounce-v2.02ded7a1.m4a"], "durationSeconds": 388 },
+			"audio": {
+				"files": [
+					"audio/chapter-6-mix-bounce-v2.02ded7a1.m4a",
+					"audio/chapter-6-mix-bounce-v2.02ace0f3.mp3"
+				],
+				"durationSeconds": 388
+			},
 			"narrationTime": { "start": 43.23, "end": 382.002 }
 		},
 		{
@@ -495,7 +528,13 @@
 				"<span data-time=\"77.035\" class=\"line\">We</span> <span data-time=\"77.215\">quickly</span> <span data-time=\"77.776\">found</span> <span data-time=\"78.136\">the</span> <span data-time=\"78.256\">genius</span> <span data-time=\"78.776\">and</span> <span data-time=\"79.157\">set</span> <span data-time=\"79.497\">them</span> <span data-time=\"79.677\">on</span> <span data-time=\"79.797\">a</span> <span data-time=\"79.857\">new</span> <span data-time=\"80.017\">path,</span> <span data-time=\"80.378\">For</span> <span data-time=\"81.498\">liberation</span> <span data-time=\"82.159\">Of</span> <span data-time=\"83.4\">mind</span> <span data-time=\"83.96\">and</span> <span data-time=\"84.86\">species</span> <span data-time=\"85.601\">and</span> <span data-time=\"86.462\">planet</span> <span data-time=\"86.982\">and</span> <span data-time=\"87.742\">cosmos.</span> <span data-time=\"89.788\">Moths</span> <span data-time=\"90.208\">are</span> <span data-time=\"90.709\">never</span> <span data-time=\"91.029\">easy</span> <span data-time=\"91.59\">to</span> <span data-time=\"91.81\">right,</span> <span data-time=\"92.23\">After</span> <span data-time=\"93.992\">they’ve</span> <span data-time=\"94.332\">been</span> <span data-time=\"94.532\">wrong</span> <span data-time=\"95.013\">For</span> <span data-time=\"96.394\">so</span> <span data-time=\"96.654\">long.</span> <span data-time=\"99.637\">After</span> <span data-time=\"99.857\">all,</span> <span data-time=\"100.137\">moths</span> <span data-time=\"100.677\">are</span> <span data-time=\"100.918\">entirely</span> <span data-time=\"101.578\">unable</span> <span data-time=\"102.039\">to</span> <span data-time=\"102.159\">fly</span> <span data-time=\"102.559\">into</span> <span data-time=\"102.899\">the</span> <span data-time=\"102.999\">Dark,</span> <span data-time=\"103.32\">Even</span> <span data-time=\"104.521\">when</span> <span data-time=\"104.861\">that’s</span> <span data-time=\"105.261\">The</span> <span data-time=\"106.322\">Way.</span>",
 				"<span data-time=\"109.325\" class=\"line\">And</span> <span data-time=\"109.425\">we</span> <span data-time=\"109.585\">noticed</span> <span data-time=\"109.985\">the</span> <span data-time=\"110.145\">effects</span> <span data-time=\"110.606\">immediately.</span> <span data-time=\"111.847\">Palpable.</span> <span data-time=\"113.288\">And</span> <span data-time=\"113.388\">now–</span> <span data-time=\"113.709\">Unflappable.</span>"
 			],
-			"audio": { "files": ["audio/chapter-7-mix-bounce-v2.d4c5ac0b.m4a"], "durationSeconds": 124 },
+			"audio": {
+				"files": [
+					"audio/chapter-7-mix-bounce-v2.d4c5ac0b.m4a",
+					"audio/chapter-7-mix-bounce-v2.ea05be82.mp3"
+				],
+				"durationSeconds": 124
+			},
 			"narrationTime": { "start": 19.383, "end": 115.41 }
 		},
 		{
@@ -506,7 +545,13 @@
 				"<span data-time=\"55.542\" class=\"line\">Before</span> <span data-time=\"56.062\">Bozo84</span> <span data-time=\"57.282\">delivered</span> <span data-time=\"57.742\">us</span> <span data-time=\"57.882\">back</span> <span data-time=\"58.183\">to</span> <span data-time=\"58.383\">our</span> <span data-time=\"58.563\">temporary</span> <span data-time=\"59.203\">home</span> <span data-time=\"61.362\">We</span> <span data-time=\"61.483\">got</span> <span data-time=\"61.683\">lost</span> <span data-time=\"62.124\">at</span> <span data-time=\"62.385\">Yen</span> <span data-time=\"62.706\">Tu</span> <span data-time=\"62.986\">Mountain</span> <span data-time=\"63.468\">for</span> <span data-time=\"63.648\">days.</span> <span data-time=\"64.991\">Weeks,</span> <span data-time=\"65.332\">maybe?</span> <span data-time=\"66.816\">My</span> <span data-time=\"66.936\">friend</span> <span data-time=\"67.217\">And</span> <span data-time=\"67.358\">I</span>",
 				"<span data-time=\"67.538\" class=\"line\">In</span> <span data-time=\"69.042\">a</span> <span data-time=\"69.082\">good</span> <span data-time=\"69.303\">way.</span>"
 			],
-			"audio": { "files": ["audio/chapter-8-mix-bounce-v3.02ffa812.m4a"], "durationSeconds": 82 },
+			"audio": {
+				"files": [
+					"audio/chapter-8-mix-bounce-v3.02ffa812.m4a",
+					"audio/chapter-8-mix-bounce-v3.27d92a5a.mp3"
+				],
+				"durationSeconds": 82
+			},
 			"narrationTime": { "start": 31.975, "end": 69.463 }
 		},
 		{
@@ -518,7 +563,13 @@
 				"<span data-time=\"59.688\" class=\"line\">Bubbles</span> <span data-time=\"60.108\">gave</span> <span data-time=\"60.409\">us</span> <span data-time=\"60.629\">each</span> <span data-time=\"61.129\">a</span> <span data-time=\"61.329\">special</span> <span data-time=\"61.81\">phone,</span> <span data-time=\"62.35\">If</span> <span data-time=\"63.351\">we</span> <span data-time=\"63.571\">ever</span> <span data-time=\"63.851\">needed</span> <span data-time=\"64.192\">to</span> <span data-time=\"64.272\">connect.</span>",
 				"<span data-time=\"66.193\" class=\"line\">So</span> <span data-time=\"66.393\">we</span> <span data-time=\"66.553\">did.</span> <span data-time=\"67.814\">We</span> <span data-time=\"67.934\">called</span> <span data-time=\"68.295\">Lucille🎱.</span> <span data-time=\"70.216\">Voicemail.</span> <span data-time=\"72.218\">We</span> <span data-time=\"72.338\">decided</span> <span data-time=\"72.758\">against</span> <span data-time=\"73.239\">leaving</span> <span data-time=\"73.899\">a</span> <span data-time=\"73.979\">message.</span> <span data-time=\"76.081\">A</span> <span data-time=\"76.121\">few</span> <span data-time=\"76.341\">moments</span> <span data-time=\"76.801\">later</span> <span data-time=\"77.322\">my</span> <span data-time=\"77.582\">friend’s</span> <span data-time=\"78.142\">phone</span> <span data-time=\"78.623\">buzzed.</span> <span data-time=\"80.544\">Everything</span> <span data-time=\"80.864\">ok?</span> <span data-time=\"81.645\">Asked</span> <span data-time=\"81.965\">Chaplin💜.</span> <span data-time=\"84.287\">Yeah,</span> <span data-time=\"84.587\">said</span> <span data-time=\"84.828\">my</span> <span data-time=\"84.968\">friend.</span> <span data-time=\"86.729\">Ok,</span> <span data-time=\"87.029\">we’re</span> <span data-time=\"87.75\">gathering</span> <span data-time=\"88.19\">you</span> <span data-time=\"88.33\">up</span> <span data-time=\"88.47\">tonight,</span> <span data-time=\"88.851\">be</span> <span data-time=\"89.011\">ready.</span> <span data-time=\"90.93\">My</span> <span data-time=\"91.05\">friend</span> <span data-time=\"91.39\">and</span> <span data-time=\"91.571\">I</span> <span data-time=\"91.871\">hiding</span> <span data-time=\"92.752\">our</span> <span data-time=\"92.972\">excitement</span> <span data-time=\"93.612\">said,</span> <span data-time=\"94.113\">Ok.</span> <span data-time=\"96.495\">Great</span> <span data-time=\"96.715\">then,</span> <span data-time=\"96.915\">said</span> <span data-time=\"97.776\">Chaplin💜,</span> <span data-time=\"98.176\">ciao.</span>"
 			],
-			"audio": { "files": ["audio/chapter-9-mix-bounce-v3.47f06a55.m4a"], "durationSeconds": 108 },
+			"audio": {
+				"files": [
+					"audio/chapter-9-mix-bounce-v3.47f06a55.m4a",
+					"audio/chapter-9-mix-bounce-v3.15eb2bfe.mp3"
+				],
+				"durationSeconds": 108
+			},
 			"narrationTime": { "start": 31.921, "end": 98.356 }
 		},
 		{
@@ -529,7 +580,13 @@
 				"<span data-time=\"50.922\" class=\"line\">Newly</span> <span data-time=\"51.383\">minted</span> <span data-time=\"51.863\">nomads</span> <span data-time=\"52.704\">now</span> <span data-time=\"53.044\">equalling</span> <span data-time=\"53.545\">fifteen,</span> <span data-time=\"54.346\">in</span> <span data-time=\"54.466\">number.</span> <span data-time=\"56.609\">As</span> <span data-time=\"56.709\">many</span> <span data-time=\"57.029\">members</span> <span data-time=\"57.69\">as</span> <span data-time=\"57.87\">letters</span> <span data-time=\"58.47\">arranged</span> <span data-time=\"59.17\">and</span> <span data-time=\"59.351\">stacked</span> <span data-time=\"59.891\">Side-by-side</span> <span data-time=\"61.832\">as</span> <span data-time=\"61.972\">we</span> <span data-time=\"62.152\">are,</span> <span data-time=\"62.432\">Adjacent</span> <span data-time=\"64.974\">nuance,</span> <span data-time=\"65.854\">Able</span> <span data-time=\"67.475\">and</span> <span data-time=\"67.775\">above</span> <span data-time=\"68.336\">and</span> <span data-time=\"68.516\">outside–</span> <span data-time=\"69.436\">The.</span> <span data-time=\"71.497\">Context.</span> <span data-time=\"74.139\">Classified</span> <span data-time=\"74.959\">and</span> <span data-time=\"75.119\">for</span> <span data-time=\"75.379\">your</span> <span data-time=\"75.72\">eyes</span> <span data-time=\"76.12\">only:</span> <span data-time=\"76.8\">The</span> <span data-time=\"77.861\">Valentine</span> <span data-time=\"78.641\">Mob.</span> <span data-time=\"81.475\">Adorned</span> <span data-time=\"82.216\">in</span> <span data-time=\"82.576\">all</span> <span data-time=\"83.076\">the</span> <span style=\"color: #D8BFD8;\" data-time=\"83.236\">thistle</span> <span data-time=\"83.877\">and</span> <span style=\"color: #C54B8C;\" data-time=\"84.057\">mulberry</span>, <span data-time=\"84.878\">velvety</span> <span data-time=\"86.199\">rags</span> <span data-time=\"86.899\">and</span> <span data-time=\"87.099\">robes.</span> <span data-time=\"89.621\">Shades</span> <span data-time=\"90.142\">and</span> <span data-time=\"90.302\">hats</span> <span data-time=\"90.762\">and</span> <span data-time=\"90.942\">belts</span> <span data-time=\"91.383\">and</span> <span data-time=\"91.563\">trunk-fulls</span> <span data-time=\"92.363\">more,</span> <span data-time=\"92.764\">for</span> <span data-time=\"92.964\">the</span> <span data-time=\"93.084\">choosing.</span>",
 				"<span data-time=\"95.706\" class=\"line\">Rising</span> <span data-time=\"96.366\">unbroken</span> <span data-time=\"97.207\">From</span> <span data-time=\"97.527\">the</span> <span data-time=\"97.647\">lavender</span> <span data-time=\"98.248\">loom</span> <span data-time=\"98.768\">Boom</span> <span data-time=\"98.868\">Boom,</span> <span data-time=\"100.61\">Va-room</span>"
 			],
-			"audio": { "files": ["audio/chapter-10-mix-bounce-v3.fc7c8367.m4a"], "durationSeconds": 128 },
+			"audio": {
+				"files": [
+					"audio/chapter-10-mix-bounce-v3.fc7c8367.m4a",
+					"audio/chapter-10-mix-bounce-v3.a0ed0690.mp3"
+				],
+				"durationSeconds": 128
+			},
 			"narrationTime": { "start": 31.405, "end": 100.95 }
 		}
 	]

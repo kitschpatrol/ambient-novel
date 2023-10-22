@@ -5,7 +5,7 @@
 	import { browser } from '$app/environment';
 	import { base } from '$app/paths';
 	import Audio from '$lib/components/Audio.svelte';
-	import AudioFadeProxy from '$lib/components/AudioFadeProxy.svelte';
+	// import AudioFadeProxy from '$lib/components/AudioFadeProxy.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import ChapterCover from '$lib/components/ChapterCover.svelte';
 	import Starfield from '$lib/components/Starfield.svelte';
@@ -575,7 +575,7 @@
 		}}
 	/>
 {:else}
-	<AudioFadeProxy
+	<Audio
 		audioSources={chapterData.audio.files.map((file) => `${base}/${file}`)}
 		isPlaying={isPlayingAndNotSeeking}
 		bind:currentTime

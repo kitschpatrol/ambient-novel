@@ -13,7 +13,6 @@
 	// don't load the audio until it's first played,
 	// this is an optimization to play well with the service worker
 	// precaching and cut down initial load time
-	let hasPlayed = false;
 
 	let targetTimeProxy: number = targetTime;
 	let currentTimeProxy: number = currentTime;
@@ -21,10 +20,6 @@
 
 	// a bit precarious
 	$: {
-		if (!hasPlayed && isPlaying) {
-			hasPlayed = true;
-		}
-
 		if (isPlaying && !isPlayingProxy) {
 			// Starting to play
 			targetTimeProxy = targetTime;
@@ -55,7 +50,6 @@
 	// TODO  disable on ended in out-transitioning stuff?
 </script>
 
-<!-- {#if hasPlayed} -->
 {#key isPlaying}
 	<Audio
 		{audioSources}
@@ -67,4 +61,3 @@
 		on:canplaythrough
 	/>
 {/key}
-<!-- {/if} -->

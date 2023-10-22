@@ -117,7 +117,10 @@
 		—
 		<i>author and narrator</i>
 		<br />
-		<a href="https://casinowitch.bandcamp.com"  rel="noopener noreferrer" target="_blank">Alex McCarl</a> —
+		<a href="https://casinowitch.bandcamp.com" rel="noopener noreferrer" target="_blank">
+			Alex McCarl
+		</a>
+		—
 		<i>original ambient tracks</i>
 		<br />
 		Mike Budd —
@@ -127,6 +130,7 @@
 		—
 		<i>website</i>
 	</p>
+	<!-- prettier-ignore -->
 	<p class="mt-[4em] text-base">
 		<em>
 			The Valentine Mob website should work anywhere, but it is best experienced with a pair of
@@ -134,12 +138,8 @@
 				href="https://www.google.com/chrome/"
 				rel="noopener noreferrer"
 				target="_blank"
-			>
-				Chrome
-			</a>
-			. If you run into technical issues, please
-			<a href="mailto:swift.rain6251@fastmail.com">let us know</a>
-			.
+			>Chrome</a>. If you run into technical issues, please
+			<a href="mailto:swift.rain6251@fastmail.com">let us know</a>.
 		</em>
 	</p>
 </main>

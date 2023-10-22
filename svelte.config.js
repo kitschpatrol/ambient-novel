@@ -9,7 +9,6 @@ const config = {
 	preprocess: vitePreprocess(),
 	kit: {
 		adapter: adapter({
-			// cloudflare pages does this for us...
 			precompress: false,
 			fallback: 'index.html'
 		}),
