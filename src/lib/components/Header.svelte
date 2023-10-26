@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
-	import { title } from '$lib/data/book.json';
+
+	export let title: string = 'The Valentine Mob';
 
 	$: isHomePage = $page.url.pathname === base;
 </script>
