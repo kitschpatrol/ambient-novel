@@ -15,7 +15,7 @@
 			<a href="{base}/">Home</a>
 		{/if}
 	</div>
-	<h1 class="font-display tracking-wider text-white shadow-vm-shadow text-shadow">
+	<h1 class="text-vm-text-headline font-display tracking-wider shadow-vm-shadow text-shadow">
 		{title.replaceAll('a', 'A')}
 	</h1>
 	<div class="justify-self-end">

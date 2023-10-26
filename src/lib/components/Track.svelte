@@ -431,11 +431,19 @@
 
 	// style
 	$: isMounted && setWordStylesFromActiveWordIndex(activeWordIndex);
+
+	// show pointer if we're in "button" mode
+	$: overrideCursor =
+		isStarfieldEnabled &&
+		!isReset &&
+		currentTime >= 0 &&
+		currentTime <= chapterData.narrationTime.start;
 </script>
 
 <div class="track">
 	<div
 		class="scroll-wrapper no-scrollbar"
+		class:override-cursor={overrideCursor}
 		bind:this={scrollWrapperElement}
 		on:scroll={(e) => {
 			/* @ts-ignore */
@@ -483,22 +491,18 @@
 		--><div class="spacer" />
 		</div>
 
+		<!-- Control starfield visibility -->
 		{#if (isStarfieldEnabled && !isReset && currentTime > 0.5 && currentTime < chapterData.narrationTime.start - 3.5) || currentTime > chapterData.narrationTime.end + 3}
-			<button
-				on:click={() => {
-					targetTime = chapterData.narrationTime.start;
-				}}
-				transition:fastFadeFromJs|local={{ duration: 3000 }}
-			>
+			<div transition:fastFadeFromJs|local={{ duration: 3000 }}>
 				<Starfield
 					id={`particles-${chapterData.index}`}
 					color={starfieldColor}
 					--position="absolute"
 					--top="0.1px"
 					--height="100%"
-					--background="linear-gradient(0deg, #f8f8f8 0%, white 13%, white 100%) white"
+					--background="linear-gradient(0deg, #f5f5f5 0%, #f7f7f7 13%, #f7f7f7 100%) #f7f7f7"
 				/>
-			</button>
+			</div>
 		{/if}
 	</div>
 
@@ -593,7 +597,7 @@
 		height: calc(100dvh / 12);
 		position: relative;
 		/* background-color: white; */
-		background: linear-gradient(0deg, #f8f8f8 0%, white 13%, white 100%) white;
+		background: linear-gradient(0deg, #f5f5f5 0%, #f7f7f7 13%, #f7f7f7 100%) #f7f7f7;
 		user-select: none;
 		/* autoprefixer? */
 		-webkit-user-select: none;
@@ -625,22 +629,22 @@
 	/* Changing opacity here was forcing reflows in safari */
 	:global(div.scroll-area span) {
 		transition: color 800ms;
-		color: lightgray;
+		color: rgb(235, 235, 235);
 	}
 
 	:global(div.scroll-area.hide-text span) {
-		color: white;
+		color: #f7f7f7;
 	}
 
 	/* Read words */
 	/* TODO THIS IS WHAT IS SLOW IN SAFARI */
 	:global(div.scroll-area span.read) {
-		color: black;
+		color: rgb(87, 87, 87);
 	}
 
 	/* TODO THIS IS WHAT IS SLOW IN SAFARI */
 	:global(div.scroll-area span.current) {
-		color: black;
+		color: rgb(87, 87, 87);
 	}
 
 	div.scroll-wrapper {
@@ -659,7 +663,6 @@
 	}
 
 	div.scroll-area {
-		color: black;
 		font-family: serif;
 		font-size: min(calc(100dvh / 36), 1.75rem);
 		line-height: calc(100dvh / 12);
@@ -680,5 +683,10 @@
 
 	div.scroll-wrapper:active {
 		cursor: grabbing;
+	}
+
+	div.override-cursor,
+	div.override-cursor:active {
+		cursor: pointer;
 	}
 </style>

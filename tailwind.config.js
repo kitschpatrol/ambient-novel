@@ -19,6 +19,9 @@ export default {
 				DEFAULT: '-.05em .05em .125em var(--tw-shadow-color)'
 			},
 			colors: {
+				'vm-text-headline': 'rgb(240, 240, 240)',
+				'vm-text-light': 'rgb(215, 215, 215)',
+				'vm-text-dark': 'rgb(87, 87, 87)',
 				'vm-magenta-mild': '#C63BEE',
 				'vm-magenta': '#f01ef6',
 				'vm-magenta-highlight': '#F6CDFB',
