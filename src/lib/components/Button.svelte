@@ -26,7 +26,7 @@
 		class:flex-row={iconAlign === 'left'}
 		class:flex-row-reverse={iconAlign === 'right'}
 		class:down={isDown}
-		class="flex h-8 flex-1 items-center justify-center gap-2 rounded-lg bg-gray-400 bg-opacity-60 font-display text-base text-white text-opacity-90"
+		class="flex h-8 flex-1 items-center justify-center gap-2 rounded-lg bg-gray-400 bg-opacity-60 font-display text-base text-vm-text-light text-opacity-90"
 	>
 		<Fa {icon} translateY="-.05" />
 		{#if label}
@@ -65,7 +65,6 @@
 	button:not(:disabled):active div {
 		top: 2px;
 		right: 2px;
-		/* text-shadow: 0 0 3px rgba(255, 255, 255, 0.587); */
 		box-shadow: 0px 1px 3px #00000067;
 		/* background-color: theme(colors.vm-magenta-mild); */
 		background-color: #c63bee;
@@ -74,7 +73,7 @@
 	button div.down {
 		top: 2px;
 		right: 2px;
-		color: white;
+		color: theme(colors.vm-text-light);
 		box-shadow: 0px 1px 3px #00000067;
 		background-color: #ef1ef68f;
 	}

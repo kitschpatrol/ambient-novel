@@ -496,7 +496,7 @@
 					--position="absolute"
 					--top="0.1px"
 					--height="100%"
-					--background="linear-gradient(0deg, #f8f8f8 0%, white 13%, white 100%) white"
+					--background="linear-gradient(0deg, #f5f5f5 0%, #f7f7f7 13%, #f7f7f7 100%) #f7f7f7"
 				/>
 			</button>
 		{/if}
@@ -593,7 +593,7 @@
 		height: calc(100dvh / 12);
 		position: relative;
 		/* background-color: white; */
-		background: linear-gradient(0deg, #f8f8f8 0%, white 13%, white 100%) white;
+		background: linear-gradient(0deg, #f5f5f5 0%, #f7f7f7 13%, #f7f7f7 100%) #f7f7f7;
 		user-select: none;
 		/* autoprefixer? */
 		-webkit-user-select: none;
@@ -625,22 +625,22 @@
 	/* Changing opacity here was forcing reflows in safari */
 	:global(div.scroll-area span) {
 		transition: color 800ms;
-		color: lightgray;
+		color: rgb(235, 235, 235);
 	}
 
 	:global(div.scroll-area.hide-text span) {
-		color: white;
+		color: #f7f7f7;
 	}
 
 	/* Read words */
 	/* TODO THIS IS WHAT IS SLOW IN SAFARI */
 	:global(div.scroll-area span.read) {
-		color: black;
+		color: rgb(87, 87, 87);
 	}
 
 	/* TODO THIS IS WHAT IS SLOW IN SAFARI */
 	:global(div.scroll-area span.current) {
-		color: black;
+		color: rgb(87, 87, 87);
 	}
 
 	div.scroll-wrapper {
@@ -659,7 +659,6 @@
 	}
 
 	div.scroll-area {
-		color: black;
 		font-family: serif;
 		font-size: min(calc(100dvh / 36), 1.75rem);
 		line-height: calc(100dvh / 12);
