@@ -1,6 +1,6 @@
 {
 	"name": "ambient-novel",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"type": "module",
 	"description": "Website for nonlinear interactive exploration of The Valentine Mob novel.",
 	"repository": {

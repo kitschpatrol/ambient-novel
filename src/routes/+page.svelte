@@ -1,9 +1,8 @@
 <script lang="ts">
 	import Stack from '$lib/components/Stack.svelte';
-	import bookDataRaw from '$lib/data/book.json';
-	import type { BookData } from '$lib/schemas/bookSchema';
+	import type { PageServerData } from './$types';
 
-	const bookData = bookDataRaw as BookData;
+	export let data: PageServerData;
 </script>
 
 <svelte:head>
@@ -16,4 +15,4 @@
 	</style>
 </svelte:head>
 
-<Stack {bookData} />
+<Stack bookData={data.bookData} />
