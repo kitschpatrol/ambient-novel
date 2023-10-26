@@ -431,11 +431,19 @@
 
 	// style
 	$: isMounted && setWordStylesFromActiveWordIndex(activeWordIndex);
+
+	// show pointer if we're in "button" mode
+	$: overrideCursor =
+		isStarfieldEnabled &&
+		!isReset &&
+		currentTime >= 0 &&
+		currentTime <= chapterData.narrationTime.start;
 </script>
 
 <div class="track">
 	<div
 		class="scroll-wrapper no-scrollbar"
+		class:override-cursor={overrideCursor}
 		bind:this={scrollWrapperElement}
 		on:scroll={(e) => {
 			/* @ts-ignore */
@@ -483,13 +491,9 @@
 		--><div class="spacer" />
 		</div>
 
+		<!-- Control starfield visibility -->
 		{#if (isStarfieldEnabled && !isReset && currentTime > 0.5 && currentTime < chapterData.narrationTime.start - 3.5) || currentTime > chapterData.narrationTime.end + 3}
-			<button
-				on:click={() => {
-					targetTime = chapterData.narrationTime.start;
-				}}
-				transition:fastFadeFromJs|local={{ duration: 3000 }}
-			>
+			<div transition:fastFadeFromJs|local={{ duration: 3000 }}>
 				<Starfield
 					id={`particles-${chapterData.index}`}
 					color={starfieldColor}
@@ -498,7 +502,7 @@
 					--height="100%"
 					--background="linear-gradient(0deg, #f5f5f5 0%, #f7f7f7 13%, #f7f7f7 100%) #f7f7f7"
 				/>
-			</button>
+			</div>
 		{/if}
 	</div>
 
@@ -679,5 +683,10 @@
 
 	div.scroll-wrapper:active {
 		cursor: grabbing;
+	}
+
+	div.override-cursor,
+	div.override-cursor:active {
+		cursor: pointer;
 	}
 </style>
