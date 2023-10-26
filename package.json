@@ -1,6 +1,6 @@
 {
 	"name": "ambient-novel",
-	"version": "1.0.2",
+	"version": "1.0.4",
 	"type": "module",
 	"description": "Website for nonlinear interactive exploration of The Valentine Mob novel.",
 	"repository": {
@@ -36,7 +36,7 @@
 		"generate-licenses": "license-checker-rseidelsohn --direct --excludePrivatePackages --excludePackagesStartingWith '@playwrith;@types;@prettier;prettier;eslint' --json --out ./src/lib/data/licenses.json",
 		"generate-package-info": "jq '{version, name, description}' package.json > ./src/lib/data/pkgInfo.json",
 		"lint": "prettier --plugin prettier-plugin-svelte --check . && eslint .",
-		"prebuild": "npm run generate-package-info",
+		"prebuild": "npm run generate-package-info && npm run generate-licenses",
 		"preview": "vite preview --host",
 		"scrape-pdf": "ts-node ./scripts/scrapePdf.ts"
 	},
@@ -51,7 +51,6 @@
 		"@types/howler": "^2.2.10",
 		"@types/html-minifier": "^4.0.4",
 		"@types/lodash": "^4.14.200",
-		"@types/mime": "^3.0.3",
 		"@types/pdf-parse": "^1.1.3",
 		"@types/prettier": "^2.7.3",
 		"@types/sanitize-html": "^2.9.3",
@@ -70,7 +69,7 @@
 		"leven": "^4.0.0",
 		"license-checker-rseidelsohn": "^4.2.10",
 		"lodash": "^4.17.21",
-		"mime": "^3.0.0",
+		"mrmime": "^1.0.1",
 		"node-html-parser": "^6.1.11",
 		"node-jq": "^4.2.2",
 		"postcss": "^8.4.31",

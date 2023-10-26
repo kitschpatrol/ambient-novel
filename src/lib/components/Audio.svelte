@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { fadeVolume } from '$lib/utils/transition/fadeVolume';
-	import pkg from 'mime';
+	import { lookup } from 'mrmime';
 	import { onMount } from 'svelte';
-	const { getType } = pkg;
 
 	export let audioSources: string[];
 	export let isPlaying = false;
@@ -161,7 +160,7 @@
 	{#each audioSources as source}
 		<source
 			src={source}
-			type={getType(source)}
+			type={lookup(source) ?? 'audio'}
 			on:error={() => {
 				console.error(`audio source error for "${source}"`);
 				retry();
