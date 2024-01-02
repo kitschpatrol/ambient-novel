@@ -12,7 +12,7 @@
 <!-- prettier-ignore -->
 <h2
 	class="chapter-title absolute left-0 top-0 h-full w-full text-center font-display tracking-wider text-vm-text-light shadow-vm-shadow text-shadow"
-	style:background-color=${chapterColor}
+	style:background-color={chapterColor}
 >
 	<span class="max-sm:hidden">Chapter </span><!--
   -->{chapterData.index + 1}<!--
