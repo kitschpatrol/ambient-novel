@@ -24,7 +24,8 @@ module.exports = {
 			parser: 'svelte-eslint-parser',
 			parserOptions: {
 				parser: '@typescript-eslint/parser'
-			}
+			},
+			extraFileExtensions: ['.svelte', '.astro']
 		}
 	],
 	rules: {
