@@ -43,15 +43,14 @@
 				random: true,
 			},
 			shape: {
-				// @ts-expect-error type issue TODO
-				images: [
-					{
+				options: {
+					images: {
 						fill: true,
 						replaceColor: true,
 						src: `${base}/heart.svg`,
 					},
-				],
-				type: 'image',
+				},
+				type: 'images',
 			},
 			size: {
 				value: 32,

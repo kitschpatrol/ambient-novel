@@ -55,14 +55,14 @@
 						},
 					},
 					shape: {
-						images: [
-							{
+						options: {
+							images: {
 								fill: true,
 								replaceColor: true,
 								src: strokeEnabled ? `${base}/saturn.svg` : `${base}/saturn-no-stroke.svg`,
 							},
-						],
-						type: 'image',
+						},
+						type: 'images',
 					},
 					size: {
 						value: {
@@ -97,14 +97,14 @@
 				random: true,
 			},
 			shape: {
-				images: [
-					{
+				options: {
+					images: {
 						fill: true,
 						replaceColor: true,
 						src: strokeEnabled ? `${base}/star.svg` : `${base}/star-no-stroke.svg`,
 					},
-				],
-				type: 'image',
+				},
+				type: 'images',
 			},
 			size: {
 				value: {
