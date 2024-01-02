@@ -1,30 +1,25 @@
 <script lang="ts">
-	import {
-		faBookReader,
-		faDiceD20,
-		faPause,
-		faRotateBack
-	} from '@fortawesome/free-solid-svg-icons';
-	import Button from '$lib/components/Button.svelte';
-	import Header from '$lib/components/Header.svelte';
-	import Track from '$lib/components/Track.svelte';
-	import TrackPlaceholder from '$lib/components/TrackPlaceholder.svelte';
-	import * as config from '$lib/config';
-	import type { BookData } from '$lib/schemas/bookSchema';
-	import { delayedForEach } from '$lib/utils/collection/delayedForEach';
-	import { getIndicesMatchingValue } from '$lib/utils/collection/getIndicesMatchingValue';
-	import random from 'lodash/random';
-	import shuffle from 'lodash/shuffle';
-	import { onMount, tick } from 'svelte';
-	import UaParser from 'ua-parser-js';
+	import { faBookReader, faDiceD20, faPause, faRotateBack } from '@fortawesome/free-solid-svg-icons'
+	import Button from '$lib/components/Button.svelte'
+	import Header from '$lib/components/Header.svelte'
+	import Track from '$lib/components/Track.svelte'
+	import TrackPlaceholder from '$lib/components/TrackPlaceholder.svelte'
+	import * as config from '$lib/config'
+	import type { BookData } from '$lib/schemas/book-schema'
+	import { delayedForEach } from '$lib/utils/collection/delayed-for-each'
+	import { getIndicesMatchingValue } from '$lib/utils/collection/get-indices-matching-value'
+	import random from 'lodash/random'
+	import shuffle from 'lodash/shuffle'
+	import { onMount, tick } from 'svelte'
+	import UaParser from 'ua-parser-js'
 
-	export let bookData: BookData;
-	const { chapters } = bookData;
-	const luckyBlendDelay = 250;
-	const resetDelay = 100;
-	const isMobile = (new UaParser().getDevice().type ?? '') === 'mobile';
+	export let bookData: BookData
+	const { chapters } = bookData
+	const luckyBlendDelay = 250
+	const resetDelay = 100
+	const isMobile = (new UaParser().getDevice().type ?? '') === 'mobile'
 
-	let width = 0;
+	let width = 0
 
 	const chapterColors = [
 		'#f01ef6',
@@ -36,76 +31,80 @@
 		'#763bff',
 		'#623bff',
 		'#5043f5',
-		'#4e3bff'
-	];
+		'#4e3bff',
+	]
 
-	let targetTimes = Array.from({ length: chapters.length }, () => 0);
-	let playStatus = Array.from({ length: chapters.length }, () => false);
-	let resetStatus = Array.from({ length: chapters.length }, () => true);
+	let targetTimes = Array.from({ length: chapters.length }, () => 0)
+	let playStatus = Array.from({ length: chapters.length }, () => false)
+	let resetStatus = Array.from({ length: chapters.length }, () => true)
 
-	let isResetting = false;
-	let isPlayingThrough = false;
+	let isResetting = false
+	let isPlayingThrough = false
 
-	$: somethingPlaying = playStatus.includes(true);
-	$: somethingNotReset = resetStatus.includes(false);
+	$: somethingPlaying = playStatus.includes(true)
+	$: somethingNotReset = resetStatus.includes(false)
 
 	$: {
 		// Messing with anything stops playing through
 		if (!isResetting && isPlayingThrough && playStatus.filter(Boolean).length !== 1) {
-			isPlayingThrough = false;
+			isPlayingThrough = false
 		}
 	}
 
-	let blendingInProgress = false;
+	let blendingInProgress = false
 
 	async function onLuckyBlend() {
-		if (blendingInProgress) return;
-		blendingInProgress = true;
-		await resetAll();
+		if (blendingInProgress) return
+		blendingInProgress = true
+		await resetAll()
 
-		await sleep(luckyBlendDelay);
+		await sleep(luckyBlendDelay)
 
 		// Pick some random chapters, and start playing
 		// lower max chapters on slow mobile
-		const chapterCount = isMobile ? random(2, 3) : random(2, 6);
-		const chapterNumbers = Array.from({ length: chapters.length }, (_, i) => i);
-		const randomChapters = shuffle(chapterNumbers).slice(0, chapterCount).sort();
+		const chapterCount = isMobile ? random(2, 3) : random(2, 6)
+		const chapterNumbers = Array.from({ length: chapters.length }, (_, i) => i)
+		// eslint-disable-next-line @typescript-eslint/require-array-sort-compare
+		const randomChapters = shuffle(chapterNumbers).slice(0, chapterCount).sort()
 
 		for (const chapterIndex of randomChapters) {
 			const startTime = random(
 				chapters[chapterIndex].narrationTime.start * 1.25,
 				chapters[chapterIndex].narrationTime.end * 0.75,
-				true
-			);
+				true,
+			)
 
-			targetTimes[chapterIndex] = startTime;
+			targetTimes[chapterIndex] = startTime
+			// eslint-disable-next-line @typescript-eslint/no-floating-promises, @typescript-eslint/no-loop-func
 			tick().then(() => {
-				playStatus[chapterIndex] = true;
-			});
-			await sleep(luckyBlendDelay);
+				playStatus[chapterIndex] = true
+			})
+			await sleep(luckyBlendDelay)
 		}
 
-		blendingInProgress = false;
+		blendingInProgress = false
 	}
 
-	let loadCount = -1;
+	let loadCount = -1
 	onMount(() => {
-		loadCount++;
-	});
+		loadCount++
+	})
 
-	$: isAllLoaded = loadCount === chapters.length;
+	$: isAllLoaded = loadCount === chapters.length
 
 	// Returns when all animations are done
 	async function resetAll() {
 		// Only reset those in need
-		isResetting = true;
-		const chapterIndicesToReset = getIndicesMatchingValue(resetStatus, false);
-		await delayedForEach(chapterIndicesToReset, (index) => (resetStatus[index] = true), resetDelay);
-		await sleep(config.chapterCoverTransitionDuration - resetDelay);
-		isResetting = false;
+		isResetting = true
+		const chapterIndicesToReset = getIndicesMatchingValue(resetStatus, false)
+		// eslint-disable-next-line no-return-assign
+		await delayedForEach(chapterIndicesToReset, (index) => (resetStatus[index] = true), resetDelay)
+		await sleep(config.chapterCoverTransitionDuration - resetDelay)
+		isResetting = false
 	}
 
-	const sleep = async (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+	// eslint-disable-next-line no-promise-executor-return
+	const sleep = async (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 </script>
 
 <svelte:window bind:innerWidth={width} />
@@ -125,20 +124,21 @@
 			on:ended={() => {
 				if (isPlayingThrough) {
 					// TODO
-					resetAll(); // This throws the right flag
+					// eslint-disable-next-line @typescript-eslint/no-floating-promises
+					resetAll() // This throws the right flag
 				} else {
-					resetStatus[index] = true;
+					resetStatus[index] = true
 				}
 
 				if (index < chapters.length - 1) {
-					const nextChapterIndex = index + 1;
-					if (!playStatus[nextChapterIndex]) playStatus[nextChapterIndex] = true;
+					const nextChapterIndex = index + 1
+					if (!playStatus[nextChapterIndex]) playStatus[nextChapterIndex] = true
 				} else {
 					// Reached the end of the book
 				}
 			}}
 			ready={() => {
-				loadCount++;
+				loadCount++
 			}}
 			rowWidth={width}
 		/>
@@ -156,9 +156,9 @@
 				isEnabled={!isPlayingThrough && isAllLoaded}
 				label="Play Through"
 				on:click={async () => {
-					await resetAll();
-					playStatus[0] = true;
-					isPlayingThrough = true;
+					await resetAll()
+					playStatus[0] = true
+					isPlayingThrough = true
 				}}
 			/>
 			<Button
@@ -175,7 +175,7 @@
 				isEnabled={somethingPlaying && isAllLoaded}
 				label="Pause all"
 				on:click={() => {
-					playStatus = playStatus.map(() => false);
+					playStatus = playStatus.map(() => false)
 				}}
 			/>
 			<Button

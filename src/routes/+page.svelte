@@ -1,8 +1,8 @@
 <script lang="ts">
-	import Stack from '$lib/components/Stack.svelte';
-	import type { PageServerData } from './$types';
+	import type { PageServerData } from './$types'
+	import Stack from '$lib/components/Stack.svelte'
 
-	export let data: PageServerData;
+	export let data: PageServerData
 </script>
 
 <svelte:head>

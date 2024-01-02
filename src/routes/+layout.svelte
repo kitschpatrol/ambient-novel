@@ -1,15 +1,15 @@
 <script lang="ts">
-	// import { browser } from '$app/environment';
+	// Import { browser } from '$app/environment';
 	// import { onMount } from 'svelte';
-	// import { pwaInfo } from 'virtual:pwa-info';
-	import { page } from '$app/stores';
-	import { canonicalPath } from '$lib/config';
-	import '/src/global.css';
+	import '/src/global.css'
+	// Import { pwaInfo } from 'virtual:pwa-info';
+	import { page } from '$app/stores'
+	import { canonicalPath } from '$lib/config'
 	/// TODO remove this
 	// onMount(() => {
 	// 	navigator.serviceWorker.getRegistrations().then(function (registrations) {
 	// 		for (let registration of registrations) {
-	// 			console.log('unregistering sw');
+	// 			console.log('unregister sw');
 	// 			registration.unregister();
 	// 		}
 	// 	});
@@ -43,11 +43,11 @@
 	// 	const audioContext = new window.AudioContext();
 	// }
 
-	$: canonicalUrl = `${canonicalPath}${$page.route.id === '/' ? '' : $page.route.id}`;
+	$: canonicalUrl = `${canonicalPath}${$page.route.id === '/' ? '' : $page.route.id}`
 </script>
 
 <svelte:head>
-	<link rel="canonical" href={canonicalUrl} />
+	<link href={canonicalUrl} rel="canonical" />
 </svelte:head>
 
 <slot />

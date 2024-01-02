@@ -1,44 +1,45 @@
 <script lang="ts">
-	import { fadeVolume } from '$lib/utils/transition/fadeVolume';
-	import { lookup } from 'mrmime';
-	import { onMount } from 'svelte';
+	import { fadeVolume } from '$lib/utils/transition/fade-volume'
+	import { lookup } from 'mrmime'
+	import { onMount } from 'svelte'
 
-	export let audioSources: string[];
-	export let isPlaying = false;
-	export let currentTime = 0;
+	export let audioSources: string[]
+	export let isPlaying = false
+	export let currentTime = 0
 
-	let audioElement: HTMLAudioElement;
-	let isInOutro = false;
-	let currentTimeProxy: number = currentTime;
+	let audioElement: HTMLAudioElement
+	let isInOutro = false
+	let currentTimeProxy: number = currentTime
 
 	onMount(() => {
 		// AudioElement.load();
-		audioElement.currentTime = currentTimeProxy; // Critical
-		updatePlay(isPlaying);
-	});
+		audioElement.currentTime = currentTimeProxy // Critical
+		updatePlay(isPlaying)
+	})
 
 	// Todo retries?
 	function updatePlay(playing: boolean) {
 		if (!isInOutro && audioElement) {
 			if (playing) {
-				audioElement.play(); // Remember this is a promise
+				// eslint-disable-next-line @typescript-eslint/no-floating-promises
+				audioElement.play() // Remember this is a promise
 			} else {
-				audioElement.pause();
+				audioElement.pause()
 			}
 		}
 	}
 
 	function updateCurrentTimeProxy(time: number, isInOutro: boolean) {
-		if (!isInOutro) currentTimeProxy = time;
+		if (!isInOutro) currentTimeProxy = time
 	}
 
 	function updateCurrentTime(time: number, isInOutro: boolean) {
-		if (!isInOutro) currentTime = time;
+		if (!isInOutro) currentTime = time
 	}
 
-	$: updatePlay(isPlaying);
-	$: updateCurrentTime(currentTimeProxy, isInOutro);
-	$: updateCurrentTimeProxy(currentTime, isInOutro);
+	$: updatePlay(isPlaying)
+	$: updateCurrentTime(currentTimeProxy, isInOutro)
+	$: updateCurrentTimeProxy(currentTime, isInOutro)
 </script>
 
 <!-- // adding preload="none" was key to currentTime bugs on mobile safari -->
@@ -51,13 +52,13 @@
 	on:ended
 	on:introstart={() => {
 		// Accommodates resumption during a transition, if that happens before a new Audio player is created
-		isInOutro = false;
+		isInOutro = false
 	}}
 	on:outroend={() => {
-		isInOutro = true;
+		isInOutro = true
 	}}
 	on:outrostart={() => {
-		isInOutro = true;
+		isInOutro = true
 	}}
 	transition:fadeVolume|local={{ duration: 5000 }}
 >

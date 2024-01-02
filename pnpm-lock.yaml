@@ -13,7 +13,10 @@ devDependencies:
     version: 6.5.1
   '@kitschpatrol/shared-config':
     specifier: ^4.3.1
-    version: 4.3.1(cspell@8.3.2)(eslint@8.56.0)(postcss-html@1.5.0)(prettier-plugin-organize-imports@3.2.4)(prettier@3.1.1)(stylelint@15.11.0)(svelte@4.2.8)(ts-node@10.9.2)(typescript@5.3.3)
+    version: 4.3.1(cspell@8.3.2)(eslint@8.56.0)(postcss-html@1.5.0)(prettier@3.1.1)(stylelint@15.11.0)(svelte@4.2.8)(ts-node@10.9.2)(typescript@5.3.3)
+  '@playwright/test':
+    specifier: ^1.40.1
+    version: 1.40.1
   '@prettier/sync':
     specifier: ^0.3.0
     version: 0.3.0(prettier@3.1.1)
@@ -53,9 +56,6 @@ devDependencies:
   '@types/pdf-parse':
     specifier: ^1.1.4
     version: 1.1.4
-  '@types/prettier':
-    specifier: ^2.7.3
-    version: 2.7.3
   '@types/sanitize-html':
     specifier: ^2.9.5
     version: 2.9.5
@@ -71,27 +71,12 @@ devDependencies:
   '@types/ua-parser-js':
     specifier: ^0.7.39
     version: 0.7.39
-  '@typescript-eslint/eslint-plugin':
-    specifier: ^6.17.0
-    version: 6.17.0(@typescript-eslint/parser@6.17.0)(eslint@8.56.0)(typescript@5.3.3)
-  '@typescript-eslint/parser':
-    specifier: ^6.17.0
-    version: 6.17.0(eslint@8.56.0)(typescript@5.3.3)
   autoprefixer:
     specifier: ^10.4.16
     version: 10.4.16(postcss@8.4.32)
   dotenv:
     specifier: ^16.3.1
     version: 16.3.1
-  eslint:
-    specifier: ^8.56.0
-    version: 8.56.0
-  eslint-config-prettier:
-    specifier: ^9.1.0
-    version: 9.1.0(eslint@8.56.0)
-  eslint-plugin-svelte:
-    specifier: ^2.35.1
-    version: 2.35.1(eslint@8.56.0)(svelte@4.2.8)(ts-node@10.9.2)
   html-minifier:
     specifier: ^4.0.0
     version: 4.0.0
@@ -116,21 +101,6 @@ devDependencies:
   postcss:
     specifier: ^8.4.32
     version: 8.4.32
-  prettier:
-    specifier: ^3.1.1
-    version: 3.1.1
-  prettier-plugin-organize-imports:
-    specifier: ^3.2.4
-    version: 3.2.4(prettier@3.1.1)(typescript@5.3.3)
-  prettier-plugin-pkg:
-    specifier: ^0.18.0
-    version: 0.18.0(prettier@3.1.1)
-  prettier-plugin-svelte:
-    specifier: ^3.1.2
-    version: 3.1.2(prettier@3.1.1)(svelte@4.2.8)
-  prettier-plugin-tailwindcss:
-    specifier: ^0.5.10
-    version: 0.5.10(prettier-plugin-astro@0.12.3)(prettier-plugin-organize-imports@3.2.4)(prettier-plugin-svelte@3.1.2)(prettier@3.1.1)
   sanitize-html:
     specifier: ^2.11.0
     version: 2.11.0
@@ -174,6 +144,12 @@ devDependencies:
     specifier: ^1.17.1
     version: 1.17.1(vite@5.0.10)
   workbox-build:
+    specifier: ^7.0.0
+    version: 7.0.0
+  workbox-range-requests:
+    specifier: ^7.0.0
+    version: 7.0.0
+  workbox-routing:
     specifier: ^7.0.0
     version: 7.0.0
   zod:
@@ -2138,7 +2114,7 @@ packages:
       - vue-eslint-parser
     dev: true
 
-  /@kitschpatrol/prettier-config@4.3.1(prettier-plugin-organize-imports@3.2.4)(prettier@3.1.1)(svelte@4.2.8)(typescript@5.3.3):
+  /@kitschpatrol/prettier-config@4.3.1(prettier@3.1.1)(svelte@4.2.8)(typescript@5.3.3):
     resolution: {integrity: sha512-MnqAGU5WnMWCTi4YdjCHDD2S4cyEJmB7iiBO2v2QEsLFOSdCiUtHJaUCN9xvSRz7QC+24ygWh9A9GfRKgPmAkw==}
     engines: {node: '>=18.0.0', pnpm: '>=8.0.0'}
     hasBin: true
@@ -2158,7 +2134,7 @@ packages:
       prettier-plugin-sh: 0.13.1(prettier@3.1.1)
       prettier-plugin-sql: 0.17.1(prettier@3.1.1)
       prettier-plugin-svelte: 3.1.2(prettier@3.1.1)(svelte@4.2.8)
-      prettier-plugin-tailwindcss: 0.5.10(prettier-plugin-astro@0.12.3)(prettier-plugin-organize-imports@3.2.4)(prettier-plugin-svelte@3.1.2)(prettier@3.1.1)
+      prettier-plugin-tailwindcss: 0.5.10(prettier-plugin-astro@0.12.3)(prettier-plugin-svelte@3.1.2)(prettier@3.1.1)
       prettier-plugin-toml: 2.0.1(prettier@3.1.1)
     transitivePeerDependencies:
       - '@ianvs/prettier-plugin-sort-imports'
@@ -2255,14 +2231,14 @@ packages:
       - typescript
     dev: true
 
-  /@kitschpatrol/shared-config@4.3.1(cspell@8.3.2)(eslint@8.56.0)(postcss-html@1.5.0)(prettier-plugin-organize-imports@3.2.4)(prettier@3.1.1)(stylelint@15.11.0)(svelte@4.2.8)(ts-node@10.9.2)(typescript@5.3.3):
+  /@kitschpatrol/shared-config@4.3.1(cspell@8.3.2)(eslint@8.56.0)(postcss-html@1.5.0)(prettier@3.1.1)(stylelint@15.11.0)(svelte@4.2.8)(ts-node@10.9.2)(typescript@5.3.3):
     resolution: {integrity: sha512-pGcn4OVaV6TU6ib5KVstZTkpAr0YF0SyTZNTnm+XvQbQiaRS7J2aJ+onQ4sCMi9OBlMSa15KoHi3sqcou1vw5A==}
     engines: {node: '>=18.0.0', pnpm: '>=8.0.0'}
     hasBin: true
     dependencies:
       '@kitschpatrol/cspell-config': 4.3.1(cspell@8.3.2)(typescript@5.3.3)
       '@kitschpatrol/eslint-config': 4.3.1(eslint@8.56.0)(svelte@4.2.8)(ts-node@10.9.2)(typescript@5.3.3)
-      '@kitschpatrol/prettier-config': 4.3.1(prettier-plugin-organize-imports@3.2.4)(prettier@3.1.1)(svelte@4.2.8)(typescript@5.3.3)
+      '@kitschpatrol/prettier-config': 4.3.1(prettier@3.1.1)(svelte@4.2.8)(typescript@5.3.3)
       '@kitschpatrol/remark-config': 4.3.1(prettier@3.1.1)(typescript@5.3.3)
       '@kitschpatrol/repo-config': 4.3.1(typescript@5.3.3)
       '@kitschpatrol/stylelint-config': 4.3.1(postcss-html@1.5.0)(stylelint@15.11.0)(typescript@5.3.3)
@@ -2492,6 +2468,14 @@ packages:
   /@pkgr/core@0.1.0:
     resolution: {integrity: sha512-Zwq5OCzuwJC2jwqmpEQt7Ds1DTi6BWSwoGkbb1n9pO3hzb35BoJELx7c0T23iDkBGkh2e7tvOtjF3tr3OaQHDQ==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
+    dev: true
+
+  /@playwright/test@1.40.1:
+    resolution: {integrity: sha512-EaaawMTOeEItCRvfmkI9v6rBkF1svM8wjl/YPRrg2N2Wmp+4qJYkWtJsbew1szfKKDm6fPLy4YAanBhIlf9dWw==}
+    engines: {node: '>=16'}
+    hasBin: true
+    dependencies:
+      playwright: 1.40.1
     dev: true
 
   /@polka/url@1.0.0-next.24:
@@ -3196,10 +3180,6 @@ packages:
 
   /@types/pdf-parse@1.1.4:
     resolution: {integrity: sha512-+gbBHbNCVGGYw1S9lAIIvrHW47UYOhMIFUsJcMkMrzy1Jf0vulBN3XQIjPgnoOXveMuHnF3b57fXROnY/Or7eg==}
-    dev: true
-
-  /@types/prettier@2.7.3:
-    resolution: {integrity: sha512-+68kP9yzs4LMp7VNh8gdzMSPZFL44MLGqiHWvttYJe+6qnuVr4Ek9wSBQoveqY/r+LwjCcU29kNVkidwim+kYA==}
     dev: true
 
   /@types/pug@2.0.10:
@@ -5512,6 +5492,14 @@ packages:
   /fs.realpath@1.0.0:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
     dev: true
+
+  /fsevents@2.3.2:
+    resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
+    engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
+    os: [darwin]
+    requiresBuild: true
+    dev: true
+    optional: true
 
   /fsevents@2.3.3:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
@@ -8173,6 +8161,22 @@ packages:
     engines: {node: '>= 6'}
     dev: true
 
+  /playwright-core@1.40.1:
+    resolution: {integrity: sha512-+hkOycxPiV534c4HhpfX6yrlawqVUzITRKwHAmYfmsVreltEl6fAZJ3DPfLMOODw0H3s1Itd6MDCWmP1fl/QvQ==}
+    engines: {node: '>=16'}
+    hasBin: true
+    dev: true
+
+  /playwright@1.40.1:
+    resolution: {integrity: sha512-2eHI7IioIpQ0bS1Ovg/HszsN/XKNwEG1kbzSDDmADpclKc7CyqkHw7Mg2JCz/bbCxg25QUPcjksoMW7JcIFQmw==}
+    engines: {node: '>=16'}
+    hasBin: true
+    dependencies:
+      playwright-core: 1.40.1
+    optionalDependencies:
+      fsevents: 2.3.2
+    dev: true
+
   /pluralize@8.0.0:
     resolution: {integrity: sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==}
     engines: {node: '>=4'}
@@ -8326,23 +8330,6 @@ packages:
       sass-formatter: 0.7.8
     dev: true
 
-  /prettier-plugin-organize-imports@3.2.4(prettier@3.1.1)(typescript@5.3.3):
-    resolution: {integrity: sha512-6m8WBhIp0dfwu0SkgfOxJqh+HpdyfqSSLfKKRZSFbDuEQXDDndb8fTpRWkUrX/uBenkex3MgnVk0J3b3Y5byog==}
-    peerDependencies:
-      '@volar/vue-language-plugin-pug': ^1.0.4
-      '@volar/vue-typescript': ^1.0.4
-      prettier: '>=2.0'
-      typescript: '>=2.9'
-    peerDependenciesMeta:
-      '@volar/vue-language-plugin-pug':
-        optional: true
-      '@volar/vue-typescript':
-        optional: true
-    dependencies:
-      prettier: 3.1.1
-      typescript: 5.3.3
-    dev: true
-
   /prettier-plugin-pkg@0.18.0(prettier@3.1.1):
     resolution: {integrity: sha512-cme+OUHj25cVj3HwGK6ek/GkCHhlhM1u/IYspOHYsFImaXMJCmjs8xeCcvLreD0HMX5QxObot+3TtQR3Bd2wHw==}
     engines: {node: ^14.18.0 || >=16.0.0}
@@ -8386,7 +8373,7 @@ packages:
       svelte: 4.2.8
     dev: true
 
-  /prettier-plugin-tailwindcss@0.5.10(prettier-plugin-astro@0.12.3)(prettier-plugin-organize-imports@3.2.4)(prettier-plugin-svelte@3.1.2)(prettier@3.1.1):
+  /prettier-plugin-tailwindcss@0.5.10(prettier-plugin-astro@0.12.3)(prettier-plugin-svelte@3.1.2)(prettier@3.1.1):
     resolution: {integrity: sha512-9UGSejqFxGG6brYjFfTYlJ8zs4L/lvZg1AngFfaC5Fs1otSskASv5IWKmjPu5MlABQUtTKtMArKyYr/hWpXSUg==}
     engines: {node: '>=14.21.3'}
     peerDependencies:
@@ -8437,7 +8424,6 @@ packages:
     dependencies:
       prettier: 3.1.1
       prettier-plugin-astro: 0.12.3
-      prettier-plugin-organize-imports: 3.2.4(prettier@3.1.1)(typescript@5.3.3)
       prettier-plugin-svelte: 3.1.2(prettier@3.1.1)(svelte@4.2.8)
     dev: true
 

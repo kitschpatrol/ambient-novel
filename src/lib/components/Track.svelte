@@ -1,76 +1,76 @@
-<!-- WAT? -->
 <svelte:options immutable={true} />
 
 <script lang="ts">
-	import { faPause, faPlay, faRotateBack } from '@fortawesome/free-solid-svg-icons';
-	import { browser } from '$app/environment';
-	import { base } from '$app/paths';
-	import Audio from '$lib/components/Audio.svelte';
+	import { faPause, faPlay, faRotateBack } from '@fortawesome/free-solid-svg-icons'
+	import { browser } from '$app/environment'
+	import { base } from '$app/paths'
+	import Audio from '$lib/components/Audio.svelte'
 	// Import AudioFadeProxy from '$lib/components/AudioFadeProxy.svelte';
-	import Button from '$lib/components/Button.svelte';
-	import ChapterCover from '$lib/components/ChapterCover.svelte';
-	import Starfield from '$lib/components/Starfield.svelte';
-	import * as config from '$lib/config';
-	import type { ChapterData } from '$lib/schemas/bookSchema';
-	import { fastFadeFromJs } from '$lib/utils/transition/fastFadeFromJs';
-	import { fastFadeJs } from '$lib/utils/transition/fastFadeJs';
-	import ScrollBooster from 'scrollbooster';
-	import { onDestroy, onMount, tick } from 'svelte';
-	import { spring } from 'svelte/motion';
-	import tinycolor from 'tinycolor2';
-	import UAParser from 'ua-parser-js';
+	import Button from '$lib/components/Button.svelte'
+	import ChapterCover from '$lib/components/ChapterCover.svelte'
+	import Starfield from '$lib/components/Starfield.svelte'
+	import * as config from '$lib/config'
+	import type { ChapterData } from '$lib/schemas/book-schema'
+	import { fastFadeFromJs } from '$lib/utils/transition/fast-fade-from-js'
+	import { fastFadeJs } from '$lib/utils/transition/fast-fade-js'
+	import ScrollBooster from 'scrollbooster'
+	import { onDestroy, onMount, tick } from 'svelte'
+	import { spring } from 'svelte/motion'
+	import tinycolor from 'tinycolor2'
+	import UaParser from 'ua-parser-js'
 
-	export let chapterData: ChapterData;
-	export let isPlaying = false;
-	export let isReset = true;
-	export let currentTime = 0;
-	export let chapterColor = '#ff0000';
-	export let rowWidth = 0; // Performance thing to set this externally...
-	export let targetTime = currentTime;
-	export let ready = () => {};
+	export let chapterData: ChapterData
+	export let isPlaying = false
+	export let isReset = true
+	export let currentTime = 0
+	export let chapterColor = '#ff0000'
+	export let rowWidth = 0 // Performance thing to set this externally...
+	export let targetTime = currentTime
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	export let ready = () => {}
 
 	// Config
-	const showTextBeforeNarrationStarts = false;
-	const isStarfieldEnabled = true;
-	const isMobile = (new UAParser().getDevice().type ?? '') === 'mobile';
+	const showTextBeforeNarrationStarts = false
+	const isStarfieldEnabled = true
+	const isMobile = (new UaParser().getDevice().type ?? '') === 'mobile'
 	// Const clickToTogglePlayPause = false;
-	const debug = false;
-	const isSpringEnabled = true;
+	const debug = false
+	const isSpringEnabled = true
 	const springConfig = {
 		damping: 0.2, // Setting > 1 gives crazy effect
-		stiffness: 0.005
-	};
+		stiffness: 0.005,
+	}
 
-	let isSeeking = false;
-	let scrollWrapperElement: HTMLDivElement;
-	let scrollLeftBinding = 0; // Optimization? or just use scrollLeft?
-	let scrollTween = spring(0, springConfig);
-	let activeWordIndex = -1; // Optimization vs. referencing the element... -1 means before first word, > wordElements.length means after last word
-	let wheelTimer: NodeJS.Timeout | undefined;
-	let isChapterCoverVisible = true;
+	let isSeeking = false
+	let scrollWrapperElement: HTMLDivElement
+	let scrollLeftBinding = 0 // Optimization? or just use scrollLeft?
+	let scrollTween = spring(0, springConfig)
+	let activeWordIndex = -1 // Optimization vs. referencing the element... -1 means before first word, > wordElements.length means after last word
+	let wheelTimer: NodeJS.Timeout | undefined
+	let isChapterCoverVisible = true
 
-	let timeCache: number[]; // One element longer than the number of words, to accommodate the "end" time of the last word
-	let wordElements: HTMLSpanElement[];
-	let isMounted = false;
-	let scrollAreaElement: HTMLDivElement;
-	let isLoaded = false;
+	let timeCache: number[] // One element longer than the number of words, to accommodate the "end" time of the last word
+	let wordElements: HTMLSpanElement[]
+	let isMounted = false
+	let scrollAreaElement: HTMLDivElement
+	let isLoaded = false
 
 	// Scroll booster / frame loop
-	let scrollBooster: ScrollBooster;
-	let isUserHoldingDownFingerOrMouse = false;
-	let scrollLeft = 0;
-	let scrollLeftDelta = 0;
-	let intervalId: NodeJS.Timer | undefined;
+	let scrollBooster: ScrollBooster
+	let isUserHoldingDownFingerOrMouse = false
+	let scrollLeft = 0
+	let scrollLeftDelta = 0
+	let intervalId: NodeJS.Timer | undefined
 	// Let scrollBoosterStart = 0;
 
 	// TODO does this help?
 	// wtf...
 	// https://stackoverflow.com/questions/9811429/html5-audio-tag-on-safari-has-a-delay
 	if (browser && isMobile) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/naming-convention, @typescript-eslint/no-unsafe-member-access
+		const AudioContext = window.AudioContext || (window as any).webkitAudioContext
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const audioContext = new AudioContext();
+		const audioContext = new AudioContext()
 	}
 
 	onMount(() => {
@@ -79,23 +79,22 @@
 			bounce: true,
 			content: scrollAreaElement,
 			direction: 'horizontal',
-			/* @ts-expect-error */
 			onPointerDown() {
 				// Doesn't fire on ios mobile while inertial scroll animation is playing
-				isSeeking = true;
+				isSeeking = true
 
 				// Seem to have to set this to avoid jumps
 				scrollBooster.setPosition({
 					x: scrollWrapperElement.scrollLeft,
-					y: 0
-				});
+					y: 0,
+				})
 
 				// Track position to distinguish between click and drag
 				// scrollBoosterStart = e.position.x;
 			},
 			pointerMode: 'mouse',
 			scrollMode: 'native',
-			viewport: scrollWrapperElement
+			viewport: scrollWrapperElement,
 			// OnPointerUp: (e) => {
 			// 	// Play / pause on click without drag
 			// 	if (clickToTogglePlayPause && isSeeking) {
@@ -107,14 +106,14 @@
 			// 		}
 			// 	}
 			// }
-		});
+		})
 
 		// Watch scroll velocity
 		// have to do this instead of an on:scroll handler so we can calculate velocity / delta
 		function loop() {
 			if (!isReset && isSeeking) {
-				scrollLeftDelta = scrollWrapperElement.scrollLeft - scrollLeft;
-				scrollLeft = scrollWrapperElement.scrollLeft;
+				scrollLeftDelta = scrollWrapperElement.scrollLeft - scrollLeft
+				scrollLeft = scrollWrapperElement.scrollLeft
 
 				// Doesn't really work on ios...
 				if (!isUserHoldingDownFingerOrMouse && scrollLeftDelta === 0) {
@@ -123,56 +122,56 @@
 					// if (scrollBooster.getState().isMoving) {
 					scrollBooster.setPosition({
 						x: scrollLeft,
-						y: 0
-					});
+						y: 0,
+					})
 					// }
 
 					// optimization, only seek audio at the end of a scroll input
-					targetTime = timeFromWordIndex(activeWordIndex);
-					currentTime = targetTime;
-					isSeeking = false;
+					targetTime = timeFromWordIndex(activeWordIndex)
+					currentTime = targetTime
+					isSeeking = false
 				}
 			}
 		}
 
 		intervalId = setInterval(() => {
-			loop();
-		}, 100);
+			loop()
+		}, 100)
 
-		wordElements = [...scrollAreaElement.querySelectorAll<HTMLSpanElement>('span[data-time]')];
+		wordElements = [...scrollAreaElement.querySelectorAll<HTMLSpanElement>('span[data-time]')]
 
-		timeCache = generateTimeCache(chapterData, wordElements);
+		timeCache = generateTimeCache(chapterData, wordElements)
 
-		isMounted = true;
-	});
+		isMounted = true
+	})
 
 	onDestroy(() => {
 		if (intervalId) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			clearInterval(intervalId as any);
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
+			clearInterval(intervalId as any)
 		}
-	});
+	})
 
 	function generateTimeCache(data: ChapterData, wordSpans: HTMLSpanElement[]): number[] {
-		const timeCache: number[] = [];
+		const timeCache: number[] = []
 
 		// Iterate through each span element
 		for (const span of wordSpans) {
-			const dataTime = span.dataset.time;
+			const dataTime = span.dataset.time
 
-			if (dataTime === null) {
+			if (dataTime === null || dataTime === undefined) {
 				console.warn(
-					`data-time attribute is missing from word ${span.innerHTML} in chapter ${chapterData.title}`
-				);
+					`data-time attribute is missing from word ${span.innerHTML} in chapter ${chapterData.title}`,
+				)
 			} else {
-				timeCache.push(Number.parseFloat(dataTime));
+				timeCache.push(Number.parseFloat(dataTime))
 			}
 		}
 
 		// Add the final time
-		timeCache.push(chapterData.narrationTime.end);
+		timeCache.push(chapterData.narrationTime.end)
 
-		return timeCache;
+		return timeCache
 	}
 
 	function scrollToOffset(offset: number, rightOnly = true, immediate = false) {
@@ -184,13 +183,14 @@
 		) {
 			if (isSpringEnabled && !immediate) {
 				// This was the trick for the flashes...
+				// eslint-disable-next-line @typescript-eslint/no-floating-promises
 				tick().then(() => {
-					$scrollTween = offset;
-				});
+					$scrollTween = offset
+				})
 			} else {
-				scrollWrapperElement.scrollLeft = offset;
+				scrollWrapperElement.scrollLeft = offset
 				if (immediate) {
-					setSpringStartPoint(offset);
+					setSpringStartPoint(offset)
 				}
 			}
 		}
@@ -203,42 +203,44 @@
 	function wordIndexFromTime(time: number): number {
 		if (time <= timeCache[0]) {
 			// Before first word
-			return -1;
+			return -1
 		}
 
+		// @ts-expect-error trusted access
 		if (time >= timeCache.at(-1)) {
 			// After last word
-			return wordElements.length;
+			return wordElements.length
 		}
 
 		// Somewhere between
 		for (let i = 0; i < wordElements.length; i++) {
 			if (time >= timeCache[i] && time < timeCache[i + 1]) {
-				return i;
+				return i
 			}
 		}
 
-		console.warn('issues');
-		return 0;
+		console.warn('issues')
+		return 0
 	}
 
 	function timeFromWordIndex(index: number): number {
-		if (index < 0) return timeCache[0];
-		if (index > wordElements.length) return timeCache[wordElements.length];
-		return timeCache[index];
+		if (index < 0) return timeCache[0]
+		if (index > wordElements.length) return timeCache[wordElements.length]
+		return timeCache[index]
 	}
 
 	function wordIndexFromScrollOffset(offset: number): number {
-		const scrollOffset = offset + rowWidth / 2;
+		const scrollOffset = offset + rowWidth / 2
 
 		// Before first word
 		if (scrollOffset <= wordElements[0].offsetLeft) {
-			return -1;
+			return -1
 		}
 
 		// After last word
+		// @ts-expect-error trusted access
 		if (scrollOffset >= wordElements.at(-1).offsetLeft + wordElements.at(-1).offsetWidth) {
-			return wordElements.length;
+			return wordElements.length
 		}
 
 		// First word
@@ -247,18 +249,21 @@
 			scrollOffset <
 			(wordElements[0].offsetLeft + wordElements[0].offsetWidth + wordElements[1].offsetLeft) / 2
 		) {
-			return 0;
+			return 0
 		}
 
 		// Last word
 		if (
 			scrollOffset >=
+			// @ts-expect-error trusted access
 			(wordElements.at(-1).offsetLeft +
+				// @ts-expect-error trusted access
 				wordElements.at(-2).offsetLeft +
+				// @ts-expect-error trusted access
 				wordElements.at(-2).offsetWidth) /
 				2
 		) {
-			return wordElements.length - 1;
+			return wordElements.length - 1
 		}
 
 		// Between
@@ -274,15 +279,15 @@
 				(wordElements[i].offsetLeft +
 					wordElements[i].offsetWidth +
 					wordElements[i + 1].offsetLeft) /
-				2;
+				2
 
 			if (scrollOffset <= rightEdge) {
-				return i;
+				return i
 			}
 		}
 
-		console.warn('issues!');
-		return 0;
+		console.warn('issues!')
+		return 0
 	}
 
 	function scrollOffsetFromWordIndex(index: number): number {
@@ -290,16 +295,17 @@
 		if (index < 0) {
 			// Return wordElements[0].offsetLeft - rowWidth / 2;
 			// optimization
-			return 0;
+			return 0
 		}
 
 		// After last word
 		if (index >= wordElements.length) {
-			return wordElements.at(-1).offsetLeft + wordElements.at(-1).offsetWidth - rowWidth / 2;
+			// @ts-expect-error trusted access
+			return wordElements.at(-1).offsetLeft + wordElements.at(-1).offsetWidth - rowWidth / 2
 		}
 
 		// Between, use the center of the word
-		return wordElements[index].offsetLeft + wordElements[index].offsetWidth / 2 - rowWidth / 2;
+		return wordElements[index].offsetLeft + wordElements[index].offsetWidth / 2 - rowWidth / 2
 	}
 
 	// ==== Reactive setters ========================================================
@@ -313,30 +319,30 @@
 			// Optimization
 			// must be after, unread
 			for (const element of wordElements) {
-				element.classList.contains('read') && element.classList.remove('read');
-				element.classList.contains('current') && element.classList.remove('current');
+				element.classList.contains('read') && element.classList.remove('read')
+				element.classList.contains('current') && element.classList.remove('current')
 			}
 		} else if (index > wordElements.length) {
 			// Optimization
 			// must be before, read
 			for (const element of wordElements) {
-				!element.classList.contains('read') && element.classList.add('read');
-				element.classList.contains('current') && element.classList.remove('current');
+				!element.classList.contains('read') && element.classList.add('read')
+				element.classList.contains('current') && element.classList.remove('current')
 			}
 		} else {
 			for (const [i, element] of wordElements.entries()) {
 				if (i < index) {
 					// Must be before, read
-					!element.classList.contains('read') && element.classList.add('read');
-					element.classList.contains('current') && element.classList.remove('current');
+					!element.classList.contains('read') && element.classList.add('read')
+					element.classList.contains('current') && element.classList.remove('current')
 				} else if (i > index) {
 					// Must be after, unread
-					element.classList.contains('read') && element.classList.remove('read');
-					element.classList.contains('current') && element.classList.remove('current');
+					element.classList.contains('read') && element.classList.remove('read')
+					element.classList.contains('current') && element.classList.remove('current')
 				} else {
 					// Must be equal, current
-					!element.classList.contains('current') && element.classList.add('current');
-					element.classList.contains('read') && element.classList.remove('read');
+					!element.classList.contains('current') && element.classList.add('current')
+					element.classList.contains('read') && element.classList.remove('read')
 				}
 			}
 		}
@@ -346,22 +352,22 @@
 
 	// Keep spring starting point up to date if we're scrolling manually
 	function setSpringStartPoint(startPoint: number) {
-		scrollTween = spring(startPoint, springConfig);
+		scrollTween = spring(startPoint, springConfig)
 	}
 
 	function setActiveWordIndex(index: number) {
-		activeWordIndex = index;
+		activeWordIndex = index
 	}
 
 	function setScrollOffset(offset: number) {
-		scrollWrapperElement.scrollLeft = offset;
+		scrollWrapperElement.scrollLeft = offset
 	}
 
 	// React to reset being set
 	function setReset(reset: boolean) {
 		if (reset) {
 			// IsPlaying = true; // force invalidation
-			isPlaying = false;
+			isPlaying = false
 			// Placeholder's transition completion does the rest
 		}
 	}
@@ -369,7 +375,7 @@
 	function setPlaying(playing: boolean) {
 		if (playing) {
 			// IsReset = true; // force invalidation
-			isReset = false;
+			isReset = false
 		}
 	}
 
@@ -377,57 +383,58 @@
 	// todo mobile safari bugs?
 	function setTargetTime(time: number) {
 		if (isMounted && isReset && isChapterCoverVisible) {
-			const wordIndex = wordIndexFromTime(time);
-			const scrollPosition = wordIndex === -1 ? 0 : scrollOffsetFromWordIndex(wordIndex);
-			scrollToOffset(scrollPosition, false, true);
+			const wordIndex = wordIndexFromTime(time)
+			const scrollPosition = wordIndex === -1 ? 0 : scrollOffsetFromWordIndex(wordIndex)
+			scrollToOffset(scrollPosition, false, true)
 		}
 	}
 
 	function setLoaded(loaded: boolean) {
 		if (loaded) {
+			// eslint-disable-next-line @typescript-eslint/no-floating-promises
 			tick().then(() => {
-				ready();
-			});
+				ready()
+			})
 		}
 	}
 
 	// Reactive zone --------------------------
 
-	$: starfieldColor = tinycolor(chapterColor).lighten(10).toHexString();
+	$: starfieldColor = tinycolor(chapterColor).lighten(10).toHexString()
 
-	$: setLoaded(isLoaded);
-	$: setPlaying(isPlaying);
-	$: setReset(isReset);
-	$: setTargetTime(targetTime);
-	$: isPlayingAndNotSeeking = isPlaying && !isSeeking; // Only really play the audio if we're not seeking
+	$: setLoaded(isLoaded)
+	$: setPlaying(isPlaying)
+	$: setReset(isReset)
+	$: setTargetTime(targetTime)
+	$: isPlayingAndNotSeeking = isPlaying && !isSeeking // Only really play the audio if we're not seeking
 
 	// While Playing / paused --------
-	$: isMounted && !isSeeking && setActiveWordIndex(wordIndexFromTime(currentTime));
+	$: isMounted && !isSeeking && setActiveWordIndex(wordIndexFromTime(currentTime))
 	$: isMounted &&
 		isPlayingAndNotSeeking &&
-		scrollToOffset(scrollOffsetFromWordIndex(activeWordIndex));
+		scrollToOffset(scrollOffsetFromWordIndex(activeWordIndex))
 
 	// Seek audio time to active word when scrolling
 	// bad for performance?
 	// $: wordElements && wordElements.length > 0 && isSeeking && seekTimeFromScroll(scrollLeftBinding);
 
 	// save the play time when we pause
-	$: isMounted && !isPlaying && (targetTime = currentTime);
-	$: isMounted && isSpringEnabled && !isSeeking && setScrollOffset($scrollTween);
+	$: isMounted && !isPlaying && (targetTime = currentTime)
+	$: isMounted && isSpringEnabled && !isSeeking && setScrollOffset($scrollTween)
 
 	// Special seeking behavior ------
-	$: isMounted && isSeeking && setSpringStartPoint(scrollLeftBinding);
-	$: isMounted && isSeeking && setActiveWordIndex(wordIndexFromScrollOffset(scrollLeftBinding));
+	$: isMounted && isSeeking && setSpringStartPoint(scrollLeftBinding)
+	$: isMounted && isSeeking && setActiveWordIndex(wordIndexFromScrollOffset(scrollLeftBinding))
 
 	// Style
-	$: isMounted && setWordStylesFromActiveWordIndex(activeWordIndex);
+	$: isMounted && setWordStylesFromActiveWordIndex(activeWordIndex)
 
 	// Show pointer if we're in "button" mode
 	$: overrideCursor =
 		isStarfieldEnabled &&
 		!isReset &&
 		currentTime >= 0 &&
-		currentTime <= chapterData.narrationTime.start;
+		currentTime <= chapterData.narrationTime.start
 </script>
 
 <div class="track">
@@ -439,35 +446,41 @@
 			// Breaks mobile?
 			// isUserHoldingDownFingerOrMouse = false;
 		}}
-		on:pointerdown={(e) => {
-			isSeeking = true;
-			isUserHoldingDownFingerOrMouse = true;
-			/* @ts-expect-error */
-			e.target.setPointerCapture(e.pointerId);
+		on:pointerdown={(event) => {
+			isSeeking = true
+			isUserHoldingDownFingerOrMouse = true
+			if (event.target) {
+				// @ts-expect-error no ts in template
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-call
+				event.target.setPointerCapture(event.pointerId)
+			}
 		}}
 		on:pointerup={() => {
-			isUserHoldingDownFingerOrMouse = false;
+			isUserHoldingDownFingerOrMouse = false
 		}}
-		on:scroll={(e) => {
-			/* @ts-expect-error */
-			scrollLeftBinding = e.target.scrollLeft;
+		on:scroll={(event) => {
+			if (event.target) {
+				// @ts-expect-error no ts in template
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+				scrollLeftBinding = event.target.scrollLeft
+			}
 		}}
-		on:wheel|passive={(e) => {
+		on:wheel|passive={(event) => {
 			// Allow gesture / wheel scrolling, e.g. two finger drag on mac track pad
-			if (Math.abs(e.deltaX) > 0) {
-				isSeeking = true;
-				isUserHoldingDownFingerOrMouse = true;
+			if (Math.abs(event.deltaX) > 0) {
+				isSeeking = true
+				isUserHoldingDownFingerOrMouse = true
 
 				// Clear the timeout if it's already set
 				if (wheelTimer !== undefined) {
-					clearTimeout(wheelTimer);
+					clearTimeout(wheelTimer)
 				}
 
 				// Set the new timeout
 				wheelTimer = setTimeout(() => {
-					wheelTimer = undefined;
-					isUserHoldingDownFingerOrMouse = false;
-				}, 200); // 200ms delay; adjust as needed
+					wheelTimer = undefined
+					isUserHoldingDownFingerOrMouse = false
+				}, 200) // 200ms delay; adjust as needed
 			}
 		}}
 	>
@@ -505,13 +518,13 @@
 	{#if isReset}
 		<div
 			on:introend={() => {
-				isChapterCoverVisible = true;
+				isChapterCoverVisible = true
 				// Still broken sometimes?
-				targetTime = -1; // Force reactive update...
-				targetTime = 0; // Go even further than the first scroll pos
+				targetTime = -1 // Force reactive update...
+				targetTime = 0 // Go even further than the first scroll pos
 			}}
 			on:outrostart={() => {
-				isChapterCoverVisible = false;
+				isChapterCoverVisible = false
 			}}
 			transition:fastFadeJs|local={{ duration: config.chapterCoverTransitionDuration }}
 		>
@@ -524,7 +537,7 @@
 			icon={isPlaying ? faPause : faPlay}
 			isTransitionEnabled={true}
 			on:click={() => {
-				isPlaying = !isPlaying;
+				isPlaying = !isPlaying
 			}}
 		/>
 	</div>
@@ -535,7 +548,7 @@
 				icon={faRotateBack}
 				isTransitionEnabled={true}
 				on:click={() => {
-					isReset = true;
+					isReset = true
 				}}
 			/>
 		</div>
@@ -563,7 +576,7 @@
 		bind:currentTime
 		isPlaying={isPlayingAndNotSeeking}
 		on:canplaythrough={() => {
-			isLoaded = true;
+			isLoaded = true
 		}}
 		on:ended
 		{targetTime}
@@ -574,7 +587,7 @@
 		bind:currentTime
 		isPlaying={isPlayingAndNotSeeking}
 		on:canplaythrough={() => {
-			isLoaded = true;
+			isLoaded = true
 		}}
 		on:ended
 		{targetTime}

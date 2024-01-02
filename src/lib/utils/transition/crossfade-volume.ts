@@ -1,8 +1,8 @@
-import type { CrossfadeParams } from 'svelte/transition';
-import { crossfade } from 'svelte/transition';
-import { fadeVolume } from './fadeVolume';
+import { fadeVolume } from './fade-volume'
+import type { CrossfadeParams } from 'svelte/transition'
+import { crossfade } from 'svelte/transition'
 
-// currently unused... regular transition working fine?
+// Currently unused... regular transition working fine?
 // https://stackblitz.com/edit/sveltekit-sphygf?file=src%2Froutes%2Fcrossfade.ts
 // https://svelte.dev/docs/svelte-transition#crossfade
 
@@ -14,7 +14,7 @@ import { fadeVolume } from './fadeVolume';
 export const crossfadeVolume = crossfade({
 	duration: 5000,
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	fallback: (node: Element, params: CrossfadeParams, intro: boolean) => {
-		return fadeVolume(node as HTMLAudioElement, {});
-	}
-});
+	fallback(node: Element, params: CrossfadeParams, intro: boolean) {
+		return fadeVolume(node as HTMLAudioElement, {})
+	},
+})

@@ -3,7 +3,7 @@ export function mapValue(
 	start1: number,
 	stop1: number,
 	start2: number,
-	stop2: number
+	stop2: number,
 ): number {
-	return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
+	return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1))
 }

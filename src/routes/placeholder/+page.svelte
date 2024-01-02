@@ -1,11 +1,11 @@
 <script lang="ts">
-	import Starfield from '$lib/components/Starfield.svelte';
-	import { onMount } from 'svelte';
-	import { fade } from 'svelte/transition';
-	let isMounted = false;
+	import Starfield from '$lib/components/Starfield.svelte'
+	import { onMount } from 'svelte'
+	import { fade } from 'svelte/transition'
+	let isMounted = false
 	onMount(() => {
-		isMounted = true;
-	});
+		isMounted = true
+	})
 </script>
 
 <svelte:head>
@@ -14,9 +14,9 @@
 		/* all the fixed position hacks (like ::before) are subtly broken */
 		body,
 		html {
-			overscroll-behavior: unset;
 			position: static;
 			overflow-y: auto;
+			overscroll-behavior: unset;
 			background: linear-gradient(
 					var(--background-color-gradient-1) 0%,
 					var(--background-color-gradient-2) 100%
@@ -38,35 +38,34 @@
 {#if isMounted}
 	<div class="star-wrapper" transition:fade={{ delay: 250, duration: 3000 }}>
 		<Starfield
+			--height="100%"
 			--position="fixed"
 			--top="0"
-			--height="100%"
-			starSpeed={0.2}
+			color="#ffffff"
+			maxParticlesDesktop={100}
+			maxParticlesMobile={50}
 			planetSpeed={0.1}
 			starRotationSpeed={1}
+			starSpeed={0.2}
 			strokeEnabled={false}
-			color="#ffffff"
-			maxParticlesMobile={50}
-			maxParticlesDesktop={100}
 		/>
 	</div>
 {/if}
 
 <style lang="postcss">
 	div.star-wrapper {
-		opacity: 0.3;
-		touch-action: none;
 		pointer-events: none;
+		touch-action: none;
+		opacity: 0.3;
 	}
 
 	main {
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
 		align-items: center;
-
-		padding: 0 1rem;
+		justify-content: center;
 		height: 100dvh;
+		padding: 0 1rem;
 	}
 
 	h1,
@@ -76,8 +75,8 @@
 	}
 
 	h2 {
-		opacity: 0.75;
 		margin-top: 4em;
+		opacity: 0.75;
 	}
 
 	h2 a:hover {

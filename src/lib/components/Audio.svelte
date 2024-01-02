@@ -1,38 +1,38 @@
 <script lang="ts">
-	import { fadeVolume } from '$lib/utils/transition/fadeVolume';
-	import { lookup } from 'mrmime';
-	import { onMount } from 'svelte';
+	import { fadeVolume } from '$lib/utils/transition/fade-volume'
+	import { lookup } from 'mrmime'
+	import { onMount } from 'svelte'
 
-	export let audioSources: string[];
-	export let isPlaying = false;
-	export let maxVolume = 1;
-	export let loop = false;
-	export let currentTime = 0; // Actual time of audio
-	export let targetTime = 0; // Time we're requesting
+	export let audioSources: string[]
+	export let isPlaying = false
+	export let maxVolume = 1
+	export let loop = false
+	export let currentTime = 0 // Actual time of audio
+	export let targetTime = 0 // Time we're requesting
 
-	let audioElement: HTMLAudioElement;
+	let audioElement: HTMLAudioElement
 
-	const retryIntervalMs = 5000;
-	let maxRetry = 3;
+	const retryIntervalMs = 5000
+	let maxRetry = 3
 
 	function retry() {
-		maxRetry--;
+		maxRetry--
 
 		if (maxRetry <= 0) {
-			console.warn('max retries reached...');
+			console.warn('max retries reached...')
 		} else {
 			console.warn(
 				`retrying audio loading process in ${
 					retryIntervalMs / 1000
-				} seconds... ${maxRetry} retries left`
-			);
+				} seconds... ${maxRetry} retries left`,
+			)
 			setTimeout(() => {
 				if (audioElement) {
-					mount();
+					mount()
 				} else {
-					console.error('audioElement is null');
+					console.error('audioElement is null')
 				}
-			}, retryIntervalMs);
+			}, retryIntervalMs)
 		}
 	}
 
@@ -40,16 +40,16 @@
 		// Voodoo implementation
 		// not sure if any of this helps
 		// https://stackoverflow.com/a/73910818/2437832
-		let savedCurrentTime = audioElement.currentTime;
+		let savedCurrentTime = audioElement.currentTime
 		// AudioElement.src = audioSources[0];
 
-		audioElement.load();
+		audioElement.load()
 
-		audioElement.currentTime = savedCurrentTime;
+		audioElement.currentTime = savedCurrentTime
 
-		audioElement.currentTime = targetTime; // Critical
-		audioElement.volume = maxVolume;
-		audioElement.muted = false;
+		audioElement.currentTime = targetTime // Critical
+		audioElement.volume = maxVolume
+		audioElement.muted = false
 		if (isPlaying)
 			audioElement
 				.play()
@@ -57,14 +57,14 @@
 					// All good
 				})
 				.catch((error) => {
-					console.error(error);
-					retry();
-				});
+					console.error(error)
+					retry()
+				})
 	}
 
 	onMount(() => {
-		mount();
-	});
+		mount()
+	})
 
 	// Function afterLoaded() {
 
@@ -98,8 +98,8 @@
 		// 	// Perform the seek
 		// 	audioElement.currentTime = time;
 		// });
-		audioElement.currentTime = time;
-	};
+		audioElement.currentTime = time
+	}
 
 	function playAudio() {
 		if (audioElement) {
@@ -109,22 +109,22 @@
 					// All good
 				})
 				.catch((error) => {
-					console.error(error);
-				});
+					console.error(error)
+				})
 		}
 	}
 
 	function pauseAudio() {
-		if (audioElement) audioElement.pause();
+		if (audioElement) audioElement.pause()
 	}
 
-	$: isPlaying ? playAudio() : pauseAudio();
-	$: audioElement && seekAudio(targetTime);
+	$: isPlaying ? playAudio() : pauseAudio()
+	$: audioElement && seekAudio(targetTime)
 
-	let currentTimeProxy: number = currentTime;
-	let isInOutro = false;
+	let currentTimeProxy: number = currentTime
+	let isInOutro = false
 
-	$: !isInOutro && (currentTime = currentTimeProxy);
+	$: !isInOutro && (currentTime = currentTimeProxy)
 </script>
 
 <!-- // adding preload="none" was key to currentTime bugs on mobile safari -->
@@ -139,20 +139,22 @@
 	on:canplaythrough
 	on:ended
 	on:error={() => {
-		console.error(`audio error for "${audioSources}"`);
-		retry();
+		console.error(`audio error for "${String(audioSources)}"`)
+		retry()
 	}}
-	on:introend={() => {}}
+	on:introend={() =>
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
+		{}}
 	on:introstart={() => {
 		// Accommodates resumption during a transition, if that happens before a new Audio player is created
-		isInOutro = false;
+		isInOutro = false
 	}}
 	on:outroend={() => {
-		isInOutro = false;
+		isInOutro = false
 	}}
 	on:outrostart={() => {
 		// Don't send time updates during transitions
-		isInOutro = true;
+		isInOutro = true
 	}}
 	preload="auto"
 	transition:fadeVolume|local={{ duration: 600 }}
@@ -160,8 +162,8 @@
 	{#each audioSources as source}
 		<source
 			on:error={() => {
-				console.error(`audio source error for "${source}"`);
-				retry();
+				console.error(`audio source error for "${source}"`)
+				retry()
 			}}
 			src={source}
 			type={lookup(source) ?? 'audio'}

@@ -36,12 +36,12 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"dev": "vite dev --host",
-		"format": "prettier --plugin prettier-plugin-svelte --write .",
+		"fix": "shared-config --fix",
 		"generate-data": "ts-node ./scripts/generateData.ts",
-		"generate-licenses": "license-checker-rseidelsohn --direct --excludePrivatePackages --excludePackagesStartingWith '@playwrith;@types;@prettier;prettier;eslint' --json --out ./src/lib/data/licenses.json",
+		"generate-licenses": "pnpm licenses list --json > ./src/lib/data/licenses.json",
 		"generate-package-info": "jq '{version, name, description}' package.json > ./src/lib/data/pkgInfo.json",
-		"lint": "prettier --plugin prettier-plugin-svelte --check . && eslint .",
-		"prebuild": "npm run generate-package-info && npm run generate-licenses",
+		"lint": "shared-config --lint",
+		"prebuild": "pnpm run generate-package-info && pnpm run generate-licenses",
 		"preview": "vite preview --host",
 		"scrape-pdf": "ts-node ./scripts/scrapePdf.ts"
 	},
@@ -49,6 +49,8 @@
 		"@cyber2024/pdf-parse-fixed": "^1.2.5",
 		"@fortawesome/free-solid-svg-icons": "^6.5.1",
 		"@kitschpatrol/shared-config": "^4.3.1",
+		"@playwright/test": "^1.40.1",
+		"@prettier/sync": "^0.3.0",
 		"@sveltejs/adapter-static": "^3.0.1",
 		"@sveltejs/kit": "^2.0.6",
 		"@sveltejs/vite-plugin-svelte": "^3.0.1",
@@ -70,7 +72,6 @@
 		"dotenv": "^16.3.1",
 		"html-minifier": "^4.0.0",
 		"leven": "^4.0.0",
-		"license-checker-rseidelsohn": "^4.3.0",
 		"lodash": "^4.17.21",
 		"mrmime": "^2.0.0",
 		"node-html-parser": "^6.1.12",
@@ -91,6 +92,8 @@
 		"vite": "^5.0.10",
 		"vite-plugin-mkcert": "^1.17.1",
 		"workbox-build": "^7.0.0",
+		"workbox-range-requests": "^7.0.0",
+		"workbox-routing": "^7.0.0",
 		"zod": "^3.22.4"
 	}
 }

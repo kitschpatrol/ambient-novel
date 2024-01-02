@@ -1,9 +1,9 @@
 <script lang="ts">
-	import ChapterCover from '$lib/components/ChapterCover.svelte';
-	import type { ChapterData } from '$lib/schemas/bookSchema';
+	import ChapterCover from '$lib/components/ChapterCover.svelte'
+	import type { ChapterData } from '$lib/schemas/book-schema'
 
-	export let chapterColor = '#ff0000';
-	export let chapterData: ChapterData;
+	export let chapterColor = '#ff0000'
+	export let chapterData: ChapterData
 
 	// Note some duplication with Track.svelte...
 	// Could try to integrate this loading placeholder there...

@@ -1,25 +1,25 @@
 <script lang="ts">
 	// This wraps the Audio component and uses Svelte's transitions functionality
 	// to fade the volume in and out when the audio is played and paused.
-	import AudioBasic from '$lib/components/AudioBasic.svelte';
+	import AudioBasic from '$lib/components/AudioBasic.svelte'
 
-	export let audioSources: string[];
-	export let isPlaying = false;
-	export let currentTime = 0;
+	export let audioSources: string[]
+	export let isPlaying = false
+	export let currentTime = 0
 
-	let isPlayingProxy: boolean = isPlaying;
-	let currentTimeProxy: number = currentTime;
+	let isPlayingProxy: boolean = isPlaying
+	let currentTimeProxy: number = currentTime
 
 	// Don't load the audio until it's first played,
 	// this is an optimization to play well with the service worker
 	// pre-caching and cut down initial load time
-	let hasPlayed = false;
+	let hasPlayed = false
 
 	// // a bit precarious
 	$: {
 		// First play
 		if (!hasPlayed && isPlaying) {
-			hasPlayed = true;
+			hasPlayed = true
 		}
 
 		if (isPlaying && !isPlayingProxy) {
@@ -27,20 +27,20 @@
 			// this tick is critical?
 
 			// tick().then(() => {
-			isPlayingProxy = true;
-			currentTimeProxy = currentTime;
+			isPlayingProxy = true
+			currentTimeProxy = currentTime
 			// });
 		} else if (!isPlaying && !isPlayingProxy) {
 			// Possibly scrubbing, parent drives time
-			currentTimeProxy = currentTime;
+			currentTimeProxy = currentTime
 		} else if (isPlaying && isPlayingProxy) {
 			// Playing, audio drives time
-			currentTime = currentTimeProxy;
+			currentTime = currentTimeProxy
 		} else if (!isPlaying && isPlayingProxy) {
 			// Starting to pause
 			// tick().then(() => {
-			isPlayingProxy = false;
-			currentTimeProxy = currentTime;
+			isPlayingProxy = false
+			currentTimeProxy = currentTime
 			// });
 		}
 	}

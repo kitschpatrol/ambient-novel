@@ -1,6 +1,6 @@
-import adapter from '@sveltejs/adapter-static';
-import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
-import 'dotenv/config';
+import adapter from '@sveltejs/adapter-static'
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
+import 'dotenv/config'
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -8,12 +8,12 @@ const config = {
 	kit: {
 		adapter: adapter({
 			fallback: 'index.html',
-			precompress: false
+			precompress: false,
 		}),
 		// ServiceWorker: {
 		// 	register: false // TODO necessary?
 		// },
-		paths: { base: process.env.BASE_PATH }
+		paths: { base: process.env.BASE_PATH },
 		// Hmm https://stackoverflow.com/questions/74931516/in-svete-what-to-use-instead-of-html-to-avoid-xss-attacks
 		// csp: {
 		// 	directives: {
@@ -25,7 +25,7 @@ const config = {
 		// }
 	},
 	// For more information about preprocessors
-	preprocess: vitePreprocess()
+	preprocess: vitePreprocess(),
 	// VitePlugin: {
 	// 	experimental: {
 	// 		inspector: {
@@ -33,6 +33,6 @@ const config = {
 	// 		}
 	// 	}
 	// }
-};
+}
 
-export default config;
+export default config
