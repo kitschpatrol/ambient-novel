@@ -44,14 +44,15 @@
 		"preview": "vite preview --host",
 		"scrape-pdf": "ts-node ./scripts/scrapePdf.ts"
 	},
-	"dependencies": {},
 	"devDependencies": {
 		"@cyber2024/pdf-parse-fixed": "^1.2.5",
 		"@fortawesome/free-solid-svg-icons": "^6.5.1",
 		"@prettier/sync": "^0.3.0",
 		"@sveltejs/adapter-static": "^3.0.1",
 		"@sveltejs/kit": "^2.0.6",
+		"@sveltejs/vite-plugin-svelte": "^3.0.1",
 		"@tailwindcss/container-queries": "^0.1.1",
+		"@tsparticles/engine": "^3.0.3",
 		"@tsparticles/slim": "^3.0.3",
 		"@tsparticles/svelte": "^3.0.0",
 		"@types/glob": "^8.1.0",
