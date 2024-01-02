@@ -13,7 +13,7 @@
 		faPause,
 		faRotateBack
 	} from '@fortawesome/free-solid-svg-icons';
-	import { random } from 'lodash';
+	import random from 'lodash/random';
 	import shuffle from 'lodash/shuffle';
 	import { onMount, tick } from 'svelte';
 	import UAParser from 'ua-parser-js';

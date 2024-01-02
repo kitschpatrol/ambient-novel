@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import { onMount } from 'svelte';
-	import Particles from 'svelte-particles';
-	import type { Engine, ISourceOptions } from 'tsparticles-engine';
-	import { loadSlim } from 'tsparticles-slim'; // if you are going to use `loadSlim`, install the "tsparticles-slim" package too.
+	import Particles, { particlesInit } from '@tsparticles/svelte';
+	import type { Engine, ISourceOptions } from '@tsparticles/engine';
+	import { loadSlim } from '@tsparticles/slim'; // if you are going to use `loadSlim`, install the "tsparticles-slim" package too.
 
 	export let id: string = 'tsparticles';
 	export let color: string = '#cccccc'; // optimization
@@ -133,14 +133,14 @@
 		mounted = true;
 	});
 
-	let particlesInit = async (engine: Engine) => {
+	void particlesInit(async (engine: Engine) => {
 		// you can use main to customize the tsParticles instance adding presets or custom shapes
 		// this loads the tsparticles package bundle, it's the easiest method for getting everything ready
 		// starting from v2 you can add only the features you need reducing the bundle size
 		//await loadFull(engine);
 		// false is key, otherwise other components will react
 		await loadSlim(engine, false);
-	};
+	});
 
 	// .1 fixes safari rounding bug
 </script>
@@ -150,6 +150,5 @@
 		style="position: var(--position); left: 0; top: var(--top); width: 100%; height: var(--height); background: var(--background);"
 		{id}
 		options={particlesConfig}
-		{particlesInit}
 	/>
 {/if}
