@@ -4,7 +4,7 @@
 
 	export let title = 'The Valentine Mob'
 
-	$: isHomePage = $page.url.pathname === base
+	$: isHomePage = $page.url.pathname.replaceAll('/', '') === base.replaceAll('/', '')
 </script>
 
 <header class="grid grid-cols-[1fr_max-content_1fr]">
