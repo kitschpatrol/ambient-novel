@@ -49,7 +49,7 @@ html {
 }
 
 html {
-	height: fill-available;
+	height: stretch;
 	background: var(--background-color-gradient-1);
 }
 
@@ -57,7 +57,7 @@ body {
 	overflow-x: hidden;
 	min-height: 100dvh;
 	/* mobile viewport bug fix */
-	min-height: fill-available;
+	min-height: stretch;
 	/* background-attachment: fixed; */
 }
 
