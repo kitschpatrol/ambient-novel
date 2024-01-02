@@ -2,11 +2,11 @@
 
 ## Overview
 
-The "Ambient Novel" website was created as a home or Scott Wayne Indiana's book _The Valentine Mob_. After several iterations, an interface approach that allows for simultaneous playack, scrubbing of multiple narrated audio tracks.
+The "Ambient Novel" website was created as a home or Scott Wayne Indiana's book _The Valentine Mob_. After several iterations, an interface approach that allows for simultaneous playback, scrubbing of multiple narrated audio tracks.
 
 ## Updating the content
 
-Certain data and assets are generated from the source data in `/data` and ouput to `/static`, `/data-generated` and `/src/lib/data`.
+Certain data and assets are generated from the source data in `/data` and output to `/static`, `/data-generated` and `/src/lib/data`.
 
 Takes about half an hour on my M1 Air to generate everything from scratch.
 
@@ -64,10 +64,10 @@ conda activate whisperx
 pip install argparse torch torchaudio torchvision
 pip install git+https://github.com/m-bain/whisperx.git
 
-# overwrite previously installed torch with nightlies for mps / m1 support
+# overwrite previously installed torch with nightly build for mps / m1 support
 pip install --pre --force-reinstall torch torchaudio torchvision --index-url https://download.pytorch.org/whl/nightly/cpu
 
-# pip will complain about missmatched dependencies, but ignore this
+# pip will complain about mismatched dependencies, but ignore this
 conda deactivate
 
 # install tts
@@ -88,7 +88,7 @@ To test... currently does NOT work, but the alignment-only model in whisperx doe
 ```bash
 conda activate whisperx
 export PYTORCH_ENABLE_MPS_FALLBACK=1
-whisperx ./static/speech/0-78.`mp3` --device mps --model tiny --language en --verbose True --fp16 Fals
+whisperx ./static/speech/0-78.`mp3` --device mps --model tiny --language en --verbose True --fp16 False
 conda deactivate
 ```
 
@@ -132,13 +132,13 @@ The app is deployed via a GitHub action to Scott's DreamHost server, which runs 
 
 - `SERVER_PATH`  
   DreamHost server path, this is prepended to the base path when files are copied. Must start with `/` and end without `/`.  
-  Example: `/home/someuser/somefolder`
+  Example: `/home/some-user/some-folder`
 
 ## Dev notes
 
 No bundle size advantage to moving content preprocessing deps only to their own package.json.
 
-To use the `build-report` npm script, insteall [`dust`](https://github.com/bootandy/dust) via homebrew if needed.
+To use the `build-report` npm script, install [`dust`](https://github.com/bootandy/dust) via homebrew if needed.
 
 ```bash
 brew install dust
@@ -157,7 +157,7 @@ Suppressing Stylelint Tailwind @apply etc. directive errors:
 
 - https://stackoverflow.com/a/76984634/2437832
 
-Deployment server MUST support HTTP 206 range requests to successfuly set `currentTime` on audio elements on chrome.
+Deployment server MUST support HTTP 206 range requests to successfully set `currentTime` on audio elements on chrome.
 
 Currently deployed to:
 https://39forks.com/thevalentinemob-staging

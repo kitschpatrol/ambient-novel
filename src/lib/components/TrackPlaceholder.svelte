@@ -11,14 +11,14 @@
 </script>
 
 <div class="track">
-	<ChapterCover {chapterData} {chapterColor} />
+	<ChapterCover {chapterColor} {chapterData} />
 </div>
 
 <style lang="postcss">
 	div.track {
+		user-select: none;
+		position: relative;
 		width: 100vw;
 		height: calc(100dvh / 12);
-		position: relative;
-		user-select: none;
 	}
 </style>

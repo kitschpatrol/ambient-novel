@@ -1,13 +1,25 @@
+# ESLint Ignore
+# Does not inherit from .gitignore
+
+# @kitschpatrol/repo-config boilerplate
+!.env.example
+.astro/
 .DS_Store
-node_modules
-/build
-/.svelte-kit
-/package
 .env
 .env.*
-!.env.example
+.svelte-kit/
+{tmp,temp}/
+**/*.min.js
+/scratch/
+bower_components/
+build/
+coverage/
+dist/
+env.d.ts
+node_modules/
+vendor/
 
-# Ignore files for PNPM, NPM and YARN
-pnpm-lock.yaml
-package-lock.json
-yarn.lock
+# @kitschpatrol/eslint-config boilerplate
+/patches/
+
+# Customizations

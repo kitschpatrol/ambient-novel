@@ -5,10 +5,10 @@
 
 	export let audioSources: string[];
 	export let isPlaying = false;
-	export let maxVolume = 1.0;
+	export let maxVolume = 1;
 	export let loop = false;
-	export let currentTime = 0; // actual time of audio
-	export let targetTime = 0; // time we're requesting
+	export let currentTime = 0; // Actual time of audio
+	export let targetTime = 0; // Time we're requesting
 
 	let audioElement: HTMLAudioElement;
 
@@ -37,24 +37,24 @@
 	}
 
 	function mount() {
-		// voodoo implementation
+		// Voodoo implementation
 		// not sure if any of this helps
 		// https://stackoverflow.com/a/73910818/2437832
-		let savedCurentTime = audioElement.currentTime;
-		// audioElement.src = audioSources[0];
+		let savedCurrentTime = audioElement.currentTime;
+		// AudioElement.src = audioSources[0];
 
 		audioElement.load();
 
-		audioElement.currentTime = savedCurentTime;
+		audioElement.currentTime = savedCurrentTime;
 
-		audioElement.currentTime = targetTime; // critical
+		audioElement.currentTime = targetTime; // Critical
 		audioElement.volume = maxVolume;
 		audioElement.muted = false;
 		if (isPlaying)
 			audioElement
 				.play()
 				.then(() => {
-					// all good
+					// All good
 				})
 				.catch((error) => {
 					console.error(error);
@@ -66,7 +66,7 @@
 		mount();
 	});
 
-	// function afterLoaded() {
+	// Function afterLoaded() {
 
 	// }
 
@@ -82,7 +82,7 @@
 	// }
 
 	const seekAudio = (time: number) => {
-		// return new Promise((resolve) => {
+		// Return new Promise((resolve) => {
 		// 	// Event listener for when the seek is complete
 		// 	// const onSeeked = () => {
 		// 	// 	// console.log('seeked');
@@ -106,7 +106,7 @@
 			audioElement
 				.play()
 				.then(() => {
-					// all good
+					// All good
 				})
 				.catch((error) => {
 					console.error(error);
@@ -127,44 +127,44 @@
 	$: !isInOutro && (currentTime = currentTimeProxy);
 </script>
 
-<!-- // adding prelad="none" was key to currentTime bugs on mobile safari -->
+<!-- // adding preload="none" was key to currentTime bugs on mobile safari -->
 <!-- // but only on CF pages which doesn't yet handle 206s range responses -->
 <!-- // now apparently not necessary after switching to netlify with 206 support -->
 <!-- // preload auto without a manual call to "load" only runs on the first file on mobile safari -->
 <audio
-	muted
-	{loop}
-	preload="auto"
-	on:canplaythrough
 	bind:currentTime={currentTimeProxy}
-	on:ended
 	bind:this={audioElement}
-	transition:fadeVolume|local={{ duration: 600 }}
-	on:outrostart={() => {
-		// don't send time updates during transitions
-		isInOutro = true;
-	}}
-	on:outroend={() => {
-		isInOutro = false;
-	}}
-	on:introstart={() => {
-		// accommodates resumption during a transition, if that happenns before a new Audio player is created
-		isInOutro = false;
-	}}
-	on:introend={() => {}}
+	{loop}
+	muted
+	on:canplaythrough
+	on:ended
 	on:error={() => {
 		console.error(`audio error for "${audioSources}"`);
 		retry();
 	}}
+	on:introend={() => {}}
+	on:introstart={() => {
+		// Accommodates resumption during a transition, if that happens before a new Audio player is created
+		isInOutro = false;
+	}}
+	on:outroend={() => {
+		isInOutro = false;
+	}}
+	on:outrostart={() => {
+		// Don't send time updates during transitions
+		isInOutro = true;
+	}}
+	preload="auto"
+	transition:fadeVolume|local={{ duration: 600 }}
 >
 	{#each audioSources as source}
 		<source
-			src={source}
-			type={lookup(source) ?? 'audio'}
 			on:error={() => {
 				console.error(`audio source error for "${source}"`);
 				retry();
 			}}
+			src={source}
+			type={lookup(source) ?? 'audio'}
 		/>
 	{/each}
 	Your browser does not support the audio element.

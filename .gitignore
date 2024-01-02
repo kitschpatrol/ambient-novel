@@ -1,10 +1,21 @@
+# Git Ignore
+# Also used by CSpell and Stylelint
+
+# @kitschpatrol/repo-config boilerplate
+!.env.example
+.astro/
 .DS_Store
-node_modules
-/build
-/.svelte-kit
-/package
 .env
 .env.*
-!.env.example
-vite.config.js.timestamp-*
-vite.config.ts.timestamp-*
+.svelte-kit/
+{tmp,temp}/
+**/*.min.js
+/scratch/
+bower_components/
+build/
+coverage/
+dist/
+node_modules/
+vendor/
+
+# Customizations

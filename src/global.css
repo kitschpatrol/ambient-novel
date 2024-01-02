@@ -68,7 +68,7 @@ body {
 	background: theme('colors.vm-magenta');
 }
 
-/* This seems to save touchcancel issues (none and pan-x don't work) */
+/* This seems to save touch cancellation issues (none and pan-x don't work) */
 * {
 	touch-action: manipulation;
 }

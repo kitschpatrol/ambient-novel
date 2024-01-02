@@ -4,21 +4,21 @@
 	import Audio from '$lib/components/Audio.svelte';
 
 	export let audioSources: string[];
-	export let maxVolume = 1.0;
+	export let maxVolume = 1;
 
 	export let isPlaying = false;
-	export let currentTime = 0; // reports time to parent (does not write)
-	export let targetTime = 0; // parent uses to set requested time (does not read)
+	export let currentTime = 0; // Reports time to parent (does not write)
+	export let targetTime = 0; // Parent uses to set requested time (does not read)
 
 	// don't load the audio until it's first played,
 	// this is an optimization to play well with the service worker
-	// precaching and cut down initial load time
+	// pre-caching and cut down initial load time
 
 	let targetTimeProxy: number = targetTime;
 	let currentTimeProxy: number = currentTime;
 	let isPlayingProxy = isPlaying;
 
-	// a bit precarious
+	// A bit precarious
 	$: {
 		if (isPlaying && !isPlayingProxy) {
 			// Starting to play
@@ -53,11 +53,11 @@
 {#key isPlaying}
 	<Audio
 		{audioSources}
+		bind:currentTime={currentTimeProxy}
 		isPlaying={isPlayingProxy}
 		{maxVolume}
-		targetTime={targetTimeProxy}
-		bind:currentTime={currentTimeProxy}
-		on:ended
 		on:canplaythrough
+		on:ended
+		targetTime={targetTimeProxy}
 	/>
 {/key}

@@ -1,15 +1,15 @@
 import pdf from '@cyber2024/pdf-parse-fixed';
-import fs from 'fs';
+import fs from 'node:fs';
 import { getTextBetween, saveFormattedJson } from './utils';
 
-// kind of a one-shot shortcut to getting the novel text
+// Kind of a one-shot shortcut to getting the novel text
 // too much work to really create consistent output without
 // any hand-fixes
 
 // gets pretty close, but there's no consistent way to quite get the line breaks
 // right in the non-indented chapters, also not worth automating the color footnote
 // to HTML conversion, or the bullet list to HTML conversion
-// these changes are made by hand after generating the ouput file
+// these changes are made by hand after generating the output file
 
 // pdfreader and pdf2json both choke on emojis
 // pdf-parse-fixed fails to load them correctly, but doesn't throw
@@ -19,11 +19,11 @@ import { getTextBetween, saveFormattedJson } from './utils';
 
 // Helpers ----------------------------------------------------------------------
 
-function getChapterText(source: string, chapterIndex: number, chapterDelimeters: string[]): string {
+function getChapterText(source: string, chapterIndex: number, chapterDelimiters: string[]): string {
 	return getTextBetween(
 		source,
-		chapterDelimeters[chapterIndex],
-		chapterDelimeters[chapterIndex + 1] ?? source.length
+		chapterDelimiters[chapterIndex],
+		chapterDelimiters[chapterIndex + 1] ?? source.length
 	);
 }
 
@@ -33,27 +33,21 @@ function chapterTextToLines(
 	breakOnIndentsOnly = false
 ): string[] {
 	let chapterText = text;
-	// filter out footnote annotations (this way they don't get split into lines)
-	chapterText = chapterText.replace(/\n\d+\n/gu, '');
+	// Filter out footnote annotations (this way they don't get split into lines)
+	chapterText = chapterText.replaceAll(/\n\d+\n/gu, '');
 
 	let lines = chapterText.split(/\r?\n/gu);
 
-	// filter empty lines
-	lines = lines.filter((line) => {
-		return line.trim().length > 0;
-	});
+	// Filter empty lines
+	lines = lines.filter((line) => line.trim().length > 0);
 
-	// filter line numbers
-	lines = lines.filter((line) => {
-		return line.trim().replace(/\d/g, '').length > 0;
-	});
+	// Filter line numbers
+	lines = lines.filter((line) => line.trim().replaceAll(/\d/g, '').length > 0);
 
-	// filter footnotes
-	lines = lines.filter((line) => {
-		return line.trim().match(/^\d+\s+#/g) === null;
-	});
+	// Filter footnotes
+	lines = lines.filter((line) => line.trim().match(/^\d+\s+#/g) === null);
 
-	// for (const [i, line] of lines.entries()) {
+	// For (const [i, line] of lines.entries()) {
 	// 	console.log(`${i}|"${line}"`);
 	// }
 
@@ -63,40 +57,38 @@ function chapterTextToLines(
 		for (const [pdfEmoji, scriptEmoji] of emojiReplacements) {
 			lineWithEmoji = lineWithEmoji.replace(pdfEmoji, scriptEmoji);
 		}
+
 		return lineWithEmoji;
 	});
 
-	// stitch lines
+	// Stitch lines
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	lines = lines.reduce<string[]>((acc, line, index) => {
-		// console.log(`acc: ${acc}`);
+		// Console.log(`acc: ${acc}`);
 
 		if (breakOnIndentsOnly) {
-			if (line.match(/^\s+[A-Z]/) !== null) {
-				acc.push(line);
+			if (/^\s+[A-Z]/.exec(line) === null) {
+				acc[acc.length - 1] = acc.at(-1) + ' ' + line;
 			} else {
-				acc[acc.length - 1] = acc[acc.length - 1] + ' ' + line;
+				acc.push(line);
 			}
 		} else {
-			// push the first line no matter what, but don't trim
-			if (acc.length === 0 || acc[acc.length - 1].match(/\s$/) !== null) {
+			// Push the first line no matter what, but don't trim
+			if (acc.length === 0 || /\s$/.exec(acc.at(-1)) !== null) {
 				acc.push(line);
 			} else {
-				acc[acc.length - 1] = acc[acc.length - 1] + '<br />' + line;
+				acc[acc.length - 1] = acc.at(-1) + '<br />' + line;
 			}
 		}
+
 		return acc;
 	}, []);
 
-	// trim lines
-	lines = lines.map((line) => {
-		return line.trim();
-	});
+	// Trim lines
+	lines = lines.map((line) => line.trim());
 
-	// clean up double spaces
-	lines = lines.map((line) => {
-		return line.replace(/\s+/gu, ' ');
-	});
+	// Clean up double spaces
+	lines = lines.map((line) => line.replaceAll(/\s+/gu, ' '));
 
 	return lines;
 }
@@ -106,8 +98,8 @@ function chapterTextToLines(
 // get text from the pdf
 const { text } = await pdf(fs.readFileSync('./design/TVM.pdf'), {});
 
-// detect chapters using these ridiculous strings
-const chapterDelimeters = [
+// Detect chapters using these ridiculous strings
+const chapterDelimiters = [
 	'\n\n\n\n1\n1\nThe Valentine Mob\n',
 	'\n\n14\n\n15\n2\nMotel Van Been Hit',
 	'\n\n23\n\n24\n\n25\n3\nMobile Tent Haven\n',
@@ -120,7 +112,7 @@ const chapterDelimeters = [
 	'\n\n66\n\n67\n10\nViable Tenth Omen\n'
 ];
 
-// some chapters are more poetic with many un-indented lines, others are more literary
+// Some chapters are more poetic with many un-indented lines, others are more literary
 // with each line indented like a paragraph
 // this config tries to pick the best line-splitting strategy for each chapter
 const chapterBreakOnIndentConfig = [
@@ -136,30 +128,30 @@ const chapterBreakOnIndentConfig = [
 	false
 ];
 
-// the pdf parser chokes on emoji, this recreates them after the fact
+// The pdf parser chokes on emoji, this recreates them after the fact
 const emojiReplacements = [
-	['力', '🦊'], // coco
-	['', '💜'], // chaplin
-	['', '🗝'], // buster
-	['', '🎱'], // lucille, invisible!
-	['', '🚀'] // andy
+	['力', '🦊'], // Coco
+	['', '💜'], // Chaplin
+	['', '🗝'], // Buster
+	['', '🎱'], // Lucille, invisible!
+	['', '🚀'] // Andy
 ];
 
-// prep for json output
+// Prep for json output
 const json: {
-	chapters: { title: string; lines: string[] }[];
+	chapters: Array<{ lines: string[]; title: string }>;
 } = {
 	chapters: []
 };
 
-// parse each chapter into lines
-for (let i = 0; i < chapterDelimeters.length; i++) {
+// Parse each chapter into lines
+for (let i = 0; i < chapterDelimiters.length; i++) {
 	const chapterJson = {
-		title: chapterDelimeters[i].replace(/\n|[^A-Za-z\s]/gu, ''),
-		lines: <string[]>[]
+		lines: [] as string[],
+		title: chapterDelimiters[i].replaceAll(/\n|[^A-Za-z\s]/gu, '')
 	};
 
-	const chapterText = getChapterText(text, i, chapterDelimeters);
+	const chapterText = getChapterText(text, i, chapterDelimiters);
 	const chapterLines = chapterTextToLines(
 		chapterText,
 		emojiReplacements,
@@ -169,7 +161,7 @@ for (let i = 0; i < chapterDelimeters.length; i++) {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	for (const [i, line] of chapterLines.entries()) {
 		chapterJson.lines.push(line);
-		// console.log(`${i}|${line}`);
+		// Console.log(`${i}|${line}`);
 		// console.log(`${line}`);
 	}
 

@@ -1,28 +1,28 @@
 <script lang="ts">
-	import Button from '$lib/components/Button.svelte';
-	import Header from '$lib/components/Header.svelte';
-	import Track from '$lib/components/Track.svelte';
-	import TrackPlacholder from '$lib/components/TrackPlaceholder.svelte';
-	import * as config from '$lib/config';
-	import type { BookData } from '$lib/schemas/bookSchema';
-	import { delayedForEach } from '$lib/utils/collection/delayedForEach';
-	import { getIndicesMatchingValue } from '$lib/utils/collection/getIndicesMatchingValue';
 	import {
 		faBookReader,
 		faDiceD20,
 		faPause,
 		faRotateBack
 	} from '@fortawesome/free-solid-svg-icons';
+	import Button from '$lib/components/Button.svelte';
+	import Header from '$lib/components/Header.svelte';
+	import Track from '$lib/components/Track.svelte';
+	import TrackPlaceholder from '$lib/components/TrackPlaceholder.svelte';
+	import * as config from '$lib/config';
+	import type { BookData } from '$lib/schemas/bookSchema';
+	import { delayedForEach } from '$lib/utils/collection/delayedForEach';
+	import { getIndicesMatchingValue } from '$lib/utils/collection/getIndicesMatchingValue';
 	import random from 'lodash/random';
 	import shuffle from 'lodash/shuffle';
 	import { onMount, tick } from 'svelte';
-	import UAParser from 'ua-parser-js';
+	import UaParser from 'ua-parser-js';
 
 	export let bookData: BookData;
 	const { chapters } = bookData;
 	const luckyBlendDelay = 250;
 	const resetDelay = 100;
-	const isMobile = (new UAParser().getDevice().type ?? '') === 'mobile';
+	const isMobile = (new UaParser().getDevice().type ?? '') === 'mobile';
 
 	let width = 0;
 
@@ -46,12 +46,12 @@
 	let isResetting = false;
 	let isPlayingThrough = false;
 
-	$: somethingPlaying = playStatus.indexOf(true) > -1;
-	$: somethingNotReset = resetStatus.indexOf(false) > -1;
+	$: somethingPlaying = playStatus.includes(true);
+	$: somethingNotReset = resetStatus.includes(false);
 
 	$: {
-		// messing with anything stops playing through
-		if (!isResetting && isPlayingThrough && playStatus.filter((v) => v).length !== 1) {
+		// Messing with anything stops playing through
+		if (!isResetting && isPlayingThrough && playStatus.filter(Boolean).length !== 1) {
 			isPlayingThrough = false;
 		}
 	}
@@ -65,7 +65,7 @@
 
 		await sleep(luckyBlendDelay);
 
-		// pick some random chapters, and start playing
+		// Pick some random chapters, and start playing
 		// lower max chapters on slow mobile
 		const chapterCount = isMobile ? random(2, 3) : random(2, 6);
 		const chapterNumbers = Array.from({ length: chapters.length }, (_, i) => i);
@@ -84,6 +84,7 @@
 			});
 			await sleep(luckyBlendDelay);
 		}
+
 		blendingInProgress = false;
 	}
 
@@ -94,9 +95,9 @@
 
 	$: isAllLoaded = loadCount === chapters.length;
 
-	// returns when all animations are done
+	// Returns when all animations are done
 	async function resetAll() {
-		// only reset those in need
+		// Only reset those in need
 		isResetting = true;
 		const chapterIndicesToReset = getIndicesMatchingValue(resetStatus, false);
 		await delayedForEach(chapterIndicesToReset, (index) => (resetStatus[index] = true), resetDelay);
@@ -104,7 +105,7 @@
 		isResetting = false;
 	}
 
-	const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+	const sleep = async (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 </script>
 
 <svelte:window bind:innerWidth={width} />
@@ -116,19 +117,15 @@
 	{#if loadCount >= index && width > 0}
 		<!-- {#if 0 >= index && width > 0} -->
 		<Track
-			ready={() => {
-				loadCount++;
-			}}
-			chapterData={chapters[index]}
-			chapterColor={chapterColors[index]}
-			rowWidth={width}
-			bind:targetTime={targetTimes[index]}
 			bind:isPlaying={playStatus[index]}
 			bind:isReset={resetStatus[index]}
+			bind:targetTime={targetTimes[index]}
+			chapterColor={chapterColors[index]}
+			chapterData={chapters[index]}
 			on:ended={() => {
 				if (isPlayingThrough) {
 					// TODO
-					resetAll(); // this throws the right flag
+					resetAll(); // This throws the right flag
 				} else {
 					resetStatus[index] = true;
 				}
@@ -137,23 +134,27 @@
 					const nextChapterIndex = index + 1;
 					if (!playStatus[nextChapterIndex]) playStatus[nextChapterIndex] = true;
 				} else {
-					// reached the end of the book
+					// Reached the end of the book
 				}
 			}}
+			ready={() => {
+				loadCount++;
+			}}
+			rowWidth={width}
 		/>
 	{:else}
-		<TrackPlacholder chapterData={chapters[index]} chapterColor={chapterColors[index]} />
+		<TrackPlaceholder chapterColor={chapterColors[index]} chapterData={chapters[index]} />
 	{/if}
 {/each}
 
 <footer>
-	<div id="controls" class="flex h-full w-full justify-between gap-6 max-sm:gap-1">
+	<div class="flex h-full w-full justify-between gap-6 max-sm:gap-1" id="controls">
 		<span class="flex basis-[32rem]">
 			<Button
 				icon={faBookReader}
-				label="Play Through"
-				isEnabled={!isPlayingThrough && isAllLoaded}
 				isDown={isPlayingThrough}
+				isEnabled={!isPlayingThrough && isAllLoaded}
+				label="Play Through"
 				on:click={async () => {
 					await resetAll();
 					playStatus[0] = true;
@@ -171,16 +172,16 @@
 		<span class="flex basis-[32rem]">
 			<Button
 				icon={faPause}
-				label="Pause all"
 				isEnabled={somethingPlaying && isAllLoaded}
+				label="Pause all"
 				on:click={() => {
 					playStatus = playStatus.map(() => false);
 				}}
 			/>
 			<Button
 				icon={faRotateBack}
-				label="Reset all"
 				isEnabled={somethingNotReset && isAllLoaded && !isResetting}
+				label="Reset all"
 				on:click={resetAll}
 			/>
 		</span>
@@ -190,23 +191,17 @@
 <style lang="postcss">
 	div#controls {
 		/* background: linear-gradient(#00000053 0%, rgba(86, 86, 86, 0.502) 100%); */
-		user-select: none;
 		/* autoprefixer? */
-		-webkit-user-select: none;
-		-moz-user-select: none;
-		-ms-user-select: none;
+		user-select: none;
 		-webkit-touch-callout: none; /* iOS Safari */
 	}
 
 	footer {
-		background: linear-gradient(#0000001d 30%, #00000000 100%) #4e3bff;
+		/* autoprefixer? */
+		user-select: none;
 		width: 100vw;
 		height: calc(100dvh / 12);
-		user-select: none;
-		/* autoprefixer? */
-		-webkit-user-select: none;
-		-moz-user-select: none;
-		-ms-user-select: none;
+		background: linear-gradient(#0000001d 30%, #00000000 100%) #4e3bff;
 		-webkit-touch-callout: none; /* iOS Safari */
 	}
 </style>

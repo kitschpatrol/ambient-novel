@@ -10,14 +10,14 @@
 	let isPlayingProxy: boolean = isPlaying;
 	let currentTimeProxy: number = currentTime;
 
-	// don't load the audio until it's first played,
+	// Don't load the audio until it's first played,
 	// this is an optimization to play well with the service worker
-	// precaching and cut down initial load time
+	// pre-caching and cut down initial load time
 	let hasPlayed = false;
 
 	// // a bit precarious
 	$: {
-		// first play
+		// First play
 		if (!hasPlayed && isPlaying) {
 			hasPlayed = true;
 		}
@@ -31,7 +31,7 @@
 			currentTimeProxy = currentTime;
 			// });
 		} else if (!isPlaying && !isPlayingProxy) {
-			// possibly scrubbing, parent drives time
+			// Possibly scrubbing, parent drives time
 			currentTimeProxy = currentTime;
 		} else if (isPlaying && isPlayingProxy) {
 			// Playing, audio drives time
@@ -56,8 +56,8 @@
 	{#key isPlaying}
 		<AudioBasic
 			{audioSources}
-			isPlaying={isPlayingProxy && isPlaying}
 			bind:currentTime={currentTimeProxy}
+			isPlaying={isPlayingProxy && isPlaying}
 			on:ended
 		/>
 	{/key}
