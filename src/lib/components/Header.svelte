@@ -5,8 +5,6 @@
 	export let title = 'The Valentine Mob'
 
 	const rawPath = $page.url.pathname.replace(base, '').replaceAll('/', '')
-
-	console.log(rawPath)
 </script>
 
 <header class="grid grid-cols-[1fr_max-content_1fr]">
