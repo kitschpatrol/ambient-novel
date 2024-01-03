@@ -39,6 +39,7 @@
 		background-color: rgb(255 255 255 / 40%);
 		border-radius: 1rem;
 		box-shadow: 5px 5px 5px 0 rgb(0 0 0 / 15%);
+		transition: background-color 0.2s ease-in-out;
 	}
 
 	a > div:first-child {
@@ -91,6 +92,7 @@
 
 	a:active {
 		background-color: white;
+		transition: background-color 0.1s ease-in-out;
 	}
 
 	a:active img,

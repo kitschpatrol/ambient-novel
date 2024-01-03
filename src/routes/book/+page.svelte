@@ -55,7 +55,7 @@
 {/if}
 
 <main
-	class="mx-auto mb-20 mt-36 max-w-[90ch] bg-[#f7f7f7] bg-opacity-90 px-12 pb-8 pt-3 font-serif text-xl text-[#222222] max-sm:mx-auto max-sm:mb-16 max-sm:mt-24 max-sm:w-[90vw] max-sm:px-5 max-sm:text-xl"
+	class="mx-auto mb-20 mt-36 max-w-[90ch] bg-[#f7f7f7] bg-opacity-90 px-12 pb-16 pt-3 font-serif text-xl text-[#222222] max-sm:mx-auto max-sm:mb-16 max-sm:mt-24 max-sm:w-[90vw] max-sm:px-5 max-sm:text-xl"
 >
 	<h2>Get the Book</h2>
 
@@ -68,7 +68,7 @@
 		imagePath="{base}/images/book.webp"
 		imageWidth={2000}
 	>
-		The 72-page, perfect-bound paperback.<br /><em>Buy direct from 39forks Publishing.</em>
+		The 72-page, perfect-bound paperback.<br /><em>Buy direct from 39forks Publishing</em>
 	</FancyLink>
 
 	<h3>The Deluxe Version</h3>
