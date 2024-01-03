@@ -99,7 +99,7 @@
 		<em>Download the complete audio book for free</em>
 	</FancyLink>
 
-	<h3>More from 39forks Publishing</h3>
+	<h3>More From 39forks Publishing</h3>
 
 	<FancyLink
 		alt="Screenshot of the 39forks Publishing online store"
