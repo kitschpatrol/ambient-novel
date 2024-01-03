@@ -50,9 +50,9 @@ To set up the environment:
 # install ffmpeg with fddk-aac
 # whisperx doesn't care about specific encoder implementations, but safari does
 # and we also use ffmpeg in the data generation step
-# TODO does this install ffprobe as well?
+# ffprobe is installed along with ffmpeg
 brew tap homebrew-ffmpeg/ffmpeg
-brew install homebrew-ffmpeg/ffmpeg/ffmpeg --with-fdk-aacbrew tap homebrew-ffmpeg/ffmpeg
+brew install homebrew-ffmpeg/ffmpeg/ffmpeg --with-fdk-aac
 brew install miniconda
 conda init zsh
 

@@ -22,6 +22,7 @@ export const bookSchema = z.object({
 		)
 		.nonempty(),
 	country: z.string().min(1),
+	fullAudio: z.array(z.string().min(1)).nonempty(),
 	license: z.string().min(1),
 	publisher: z.string().min(1),
 	title: z.string().min(1),

@@ -1,6 +1,6 @@
 {
 	"name": "ambient-novel",
-	"version": "1.0.5",
+	"version": "2.0.0",
 	"type": "module",
 	"description": "Website for nonlinear interactive exploration of The Valentine Mob novel.",
 	"repository": {
@@ -70,11 +70,13 @@
 		"@types/ua-parser-js": "^0.7.39",
 		"autoprefixer": "^10.4.16",
 		"dotenv": "^16.3.1",
+		"glob": "^10.3.10",
 		"html-minifier": "^4.0.0",
 		"leven": "^4.0.0",
 		"lodash": "^4.17.21",
 		"mrmime": "^2.0.0",
 		"node-html-parser": "^6.1.12",
+		"node-id3": "^0.2.6",
 		"node-jq": "^4.2.2",
 		"postcss": "^8.4.32",
 		"sanitize-html": "^2.11.0",

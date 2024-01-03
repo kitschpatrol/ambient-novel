@@ -12,6 +12,7 @@ import {
 	checkForBinaryOnPath,
 	compressTo,
 	createIntermediatePaths,
+	findFile,
 	findHashedFile,
 	generateRegexForString,
 	getAudioDuration,
@@ -24,6 +25,7 @@ import {
 	replaceTextNodeHtml,
 	saveFormattedJson,
 	sayToFileCoqui,
+	setAlbumArtAndTags,
 	stripEmojis,
 	stripHtmlTags,
 	stripTagNodeHtml,
@@ -68,6 +70,21 @@ const config = {
 		],
 		regenerateCompressed: false,
 		sourceDir: '/Users/mika/Documents/Projects/Ambient Novel with Scott Wayne Indiana/Audio/Mix',
+	},
+	fullAudioBookSettings: {
+		outputDir: './static/audio-book',
+		// Album art only supported for mp3 at the moment
+		outputs: [
+			{
+				format: 'mp3',
+				quality: 0.3,
+				sampleRate: 44_100,
+				vbr: true,
+			},
+		],
+		regenerateCompressed: true,
+		sourceDir:
+			'/Users/mika/Documents/Projects/Ambient Novel with Scott Wayne Indiana/Complete Book',
 	},
 	jsonSettings: {
 		abortOnSchemaErrors: false, // Useful for outputting the resulting book.json with minor errors
@@ -119,6 +136,53 @@ const bookOutput: DeepPartial<BookData> = {
 checkForBinaryOnPath('ffmpeg')
 checkForBinaryOnPath('ffprobe')
 checkForBinaryOnPath('conda')
+
+// Generate full audio book
+
+createIntermediatePaths(
+	config.fullAudioBookSettings.outputDir,
+	config.fullAudioBookSettings.regenerateCompressed,
+)
+
+console.log(`Compressing full audio book from ${config.fullAudioBookSettings.sourceDir}`)
+
+bookOutput.fullAudio = []
+const cleanFilename = 'The Valentine Mob - Complete Audio Book'
+const sourceFile = `${config.fullAudioBookSettings.sourceDir}/${bookSource.fullAudio}`
+
+// Example usage
+const tagOptions = {
+	albumArtPath: './design/album-art.jpg',
+	albumName: 'The Valentine Mob',
+	artistNames: ['Scott Wayne Indiana', 'Alex McCarl', 'Mike Budd'],
+	trackName: 'The Valentine Mob',
+}
+
+for (const { format, quality, sampleRate, vbr } of config.fullAudioBookSettings.outputs) {
+	const audioFileUnhashed = `${config.fullAudioBookSettings.outputDir}/${cleanFilename}.${format}`
+	const audioFile = findFile(audioFileUnhashed)
+
+	if (audioFile && !config.fullAudioBookSettings.regenerateCompressed) {
+		console.log(`Already found audio track ${audioFile}, nothing to generate...`)
+	} else {
+		// Clean up existing
+		if (audioFile) {
+			fs.rmSync(audioFile, { force: true })
+		}
+
+		console.log(`Compressing audio file ${sourceFile} to ${format}`)
+		compressTo(sourceFile, audioFileUnhashed, quality, sampleRate, vbr)
+
+		try {
+			setAlbumArtAndTags(audioFileUnhashed, tagOptions)
+			console.log(`ID3 tags and album art set successfully for ${audioFileUnhashed}`)
+		} catch (error) {
+			console.error(error)
+		}
+
+		bookOutput.fullAudio.push(audioFileUnhashed.replace(/\.?\/?static\//, ''))
+	}
+}
 
 // Generate output dirs if needed, clear them if regenerate is true
 if (config.speechSettings.regenerateSource) {
@@ -314,8 +378,8 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 
 			// Add timing data
 			const spanElement = wordHtml.querySelector('span')!
-			// @ts-expect-error type issue
-			spanElement.dataset.time = wordTiming.start
+			// eslint-disable-next-line unicorn/prefer-dom-node-dataset
+			spanElement.setAttribute('data-time', wordTiming.start)
 
 			// Add a class to set horizontal spacing between lines via css
 			// but don't do it on the first line of the chapter

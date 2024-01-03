@@ -7,13 +7,68 @@ import synchronizedPrettier from '@prettier/sync'
 import { glob } from 'glob'
 import leven from 'leven'
 import { HTMLElement, type Node, TextNode } from 'node-html-parser'
+import id3 from 'node-id3'
 import { execSync } from 'node:child_process'
 import crypto from 'node:crypto'
 import fs from 'node:fs'
 import path from 'node:path'
+import { extname } from 'node:path'
 import { stripHtml } from 'string-strip-html'
 
 // Utility functions used by generateData.ts
+
+type TagOptions = {
+	albumArtPath: string
+	albumName: string
+	artistNames: string[]
+	trackName: string
+}
+
+// Function to set tags for MP3
+function setTagsForMP3(audioFilePath: string, tags: TagOptions) {
+	const id3Tags = {
+		// eslint-disable-next-line @typescript-eslint/naming-convention
+		APIC: tags.albumArtPath,
+		album: tags.albumName,
+		artist: tags.artistNames.join(', '),
+		title: tags.trackName,
+	}
+
+	if (!id3.write(id3Tags, audioFilePath)) {
+		throw new Error(`Failed to write ID3 tags to ${audioFilePath}`)
+	}
+}
+
+// Unified function to set album art and other tags
+export function setAlbumArtAndTags(audioFilePath: string, tagOptions: TagOptions) {
+	const fileExtension = extname(audioFilePath).toLowerCase()
+
+	if (fileExtension === '.mp3') {
+		setTagsForMP3(audioFilePath, tagOptions)
+	} else {
+		throw new Error('Unsupported file format')
+	}
+}
+
+export function findFile(filePath: string): null | string {
+	// Synchronously get all files matching the pattern
+	const files = glob.sync(filePath)
+
+	// If at least one file matches the pattern
+	if (files.length === 1) {
+		// Get the first file
+		const matchedFilePath = files[0]
+
+		// Check that the file exists and is a file (not a directory)
+		if (fs.existsSync(matchedFilePath) && fs.lstatSync(matchedFilePath).isFile()) {
+			return matchedFilePath
+		}
+	} else if (files.length > 1) {
+		throw new Error(`More than one file ${filePath} was found!`)
+	}
+
+	return null
+}
 
 export function findHashedFile(filePath: string): null | string {
 	// Match the hash area
