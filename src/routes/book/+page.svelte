@@ -64,7 +64,9 @@
 		alt="The Valentine Mob paperback book cover"
 		href="https://39forkspublishing.square.site/product/the-valentine-mob/97"
 		icon={faArrowRight}
+		imageHeight={3401}
 		imagePath="{base}/images/book.webp"
+		imageWidth={2000}
 	>
 		The 72-page, perfect-bound paperback.<br /><em>Buy direct from 39forks Publishing.</em>
 	</FancyLink>
@@ -74,7 +76,9 @@
 		alt="The Valentine Mob deluxe edition with book and lego set"
 		href="https://39forkspublishing.square.site/product/the-valentine-mob-deluxe-version/98"
 		icon={faArrowRight}
+		imageHeight={4463}
 		imagePath="{base}/images/deluxe.webp"
+		imageWidth={4644}
 	>
 		The book, plus a custom-built Lego box featuring sixteen Valentine Mob Minifigs.
 		<em>Buy direct from 39forks Publishing</em>
@@ -86,7 +90,9 @@
 		downloadLink={true}
 		href="{base}/audio-book/The Valentine Mob - Complete Audio Book.mp3"
 		icon={faCloudArrowDown}
+		imageHeight={2695}
 		imagePath="{base}/images/audio.webp"
+		imageWidth={1300}
 		openInNewTab={false}
 	>
 		The author narrates the Valentine Mob over original ambient tracks.<br />
@@ -99,7 +105,9 @@
 		alt="Screenshot of the 39forks Publishing online store"
 		href="https://39forkspublishing.square.site/s/shop"
 		icon={faArrowRight}
+		imageHeight={2006}
 		imagePath="{base}/images/store.webp"
+		imageWidth={2723}
 	>
 		Discover more books, projects, and games from 39forks.
 		<em>Visit the online store</em>

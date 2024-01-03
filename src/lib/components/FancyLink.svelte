@@ -6,6 +6,8 @@
 	export let openInNewTab = true
 	export let href: string
 	export let imagePath: string
+	export let imageWidth: number
+	export let imageHeight: number
 	// eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
 	export let icon: null | unknown = null // Using IconDefinition causes type errors...
 
@@ -17,7 +19,7 @@
 
 <a {download} {href} {rel} {target}>
 	<div>
-		<img {alt} src={imagePath} />
+		<img {alt} height={imageHeight} src={imagePath} width={imageWidth} />
 	</div>
 	<div>
 		<slot />
@@ -71,6 +73,8 @@
 
 	a img {
 		transform: scale(1);
+		width: auto;
+		max-width: none;
 		max-height: 18rem;
 		padding: 1.5rem;
 		transition: transform 0.1s ease-in-out;
