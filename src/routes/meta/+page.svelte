@@ -3,7 +3,7 @@
 	import { browser } from '$app/environment'
 	import Button from '$lib/components/Button.svelte'
 	import Header from '$lib/components/Header.svelte'
-	import { name, version } from '$lib/data/pkgInfo.json'
+	import { name, version } from '$lib/data/pkg-info.json'
 	import UaParser from 'ua-parser-js'
 
 	async function getServiceWorkerCount() {

@@ -31,19 +31,19 @@
 		"novel"
 	],
 	"scripts": {
-		"build": "vite build && ts-node ./scripts/setHtaccessBasePath.ts",
+		"build": "vite build && tsx ./scripts/set-htaccess-base-path.ts",
 		"build-report": "dust -t -b ./build",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"dev": "vite dev --host",
 		"fix": "shared-config --fix",
-		"generate-data": "ts-node ./scripts/generateData.ts",
+		"generate-data": "tsx ./scripts/generate-data.ts",
 		"generate-licenses": "pnpm licenses list --json > ./src/lib/data/licenses.json",
-		"generate-package-info": "jq '{version, name, description}' package.json > ./src/lib/data/pkgInfo.json",
+		"generate-package-info": "jq '{version, name, description}' package.json > ./src/lib/data/pkg-info.json",
 		"lint": "shared-config --lint",
 		"prebuild": "pnpm run generate-package-info && pnpm run generate-licenses",
 		"preview": "vite preview --host",
-		"scrape-pdf": "ts-node ./scripts/scrapePdf.ts"
+		"scrape-pdf": "tsx ./scripts/scrape-pdf.ts"
 	},
 	"devDependencies": {
 		"@cyber2024/pdf-parse-fixed": "^1.2.5",
@@ -86,7 +86,7 @@
 		"svelte-fa": "^3.0.4",
 		"tailwindcss": "^3.4.0",
 		"tinycolor2": "^1.6.0",
-		"ts-node": "^10.9.2",
+		"tsx": "^4.7.0",
 		"typescript": "^5.3.3",
 		"ua-parser-js": "^1.0.37",
 		"vite": "^5.0.10",
