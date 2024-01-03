@@ -90,9 +90,9 @@
 		downloadLink={true}
 		href="{base}/audio-book/The Valentine Mob - Complete Audio Book.mp3"
 		icon={faCloudArrowDown}
-		imageHeight={2695}
+		imageHeight={2774}
 		imagePath="{base}/images/audio.webp"
-		imageWidth={1300}
+		imageWidth={1415}
 		openInNewTab={false}
 	>
 		The author narrates the Valentine Mob over original ambient tracks.<br />

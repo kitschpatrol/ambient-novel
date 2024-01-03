@@ -41,27 +41,29 @@
 		box-shadow: 5px 5px 5px 0 rgb(0 0 0 / 15%);
 	}
 
+	a > div:first-child {
+		overflow: hidden;
+		place-self: stretch stretch;
+		border-radius: 1rem 0 0 1rem;
+		box-shadow: 10px 0 20px -5px rgb(0 0 0 / 10%);
+	}
+
 	@media (width <= 600px) {
 		a {
 			grid-template-columns: 1fr;
 			grid-template-rows: 1fr 1fr;
 		}
-	}
 
-	a > div:first-child {
-		overflow: hidden;
-		display: grid;
-		place-self: stretch stretch;
-		align-items: center;
-		justify-content: center;
-		border-radius: 1rem 0 0 1rem;
-		box-shadow: 10px 0 20px -5px rgb(0 0 0 / 10%);
+		a > div:first-child {
+			border-radius: 1rem 1rem 0 0;
+			box-shadow: 0 10px 20px -5px rgb(0 0 0 / 10%);
+		}
 	}
 
 	a > div:last-child {
 		display: grid;
 		justify-items: center;
-		padding: 2rem;
+		padding: 1.5rem;
 		text-align: center;
 	}
 
@@ -73,17 +75,25 @@
 
 	a img {
 		transform: scale(1);
-		width: auto;
-		max-width: none;
+		width: 100%;
+		height: 100%;
 		max-height: 18rem;
+		margin: auto;
 		padding: 1.5rem;
-		transition: transform 0.1s ease-in-out;
+		object-fit: contain;
+		transition: transform 0.2s ease-in-out;
 	}
 
+	a:active,
 	a:hover {
 		background-color: rgb(255 255 255 / 60%);
 	}
 
+	a:active {
+		background-color: white;
+	}
+
+	a:active img,
 	a:hover img {
 		transform: scale(1.05);
 		transition: transform 0.1s ease-in-out;
