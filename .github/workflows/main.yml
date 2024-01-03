@@ -18,9 +18,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
+          cache: 'pnpm' # Enable caching for pnpm
+
+      - name: Install pnpm
+        run: npm install -g pnpm
 
       - name: Install dependencies
-        run: npm install
+        run: pnpm install
 
       - name: Set BASE_PATH for develop
         if: github.ref == 'refs/heads/develop'
@@ -31,7 +35,7 @@ jobs:
         run: echo "BASE_PATH=${{ vars.BASE_PATH_PRODUCTION }}" >> $GITHUB_ENV
 
       - name: Build project
-        run: npm run build
+        run: pnpm run build
 
       - name: Deploy via SCP
         uses: appleboy/scp-action@v0.1.4
