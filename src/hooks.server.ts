@@ -1,7 +1,7 @@
-import { building } from '$app/environment';
-import { minify } from 'html-minifier';
+import { building } from '$app/environment'
+import { minify } from 'html-minifier'
 
-const minification_options = {
+const minificationOptions = {
 	collapseBooleanAttributes: true,
 	collapseWhitespace: true,
 	conservativeCollapse: true,
@@ -11,24 +11,27 @@ const minification_options = {
 	minifyCSS: true,
 	minifyJS: false,
 	removeAttributeQuotes: true,
-	removeComments: false, // some hydration code needs comments, so leave them in
+	removeComments: false, // Some hydration code needs comments, so leave them in
 	removeOptionalTags: true,
 	removeRedundantAttributes: true,
 	removeScriptTypeAttributes: true,
 	removeStyleLinkTypeAttributes: true,
 	sortAttributes: true,
-	sortClassName: true
-};
+	sortClassName: true,
+}
 
+// eslint-disable-next-line @typescript-eslint/require-await
 export async function handle({ event, resolve }) {
-	let page = '';
+	let page = ''
 
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
 	return resolve(event, {
-		transformPageChunk: ({ html, done }) => {
-			page += html;
+		transformPageChunk({ done, html }) {
+			// eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+			page += html
 			if (done) {
-				return building ? minify(page, minification_options) : page;
+				return building ? minify(page, minificationOptions) : page
 			}
-		}
-	});
+		},
+	})
 }

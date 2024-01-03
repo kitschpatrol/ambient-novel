@@ -1,155 +1,154 @@
 <script lang="ts">
-	import { base } from '$app/paths';
-	import { onMount } from 'svelte';
-	import Particles from 'svelte-particles';
-	import type { Engine, ISourceOptions } from 'tsparticles-engine';
-	import { loadSlim } from 'tsparticles-slim'; // if you are going to use `loadSlim`, install the "tsparticles-slim" package too.
+	import type { Engine, ISourceOptions } from '@tsparticles/engine'
+	import { loadSlim } from '@tsparticles/slim'
+	import Particles, { particlesInit } from '@tsparticles/svelte'
+	import { base } from '$app/paths'
+	import { onMount } from 'svelte' // If you are going to use `loadSlim`, install the "tsparticles-slim" package too.
 
-	export let id: string = 'tsparticles';
-	export let color: string = '#cccccc'; // optimization
+	export let id = 'tsparticles'
+	export let color = '#cccccc' // Optimization
 
-	export let maxParticlesMobile: number = 9;
-	export let maxParticlesDesktop: number = 18;
-	export let strokeEnabled = true;
-	export let starSpeed = 0.4;
-	export let starRotationSpeed = 3;
-	export let planetSpeed = 0.3;
+	export let maxParticlesMobile = 9
+	export let maxParticlesDesktop = 18
+	export let strokeEnabled = true
+	export let starSpeed = 0.4
+	export let starRotationSpeed = 3
+	export let planetSpeed = 0.3
 
-	let particlesConfig: ISourceOptions;
+	let particlesConfig: ISourceOptions
 	$: particlesConfig = {
-		name: id,
-		pauseOnOutsideViewport: false,
 		detectRetina: true,
 		fullScreen: false,
+		name: id,
+		particles: {
+			collisions: {
+				enable: true,
+				// Distance: 100
+			},
+			color: {
+				value: color,
+			},
+			groups: {
+				saturn: {
+					collisions: {
+						enable: false,
+						// Distance: 100
+					},
+					links: {
+						enable: false,
+					},
+					move: {
+						speed: planetSpeed,
+					},
+					number: {
+						value: 2,
+					},
+					rotate: {
+						animation: {
+							enable: false,
+						},
+						direction: 'random',
+						random: true,
+						value: {
+							max: 10,
+							min: -10,
+						},
+					},
+					shape: {
+						options: {
+							images: {
+								fill: true,
+								replaceColor: true,
+								src: strokeEnabled ? `${base}/saturn.svg` : `${base}/saturn-no-stroke.svg`,
+							},
+						},
+						type: 'images',
+					},
+					size: {
+						value: {
+							max: 25,
+							min: 15,
+						},
+					},
+				},
+			},
+			links: {
+				color,
+				distance: 80,
+				enable: true,
+				width: 2,
+				zIndex: 1,
+			},
+			move: {
+				enable: true,
+				random: true,
+				speed: starSpeed,
+			},
+			number: {
+				value: maxParticlesDesktop,
+			},
+			rotate: {
+				animation: {
+					enable: true,
+					speed: starRotationSpeed,
+					sync: false,
+				},
+				direction: 'random',
+				random: true,
+			},
+			shape: {
+				options: {
+					images: {
+						fill: true,
+						replaceColor: true,
+						src: strokeEnabled ? `${base}/star.svg` : `${base}/star-no-stroke.svg`,
+					},
+				},
+				type: 'images',
+			},
+			size: {
+				value: {
+					max: 10,
+					min: 5,
+				},
+			},
+		},
+		pauseOnOutsideViewport: false,
 		responsive: [
 			{
 				maxWidth: 768,
 				options: {
 					particles: {
 						number: {
-							value: maxParticlesMobile
-						}
-					}
-				}
-			}
-		],
-		particles: {
-			shape: {
-				type: 'image',
-				images: [
-					{
-						src: strokeEnabled ? `${base}/star.svg` : `${base}/star-nostroke.svg`,
-						fill: true,
-						replaceColor: true
-					}
-				]
-			},
-			links: {
-				enable: true,
-				color,
-				width: 2,
-				distance: 80,
-				zIndex: 1
-			},
-			rotate: {
-				random: true,
-				direction: 'random',
-				animation: {
-					enable: true,
-					speed: starRotationSpeed,
-					sync: false
-				}
-			},
-			size: {
-				value: {
-					min: 5,
-					max: 10
-				}
-			},
-			color: {
-				value: color
-			},
-			move: {
-				enable: true,
-				speed: starSpeed,
-				random: true
-			},
-			number: {
-				value: maxParticlesDesktop
-			},
-			collisions: {
-				enable: true
-				// distance: 100
-			},
-			groups: {
-				saturn: {
-					collisions: {
-						enable: false
-						// distance: 100
-					},
-					shape: {
-						type: 'image',
-						images: [
-							{
-								src: strokeEnabled ? `${base}/saturn.svg` : `${base}/saturn-nostroke.svg`,
-								fill: true,
-								replaceColor: true
-							}
-						]
-					},
-					number: {
-						value: 2
-					},
-					size: {
-						value: {
-							min: 15,
-							max: 25
-						}
-					},
-					move: {
-						speed: planetSpeed
-					},
-					links: {
-						enable: false
-					},
-					rotate: {
-						random: true,
-						direction: 'random',
-						value: {
-							min: -10,
-							max: 10
+							value: maxParticlesMobile,
 						},
-						animation: {
-							enable: false
-						}
-					}
-				}
-			}
-		}
-	};
+					},
+				},
+			},
+		],
+	}
 
-	let mounted = false;
+	let mounted = false
 	onMount(() => {
-		mounted = true;
-	});
+		mounted = true
+	})
 
-	let particlesInit = async (engine: Engine) => {
-		// you can use main to customize the tsParticles instance adding presets or custom shapes
+	void particlesInit(async (engine: Engine) => {
+		// You can use main to customize the tsParticles instance adding presets or custom shapes
 		// this loads the tsparticles package bundle, it's the easiest method for getting everything ready
 		// starting from v2 you can add only the features you need reducing the bundle size
-		//await loadFull(engine);
+		// await loadFull(engine);
 		// false is key, otherwise other components will react
-		await loadSlim(engine, false);
-	};
+		await loadSlim(engine, false)
+	})
 
 	// .1 fixes safari rounding bug
 </script>
 
 {#if mounted}
 	<Particles
-		style="position: var(--position); left: 0; top: var(--top); width: 100%; height: var(--height); background: var(--background);"
 		{id}
 		options={particlesConfig}
-		{particlesInit}
+		style="position: var(--position); top: var(--top); left: 0; width: 100%; height: var(--height); background: var(--background);"
 	/>
 {/if}

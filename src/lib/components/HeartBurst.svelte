@@ -1,86 +1,86 @@
 <script lang="ts">
-	import { base } from '$app/paths';
-	import { onMount } from 'svelte';
-	import Particles from 'svelte-particles';
-	import type { Container, Engine, ISourceOptions } from 'tsparticles-engine';
-	import { loadSlim } from 'tsparticles-slim'; // if you are going to use `loadSlim`, install the "tsparticles-slim" package too.
+	import type { Container, Engine, ISourceOptions } from '@tsparticles/engine'
+	import { loadSlim } from '@tsparticles/slim'
+	import Particles, { particlesInit } from '@tsparticles/svelte'
+	import { base } from '$app/paths'
+	import { onMount } from 'svelte' // If you are going to use `loadSlim`, install the "tsparticles-slim" package too.
 
 	// charge-up logic
-	let startTime = 0;
-	let chargeDuration = 0;
-	let particlesContainer: Container;
+	let startTime = 0
+	let chargeDuration = 0
+	let particlesContainer: Container
 
 	function markTime(charging: boolean) {
 		if (charging) {
-			startTime = Date.now();
+			startTime = Date.now()
 		} else if (startTime !== 0) {
-			chargeDuration = Date.now() - startTime;
-			launchHearts(chargeDuration / 100);
+			chargeDuration = Date.now() - startTime
+			launchHearts(chargeDuration / 100)
 		}
 	}
 
 	function launchHearts(amount: number) {
 		if (particlesContainer) {
 			for (let i = 0; i < amount; i++) {
-				console.log(`Creating ${amount} particles`);
+				console.log(`Creating ${amount} particles`)
 				particlesContainer.particles.addParticle({
 					x: Math.random() * 500,
-					y: Math.random() * 500
-				});
+					y: Math.random() * 500,
+				})
 			}
 		}
 	}
 
-	let isCharging = false;
-	$: markTime(isCharging);
+	let isCharging = false
+	$: markTime(isCharging)
 
 	const particlesConfig: ISourceOptions = {
 		particles: {
 			move: {
 				angle: 15,
 				enable: true,
+				outModes: 'destroy',
 				random: true,
-				outModes: 'destroy'
 			},
 			shape: {
-				type: 'image',
-				images: [
-					{
-						src: `${base}/heart.svg`,
+				options: {
+					images: {
 						fill: true,
-						replaceColor: true
-					}
-				]
+						replaceColor: true,
+						src: `${base}/heart.svg`,
+					},
+				},
+				type: 'images',
 			},
 			size: {
-				value: 32
-			}
-		}
-	};
+				value: 32,
+			},
+		},
+	}
 
-	let mounted = false;
+	let mounted = false
 	onMount(() => {
-		mounted = true;
-	});
+		mounted = true
+	})
 
-	let particlesInit = async (engine: Engine) => {
-		// you can use main to customize the tsParticles instance adding presets or custom shapes
+	void particlesInit(async (engine: Engine) => {
+		// You can use main to customize the tsParticles instance adding presets or custom shapes
 		// this loads the tsparticles package bundle, it's the easiest method for getting everything ready
 		// starting from v2 you can add only the features you need reducing the bundle size
-		//await loadFull(engine);
+		// await loadFull(engine);
 		// false is key, otherwise other components will react
-		await loadSlim(engine, false);
-	};
+		await loadSlim(engine, false)
+	})
 </script>
 
 {#if mounted}
 	<Particles
 		id="heartburst"
-		options={particlesConfig}
-		{particlesInit}
-		on:particlesLoaded={(e) => {
-			e.detail.particles && (particlesContainer = e.detail.particles);
+		on:particlesLoaded={(event) => {
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+			event.detail.particles && (particlesContainer = event.detail.particles)
 		}}
+		options={particlesConfig}
 	/>
 {/if}
 <br />
@@ -89,16 +89,17 @@
 {chargeDuration}
 <br />
 <button
-	on:pointerdown={(e) => {
-		/* @ts-ignore */
-		e.target.setPointerCapture(e.pointerId);
-		isCharging = true;
-	}}
 	on:pointercancel={() => {
-		isCharging = false;
+		isCharging = false
+	}}
+	on:pointerdown={(event) => {
+		// @ts-expect-error no ts in template
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-call
+		event.target.setPointerCapture(event.pointerId)
+		isCharging = true
 	}}
 	on:pointerup={() => {
-		isCharging = false;
+		isCharging = false
 	}}
 >
 	Heart

@@ -1,58 +1,64 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
-	import Button from '$lib/components/Button.svelte';
-	import Header from '$lib/components/Header.svelte';
-	import { name, version } from '$lib/data/pkgInfo.json';
-	import { faBomb, faTrash } from '@fortawesome/free-solid-svg-icons';
-	import UAParser from 'ua-parser-js';
+	import { faBomb, faTrash } from '@fortawesome/free-solid-svg-icons'
+	import { browser } from '$app/environment'
+	import Button from '$lib/components/Button.svelte'
+	import Header from '$lib/components/Header.svelte'
+	import { name, version } from '$lib/data/pkg-info.json'
+	import UaParser from 'ua-parser-js'
 
 	async function getServiceWorkerCount() {
-		return (await navigator.serviceWorker.getRegistrations()).length;
+		const registrations = await navigator.serviceWorker.getRegistrations()
+		return registrations.length
 	}
 
 	async function uninstallServiceWorker() {
-		const registrations = await navigator.serviceWorker.getRegistrations();
+		const registrations = await navigator.serviceWorker.getRegistrations()
 		for (let registration of registrations) {
-			await registration.unregister();
+			await registration.unregister()
 		}
-		swCount = getServiceWorkerCount();
+
+		swCount = getServiceWorkerCount()
 	}
 
-	async function clearServiceWorkerCache() {
+	function clearServiceWorkerCache() {
 		if (browser && 'serviceWorker' in navigator) {
 			navigator.serviceWorker.controller?.postMessage({
-				action: 'clearCache'
-			});
-			cacheCount = getCacheCount();
+				action: 'clearCache',
+			})
+			cacheCount = getCacheCount()
 		}
 	}
 
 	async function getCacheCount(): Promise<number> {
 		return new Promise<number>((resolve, reject) => {
 			if (browser && 'serviceWorker' in navigator && navigator.serviceWorker.controller) {
-				const messageChannel = new MessageChannel();
+				const messageChannel = new MessageChannel()
 
 				// Set up a listener for receiving the count of cached items
+				// eslint-disable-next-line unicorn/prefer-add-event-listener
 				messageChannel.port1.onmessage = (event) => {
-					resolve(event.data.cacheCount);
-				};
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
+					resolve(event.data.cacheCount)
+				}
 
 				// Send the message to the service worker to get the cache count
 				navigator.serviceWorker.controller.postMessage(
 					{
-						action: 'getCacheCount'
+						action: 'getCacheCount',
 					},
-					[messageChannel.port2]
-				);
+					[messageChannel.port2],
+				)
 			} else {
-				reject('Service Worker not available');
+				reject(new Error('Service Worker not available'))
 			}
-		});
+		})
 	}
 
-	const isMobile = (new UAParser().getDevice().type ?? '') === 'mobile';
-	let cacheCount = getCacheCount();
-	let swCount = getServiceWorkerCount();
+	const isMobile = (new UaParser().getDevice().type ?? '') === 'mobile'
+	// eslint-disable-next-line unicorn/prefer-top-level-await
+	let cacheCount = getCacheCount()
+	// eslint-disable-next-line unicorn/prefer-top-level-await
+	let swCount = getServiceWorkerCount()
 </script>
 
 <svelte:head>
@@ -61,9 +67,9 @@
 		/* all the fixed position hacks (like ::before) are subtly broken */
 		body,
 		html {
-			overscroll-behavior: unset;
 			position: static;
 			overflow-y: auto;
+			overscroll-behavior: unset;
 			background: linear-gradient(
 					var(--background-color-gradient-1) 0%,
 					var(--background-color-gradient-2) 100%
@@ -74,9 +80,9 @@
 </svelte:head>
 
 <Header
+	--height="calc(100svh / 12)"
 	--position="fixed"
 	--shadow="-10px 25px 50px 0px rgba(0, 0, 0, 0.2)"
-	--height="calc(100svh / 12)"
 />
 
 <main class="mx-auto mb-16 mt-36 max-w-[25rem]">

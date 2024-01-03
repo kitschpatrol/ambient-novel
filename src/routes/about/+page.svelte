@@ -1,17 +1,17 @@
 <script lang="ts">
-	import { base } from '$app/paths';
-	import Header from '$lib/components/Header.svelte';
-	import Starfield from '$lib/components/Starfield.svelte';
-	import { onMount } from 'svelte';
-	import { fade } from 'svelte/transition';
-	// import OpenSourceCredits from '$lib/components/OpenSourceCredits.svelte';
+	import { base } from '$app/paths'
+	import Header from '$lib/components/Header.svelte'
+	import Starfield from '$lib/components/Starfield.svelte'
+	import { onMount } from 'svelte'
+	import { fade } from 'svelte/transition'
+	// Import OpenSourceCredits from '$lib/components/OpenSourceCredits.svelte';
 	// import licenseDataRaw from '$lib/data/licenses.json';
-	// import { licenseSchema } from '$lib/schemas/licensesSchema';
+	// import { licenseSchema } from '$lib/schemas/licenses-schema';
 	// const licenseData = licenseSchema.parse(licenseDataRaw);
-	let isMounted = false;
+	let isMounted = false
 	onMount(() => {
-		isMounted = true;
-	});
+		isMounted = true
+	})
 </script>
 
 <svelte:head>
@@ -20,9 +20,9 @@
 		/* all the fixed position hacks (like ::before) are subtly broken */
 		body,
 		html {
-			overscroll-behavior: unset;
 			position: static;
 			overflow-y: auto;
+			overscroll-behavior: unset;
 			background: linear-gradient(
 					var(--background-color-gradient-1) 0%,
 					var(--background-color-gradient-2) 100%
@@ -33,24 +33,24 @@
 </svelte:head>
 
 <Header
+	--height="calc(100svh / 12)"
 	--position="fixed"
 	--shadow="-10px 25px 50px 0px rgba(0, 0, 0, 0.2)"
-	--height="calc(100svh / 12)"
 />
 
 {#if isMounted}
 	<div class="star-wrapper" transition:fade={{ delay: 250, duration: 3000 }}>
 		<Starfield
+			--height="calc(100svh - (100svh / 12))"
 			--position="fixed"
 			--top="calc(100svh / 12)"
-			--height="calc(100svh - (100svh / 12))"
-			starSpeed={0.2}
+			color="#ffffff"
+			maxParticlesDesktop={80}
+			maxParticlesMobile={20}
 			planetSpeed={0.1}
 			starRotationSpeed={1}
+			starSpeed={0.2}
 			strokeEnabled={false}
-			color="#ffffff"
-			maxParticlesMobile={20}
-			maxParticlesDesktop={80}
 		/>
 	</div>
 {/if}
@@ -144,21 +144,21 @@
 	</p>
 </main>
 <img
+	alt="heart"
 	class="heart mx-auto mb-16 w-[10vw] max-w-[4rem] pb-16 opacity-90"
 	src="{base}/heart.svg"
-	alt="heart"
 />
 
 <style lang="postcss">
 	div.star-wrapper {
-		opacity: 0.3;
-		touch-action: none;
 		pointer-events: none;
+		touch-action: none;
+		opacity: 0.3;
 	}
 
 	main {
-		box-shadow: 0px 3px 9px #0000005f;
 		line-height: 1.75em;
+		box-shadow: 0 3px 9px #0000005f;
 	}
 
 	.emoji {
@@ -179,18 +179,18 @@
 
 	main a {
 		text-decoration: underline;
+		text-decoration-color: rgb(0 0 0 / 25%);
 		text-decoration-style: dotted;
 		text-decoration-thickness: 0.1em;
 		text-underline-offset: 0.2em;
-		text-decoration-color: rgba(0, 0, 0, 0.25);
 	}
 
 	main a:hover {
 		text-decoration: underline;
-		text-underline-offset: 0.2em;
-		text-decoration-thickness: 0.1em;
+		text-decoration-color: rgb(0 0 0 / 100%);
 		text-decoration-style: solid;
-		text-decoration-color: rgba(0, 0, 0, 1);
+		text-decoration-thickness: 0.1em;
+		text-underline-offset: 0.2em;
 	}
 
 	img.heart {

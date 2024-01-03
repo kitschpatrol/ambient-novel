@@ -12,8 +12,8 @@
 
 	/* Hide scrollbar for IE, Edge and Firefox */
 	.no-scrollbar {
-		-ms-overflow-style: none; /* IE and Edge */
 		scrollbar-width: none; /* Firefox */
+		-ms-overflow-style: none; /* IE and Edge */
 	}
 	/* } */
 }
@@ -22,12 +22,12 @@
 /* and https://transfonter.org */
 @font-face {
 	font-family: 'Nasalization Extended';
+	/* TODO good idea? */
+	font-display: fallback;
 	src:
 		url('/fonts/nasalization/nasalization-extended-light.woff2') format('woff2'),
 		url('/fonts/nasalization/nasalization-extended-light.woff') format('woff'),
 		url('/fonts/nasalization/nasalization-extended-light.ttf') format('truetype');
-	/* TODO good idea? */
-	font-display: fallback;
 }
 
 /* @property --backgroundGradientAngle {
@@ -43,23 +43,21 @@
 
 body,
 html {
+	overscroll-behavior: none; /* for safari mobile */
 	width: 100%;
 	height: 100%;
-
-	overscroll-behavior: none; /* for safari mobile */
 }
 
 html {
-	height: -webkit-fill-available;
+	height: stretch;
 	background: var(--background-color-gradient-1);
 }
 
 body {
+	overflow-x: hidden;
 	min-height: 100dvh;
 	/* mobile viewport bug fix */
-	min-height: -webkit-fill-available;
-
-	overflow-x: hidden;
+	min-height: stretch;
 	/* background-attachment: fixed; */
 }
 
@@ -68,7 +66,7 @@ body {
 	background: theme('colors.vm-magenta');
 }
 
-/* This seems to save touchcancel issues (none and pan-x don't work) */
+/* This seems to save touch cancellation issues (none and pan-x don't work) */
 * {
 	touch-action: manipulation;
 }
@@ -85,5 +83,5 @@ a:focus,
 button,
 button.active,
 button.focus {
-	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+	-webkit-tap-highlight-color: rgb(0 0 0 / 0%);
 }

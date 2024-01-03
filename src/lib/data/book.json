@@ -1,11 +1,5 @@
 {
-	"title": "The Valentine Mob",
-	"titleAlt": "The Ambient Novel",
 	"author": "Scott Wayne Indiana",
-	"year": 2023,
-	"publisher": "39forks Publishing",
-	"country": "USA",
-	"license": "©39forks Publishing USA 2023 All Rights Reserved",
 	"chapters": [
 		{
 			"title": "The Valentine Mob",
@@ -129,7 +123,7 @@
 				],
 				"durationSeconds": 1402.374989
 			},
-			"narrationTime": { "start": 14.658, "end": 1395.949 }
+			"narrationTime": { "end": 1395.949, "start": 14.658 }
 		},
 		{
 			"title": "Motel Van Been Hit",
@@ -242,7 +236,7 @@
 				],
 				"durationSeconds": 790
 			},
-			"narrationTime": { "start": 32.826, "end": 783.815 }
+			"narrationTime": { "end": 783.815, "start": 32.826 }
 		},
 		{
 			"title": "Mobile Tent Haven",
@@ -295,7 +289,7 @@
 				],
 				"durationSeconds": 240
 			},
-			"narrationTime": { "start": 18.496, "end": 232.793 }
+			"narrationTime": { "end": 232.793, "start": 18.496 }
 		},
 		{
 			"title": "Nova Bent The Lime",
@@ -410,7 +404,7 @@
 				],
 				"durationSeconds": 1010
 			},
-			"narrationTime": { "start": 24.043, "end": 999.628 }
+			"narrationTime": { "end": 999.628, "start": 24.043 }
 		},
 		{
 			"title": "The Ambient Novel",
@@ -480,7 +474,7 @@
 				],
 				"durationSeconds": 944
 			},
-			"narrationTime": { "start": 35.379, "end": 935.442 }
+			"narrationTime": { "end": 935.442, "start": 35.379 }
 		},
 		{
 			"title": "Hot In Lane TV Beam",
@@ -515,7 +509,7 @@
 				],
 				"durationSeconds": 388
 			},
-			"narrationTime": { "start": 43.23, "end": 382.002 }
+			"narrationTime": { "end": 382.002, "start": 43.23 }
 		},
 		{
 			"title": "Abilene Moth Vent",
@@ -535,7 +529,7 @@
 				],
 				"durationSeconds": 124
 			},
-			"narrationTime": { "start": 19.383, "end": 115.41 }
+			"narrationTime": { "end": 115.41, "start": 19.383 }
 		},
 		{
 			"title": "The Noble Vietnam",
@@ -552,7 +546,7 @@
 				],
 				"durationSeconds": 82
 			},
-			"narrationTime": { "start": 31.975, "end": 69.463 }
+			"narrationTime": { "end": 69.463, "start": 31.975 }
 		},
 		{
 			"title": "Invent Home Table",
@@ -570,7 +564,7 @@
 				],
 				"durationSeconds": 108
 			},
-			"narrationTime": { "start": 31.921, "end": 98.356 }
+			"narrationTime": { "end": 98.356, "start": 31.921 }
 		},
 		{
 			"title": "Viable Tenth Omen",
@@ -587,7 +581,14 @@
 				],
 				"durationSeconds": 128
 			},
-			"narrationTime": { "start": 31.405, "end": 100.95 }
+			"narrationTime": { "end": 100.95, "start": 31.405 }
 		}
-	]
+	],
+	"country": "USA",
+	"license": "©39forks Publishing USA 2023 All Rights Reserved",
+	"publisher": "39forks Publishing",
+	"title": "The Valentine Mob",
+	"titleAlt": "The Ambient Novel",
+	"year": 2023,
+	"fullAudio": ["audio-book/The Valentine Mob - Complete Audio Book.mp3"]
 }

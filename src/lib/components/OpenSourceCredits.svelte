@@ -1,16 +1,16 @@
 <script lang="ts">
-	import type { LicenseData } from '$lib/schemas/licensesSchema';
-	// import sanitizeHtml from 'sanitize-html';
-	export let licenseData: LicenseData;
+	import type { LicenseData } from '$lib/schemas/licenses-schema'
+	// Import sanitizeHtml from 'sanitize-html';
+	export let licenseData: LicenseData
 
 	const licenses = Object.keys(licenseData).map((packageName) => ({
 		packageName,
-		...licenseData[packageName]
-	}));
+		...licenseData[packageName],
+	}))
 
 	function sanitize(input: string): string {
-		return input;
-		// return sanitizeHtml(input, {
+		return input
+		// Return sanitizeHtml(input, {
 		// 	allowedTags: ['a'],
 		// 	allowedAttributes: {
 		// 		a: ['href']
@@ -19,25 +19,26 @@
 	}
 
 	function stripVersion(input: string): string {
-		return input.replace(/@[0-9.]+$/, '');
+		return input.replace(/@[\d.]+$/, '')
 	}
 
 	function cleanUrl(url: string): string {
-		let cleanUrl = url.replace(/^\+git/, '');
+		let cleanUrl = url.replace(/^\+git/, '')
 		if (!cleanUrl.startsWith('http')) {
-			cleanUrl = 'https://' + cleanUrl;
+			cleanUrl = 'https://' + cleanUrl
 		}
-		return cleanUrl;
+
+		return cleanUrl
 	}
 
 	function formatLicense(license: (typeof licenses)[0]) {
-		const cleanName = stripVersion(license.packageName);
-		const url = license.url ?? license.repository;
+		const cleanName = stripVersion(license.packageName)
+		const url = license.url ?? license.repository
 
-		const name = url ? `<a href="${cleanUrl(url)}">${cleanName}</a>` : cleanName;
-		const publisher = license.publisher ? ` by ${license.publisher}` : '';
+		const name = url ? `<a href="${cleanUrl(url)}">${cleanName}</a>` : cleanName
+		const publisher = license.publisher ? ` by ${license.publisher}` : ''
 
-		return sanitize(`${name}${publisher}`);
+		return sanitize(`${name}${publisher}`)
 	}
 </script>
 
@@ -46,6 +47,3 @@
 		<li>{@html formatLicense(license)}</li>
 	{/each}
 </ul>
-
-<style lang="postcss">
-</style>
