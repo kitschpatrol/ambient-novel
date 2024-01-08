@@ -10,7 +10,7 @@
 	export let imageWidth: number
 	export let imageHeight: number
 
-	export let icon: IconDefinition | null = null // Using IconDefinition causes type errors...
+	export let icon: IconDefinition | null = null
 
 	// eslint-disable-next-line unicorn/prevent-abbreviations
 	$: rel = openInNewTab ? 'noopener noreferrer' : undefined
