@@ -1,11 +1,12 @@
 <script lang="ts">
+	import type { IconDefinition } from '@fortawesome/free-solid-svg-icons'
 	import { fastFadeCss } from '$lib/utils/transition/fast-fade-css'
 	import Fa from 'svelte-fa'
 	export let isDown = false
 	export let iconAlign: 'left' | 'right' = 'left'
 	export let label: null | string = null
-	// eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
-	export let icon: null | unknown // Using IconDefinition causes type errors...
+
+	export let icon: IconDefinition
 	export let isEnabled = true
 	export let isTransitionEnabled = false
 

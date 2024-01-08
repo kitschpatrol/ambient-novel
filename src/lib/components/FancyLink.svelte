@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { IconDefinition } from '@fortawesome/free-solid-svg-icons'
 	import Fa from 'svelte-fa'
 
 	export let alt: string
@@ -8,8 +9,8 @@
 	export let imagePath: string
 	export let imageWidth: number
 	export let imageHeight: number
-	// eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
-	export let icon: null | unknown = null // Using IconDefinition causes type errors...
+
+	export let icon: IconDefinition | null = null // Using IconDefinition causes type errors...
 
 	// eslint-disable-next-line unicorn/prevent-abbreviations
 	$: rel = openInNewTab ? 'noopener noreferrer' : undefined
@@ -75,14 +76,12 @@
 	}
 
 	a img {
-		transform: scale(1);
 		width: 100%;
 		height: 100%;
 		max-height: 18rem;
 		margin: auto;
 		padding: 1.5rem;
 		object-fit: contain;
-		transition: transform 0.2s ease-in-out;
 	}
 
 	a:active,
@@ -93,11 +92,5 @@
 	a:active {
 		background-color: white;
 		transition: background-color 0.1s ease-in-out;
-	}
-
-	a:active img,
-	a:hover img {
-		transform: scale(1.05);
-		transition: transform 0.1s ease-in-out;
 	}
 </style>
