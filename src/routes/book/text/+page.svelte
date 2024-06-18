@@ -10,6 +10,14 @@
 
 	const { chapters } = data.bookData
 
+	// Clean up rare HTML-conflicting entities
+	// Encoding everything would be trickier because of the embedded HTML
+	for (const chapter of chapters) {
+		for (let i = 0; i < chapter.lines.length; i++) {
+			chapter.lines[i] = chapter.lines[i].replace('< They all snap >', '&lt; They all snap &gt;')
+		}
+	}
+
 	let isMounted = false
 	onMount(() => {
 		isMounted = true
