@@ -10,7 +10,7 @@ The "Ambient Novel" website was created as a home or Scott Wayne Indiana's book 
 
 Certain data and assets are generated from the source data in `/data` and output to `/static`, `/data-generated` and `/src/lib/data`.
 
-Takes about half an hour on to generate everything from scratch.
+It takes about half an hour on to generate everything from scratch.
 
 The content generator does a number of things depending on the config object in `/data/book.json`.
 

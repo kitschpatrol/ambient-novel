@@ -5,7 +5,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { type BookData, bookSchema } from '../src/lib/schemas/book-schema'
-import { bookSourceSchema } from './book-source-schema'
+import { bookSourceSchema } from '../src/lib/schemas/book-source-schema'
 import {
 	actionWordTrimmer,
 	alignTranscriptToAudioWithWordLevelTimings,

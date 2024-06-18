@@ -14,7 +14,7 @@
 </script>
 
 <svelte:head>
-	<title>Get the Book — The Valentine Mob</title>
+	<title>Get the Book — The&nbsp;Valentine&nbsp;Mob</title>
 	<style>
 		/* all the fixed position hacks (like ::before) are subtly broken */
 		body,
@@ -86,7 +86,7 @@
 
 	<h3>The Audio Book</h3>
 	<FancyLink
-		alt="Screenshot of The Valentine Mob playing on an iPhone in Apple Music"
+		alt="Screenshot of The&nbsp;Valentine&nbsp;Mob playing on an iPhone in Apple Music"
 		downloadLink={true}
 		href="{base}/audio-book/The Valentine Mob - Complete Audio Book.mp3"
 		icon={faCloudArrowDown}
@@ -95,8 +95,21 @@
 		imageWidth={1415}
 		openInNewTab={false}
 	>
-		The author narrates the Valentine Mob over original ambient tracks.<br />
+		The author narrates The&nbsp;Valentine&nbsp;Mob over original ambient tracks.<br />
 		<em>Download the complete audio book for free</em>
+	</FancyLink>
+
+	<h3>The Text</h3>
+	<FancyLink
+		alt="The Valentine Mob deluxe edition with book and lego set"
+		href="{base}/book/text"
+		icon={faArrowRight}
+		imageHeight={3550}
+		imagePath="{base}/images/text.webp"
+		imageWidth={5063}
+	>
+		The complete linear text of The&nbsp;Valentine&nbsp;Mob
+		<em>Read online for free</em>
 	</FancyLink>
 
 	<h3>More From 39forks Publishing</h3>
