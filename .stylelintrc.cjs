@@ -11,7 +11,7 @@ module.exports = {
 				ignoreAtRules: ['apply', 'layer', 'responsive', 'screen', 'tailwind', 'variants'],
 			},
 		],
-		'declaration-block-trailing-semicolon': null,
+		// 'declaration-block-trailing-semicolon': null,
 		'no-descending-specificity': null,
 	},
 }

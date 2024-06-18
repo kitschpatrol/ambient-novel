@@ -2,7 +2,7 @@
 	"name": "ambient-novel",
 	"version": "2.0.0",
 	"type": "module",
-	"description": "Website for nonlinear interactive exploration of The Valentine Mob novel.",
+	"description": "An interface for nonlinear interactive exploration of a novel.",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/kitschpatrol/ambient-novel.git"
@@ -19,9 +19,10 @@
 	},
 	"license": "MIT",
 	"private": true,
+	"packageManager": "pnpm@9.4.0+sha512.f549b8a52c9d2b8536762f99c0722205efc5af913e77835dbccc3b0b0b2ca9e7dc8022b78062c17291c48e88749c70ce88eb5a74f1fa8c4bf5e18bb46c8bd83a",
 	"engines": {
-		"node": ">=18.0.0",
-		"pnpm": ">=8.0.0"
+		"node": ">=22.0.0",
+		"pnpm": ">=9.0.0"
 	},
 	"keywords": [
 		"ambient",
@@ -48,7 +49,7 @@
 	"devDependencies": {
 		"@cyber2024/pdf-parse-fixed": "^1.2.5",
 		"@fortawesome/free-solid-svg-icons": "^6.5.1",
-		"@kitschpatrol/shared-config": "^4.3.1",
+		"@kitschpatrol/shared-config": "^4.7.2",
 		"@playwright/test": "^1.40.1",
 		"@prettier/sync": "^0.3.0",
 		"@sveltejs/adapter-static": "^3.0.1",

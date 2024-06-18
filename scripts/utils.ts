@@ -12,7 +12,6 @@ import { execSync } from 'node:child_process'
 import crypto from 'node:crypto'
 import fs from 'node:fs'
 import path from 'node:path'
-import { extname } from 'node:path'
 import { stripHtml } from 'string-strip-html'
 
 // Utility functions used by generateData.ts
@@ -41,7 +40,7 @@ function setTagsForMP3(audioFilePath: string, tags: TagOptions) {
 
 // Unified function to set album art and other tags
 export function setAlbumArtAndTags(audioFilePath: string, tagOptions: TagOptions) {
-	const fileExtension = extname(audioFilePath).toLowerCase()
+	const fileExtension = path.extname(audioFilePath).toLowerCase()
 
 	if (fileExtension === '.mp3') {
 		setTagsForMP3(audioFilePath, tagOptions)
@@ -579,7 +578,7 @@ export function alignTranscriptToAudioWithWordLevelTimings(
 // Word timing html embedding stuff
 
 export function escapeRegex(inputString: string): string {
-	return inputString.replaceAll(/[$()*+.?[\\\]^{|}-]/g, '\\$&')
+	return inputString.replaceAll(/[$()*+.?[\\\]^{|}-]/g, String.raw`\$&`)
 }
 
 // Hard coded to escape span for now

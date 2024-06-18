@@ -9,8 +9,9 @@ module.exports = {
 		'@html-eslint/no-non-scalable-viewport': 'off',
 		'@html-eslint/require-title': 'off',
 		'@typescript-eslint/ban-types': 'off',
+		'n/no-unsupported-features/node-builtins': 'off',
 		'no-irregular-whitespace': 'off',
-		'unicorn/no-null': 'off',
 		'svelte/no-at-html-tags': 'off',
+		'unicorn/no-null': 'off',
 	},
 }

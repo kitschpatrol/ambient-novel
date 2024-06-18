@@ -77,7 +77,7 @@
 	<Particles
 		id="heartburst"
 		on:particlesLoaded={(event) => {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 			event.detail.particles && (particlesContainer = event.detail.particles)
 		}}
 		options={particlesConfig}
