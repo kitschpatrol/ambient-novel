@@ -1,14 +1,16 @@
 <script lang="ts">
-	import type { PageServerData } from './$types'
 	import { base } from '$app/paths'
 	import Header from '$lib/components/Header.svelte'
 	import Starfield from '$lib/components/Starfield.svelte'
+	import bookSourceRaw from '$lib/data/book-source.json'
+	import type { BookSource } from '$lib/schemas/book-source-schema'
 	import { onMount } from 'svelte'
 	import { fade } from 'svelte/transition'
+	const bookData = bookSourceRaw as BookSource
 
-	export let data: PageServerData
-
-	const { chapters } = data.bookData
+	// Doing the server-loaded approach in the "text" subdirectory messes up the
+	// .htaccess routing on DreamHost...
+	const { chapters } = bookData
 
 	// Clean up rare HTML-conflicting entities
 	// Encoding everything would be trickier because of the embedded HTML
@@ -52,10 +54,10 @@
 	class="mx-auto mb-20 mt-36 max-w-[90ch] bg-[#f7f7f7] bg-opacity-90 px-12 pb-16 pt-3 font-serif text-xl text-[#222222] max-sm:mx-auto max-sm:mb-16 max-sm:mt-24 max-sm:w-[90vw] max-sm:px-5 max-sm:text-xl"
 >
 	<h2>
-		{data.bookData.title}<span class="alternate-title"> or <br />{data.bookData.titleAlt}</span>
+		{bookData.title}<span class="alternate-title"> or <br />{bookData.titleAlt}</span>
 	</h2>
 
-	<cite>{data.bookData.author}</cite>
+	<cite>{bookData.author}</cite>
 
 	<hr />
 
