@@ -108,7 +108,7 @@
 		imagePath="{base}/images/text.webp"
 		imageWidth={5063}
 	>
-		The complete linear text of The&nbsp;Valentine&nbsp;Mob
+		The complete linear text of The&nbsp;Valentine&nbsp;Mob.<br />
 		<em>Read online for free</em>
 	</FancyLink>
 
