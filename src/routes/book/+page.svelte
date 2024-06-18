@@ -102,7 +102,7 @@
 	<h3>The Text</h3>
 	<FancyLink
 		alt="The Valentine Mob deluxe edition with book and lego set"
-		href="{base}/book/text"
+		href="{base}/text"
 		icon={faArrowRight}
 		imageHeight={3550}
 		imagePath="{base}/images/text.webp"
