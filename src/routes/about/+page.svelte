@@ -128,7 +128,7 @@
 		<br />
 		<a href="https://ericmika.com" rel="noopener noreferrer" target="_blank">Eric Mika</a>
 		—
-		<i>website</i>
+		<i>website (<a href="https://github.com/kitschpatrol/ambient-novel">source code</a>)</i>
 	</p>
 	<!-- prettier-ignore -->
 	<p class="mt-[4em] text-base">

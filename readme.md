@@ -4,9 +4,18 @@
 
 ## Overview
 
-The "Ambient Novel" website was created as a home or Scott Wayne Indiana's book _The Valentine Mob_. After several iterations, an interface approach emerged that allows for simultaneous playback, scrubbing of multiple narrated audio tracks.
+The Ambient Novel is an experimental interface for nonlinear long-form narrated text. It was developed for Scott Wayne Indiana's book _The Valentine Mob_. The interface allows for simultaneous playback, scrubbing, and interleaving of multiple narrated audio tracks.
 
-## Updating the content
+> \[!NOTE]
+> This source code is released as a curiosity, and its quality reflects that of a quick personal side project subject to a number of hasty iterations.
+>
+> The most interesting parts from a technical standpoint are probably in the content pipeline, which generates the metadata allowing the audio book to be aligned with the presentation of the text. It creates inferences from a recorded reading of the book, with some extra logic to negotiate any variations between the exact (known) text of the book and the narrator's (sometimes divergent) utterances to yield the original book text with word-level audio alignment timing data.
+
+## Development Notes
+
+### Updating the content
+
+_Note: Some audio content assets are external to this repository._
 
 Certain data and assets are generated from the source data in `/data` and output to `/static`, `/data-generated` and `/src/lib/data`.
 
@@ -39,7 +48,7 @@ Note special cards with embedded html (1-indexed):
 - 54: Has a color span
 - 83: Has a color span
 
-## Transcript alignment and text to speech
+### Transcript alignment and text to speech
 
 This is sketchy, and not well automated on account of its rare invocation.
 
@@ -85,14 +94,34 @@ make install
 conda deactivate
 ```
 
-To test... currently does NOT work, but the alignment-only model in whisperx does that's called by alignTranscriptToAudio.py does:
+### Size optimization
+
+No bundle size advantage to moving content preprocessing deps only to their own package.json.
+
+To use the `build-report` npm script, install [`dust`](https://github.com/bootandy/dust) via homebrew if needed.
 
 ```bash
-conda activate whisperx
-export PYTORCH_ENABLE_MPS_FALLBACK=1
-whisperx ./static/speech/0-78.$(mp3) --device mps --model tiny --language en --verbose True --fp16 False
-conda deactivate
+brew install dust
 ```
+
+### Reference links
+
+#### Scrolling
+
+- <https://github.com/studio-freight/lenis>
+- <https://github.com/Adoratorio/hades>
+
+#### Tailwind
+
+- <https://stackoverflow.com/a/76984634/2437832>
+
+#### Svelte PWA
+
+- <https://stackoverflow.com/questions/76007716/how-do-i-use-workbox-range-requests-plugin-with-vite-pwa>
+- <https://github.com/userquin/sveltesociety.dev/tree/pwa>
+- <https://www.sarcevic.dev/offline-first-installable-pwa-sveltekit-workbox-precaching>
+- <https://github.com/daffinm/audio-cache-test>
+- Tried `@vite-pwa/sveltekit`, but too many issues getting correct behavior around range requests.
 
 ## Deployment
 
@@ -123,43 +152,20 @@ The app is deployed via a GitHub action to Scott's DreamHost server, which runs 
   DreamHost server path, this is prepended to the base path when files are copied. Must start with `/` and end without `/`.\
   Example: `/home/some-user/some-folder`
 
-## Development notes
-
-No bundle size advantage to moving content preprocessing deps only to their own package.json.
-
-To use the `build-report` npm script, install [`dust`](https://github.com/bootandy/dust) via homebrew if needed.
-
-```bash
-brew install dust
-```
+Note: The deployment server _must_ support HTTP 206 range requests to successfully set `currentTime` on audio elements on chrome.
 
 ### Known issues
 
 - Scrolling issues on mobile Safari, where there are no touch up events during inertial scroll animations.
 
-### Scrolling
+## Acknowledgments
 
-- <https://github.com/studio-freight/lenis>
-- <https://github.com/Adoratorio/hades>
-
-Suppressing Stylelint Tailwind @apply etc. directive errors:
-
-- <https://stackoverflow.com/a/76984634/2437832>
-
-Deployment server MUST support HTTP 206 range requests to successfully set `currentTime` on audio elements on chrome.
-
-Currently deployed to:
-<https://39forks.com/thevalentinemob-staging>
-<https://39forks.com/thevalentinemob-production-tbd>
-
-### PWA
-
-- <https://stackoverflow.com/questions/76007716/how-do-i-use-workbox-range-requests-plugin-with-vite-pwa>
-- <https://github.com/userquin/sveltesociety.dev/tree/pwa>
-- <https://www.sarcevic.dev/offline-first-installable-pwa-sveltekit-workbox-precaching>
-- <https://github.com/daffinm/audio-cache-test>
-
-Tried `@vite-pwa/sveltekit`, but too many issues getting correct behavior around range requests.
+- [Scott Wayne Indiana](https://39forks.com/)\
+  _author, narrator, interaction designer_
+- [Alex McCarl](https://casinowitch.bandcamp.com)\
+  _original ambient tracks_
+- Mike Budd\
+  _audio recording and mixing_
 
 ## License
 
