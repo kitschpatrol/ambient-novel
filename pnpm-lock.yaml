@@ -12,37 +12,37 @@ importers:
         specifier: ^1.2.5
         version: 1.2.5
       '@fortawesome/free-solid-svg-icons':
-        specifier: ^6.5.1
+        specifier: ^6.5.2
         version: 6.5.2
       '@kitschpatrol/shared-config':
         specifier: ^4.7.2
         version: 4.7.2(cspell@8.9.0)(eslint@8.57.0)(mdat@0.7.2(typescript@5.4.5))(postcss-html@1.7.0)(prettier@3.3.2)(stylelint@16.6.1(typescript@5.4.5))(svelte@4.2.18)(typescript@5.4.5)
       '@playwright/test':
-        specifier: ^1.40.1
+        specifier: ^1.44.1
         version: 1.44.1
       '@prettier/sync':
-        specifier: ^0.3.0
-        version: 0.3.0(prettier@3.3.2)
+        specifier: ^0.5.2
+        version: 0.5.2(prettier@3.3.2)
       '@sveltejs/adapter-static':
-        specifier: ^3.0.1
+        specifier: ^3.0.2
         version: 3.0.2(@sveltejs/kit@2.5.16(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.1(@types/node@20.14.5)(terser@5.31.1)))(svelte@4.2.18)(vite@5.3.1(@types/node@20.14.5)(terser@5.31.1)))
       '@sveltejs/kit':
-        specifier: ^2.0.7
+        specifier: ^2.5.16
         version: 2.5.16(@sveltejs/vite-plugin-svelte@3.1.1(svelte@4.2.18)(vite@5.3.1(@types/node@20.14.5)(terser@5.31.1)))(svelte@4.2.18)(vite@5.3.1(@types/node@20.14.5)(terser@5.31.1))
       '@sveltejs/vite-plugin-svelte':
-        specifier: ^3.0.1
+        specifier: ^3.1.1
         version: 3.1.1(svelte@4.2.18)(vite@5.3.1(@types/node@20.14.5)(terser@5.31.1))
       '@tailwindcss/container-queries':
         specifier: ^0.1.1
         version: 0.1.1(tailwindcss@3.4.4)
       '@tsparticles/engine':
-        specifier: ^3.0.3
+        specifier: ^3.4.0
         version: 3.4.0
       '@tsparticles/slim':
-        specifier: ^3.0.3
+        specifier: ^3.4.0
         version: 3.4.0
       '@tsparticles/svelte':
-        specifier: ^3.0.0
+        specifier: ^3.1.1
         version: 3.1.1(svelte@4.2.18)
       '@types/glob':
         specifier: ^8.1.0
@@ -54,13 +54,13 @@ importers:
         specifier: ^4.0.5
         version: 4.0.5
       '@types/lodash':
-        specifier: ^4.14.202
+        specifier: ^4.17.5
         version: 4.17.5
       '@types/pdf-parse':
         specifier: ^1.1.4
         version: 1.1.4
       '@types/sanitize-html':
-        specifier: ^2.9.5
+        specifier: ^2.11.0
         version: 2.11.0
       '@types/scrollbooster':
         specifier: ^3.0.3
@@ -75,13 +75,13 @@ importers:
         specifier: ^0.7.39
         version: 0.7.39
       autoprefixer:
-        specifier: ^10.4.16
+        specifier: ^10.4.19
         version: 10.4.19(postcss@8.4.38)
       dotenv:
-        specifier: ^16.3.1
+        specifier: ^16.4.5
         version: 16.4.5
       glob:
-        specifier: ^10.3.10
+        specifier: ^10.4.1
         version: 10.4.1
       html-minifier:
         specifier: ^4.0.0
@@ -96,19 +96,19 @@ importers:
         specifier: ^2.0.0
         version: 2.0.0
       node-html-parser:
-        specifier: ^6.1.12
+        specifier: ^6.1.13
         version: 6.1.13
       node-id3:
         specifier: ^0.2.6
         version: 0.2.6
       node-jq:
-        specifier: ^4.2.2
+        specifier: ^4.4.0
         version: 4.4.0
       postcss:
-        specifier: ^8.4.33
+        specifier: ^8.4.38
         version: 8.4.38
       sanitize-html:
-        specifier: ^2.11.0
+        specifier: ^2.13.0
         version: 2.13.0
       scrollbooster:
         specifier: ^3.0.2
@@ -117,49 +117,49 @@ importers:
         specifier: ^3.0.5
         version: 3.0.5
       string-strip-html:
-        specifier: ^13.4.5
+        specifier: ^13.4.8
         version: 13.4.8
       svelte:
-        specifier: ^4.2.8
+        specifier: ^4.2.18
         version: 4.2.18
       svelte-check:
-        specifier: ^3.6.2
+        specifier: ^3.8.1
         version: 3.8.1(@babel/core@7.24.7)(postcss-load-config@4.0.2(postcss@8.4.38))(postcss@8.4.38)(svelte@4.2.18)
       svelte-fa:
-        specifier: ^4.0.1
+        specifier: ^4.0.2
         version: 4.0.2(svelte@4.2.18)
       tailwindcss:
-        specifier: ^3.4.1
+        specifier: ^3.4.4
         version: 3.4.4
       tinycolor2:
         specifier: ^1.6.0
         version: 1.6.0
       tsx:
-        specifier: ^4.7.0
+        specifier: ^4.15.6
         version: 4.15.6
       typescript:
-        specifier: ^5.3.3
+        specifier: ^5.4.5
         version: 5.4.5
       ua-parser-js:
-        specifier: ^1.0.37
+        specifier: ^1.0.38
         version: 1.0.38
       vite:
-        specifier: ^5.0.11
+        specifier: ^5.3.1
         version: 5.3.1(@types/node@20.14.5)(terser@5.31.1)
       vite-plugin-mkcert:
-        specifier: ^1.17.1
+        specifier: ^1.17.5
         version: 1.17.5(vite@5.3.1(@types/node@20.14.5)(terser@5.31.1))
       workbox-build:
-        specifier: ^7.0.0
+        specifier: ^7.1.1
         version: 7.1.1
       workbox-range-requests:
-        specifier: ^7.0.0
+        specifier: ^7.1.0
         version: 7.1.0
       workbox-routing:
-        specifier: ^7.0.0
+        specifier: ^7.1.0
         version: 7.1.0
       zod:
-        specifier: ^3.22.4
+        specifier: ^3.23.8
         version: 3.23.8
 
 packages:
@@ -1381,10 +1381,10 @@ packages:
     peerDependencies:
       prettier: ^3.0.0
 
-  '@prettier/sync@0.3.0':
-    resolution: {integrity: sha512-3dcmCyAxIcxy036h1I7MQU/uEEBq8oLwf1CE3xeze+MPlgkdlb/+w6rGR/1dhp6Hqi17fRS6nvwnOzkESxEkOw==}
+  '@prettier/sync@0.5.2':
+    resolution: {integrity: sha512-Yb569su456XNx5BsH/Vyem7xD6g/y9iLmLUzRKM1a/dhU/D7HqqvkAG72znulXlMXztbV0iiu9O5AL8K98TzZQ==}
     peerDependencies:
-      prettier: ^3.0.0
+      prettier: '*'
 
   '@puppeteer/browsers@2.2.3':
     resolution: {integrity: sha512-bJ0UBsk0ESOs6RFcLXOt99a3yTDcOKlzfjad+rhFwdaG1Lu/Wzq58GHYCDTlZ9z6mldf4g+NTb+TXEfe0PpnsQ==}
@@ -3848,6 +3848,9 @@ packages:
   make-dir@1.3.0:
     resolution: {integrity: sha512-2w31R7SJtieJJnQtGc7RVL2StM2vGYVfqUOvUDxH6bC6aJTxPxTF0GnIgCyu7tjockiUWAYQRbxa7vKn34s5sQ==}
     engines: {node: '>=4'}
+
+  make-synchronized@0.2.9:
+    resolution: {integrity: sha512-4wczOs8SLuEdpEvp3vGo83wh8rjJ78UsIk7DIX5fxdfmfMJGog4bQzxfvOwq7Q3yCHLC4jp1urPHIxRS/A93gA==}
 
   markdown-extensions@2.0.0:
     resolution: {integrity: sha512-o5vL7aDWatOTX8LzaS1WMoaoxIiLRQJuIKKe2wAw6IeULDHaqbiqiggmx+pKvZDb1Sj+pE46Sn1T7lCqfFtg1Q==}
@@ -7585,8 +7588,9 @@ snapshots:
       '@xml-tools/parser': 1.0.11
       prettier: 3.3.2
 
-  '@prettier/sync@0.3.0(prettier@3.3.2)':
+  '@prettier/sync@0.5.2(prettier@3.3.2)':
     dependencies:
+      make-synchronized: 0.2.9
       prettier: 3.3.2
 
   '@puppeteer/browsers@2.2.3':
@@ -10377,6 +10381,8 @@ snapshots:
   make-dir@1.3.0:
     dependencies:
       pify: 3.0.0
+
+  make-synchronized@0.2.9: {}
 
   markdown-extensions@2.0.0: {}
 
