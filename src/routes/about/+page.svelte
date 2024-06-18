@@ -157,6 +157,8 @@
 	}
 
 	main {
+		position: relative;
+		z-index: 4;
 		line-height: 1.75em;
 		box-shadow: 0 3px 9px #0000005f;
 	}
