@@ -53,27 +53,32 @@
 <main
 	class="mx-auto mb-20 mt-36 max-w-[90ch] bg-[#f7f7f7] bg-opacity-90 px-12 pb-16 pt-3 font-serif text-xl text-[#222222] max-sm:mx-auto max-sm:mb-16 max-sm:mt-24 max-sm:w-[90vw] max-sm:px-5 max-sm:text-xl"
 >
-	<h2>
-		{bookData.title}<span class="alternate-title"> or <br />{bookData.titleAlt}</span>
-	</h2>
-
-	<cite>{bookData.author}</cite>
-
+	<section class="cover">
+		<h2>
+			{bookData.title} <span class="alternate-title">or<br />{bookData.titleAlt}</span>
+		</h2>
+		<cite>{bookData.author}</cite>
+	</section>
 	<hr />
-
-	<p class="contents-heading">Contents</p>
-	<ol>
-		{#each chapters as chapter, index}
-			<li><a href="#chapter-{index + 1}">{chapter.title}</a></li>
-		{/each}
-	</ol>
+	<section class="table-of-contents">
+		<p>Contents</p>
+		<ol>
+			{#each chapters as chapter, index}
+				<li><a href="#chapter-{index + 1}">{chapter.title}</a></li>
+			{/each}
+		</ol>
+	</section>
 
 	{#each chapters as chapter, index}
 		<hr />
-		<h3 id="chapter-{index + 1}"><span class="chapter-number">{index + 1}</span>{chapter.title}</h3>
-		{#each chapter.lines as line}
-			<p>{@html line}</p>
-		{/each}
+		<section class="chapter">
+			<h3 id="chapter-{index + 1}">
+				<span class="chapter-number">{index + 1}</span>{chapter.title}
+			</h3>
+			{#each chapter.lines as line}
+				<p>{@html line}</p>
+			{/each}
+		</section>
 	{/each}
 </main>
 <img
@@ -100,39 +105,11 @@
 {/if}
 
 <style lang="postcss">
+	/* General */
 	div.star-wrapper {
 		pointer-events: none;
 		touch-action: none;
 		opacity: 0.3;
-	}
-
-	main > p {
-		/* margin-top: 1em; */
-		text-indent: 3em;
-	}
-
-	:global(main > p > span) {
-		color: unset !important;
-		/* Hide inline color no shadow combination seems to yield legibility... 
-		/* text-shadow: 1px 1px 8px rgb(0 0 0); */
-	}
-
-	/* Optional Options & Opportunities list */
-	main > p :global(ul li) {
-		margin-left: 3em;
-		text-indent: 0;
-		list-style-type: disc;
-	}
-
-	main > p.contents-heading {
-		margin-top: 4em;
-		text-align: center;
-		text-indent: 0;
-	}
-
-	/* No breaks for the multi-line  */
-	p:has(ul) + p:has(ul) {
-		margin-top: 0;
 	}
 
 	main {
@@ -142,45 +119,13 @@
 		box-shadow: 0 3px 9px #0000005f;
 	}
 
-	ol {
-		display: grid;
-		justify-items: center;
-		margin: 2em 0;
-		list-style-type: decimal;
+	main > section {
+		margin: 4em 0;
 	}
 
 	hr {
-		@apply text-3xl;
-		margin: 3em 0 0;
 		border: 0;
 		border-bottom: 4px solid rgb(0 0 0 / 5%);
-	}
-
-	main h2 {
-		@apply pb-3 pt-12 text-center text-3xl font-normal;
-	}
-
-	main h2 span.alternate-title {
-		display: block;
-
-		@apply mt-4 text-xl font-normal;
-	}
-
-	cite {
-		display: block;
-		font-style: normal;
-
-		@apply mt-8 text-center text-base font-normal;
-	}
-
-	main h3 span.chapter-number {
-		display: block;
-
-		@apply pt-24 text-4xl font-medium;
-	}
-
-	main h3 {
-		@apply pb-14 pb-3 text-2xl font-medium;
 	}
 
 	img.heart {
@@ -202,5 +147,82 @@
 		text-decoration-style: solid;
 		text-decoration-thickness: 0.1em;
 		text-underline-offset: 0.2em;
+	}
+
+	/* Cover */
+	main > section.cover > h2 {
+		@apply pb-3 pt-12 text-center text-3xl font-normal;
+	}
+
+	main > section.cover > h2 > span.alternate-title {
+		display: block;
+
+		@apply mt-4 text-xl font-normal;
+	}
+
+	main > section.cover > cite {
+		display: block;
+		font-style: normal;
+
+		@apply mt-24 text-center text-base font-normal;
+	}
+
+	/* Table of contents */
+	main > section.table-of-contents {
+		text-align: center;
+	}
+
+	main > section.table-of-contents > p {
+		font-style: italic;
+		text-align: center;
+		text-indent: 0;
+	}
+
+	main > section.table-of-contents > ol {
+		display: inline-block;
+		margin-top: 2em;
+		padding-left: 2em;
+		text-align: left;
+		list-style-type: decimal;
+	}
+
+	/* Chapter text */
+
+	main > section.chapter > h3 {
+		@apply mb-12 text-2xl font-medium;
+	}
+
+	main > section.chapter > h3 > span.chapter-number {
+		display: block;
+
+		@apply text-4xl font-medium;
+	}
+
+	main > section.chapter > p {
+		/* margin-top: 1em; */
+		text-indent: 3em;
+	}
+
+	main > section.chapter > p > :global(span) {
+		color: unset !important;
+		/* Hide inline color no shadow combination seems to yield legibility... 
+		/* text-shadow: 1px 1px 8px rgb(0 0 0); */
+	}
+
+	/* Optional Options & Opportunities list */
+	main > section.chapter > p :global(ul li) {
+		margin-left: 3em;
+		text-indent: 0;
+		list-style-type: disc;
+	}
+
+	/* No breaks for the multi-line  */
+	main > section.chapter > p:has(ul) {
+		margin-top: 1em;
+	}
+
+	main > section.chapter > p:has(ul) + p:has(ul) {
+		margin-top: 0;
+		margin-bottom: 1em;
 	}
 </style>

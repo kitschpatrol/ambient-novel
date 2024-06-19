@@ -29,7 +29,9 @@
 		"book",
 		"fiction",
 		"interactive",
-		"novel"
+		"novel",
+		"svelte",
+		"whisper"
 	],
 	"scripts": {
 		"build": "vite build && tsx ./scripts/set-htaccess-base-path.ts",
