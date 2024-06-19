@@ -13,9 +13,9 @@ The Ambient Novel is an experimental interface for nonlinear long-form narrated 
 
 ## Basic architecture
 
-Everything starts with a [JSON file representing the book's contents](https://github.com/kitschpatrol/blob/develop/data/book.json), paragraph by paragraph.
+Everything starts with a [JSON file representing the book's contents](https://github.com/kitschpatrol/ambient-novel/blob/main/data/book.json), paragraph by paragraph.
 
-During a one-time content generation step, this JSON file goes through a number of transforms, where it's combined with audio files and ambient music tracks to yield a [revised JSON file](https://github.com/kitschpatrol/blob/develop/src/lib/data/book.json) with per-word timing data embedded in a `<span>` element's `data` attributes wrapping each word of the book. (The span elements are ugly, but this is a fast way to provide timing data to the front-end instead of maintaining a cleaner but higher-overhead JSON abstraction.)
+During a one-time content generation step, this JSON file goes through a number of transforms, where it's combined with audio files and ambient music tracks to yield a [revised JSON file](https://github.com/kitschpatrol/ambient-novel/blob/main/src/lib/data/book.json) with per-word timing data embedded in a `<span>` element's `data` attributes wrapping each word of the book. (The span elements are ugly, but this is a fast way to provide timing data to the front-end instead of maintaining a cleaner but higher-overhead JSON abstraction.)
 
 Behind the scenes, the content generation step uses [whisperx](https://github.com/m-bain/whisperx), with some additional logic employing [Levenshtein distance](https://en.wikipedia.org/wiki/Levenshtein_distance) measurements to ensure parity between the text transcribed from the audio and the text of the book itself.
 
@@ -25,7 +25,7 @@ At runtime, the book text, timing data, and the associated audio files are loade
 
 To improve performance, and to enable offline listening, audio files are preloaded and cached by a service worker. (Browsers, especially mobile Safari, purge even modestly-sized audio files from the browser's cache _very_ aggressively, so managing caching manually was the only way to achieve remotely acceptable performance.)
 
-The site's visual design is derived from the cover art of [_The Valentine Mob_](https://39forkspublishing.square.site/product/the-valentine-mob/97) book. Aesthetic specificity notwithstanding, the ambient novel "system" could theoretically be used to make the text of any book interactive, so long as it's provided in the [appropriate format](https://github.com/kitschpatrol/blob/develop/src/lib/schemas/book-source-schema.ts).
+The site's visual design is derived from the cover art of [_The Valentine Mob_](https://39forkspublishing.square.site/product/the-valentine-mob/97) book. Aesthetic specificity notwithstanding, the ambient novel "system" could theoretically be used to make the text of any book interactive, so long as it's provided in the [appropriate format](https://github.com/kitschpatrol/ambient-novel/blob/main/src/lib/schemas/book-source-schema.ts).
 
 ## Development notes
 
@@ -173,7 +173,7 @@ Note: The deployment server _must_ support HTTP 206 range requests to successful
 
 ### Known issues
 
-- Scrolling issues on mobile Safari, where there are no touch up events during inertial scroll animations.
+- There are some issues with flick scrolling of chapter text on mobile Safari, where there are no touch up events during inertial scroll animations.
 
 ## Acknowledgments
 
