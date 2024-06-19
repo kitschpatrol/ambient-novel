@@ -128,7 +128,7 @@
 		<br />
 		<a href="https://ericmika.com" rel="noopener noreferrer" target="_blank">Eric Mika</a>
 		—
-		<i>website</i>
+		<i>website (<a href="https://github.com/kitschpatrol/ambient-novel">source code</a>)</i>
 	</p>
 	<!-- prettier-ignore -->
 	<p class="mt-[4em] text-base">
@@ -157,6 +157,8 @@
 	}
 
 	main {
+		position: relative;
+		z-index: 4;
 		line-height: 1.75em;
 		box-shadow: 0 3px 9px #0000005f;
 	}

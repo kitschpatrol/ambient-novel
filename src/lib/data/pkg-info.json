@@ -1,5 +1,5 @@
 {
 	"version": "2.0.0",
 	"name": "ambient-novel",
-	"description": "Website for nonlinear interactive exploration of The Valentine Mob novel."
+	"description": "An interface for nonlinear interactive exploration of a novel."
 }

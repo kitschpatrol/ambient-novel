@@ -132,7 +132,7 @@
 
 				if (index < chapters.length - 1) {
 					const nextChapterIndex = index + 1
-					if (!playStatus[nextChapterIndex]) playStatus[nextChapterIndex] = true
+					playStatus[nextChapterIndex] ||= true
 				} else {
 					// Reached the end of the book
 				}
