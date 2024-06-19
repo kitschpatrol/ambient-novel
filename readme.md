@@ -9,13 +9,30 @@ The Ambient Novel is an experimental interface for nonlinear long-form narrated 
 > \[!NOTE]
 > This source code is released as a curiosity, and its quality reflects that of a quick personal side project subject to a number of hasty iterations.
 >
-> The most interesting parts from a technical standpoint are probably in the content pipeline, which generates the metadata allowing the audio book to be aligned with the presentation of the text. It creates inferences from a recorded reading of the book, with some extra logic to negotiate any variations between the exact (known) text of the book and the narrator's (sometimes divergent) utterances to yield the original book text with word-level audio alignment timing data.
+> The most interesting parts from a technical standpoint are probably in the content pipeline, which generates the metadata responsible for aligning the audio book with the presentation of the text. It creates inferences from a recorded reading of the book, with some extra logic to negotiate any variations between the exact (known) text of the book and the narrator's (sometimes divergent) utterances to yield the original book text with word-level audio alignment timing data.
 
-## Development Notes
+## Basic architecture
+
+Everything starts with a [JSON file representing the book's contents](https://github.com/kitschpatrol/blob/develop/data/book.json), paragraph by paragraph.
+
+During a one-time content generation step, this JSON file goes through a number of transforms, where it's combined with audio files and ambient music tracks to yield a [revised JSON file](https://github.com/kitschpatrol/blob/develop/src/lib/data/book.json) with per-word timing data embedded in a `<span>` element's `data` attributes wrapping each word of the book. (The span elements are ugly, but this is a fast way to provide timing data to the front-end instead of maintaining a cleaner but higher-overhead JSON abstraction.)
+
+Behind the scenes, the content generation step uses [whisperx](https://github.com/m-bain/whisperx), with some additional logic employing [Levenshtein distance](https://en.wikipedia.org/wiki/Levenshtein_distance) measurements to ensure parity between the text transcribed from the audio and the text of the book itself.
+
+During early development of the project, before recordings of the audio book narration were available, a text-to-speech engine was used to generate spoken audio — that plumbing remains in the repository
+
+At runtime, the book text, timing data, and the associated audio files are loaded by the front-end, a [SvelteKit](https://kit.svelte.dev) app implementing a number of [custom Svelte components](https://github.com/kitschpatrol/tree/develop/src/lib/components) to keep the scrolling text of each chapter in sync the audio, and to allow live scrubbing through the audio and text simultaneously. The site is statically generated, and does not depend on any server-side logic at runtime.
+
+To improve performance, and to enable offline listening, audio files are preloaded and cached by a service worker. (Browsers, especially mobile Safari, purge even modestly-sized audio files from the browser's cache _very_ aggressively, so managing caching manually was the only way to achieve remotely acceptable performance.)
+
+The site's visual design is derived from the cover art of [_The Valentine Mob_](https://39forkspublishing.square.site/product/the-valentine-mob/97) book. Aesthetic specificity notwithstanding, the ambient novel "system" could theoretically be used to make the text of any book interactive, so long as it's provided in the [appropriate format](https://github.com/kitschpatrol/blob/develop/src/lib/schemas/book-source-schema.ts).
+
+## Development notes
 
 ### Updating the content
 
-_Note: Some audio content assets are external to this repository._
+> \[!IMPORTANT]
+> Some audio content assets required for the are external to this repository.
 
 Certain data and assets are generated from the source data in `/data` and output to `/static`, `/data-generated` and `/src/lib/data`.
 
