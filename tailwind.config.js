@@ -19,8 +19,8 @@ export default {
 	theme: {
 		extend: {
 			boxShadow: {
-				DEFAULT: '-3px 3px 5px var(--tw-shadow-color)',
 				button: '-3px 3px 5px rgb(0 0 0 / .4)',
+				DEFAULT: '-3px 3px 5px var(--tw-shadow-color)',
 			},
 			colors: {
 				'vm-blue': '#4447fb',

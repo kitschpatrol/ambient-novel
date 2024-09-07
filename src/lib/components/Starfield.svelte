@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { Engine, ISourceOptions } from '@tsparticles/engine'
+	import { base } from '$app/paths'
 	import { loadSlim } from '@tsparticles/slim'
 	import Particles, { particlesInit } from '@tsparticles/svelte'
-	import { base } from '$app/paths'
 	import { onMount } from 'svelte' // If you are going to use `loadSlim`, install the "tsparticles-slim" package too.
 
 	export let id = 'tsparticles'

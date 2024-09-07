@@ -1,9 +1,9 @@
 <script lang="ts">
+	import type { BookSource } from '$lib/schemas/book-source-schema'
 	import { base } from '$app/paths'
 	import Header from '$lib/components/Header.svelte'
 	import Starfield from '$lib/components/Starfield.svelte'
 	import bookSourceRaw from '$lib/data/book-source.json'
-	import type { BookSource } from '$lib/schemas/book-source-schema'
 	import { onMount } from 'svelte'
 	import { fade } from 'svelte/transition'
 	const bookData = bookSourceRaw as BookSource

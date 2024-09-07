@@ -1,6 +1,6 @@
 <script lang="ts">
-	import ChapterCover from '$lib/components/ChapterCover.svelte'
 	import type { ChapterData } from '$lib/schemas/book-schema'
+	import ChapterCover from '$lib/components/ChapterCover.svelte'
 
 	export let chapterColor = '#ff0000'
 	export let chapterData: ChapterData

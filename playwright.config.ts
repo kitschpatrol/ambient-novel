@@ -1,5 +1,6 @@
 import type { PlaywrightTestConfig } from '@playwright/test'
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 const config: PlaywrightTestConfig = {
 	testDir: 'tests',
 	testMatch: /(.+\.)?(test|spec)\.[jt]s/,

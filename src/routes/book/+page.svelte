@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { faArrowRight, faCloudArrowDown } from '@fortawesome/free-solid-svg-icons'
 	import { base } from '$app/paths'
 	import FancyLink from '$lib/components/FancyLink.svelte'
 	import Header from '$lib/components/Header.svelte'
 	import Starfield from '$lib/components/Starfield.svelte'
+	import { faArrowRight, faCloudArrowDown } from '@fortawesome/free-solid-svg-icons'
 	import { onMount } from 'svelte'
 	import { fade } from 'svelte/transition'
 

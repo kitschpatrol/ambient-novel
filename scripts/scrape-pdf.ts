@@ -1,7 +1,7 @@
 /* eslint-disable no-lonely-if */
-import { getTextBetween, saveFormattedJson } from './utils'
 import pdf from '@cyber2024/pdf-parse-fixed'
 import fs from 'node:fs'
+import { getTextBetween, saveFormattedJson } from './utils'
 
 // Kind of a one-shot shortcut to getting the novel text
 // too much work to really create consistent output without

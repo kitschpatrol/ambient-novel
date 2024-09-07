@@ -1,10 +1,10 @@
 <script lang="ts">
 	// Import { browser } from '$app/environment';
-	// import { onMount } from 'svelte';
-	import '/src/global.css'
 	// Import { pwaInfo } from 'virtual:pwa-info';
 	import { page } from '$app/stores'
-	import { canonicalPath } from '$lib/config'
+	import { CANONICAL_PATH } from '$lib/config'
+	// Import { onMount } from 'svelte';
+	import '/src/global.css'
 	/// TODO remove this
 	// onMount(() => {
 	// 	navigator.serviceWorker.getRegistrations().then(function (registrations) {
@@ -43,7 +43,7 @@
 	// 	const audioContext = new window.AudioContext();
 	// }
 
-	$: canonicalUrl = `${canonicalPath}${$page.route.id === '/' ? '' : $page.route.id}`
+	$: canonicalUrl = `${CANONICAL_PATH}${$page.route.id === '/' ? '' : $page.route.id}`
 </script>
 
 <svelte:head>

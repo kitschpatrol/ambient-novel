@@ -3,6 +3,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import fs from 'node:fs'
+import path from 'node:path'
+import { parse } from 'node-html-parser'
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { type BookData, bookSchema } from '../src/lib/schemas/book-schema'
 import { bookSourceSchema } from '../src/lib/schemas/book-source-schema'
@@ -33,9 +36,6 @@ import {
 	transcribe,
 	truncateWithEllipsis,
 } from './utils'
-import { parse } from 'node-html-parser'
-import fs from 'node:fs'
-import path from 'node:path'
 
 // Prerequisites ----------------------------------------------------------------------
 //

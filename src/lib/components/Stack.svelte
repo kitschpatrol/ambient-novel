@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { faBookReader, faDiceD20, faPause, faRotateBack } from '@fortawesome/free-solid-svg-icons'
+	import type { BookData } from '$lib/schemas/book-schema'
 	import Button from '$lib/components/Button.svelte'
 	import Header from '$lib/components/Header.svelte'
 	import Track from '$lib/components/Track.svelte'
 	import TrackPlaceholder from '$lib/components/TrackPlaceholder.svelte'
 	import * as config from '$lib/config'
-	import type { BookData } from '$lib/schemas/book-schema'
 	import { delayedForEach } from '$lib/utils/collection/delayed-for-each'
 	import { getIndicesMatchingValue } from '$lib/utils/collection/get-indices-matching-value'
+	import { faBookReader, faDiceD20, faPause, faRotateBack } from '@fortawesome/free-solid-svg-icons'
 	import random from 'lodash/random'
 	import shuffle from 'lodash/shuffle'
 	import { onMount, tick } from 'svelte'
@@ -99,7 +99,7 @@
 		const chapterIndicesToReset = getIndicesMatchingValue(resetStatus, false)
 		// eslint-disable-next-line no-return-assign
 		await delayedForEach(chapterIndicesToReset, (index) => (resetStatus[index] = true), resetDelay)
-		await sleep(config.chapterCoverTransitionDuration - resetDelay)
+		await sleep(config.CHAPTER_COVER_TRANSITION_DURATION - resetDelay)
 		isResetting = false
 	}
 

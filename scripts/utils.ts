@@ -6,12 +6,12 @@
 import synchronizedPrettier from '@prettier/sync'
 import { glob } from 'glob'
 import leven from 'leven'
-import { HTMLElement, type Node, TextNode } from 'node-html-parser'
-import id3 from 'node-id3'
 import { execSync } from 'node:child_process'
 import crypto from 'node:crypto'
 import fs from 'node:fs'
 import path from 'node:path'
+import { HTMLElement, type Node, TextNode } from 'node-html-parser'
+import id3 from 'node-id3'
 import { stripHtml } from 'string-strip-html'
 
 // Utility functions used by generateData.ts
@@ -26,9 +26,9 @@ type TagOptions = {
 // Function to set tags for MP3
 function setTagsForMP3(audioFilePath: string, tags: TagOptions) {
 	const id3Tags = {
+		album: tags.albumName,
 		// eslint-disable-next-line @typescript-eslint/naming-convention
 		APIC: tags.albumArtPath,
-		album: tags.albumName,
 		artist: tags.artistNames.join(', '),
 		title: tags.trackName,
 	}
@@ -127,7 +127,7 @@ export function checkForBinaryOnPath(binary: string) {
 // Trim non-json garbage
 export function extractOutermostJsonObjectArray(s: string): string {
 	const start = s.includes('[{') ? s.indexOf('[{') : 0
-	const end = s.lastIndexOf('}]') >= 0 ? s.lastIndexOf('}]') + 2 : s.length
+	const end = s.includes('}]') ? s.lastIndexOf('}]') + 2 : s.length
 	return s.slice(start, end)
 }
 

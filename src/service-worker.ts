@@ -130,7 +130,7 @@ self.addEventListener('message', (event: ServiceWorkerMessageEvent) => {
 				// Console.log('Caches cleared');
 			})
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			.catch((error: Error) => {
+			.catch((error: unknown) => {
 				// Console.log('Error clearing caches', error);
 			})
 	}

@@ -56,7 +56,7 @@
 				.then(() => {
 					// All good
 				})
-				.catch((error) => {
+				.catch((error: unknown) => {
 					console.error(error)
 					retry()
 				})
@@ -108,7 +108,7 @@
 				.then(() => {
 					// All good
 				})
-				.catch((error) => {
+				.catch((error: unknown) => {
 					console.error(error)
 				})
 		}

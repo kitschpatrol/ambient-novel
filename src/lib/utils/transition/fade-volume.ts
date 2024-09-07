@@ -1,5 +1,5 @@
-import { linear } from 'svelte/easing'
 import type { FadeParams, TransitionConfig } from 'svelte/transition'
+import { linear } from 'svelte/easing'
 
 export function fadeVolume(
 	node: HTMLAudioElement,

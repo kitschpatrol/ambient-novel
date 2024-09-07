@@ -1,2 +1,2 @@
-export const chapterCoverTransitionDuration = 500
-export const canonicalPath = 'https://39forks.com/thevalentinemob'
+export const CHAPTER_COVER_TRANSITION_DURATION = 500
+export const CANONICAL_PATH = 'https://39forks.com/thevalentinemob'

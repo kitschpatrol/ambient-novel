@@ -1,5 +1,6 @@
 import * as z from 'zod'
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export const bookSourceSchema = z.object({
 	author: z.string().min(1),
 	chapters: z

@@ -1,7 +1,7 @@
 <svelte:options immutable={true} />
 
 <script lang="ts">
-	import { faPause, faPlay, faRotateBack } from '@fortawesome/free-solid-svg-icons'
+	import type { ChapterData } from '$lib/schemas/book-schema'
 	import { browser } from '$app/environment'
 	import { base } from '$app/paths'
 	import Audio from '$lib/components/Audio.svelte'
@@ -10,9 +10,9 @@
 	import ChapterCover from '$lib/components/ChapterCover.svelte'
 	import Starfield from '$lib/components/Starfield.svelte'
 	import * as config from '$lib/config'
-	import type { ChapterData } from '$lib/schemas/book-schema'
 	import { fastFadeFromJs } from '$lib/utils/transition/fast-fade-from-js'
 	import { fastFadeJs } from '$lib/utils/transition/fast-fade-js'
+	import { faPause, faPlay, faRotateBack } from '@fortawesome/free-solid-svg-icons'
 	import ScrollBooster from 'scrollbooster'
 	import { onDestroy, onMount, tick } from 'svelte'
 	import { spring } from 'svelte/motion'
@@ -526,7 +526,7 @@
 			on:outrostart={() => {
 				isChapterCoverVisible = false
 			}}
-			transition:fastFadeJs|local={{ duration: config.chapterCoverTransitionDuration }}
+			transition:fastFadeJs|local={{ duration: config.CHAPTER_COVER_TRANSITION_DURATION }}
 		>
 			<ChapterCover {chapterColor} {chapterData} />
 		</div>

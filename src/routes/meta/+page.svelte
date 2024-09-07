@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { faBomb, faTrash } from '@fortawesome/free-solid-svg-icons'
 	import { browser } from '$app/environment'
 	import Button from '$lib/components/Button.svelte'
 	import Header from '$lib/components/Header.svelte'
 	import { name, version } from '$lib/data/pkg-info.json'
+	import { faBomb, faTrash } from '@fortawesome/free-solid-svg-icons'
 	import UaParser from 'ua-parser-js'
 
 	async function getServiceWorkerCount() {
