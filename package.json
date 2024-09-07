@@ -1,6 +1,6 @@
 {
 	"name": "ambient-novel",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"type": "module",
 	"description": "An interface for nonlinear interactive exploration of a novel.",
 	"repository": {
