@@ -55,7 +55,7 @@ To install dependencies for the content generation process, run:
 To update the generated data, run:
 
 ```bash
-npm run generateData
+pnpm run generate-data
 ```
 
 Note that this will overwrite existing data.
