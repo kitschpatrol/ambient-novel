@@ -1,6 +1,5 @@
 import * as z from 'zod'
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export const licenseSchema = z.record(
 	z.object({
 		email: z.string().min(1).optional(), // Not all valid emails

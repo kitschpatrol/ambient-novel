@@ -2,7 +2,6 @@ import * as z from 'zod'
 
 // Slight shift in structure from the book
 // source schema used in the content generator
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export const bookSchema = z.object({
 	author: z.string().min(1),
 	chapters: z

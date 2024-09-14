@@ -11,7 +11,6 @@ import { fadeVolume } from './fade-volume'
 // in:send={{key: "a"}}
 // out:receive={{key: "a"}}
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export const crossfadeVolume = crossfade({
 	duration: 5000,
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
