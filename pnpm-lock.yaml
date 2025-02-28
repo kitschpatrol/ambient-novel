@@ -15,25 +15,22 @@ importers:
         specifier: ^1.2.5
         version: 1.2.5
       '@fortawesome/free-solid-svg-icons':
-        specifier: ^6.6.0
+        specifier: ^6.7.2
         version: 6.7.2
-      '@kitschpatrol/dict-en-wiktionary':
-        specifier: ^1.0.2
-        version: 1.0.2
       '@kitschpatrol/shared-config':
         specifier: ^5.0.6
         version: 5.0.6(@types/estree@1.0.6)(@types/node@22.0.0)(@typescript-eslint/utils@8.25.0(eslint@9.21.0(jiti@2.4.2))(typescript@5.7.3))(jiti@2.4.2)(postcss-html@1.8.0)(svelte@4.2.19)(ts-api-utils@2.0.1(typescript@5.7.3))(typescript@5.7.3)
       '@playwright/test':
-        specifier: ^1.47.1
+        specifier: ^1.50.1
         version: 1.50.1
       '@prettier/sync':
         specifier: ^0.5.2
         version: 0.5.2(prettier@3.5.2)
       '@sveltejs/adapter-static':
-        specifier: ^3.0.4
+        specifier: ^3.0.8
         version: 3.0.8(@sveltejs/kit@2.17.3(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.14(@types/node@22.0.0)(terser@5.39.0)))(svelte@4.2.19)(vite@5.4.14(@types/node@22.0.0)(terser@5.39.0)))
       '@sveltejs/kit':
-        specifier: ^2.5.27
+        specifier: ^2.17.3
         version: 2.17.3(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.14(@types/node@22.0.0)(terser@5.39.0)))(svelte@4.2.19)(vite@5.4.14(@types/node@22.0.0)(terser@5.39.0))
       '@sveltejs/vite-plugin-svelte':
         specifier: ^3.1.2
@@ -42,10 +39,10 @@ importers:
         specifier: ^0.1.1
         version: 0.1.1(tailwindcss@3.4.17)
       '@tsparticles/engine':
-        specifier: ^3.5.0
+        specifier: ^3.8.1
         version: 3.8.1
       '@tsparticles/slim':
-        specifier: ^3.5.0
+        specifier: ^3.8.1
         version: 3.8.1
       '@tsparticles/svelte':
         specifier: ^3.1.1
@@ -54,13 +51,13 @@ importers:
         specifier: ^8.1.0
         version: 8.1.0
       '@types/howler':
-        specifier: ^2.2.11
+        specifier: ^2.2.12
         version: 2.2.12
       '@types/html-minifier':
         specifier: ^4.0.5
         version: 4.0.5
       '@types/lodash':
-        specifier: ^4.17.7
+        specifier: ^4.17.15
         version: 4.17.15
       '@types/node':
         specifier: 22.0.0
@@ -87,7 +84,7 @@ importers:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.5.3)
       dotenv:
-        specifier: ^16.4.5
+        specifier: ^16.4.7
         version: 16.4.7
       glob:
         specifier: ^10.4.5
@@ -102,22 +99,22 @@ importers:
         specifier: ^4.17.21
         version: 4.17.21
       mrmime:
-        specifier: ^2.0.0
+        specifier: ^2.0.1
         version: 2.0.1
       node-html-parser:
         specifier: ^6.1.13
         version: 6.1.13
       node-id3:
-        specifier: ^0.2.6
+        specifier: ^0.2.8
         version: 0.2.8
       node-jq:
         specifier: ^6.0.1
         version: 6.0.1
       postcss:
-        specifier: ^8.4.47
+        specifier: ^8.5.3
         version: 8.5.3
       sanitize-html:
-        specifier: ^2.13.0
+        specifier: ^2.14.0
         version: 2.14.0
       scrollbooster:
         specifier: ^3.0.2
@@ -132,43 +129,43 @@ importers:
         specifier: ^4.2.19
         version: 4.2.19
       svelte-check:
-        specifier: ^4.0.2
+        specifier: ^4.1.4
         version: 4.1.4(picomatch@4.0.2)(svelte@4.2.19)(typescript@5.7.3)
       svelte-fa:
-        specifier: ^4.0.2
+        specifier: ^4.0.3
         version: 4.0.3(svelte@4.2.19)
       tailwindcss:
-        specifier: ^3.4.11
+        specifier: ^3.4.17
         version: 3.4.17
       tinycolor2:
         specifier: ^1.6.0
         version: 1.6.0
       tsx:
-        specifier: ^4.19.1
+        specifier: ^4.19.3
         version: 4.19.3
       typescript:
         specifier: ^5.7.3
         version: 5.7.3
       ua-parser-js:
-        specifier: ^1.0.39
+        specifier: ^1.0.40
         version: 1.0.40
       vite:
-        specifier: ^5.4.5
+        specifier: ^5.4.14
         version: 5.4.14(@types/node@22.0.0)(terser@5.39.0)
       vite-plugin-mkcert:
         specifier: ^1.17.6
         version: 1.17.6(vite@5.4.14(@types/node@22.0.0)(terser@5.39.0))
       workbox-build:
-        specifier: ^7.1.1
+        specifier: ^7.3.0
         version: 7.3.0
       workbox-range-requests:
-        specifier: ^7.1.0
+        specifier: ^7.3.0
         version: 7.3.0
       workbox-routing:
-        specifier: ^7.1.0
+        specifier: ^7.3.0
         version: 7.3.0
       zod:
-        specifier: ^3.23.8
+        specifier: ^3.24.2
         version: 3.24.2
 
 packages:
@@ -1393,10 +1390,6 @@ packages:
     resolution: {integrity: sha512-FFxyxlzkSz4ncEx0oj3sjuEuAT8+k8dTr7Pue2w/RKW2P+e5ej09KAtZk6OP+6siP6ERrIKn3kmRTgy2peoO7Q==}
     engines: {node: '>=22.13.1', pnpm: '>=10.0.0'}
     hasBin: true
-
-  '@kitschpatrol/dict-en-wiktionary@1.0.2':
-    resolution: {integrity: sha512-7oH+HRJd8yu5t1yeaDGRmBbB8HYcrjjSwqcC3bZsoVWtdFk4kMKv6+m6301oQDY1CX6jC/zJzowWOFesa1s+8g==}
-    engines: {node: '>=22.0.0', pnpm: '>=9.0.0'}
 
   '@kitschpatrol/eslint-config@5.0.6':
     resolution: {integrity: sha512-JwZThgh1kvEC/ZUqwjkSjE6RMpKyqSOvp5j8UX2StYSQzhV3xD4Ct0XgoiOC17KJA0qONmwdhmMxW+Jn3J+QJQ==}
@@ -7580,8 +7573,6 @@ snapshots:
       prettier: 3.5.2
     transitivePeerDependencies:
       - typescript
-
-  '@kitschpatrol/dict-en-wiktionary@1.0.2': {}
 
   '@kitschpatrol/eslint-config@5.0.6(@types/estree@1.0.6)(@typescript-eslint/utils@8.25.0(eslint@9.21.0(jiti@2.4.2))(typescript@5.7.3))(jiti@2.4.2)(svelte@4.2.19)(ts-api-utils@2.0.1(typescript@5.7.3))(typescript@5.7.3)':
     dependencies:
