@@ -13,7 +13,10 @@ const config = {
 		// ServiceWorker: {
 		// 	register: false // TODO necessary?
 		// },
-		paths: { base: process.env.BASE_PATH },
+		paths: {
+			// @ts-expect-error - ???
+			base: process.env.BASE_PATH,
+		},
 		// Hmm https://stackoverflow.com/questions/74931516/in-svete-what-to-use-instead-of-html-to-avoid-xss-attacks
 		// csp: {
 		// 	directives: {

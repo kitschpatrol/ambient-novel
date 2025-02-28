@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unresolved
 import { building } from '$app/environment'
 import { minify } from 'html-minifier'
 
@@ -20,14 +21,14 @@ const minificationOptions = {
 	sortClassName: true,
 }
 
-// eslint-disable-next-line @typescript-eslint/require-await
+// eslint-disable-next-line ts/require-await, jsdoc/require-jsdoc
 export async function handle({ event, resolve }) {
 	let page = ''
 
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
+	// eslint-disable-next-line ts/no-unsafe-return, ts/no-unsafe-call
 	return resolve(event, {
 		transformPageChunk({ done, html }) {
-			// eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+			// eslint-disable-next-line ts/restrict-plus-operands
 			page += html
 			if (done) {
 				return building ? minify(page, minificationOptions) : page

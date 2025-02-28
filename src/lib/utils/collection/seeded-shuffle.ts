@@ -1,5 +1,8 @@
 import seedrandom from 'seedrandom'
 
+/**
+ * Deterministically shuffle an array using a seed.
+ */
 export function seededShuffle<T>(array: T[], seed: string): T[] {
 	// RNG must return [0, 1)
 	const seededRng = seedrandom(seed)

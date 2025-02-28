@@ -5,5 +5,5 @@ import type { PageServerLoad } from './$types'
 // Needed when in layout.ts?
 // export const prerender = true;
 
-// eslint-disable-next-line @typescript-eslint/require-await
+// eslint-disable-next-line ts/require-await
 export const load: PageServerLoad = async () => ({ bookData: bookDataRaw as BookData })

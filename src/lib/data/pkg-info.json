@@ -1,5 +1,5 @@
 {
-	"version": "2.0.1",
+	"version": "2.0.2",
 	"name": "ambient-novel",
-	"description": "An interface for nonlinear interactive exploration of a novel."
+	"description": "An interface for nonlinear, interwoven, and interactive exploration of a novel."
 }

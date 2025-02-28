@@ -35,9 +35,7 @@
 				const messageChannel = new MessageChannel()
 
 				// Set up a listener for receiving the count of cached items
-				// eslint-disable-next-line unicorn/prefer-add-event-listener
 				messageChannel.port1.onmessage = (event) => {
-					// eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
 					resolve(event.data.cacheCount)
 				}
 
@@ -55,9 +53,9 @@
 	}
 
 	const isMobile = (new UaParser().getDevice().type ?? '') === 'mobile'
-	// eslint-disable-next-line unicorn/prefer-top-level-await
+
 	let cacheCount = getCacheCount()
-	// eslint-disable-next-line unicorn/prefer-top-level-await
+
 	let swCount = getServiceWorkerCount()
 </script>
 

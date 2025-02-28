@@ -13,10 +13,9 @@
 	// Setting duration to 0 is not enough for a smooth transition
 	// https://stackoverflow.com/a/70629246/2437832
 	// possibly still flaky
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 	function maybe(node: HTMLElement, options: any) {
 		if (isTransitionEnabled) {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
 			return options.fn(node, options)
 		}
 	}
@@ -74,7 +73,7 @@
 	button div.down {
 		top: 2px;
 		right: 2px;
-		/* stylelint-disable-next-line function-no-unknown */
+		/* stylelint-disable-next-line declaration-property-value-no-unknown */
 		color: theme(colors.vm-text-light);
 		background-color: #ef1ef68f;
 		box-shadow: 0 1px 3px #00000067;

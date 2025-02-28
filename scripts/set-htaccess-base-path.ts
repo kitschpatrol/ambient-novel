@@ -18,5 +18,5 @@ const generateHtaccess = async () => {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
+// eslint-disable-next-line ts/no-floating-promises
 generateHtaccess()

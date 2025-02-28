@@ -1,3 +1,6 @@
+/**
+ * Map a value from one range to another.
+ */
 export function mapValue(
 	value: number,
 	start1: number,
