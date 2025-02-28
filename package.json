@@ -26,7 +26,7 @@
 	},
 	"type": "module",
 	"scripts": {
-		"prebuild": "pnpm run generate-package-info && pnpm run generate-licenses && pnpm run copy-source-data && kpi-prettier fix",
+		"prebuild": "svelte-kit sync && pnpm run generate-package-info && pnpm run generate-licenses && pnpm run copy-source-data && kpi-prettier fix",
 		"build": "pnpm run prebuild && vite build && tsx ./scripts/set-htaccess-base-path.ts",
 		"build-report": "dust -t -b ./build",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
