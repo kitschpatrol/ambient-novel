@@ -1,5 +1,5 @@
 This license applies to the website source code ONLY.
-Note separate license for book text in /data/LICENSE.txt
+Note separate license for book text in /data/license.txt
 
 ----
 
