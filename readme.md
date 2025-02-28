@@ -6,7 +6,9 @@
 
 The Ambient Novel is an experimental interface for nonlinear long-form narrated text. It was developed for Scott Wayne Indiana's book _The Valentine Mob_. The interface allows for simultaneous playback, scrubbing, and interleaving of multiple narrated audio tracks.
 
-> \[!NOTE]
+The project is live at [39forks.com/thevalentinemob](https://39forks.com/thevalentinemob).
+
+> [!NOTE]
 > This source code is released as a curiosity, and its quality reflects that of a quick personal side project subject to a number of hasty iterations.
 >
 > The most interesting parts from a technical standpoint are probably in the content pipeline, which generates the metadata responsible for aligning the audio book with the presentation of the text. It creates inferences from a recorded reading of the book, with some extra logic to negotiate any variations between the exact (known) text of the book and the narrator's (sometimes divergent) utterances to yield the original book text with word-level audio alignment timing data.
@@ -19,7 +21,7 @@ During a one-time content generation step, this JSON file goes through a number 
 
 Behind the scenes, the content generation step uses [whisperx](https://github.com/m-bain/whisperx), with some additional logic employing [Levenshtein distance](https://en.wikipedia.org/wiki/Levenshtein_distance) measurements to ensure parity between the text transcribed from the audio and the text of the book itself.
 
-During early development of the project, before recordings of the audio book narration were available, a text-to-speech engine was used to generate spoken audio — that plumbing remains in the repository
+During early development of the project, before recordings of the audio book narration were available, a text-to-speech engine was used to generate spoken audio — that plumbing remains in the repository
 
 At runtime, the book text, timing data, and the associated audio files are loaded by the front-end, which is a [SvelteKit](https://kit.svelte.dev) app implementing a number of [custom Svelte components](https://github.com/kitschpatrol/ambient-novel/tree/main/src/lib/components). The heart of this is the [track](https://github.com/kitschpatrol/ambient-novel/blob/main/src/lib/components/Track.svelte) component which keeps the scrolling text of each chapter in sync with the audio, and allows live scrubbing through the audio and text simultaneously.
 
@@ -33,12 +35,12 @@ The site's visual design is derived from the cover art of [_The Valentine Mob_](
 
 ### Updating the content
 
-> \[!IMPORTANT]
-> Some audio content assets required for the are external to this repository.
+> [!IMPORTANT]
+> Some audio content assets required for complete content generation are external to this repository.
 
 Certain data and assets are generated from the source data in `/data` and output to `/static`, `/data-generated` and `/src/lib/data`.
 
-It takes about half an hour on to generate everything from scratch.
+It takes about half an hour to generate everything from scratch.
 
 The content generator does a number of things depending on the config object in `/data/book.json`.
 
@@ -127,19 +129,19 @@ brew install dust
 
 #### Scrolling
 
-- <https://github.com/studio-freight/lenis>
-- <https://github.com/Adoratorio/hades>
+- https://github.com/studio-freight/lenis
+- https://github.com/Adoratorio/hades
 
 #### Tailwind
 
-- <https://stackoverflow.com/a/76984634/2437832>
+- https://stackoverflow.com/a/76984634/2437832
 
 #### Svelte PWA
 
-- <https://stackoverflow.com/questions/76007716/how-do-i-use-workbox-range-requests-plugin-with-vite-pwa>
-- <https://github.com/userquin/sveltesociety.dev/tree/pwa>
-- <https://www.sarcevic.dev/offline-first-installable-pwa-sveltekit-workbox-precaching>
-- <https://github.com/daffinm/audio-cache-test>
+- https://stackoverflow.com/questions/76007716/how-do-i-use-workbox-range-requests-plugin-with-vite-pwa
+- https://github.com/userquin/sveltesociety.dev/tree/pwa
+- https://www.sarcevic.dev/offline-first-installable-pwa-sveltekit-workbox-precaching
+- https://github.com/daffinm/audio-cache-test
 - Tried `@vite-pwa/sveltekit`, but too many issues getting correct behavior around range requests.
 
 ## Deployment
@@ -160,7 +162,7 @@ The app is deployed via a GitHub action to Scott's DreamHost server, which runs 
 **Required GitHub [variables](https://github.com/kitschpatrol/ambient-novel/settings/variables/actions):**
 
 - `BASE_PATH_PRODUCTION`\
-  Name of subfolder to copy the site to. During the build process, this variable is also used in `svelte.config.js`. copied. Must start with `/` and end without `/`.\
+  Name of subfolder to copy the site to. During the build process, this variable is also used in `svelte.config.js`. Must start with `/` and end without `/`.\
   Example: `/thevalentinemob`
 
 - `BASE_PATH_STAGING`\
