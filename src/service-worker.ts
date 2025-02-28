@@ -1,13 +1,14 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/triple-slash-reference */
+/* eslint-disable ts/no-unsafe-assignment */
+/* eslint-disable ts/no-unsafe-argument */
+/* eslint-disable ts/no-unsafe-member-access */
+/* eslint-disable ts/no-unsafe-call */
+/* eslint-disable ts/triple-slash-reference */
 /// <reference types="@sveltejs/kit" />
 /// <reference no-default-lib="true"/>
 /// <reference lib="esnext" />
 /// <reference lib="webworker" />
 
+// eslint-disable-next-line import/no-unresolved
 import { files } from '$service-worker'
 import { createPartialResponse } from 'workbox-range-requests'
 import { registerRoute } from 'workbox-routing'
@@ -19,7 +20,7 @@ const filesToCache = new Set(files.filter((f) => f.endsWith('m4a')))
 const cacheName = `tvm-audio-cache`
 
 self.addEventListener('install', () => {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	// eslint-disable-next-line ts/no-explicit-any, unicorn/prefer-global-this
 	;(self as any).skipWaiting()
 
 	// Console.log('SW installed');
@@ -28,7 +29,7 @@ self.addEventListener('install', () => {
 self.addEventListener('activate', async () => {
 	// Console.log('SW activated');
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	// eslint-disable-next-line ts/no-explicit-any, unicorn/prefer-global-this
 	;(self as any).clients.claim()
 
 	// Delete old caches
@@ -59,7 +60,7 @@ self.addEventListener('activate', async () => {
 // even if it's responding to a range request...
 // if the file's already in cache, serve a range response if necessary
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line ts/no-explicit-any
 const m4aHandler = async ({ event }: { event: any }) => {
 	const cache = await caches.open(cacheName)
 
@@ -112,13 +113,14 @@ registerRoute(
 
 // Messages
 
-type ServiceWorkerMessageEvent = {
+type ServiceWorkerMessageEvent = Event & {
 	data: {
 		action: string
 	}
-} & Event
+}
 
 self.addEventListener('message', (event: ServiceWorkerMessageEvent) => {
+	// eslint-disable-next-line ts/no-unnecessary-condition
 	if (event.data && event.data.action === 'clearCache') {
 		// Clear the cache
 		caches
@@ -129,7 +131,7 @@ self.addEventListener('message', (event: ServiceWorkerMessageEvent) => {
 			.then(() => {
 				// Console.log('Caches cleared');
 			})
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			// eslint-disable-next-line ts/no-unused-vars, ts/use-unknown-in-catch-callback-variable
 			.catch((error: Error) => {
 				// Console.log('Error clearing caches', error);
 			})
@@ -137,11 +139,12 @@ self.addEventListener('message', (event: ServiceWorkerMessageEvent) => {
 })
 
 self.addEventListener('message', async (event: ServiceWorkerMessageEvent) => {
+	// eslint-disable-next-line ts/no-unnecessary-condition
 	if (event.data && event.data.action === 'getCacheCount') {
 		const totalCount = await countCachedItems()
 
 		// Send back the total count to the main thread
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		// eslint-disable-next-line ts/no-explicit-any
 		;((event as any).ports[0] as MessagePort).postMessage({
 			cacheCount: totalCount,
 		})

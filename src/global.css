@@ -63,6 +63,7 @@ body {
 
 ::selection {
 	color: white;
+	/* stylelint-disable-next-line declaration-property-value-no-unknown */
 	background: theme('colors.vm-magenta');
 }
 

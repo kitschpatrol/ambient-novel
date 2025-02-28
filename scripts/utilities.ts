@@ -1,8 +1,13 @@
+/* eslint-disable unicorn/no-null */
+/* eslint-disable ts/no-unnecessary-condition */
+/* eslint-disable ts/no-restricted-types */
+/* eslint-disable jsdoc/require-jsdoc */
 /* eslint-disable unicorn/no-array-for-each */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable ts/no-unsafe-argument */
+/* eslint-disable ts/no-unsafe-assignment */
+/* eslint-disable ts/no-unsafe-call */
+/* eslint-disable ts/no-unsafe-member-access */
+
 import synchronizedPrettier from '@prettier/sync'
 import { glob } from 'glob'
 import leven from 'leven'
@@ -26,9 +31,9 @@ type TagOptions = {
 // Function to set tags for MP3
 function setTagsForMP3(audioFilePath: string, tags: TagOptions) {
 	const id3Tags = {
-		// eslint-disable-next-line @typescript-eslint/naming-convention
-		APIC: tags.albumArtPath,
 		album: tags.albumName,
+		// eslint-disable-next-line ts/naming-convention
+		APIC: tags.albumArtPath,
 		artist: tags.artistNames.join(', '),
 		title: tags.trackName,
 	}
@@ -97,6 +102,7 @@ export function findHashedFile(filePath: string): null | string {
 function hashFile(filePath: string): string {
 	const fileBuffer = fs.readFileSync(filePath)
 	const hashSum = crypto.createHash('sha256')
+	// @ts-expect-error - update() expects a Buffer
 	hashSum.update(fileBuffer)
 
 	// Get the first 8 characters of the hash
@@ -127,7 +133,7 @@ export function checkForBinaryOnPath(binary: string) {
 // Trim non-json garbage
 export function extractOutermostJsonObjectArray(s: string): string {
 	const start = s.includes('[{') ? s.indexOf('[{') : 0
-	const end = s.lastIndexOf('}]') >= 0 ? s.lastIndexOf('}]') + 2 : s.length
+	const end = s.includes('}]') ? s.lastIndexOf('}]') + 2 : s.length
 	return s.slice(start, end)
 }
 
@@ -162,6 +168,7 @@ export function getTextBetween(
 
 export function stripEmojis(text: string): string {
 	const emojiRegex =
+		// eslint-disable-next-line regexp/prefer-character-class, regexp/no-dupe-disjunctions
 		/[\uD800-\uDBFF][\uDC00-\uDFFF]|\p{Emoji_Presentation}|\p{Emoji}\uFE0F|🗝|🦊|💜|🗝|🎱|🚀|力||||/gu
 	return text.replaceAll(emojiRegex, '')
 }
@@ -391,9 +398,10 @@ export function compressTo(
 ): void {
 	const extension = outputFile.split('.').pop()
 
+	// eslint-disable-next-line ts/switch-exhaustiveness-check
 	switch (extension) {
-		case 'm4a':
-		case 'aac': {
+		case 'aac':
+		case 'm4a': {
 			compressToAac(sourceFile, outputFile, quality, sampleRate, vbr)
 			break
 		}
@@ -431,13 +439,13 @@ export function normalizeUnicode(string_: string): string {
 			.replaceAll(/[^\u0000-\u007F]/g, (char) => {
 				// Replace non-ASCII characters with their closest ASCII equivalent
 				const asciiChar = char.normalize('NFKD').replaceAll(/[\u0300-\u036F]/g, '')
-				return /[\dA-Za-z]/.test(asciiChar) ? asciiChar : ''
+				return /[\dA-Z]/i.test(asciiChar) ? asciiChar : ''
 			})
 	)
 }
 
 export function normalizeWord(s: string): string {
-	const regex = /[^\dA-Za-z]/g
+	const regex = /[^\dA-Z]/gi
 	const filtered = s.toLowerCase().replaceAll(regex, '')
 	return filtered
 }
@@ -563,7 +571,7 @@ export function alignTranscriptToAudioWithWordLevelTimings(
 		)
 
 		// Console.log(`timingsRawJson: ${JSON.stringify(timingsRawJson, null, 2)}`);
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		// eslint-disable-next-line ts/no-explicit-any
 		const timingsRaw: any[] = JSON.parse(timingsRawJson)
 
 		// Console.log(`timingsRaw: ${JSON.stringify(timingsRaw, null, 2)}`);
@@ -590,6 +598,7 @@ export function generateRegexForString(inputString: string): RegExp {
 	return new RegExp(
 		[
 			'(<span.*>)?',
+			// eslint-disable-next-line ts/no-misused-spread
 			...[...inputString].map((c) => escapeRegex(c) + '(</span>)?' + emojiRegex),
 		].join(''),
 	)

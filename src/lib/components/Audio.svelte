@@ -142,9 +142,7 @@
 		console.error(`audio error for "${String(audioSources)}"`)
 		retry()
 	}}
-	on:introend={() =>
-		// eslint-disable-next-line @typescript-eslint/no-empty-function
-		{}}
+	on:introend={() => {}}
 	on:introstart={() => {
 		// Accommodates resumption during a transition, if that happens before a new Audio player is created
 		isInOutro = false

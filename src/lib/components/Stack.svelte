@@ -64,7 +64,7 @@
 		// lower max chapters on slow mobile
 		const chapterCount = isMobile ? random(2, 3) : random(2, 6)
 		const chapterNumbers = Array.from({ length: chapters.length }, (_, i) => i)
-		// eslint-disable-next-line @typescript-eslint/require-array-sort-compare
+
 		const randomChapters = shuffle(chapterNumbers).slice(0, chapterCount).sort()
 
 		for (const chapterIndex of randomChapters) {
@@ -75,7 +75,7 @@
 			)
 
 			targetTimes[chapterIndex] = startTime
-			// eslint-disable-next-line @typescript-eslint/no-floating-promises, @typescript-eslint/no-loop-func
+
 			tick().then(() => {
 				playStatus[chapterIndex] = true
 			})
@@ -97,13 +97,12 @@
 		// Only reset those in need
 		isResetting = true
 		const chapterIndicesToReset = getIndicesMatchingValue(resetStatus, false)
-		// eslint-disable-next-line no-return-assign
+
 		await delayedForEach(chapterIndicesToReset, (index) => (resetStatus[index] = true), resetDelay)
 		await sleep(config.chapterCoverTransitionDuration - resetDelay)
 		isResetting = false
 	}
 
-	// eslint-disable-next-line no-promise-executor-return
 	const sleep = async (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 </script>
 
@@ -111,7 +110,7 @@
 
 <Header --height="calc(100dvh / 12)" />
 
-<!-- eslint-disable-next-line @typescript-eslint/no-unused-vars -->
+<!-- eslint-disable-next-line ts/no-unused-vars -->
 {#each chapters as _, index}
 	{#if loadCount >= index && width > 0}
 		<!-- {#if 0 >= index && width > 0} -->
@@ -124,7 +123,7 @@
 			on:ended={() => {
 				if (isPlayingThrough) {
 					// TODO
-					// eslint-disable-next-line @typescript-eslint/no-floating-promises
+
 					resetAll() // This throws the right flag
 				} else {
 					resetStatus[index] = true

@@ -9,7 +9,7 @@
 	import Button from '$lib/components/Button.svelte'
 	import ChapterCover from '$lib/components/ChapterCover.svelte'
 	import Starfield from '$lib/components/Starfield.svelte'
-	import * as config from '$lib/config'
+	import { chapterCoverTransitionDuration } from '$lib/config'
 	import type { ChapterData } from '$lib/schemas/book-schema'
 	import { fastFadeFromJs } from '$lib/utils/transition/fast-fade-from-js'
 	import { fastFadeJs } from '$lib/utils/transition/fast-fade-js'
@@ -26,7 +26,7 @@
 	export let chapterColor = '#ff0000'
 	export let rowWidth = 0 // Performance thing to set this externally...
 	export let targetTime = currentTime
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
+
 	export let ready = () => {}
 
 	// Config
@@ -67,9 +67,8 @@
 	// wtf...
 	// https://stackoverflow.com/questions/9811429/html5-audio-tag-on-safari-has-a-delay
 	if (browser && isMobile) {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/naming-convention, @typescript-eslint/no-unsafe-member-access
 		const AudioContext = window.AudioContext || (window as any).webkitAudioContext
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 		const audioContext = new AudioContext()
 	}
 
@@ -138,7 +137,10 @@
 			loop()
 		}, 100)
 
-		wordElements = [...scrollAreaElement.querySelectorAll<HTMLSpanElement>('span[data-time]')]
+		wordElements = [
+			...// @ts-expect-error - Iterator?
+			scrollAreaElement.querySelectorAll<HTMLSpanElement>('span[data-time]'),
+		]
 
 		timeCache = generateTimeCache(chapterData, wordElements)
 
@@ -147,7 +149,6 @@
 
 	onDestroy(() => {
 		if (intervalId) {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
 			clearInterval(intervalId as any)
 		}
 	})
@@ -183,7 +184,7 @@
 		) {
 			if (isSpringEnabled && !immediate) {
 				// This was the trick for the flashes...
-				// eslint-disable-next-line @typescript-eslint/no-floating-promises
+
 				tick().then(() => {
 					$scrollTween = offset
 				})
@@ -391,7 +392,6 @@
 
 	function setLoaded(loaded: boolean) {
 		if (loaded) {
-			// eslint-disable-next-line @typescript-eslint/no-floating-promises
 			tick().then(() => {
 				ready()
 			})
@@ -451,7 +451,7 @@
 			isUserHoldingDownFingerOrMouse = true
 			if (event.target) {
 				// @ts-expect-error no ts in template
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-call
+
 				event.target.setPointerCapture(event.pointerId)
 			}
 		}}
@@ -461,7 +461,7 @@
 		on:scroll={(event) => {
 			if (event.target) {
 				// @ts-expect-error no ts in template
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
 				scrollLeftBinding = event.target.scrollLeft
 			}
 		}}
@@ -526,7 +526,7 @@
 			on:outrostart={() => {
 				isChapterCoverVisible = false
 			}}
-			transition:fastFadeJs|local={{ duration: config.chapterCoverTransitionDuration }}
+			transition:fastFadeJs|local={{ duration: chapterCoverTransitionDuration }}
 		>
 			<ChapterCover {chapterColor} {chapterData} />
 		</div>

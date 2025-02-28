@@ -12,5 +12,4 @@ export const licenseSchema = z.record(
 	}),
 )
 
-export type License = z.infer<typeof licenseSchema>[string]
 export type LicenseData = z.infer<typeof licenseSchema>

@@ -21,7 +21,6 @@
 	function updatePlay(playing: boolean) {
 		if (!isInOutro && audioElement) {
 			if (playing) {
-				// eslint-disable-next-line @typescript-eslint/no-floating-promises
 				audioElement.play() // Remember this is a promise
 			} else {
 				audioElement.pause()

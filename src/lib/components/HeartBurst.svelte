@@ -77,7 +77,7 @@
 	<Particles
 		id="heartburst"
 		on:particlesLoaded={(event) => {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			// @ts-expect-error no ts in template
 			event.detail.particles && (particlesContainer = event.detail.particles)
 		}}
 		options={particlesConfig}
@@ -94,7 +94,6 @@
 	}}
 	on:pointerdown={(event) => {
 		// @ts-expect-error no ts in template
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 		event.target.setPointerCapture(event.pointerId)
 		isCharging = true
 	}}

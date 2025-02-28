@@ -1,7 +1,7 @@
 /* eslint-disable no-lonely-if */
-import { getTextBetween, saveFormattedJson } from './utils'
 import pdf from '@cyber2024/pdf-parse-fixed'
 import fs from 'node:fs'
+import { getTextBetween, saveFormattedJson } from './utilities'
 
 // Kind of a one-shot shortcut to getting the novel text
 // too much work to really create consistent output without
@@ -37,7 +37,7 @@ function chapterTextToLines(
 	// Filter out footnote annotations (this way they don't get split into lines)
 	chapterText = chapterText.replaceAll(/\n\d+\n/gu, '')
 
-	let lines = chapterText.split(/\r?\n/gu)
+	let lines = chapterText.split(/\r?\n/u)
 
 	// Filter empty lines
 	lines = lines.filter((line) => line.trim().length > 0)
@@ -63,7 +63,7 @@ function chapterTextToLines(
 	})
 
 	// Stitch lines
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	// eslint-disable-next-line ts/no-unused-vars, unicorn/no-array-reduce
 	lines = lines.reduce<string[]>((acc, line, index) => {
 		// Console.log(`acc: ${acc}`);
 
@@ -159,7 +159,7 @@ for (let i = 0; i < chapterDelimiters.length; i++) {
 		chapterBreakOnIndentConfig[i],
 	)
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	// eslint-disable-next-line ts/no-unused-vars
 	for (const [i, line] of chapterLines.entries()) {
 		chapterJson.lines.push(line)
 		// Console.log(`${i}|${line}`);

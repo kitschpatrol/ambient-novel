@@ -1,9 +1,14 @@
+/* eslint-disable unicorn/no-null */
 /* eslint-disable unicorn/no-process-exit */
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable ts/no-unused-expressions */
+/* eslint-disable ts/no-unsafe-argument */
+/* eslint-disable ts/no-unsafe-call */
+/* eslint-disable ts/no-unsafe-member-access */
+/* eslint-disable ts/no-unsafe-assignment */
+
+import { parse } from 'node-html-parser'
+import fs from 'node:fs'
+import path from 'node:path'
 import { type BookData, bookSchema } from '../src/lib/schemas/book-schema'
 import { bookSourceSchema } from '../src/lib/schemas/book-source-schema'
 import {
@@ -32,10 +37,7 @@ import {
 	stripUnspeakables,
 	transcribe,
 	truncateWithEllipsis,
-} from './utils'
-import { parse } from 'node-html-parser'
-import fs from 'node:fs'
-import path from 'node:path'
+} from './utilities'
 
 // Prerequisites ----------------------------------------------------------------------
 //
@@ -115,7 +117,7 @@ const bookSource = bookSourceSchema.parse(
 type DeepPartial<T> = {
 	[P in keyof T]?: T[P] extends Array<infer U>
 		? Array<DeepPartial<U>>
-		: T[P] extends object
+		: T[P] extends Record<string, unknown>
 			? DeepPartial<T[P]>
 			: T[P]
 }
@@ -191,6 +193,7 @@ if (config.speechSettings.regenerateSource) {
 
 createIntermediatePaths(config.jsonSettings.outputFile, true)
 
+// eslint-disable-next-line ts/no-unnecessary-condition
 if (config.speechSettings.outputDir) {
 	createIntermediatePaths(
 		config.speechSettings.outputDir,
@@ -389,6 +392,7 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 
 			const renderedWordHtml = wordHtml.outerHTML
 
+			// eslint-disable-next-line ts/no-unnecessary-condition
 			if (renderedWordHtml === undefined) {
 				throw new Error('Word html is undefined')
 			}
@@ -413,11 +417,12 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 		stripTagNodeHtml(lineHtml, 'ul')
 
 		// Sanitize less than '<' and greater than '>' characters which confuse svelte
-		replaceTextNodeHtml(lineHtml, /</gi, '&lt;')
-		replaceTextNodeHtml(lineHtml, />/gi, '&gt;')
+		replaceTextNodeHtml(lineHtml, /</g, '&lt;')
+		replaceTextNodeHtml(lineHtml, />/g, '&gt;')
 
 		const renderedLineHtml = lineHtml.outerHTML
 
+		// eslint-disable-next-line ts/no-unnecessary-condition
 		if (renderedLineHtml === undefined) {
 			throw new Error('Word html is undefined')
 		}

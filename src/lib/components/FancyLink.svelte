@@ -12,7 +12,6 @@
 
 	export let icon: IconDefinition | null = null
 
-	// eslint-disable-next-line unicorn/prevent-abbreviations
 	$: rel = openInNewTab ? 'noopener noreferrer' : undefined
 	$: target = openInNewTab ? '_blank' : undefined
 	$: download = downloadLink ? '' : undefined
@@ -37,8 +36,8 @@
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		place-items: center center;
-		background-color: rgb(255 255 255 / 40%);
 		border-radius: 1rem;
+		background-color: rgb(255 255 255 / 40%);
 		box-shadow: 5px 5px 5px 0 rgb(0 0 0 / 15%);
 		transition: background-color 0.2s ease-in-out;
 	}
