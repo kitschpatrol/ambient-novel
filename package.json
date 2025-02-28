@@ -1,6 +1,6 @@
 {
 	"name": "ambient-novel",
-	"version": "2.0.1",
+	"version": "2.0.2",
 	"private": true,
 	"description": "An interface for nonlinear, interwoven, and interactive exploration of a novel.",
 	"keywords": [
