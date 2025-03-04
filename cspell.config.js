@@ -5,8 +5,8 @@ export default cspellConfig({
 		'*.m4a',
 		'*.mp3',
 		'./src/lib/data/licenses.json',
-		'./data-generated/*',
-		'./build/*',
+		'./data-generated/**/*',
+		'./build/**/*',
 	],
 	words: [
 		'adelay',
