@@ -129,7 +129,7 @@ brew install dust
 
 #### Scrolling
 
-- https://github.com/studio-freight/lenis
+- https://github.com/darkroomengineering/lenis
 - https://github.com/Adoratorio/hades
 
 #### Tailwind
