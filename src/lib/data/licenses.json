@@ -2623,9 +2623,9 @@
 		},
 		{
 			"name": "@tsparticles/basic",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+basic@3.9.1/node_modules/@tsparticles/basic"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+basic@3.8.1/node_modules/@tsparticles/basic"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2634,9 +2634,9 @@
 		},
 		{
 			"name": "@tsparticles/engine",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+engine@3.9.1/node_modules/@tsparticles/engine"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+engine@3.8.1/node_modules/@tsparticles/engine"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2645,9 +2645,9 @@
 		},
 		{
 			"name": "@tsparticles/interaction-external-attract",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+interaction-external-attract@3.9.1/node_modules/@tsparticles/interaction-external-attract"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+interaction-external-attract@3.8.1/node_modules/@tsparticles/interaction-external-attract"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2656,9 +2656,9 @@
 		},
 		{
 			"name": "@tsparticles/interaction-external-bounce",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+interaction-external-bounce@3.9.1/node_modules/@tsparticles/interaction-external-bounce"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+interaction-external-bounce@3.8.1/node_modules/@tsparticles/interaction-external-bounce"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2667,9 +2667,9 @@
 		},
 		{
 			"name": "@tsparticles/interaction-external-bubble",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+interaction-external-bubble@3.9.1/node_modules/@tsparticles/interaction-external-bubble"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+interaction-external-bubble@3.8.1/node_modules/@tsparticles/interaction-external-bubble"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2678,9 +2678,9 @@
 		},
 		{
 			"name": "@tsparticles/interaction-external-connect",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+interaction-external-connect@3.9.1/node_modules/@tsparticles/interaction-external-connect"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+interaction-external-connect@3.8.1/node_modules/@tsparticles/interaction-external-connect"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2689,9 +2689,9 @@
 		},
 		{
 			"name": "@tsparticles/interaction-external-grab",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+interaction-external-grab@3.9.1/node_modules/@tsparticles/interaction-external-grab"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+interaction-external-grab@3.8.1/node_modules/@tsparticles/interaction-external-grab"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2700,9 +2700,9 @@
 		},
 		{
 			"name": "@tsparticles/interaction-external-pause",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+interaction-external-pause@3.9.1/node_modules/@tsparticles/interaction-external-pause"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+interaction-external-pause@3.8.1/node_modules/@tsparticles/interaction-external-pause"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2711,9 +2711,9 @@
 		},
 		{
 			"name": "@tsparticles/interaction-external-push",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+interaction-external-push@3.9.1/node_modules/@tsparticles/interaction-external-push"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+interaction-external-push@3.8.1/node_modules/@tsparticles/interaction-external-push"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2722,9 +2722,9 @@
 		},
 		{
 			"name": "@tsparticles/interaction-external-remove",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+interaction-external-remove@3.9.1/node_modules/@tsparticles/interaction-external-remove"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+interaction-external-remove@3.8.1/node_modules/@tsparticles/interaction-external-remove"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2733,9 +2733,9 @@
 		},
 		{
 			"name": "@tsparticles/interaction-external-repulse",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+interaction-external-repulse@3.9.1/node_modules/@tsparticles/interaction-external-repulse"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+interaction-external-repulse@3.8.1/node_modules/@tsparticles/interaction-external-repulse"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2744,9 +2744,9 @@
 		},
 		{
 			"name": "@tsparticles/interaction-external-slow",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+interaction-external-slow@3.9.1/node_modules/@tsparticles/interaction-external-slow"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+interaction-external-slow@3.8.1/node_modules/@tsparticles/interaction-external-slow"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2755,9 +2755,9 @@
 		},
 		{
 			"name": "@tsparticles/interaction-particles-attract",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+interaction-particles-attract@3.9.1/node_modules/@tsparticles/interaction-particles-attract"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+interaction-particles-attract@3.8.1/node_modules/@tsparticles/interaction-particles-attract"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2766,9 +2766,9 @@
 		},
 		{
 			"name": "@tsparticles/interaction-particles-collisions",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+interaction-particles-collisions@3.9.1/node_modules/@tsparticles/interaction-particles-collisions"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+interaction-particles-collisions@3.8.1/node_modules/@tsparticles/interaction-particles-collisions"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2777,9 +2777,9 @@
 		},
 		{
 			"name": "@tsparticles/interaction-particles-links",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+interaction-particles-links@3.9.1/node_modules/@tsparticles/interaction-particles-links"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+interaction-particles-links@3.8.1/node_modules/@tsparticles/interaction-particles-links"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2788,9 +2788,9 @@
 		},
 		{
 			"name": "@tsparticles/move-base",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+move-base@3.9.1/node_modules/@tsparticles/move-base"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+move-base@3.8.1/node_modules/@tsparticles/move-base"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2799,9 +2799,9 @@
 		},
 		{
 			"name": "@tsparticles/move-parallax",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+move-parallax@3.9.1/node_modules/@tsparticles/move-parallax"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+move-parallax@3.8.1/node_modules/@tsparticles/move-parallax"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2810,9 +2810,9 @@
 		},
 		{
 			"name": "@tsparticles/plugin-easing-quad",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+plugin-easing-quad@3.9.1/node_modules/@tsparticles/plugin-easing-quad"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+plugin-easing-quad@3.8.1/node_modules/@tsparticles/plugin-easing-quad"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2821,9 +2821,9 @@
 		},
 		{
 			"name": "@tsparticles/plugin-hex-color",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+plugin-hex-color@3.9.1/node_modules/@tsparticles/plugin-hex-color"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+plugin-hex-color@3.8.1/node_modules/@tsparticles/plugin-hex-color"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2832,9 +2832,9 @@
 		},
 		{
 			"name": "@tsparticles/plugin-hsl-color",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+plugin-hsl-color@3.9.1/node_modules/@tsparticles/plugin-hsl-color"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+plugin-hsl-color@3.8.1/node_modules/@tsparticles/plugin-hsl-color"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2843,9 +2843,9 @@
 		},
 		{
 			"name": "@tsparticles/plugin-rgb-color",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+plugin-rgb-color@3.9.1/node_modules/@tsparticles/plugin-rgb-color"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+plugin-rgb-color@3.8.1/node_modules/@tsparticles/plugin-rgb-color"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2854,9 +2854,9 @@
 		},
 		{
 			"name": "@tsparticles/shape-circle",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+shape-circle@3.9.1/node_modules/@tsparticles/shape-circle"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+shape-circle@3.8.1/node_modules/@tsparticles/shape-circle"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2865,9 +2865,9 @@
 		},
 		{
 			"name": "@tsparticles/shape-emoji",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+shape-emoji@3.9.1/node_modules/@tsparticles/shape-emoji"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+shape-emoji@3.8.1/node_modules/@tsparticles/shape-emoji"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2876,9 +2876,9 @@
 		},
 		{
 			"name": "@tsparticles/shape-image",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+shape-image@3.9.1/node_modules/@tsparticles/shape-image"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+shape-image@3.8.1/node_modules/@tsparticles/shape-image"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2887,9 +2887,9 @@
 		},
 		{
 			"name": "@tsparticles/shape-line",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+shape-line@3.9.1/node_modules/@tsparticles/shape-line"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+shape-line@3.8.1/node_modules/@tsparticles/shape-line"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2898,9 +2898,9 @@
 		},
 		{
 			"name": "@tsparticles/shape-polygon",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+shape-polygon@3.9.1/node_modules/@tsparticles/shape-polygon"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+shape-polygon@3.8.1/node_modules/@tsparticles/shape-polygon"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2909,9 +2909,9 @@
 		},
 		{
 			"name": "@tsparticles/shape-square",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+shape-square@3.9.1/node_modules/@tsparticles/shape-square"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+shape-square@3.8.1/node_modules/@tsparticles/shape-square"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2920,9 +2920,9 @@
 		},
 		{
 			"name": "@tsparticles/shape-star",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+shape-star@3.9.1/node_modules/@tsparticles/shape-star"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+shape-star@3.8.1/node_modules/@tsparticles/shape-star"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2931,9 +2931,9 @@
 		},
 		{
 			"name": "@tsparticles/slim",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+slim@3.9.1/node_modules/@tsparticles/slim"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+slim@3.8.1/node_modules/@tsparticles/slim"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2953,9 +2953,9 @@
 		},
 		{
 			"name": "@tsparticles/updater-color",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+updater-color@3.9.1/node_modules/@tsparticles/updater-color"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+updater-color@3.8.1/node_modules/@tsparticles/updater-color"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2964,9 +2964,9 @@
 		},
 		{
 			"name": "@tsparticles/updater-life",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+updater-life@3.9.1/node_modules/@tsparticles/updater-life"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+updater-life@3.8.1/node_modules/@tsparticles/updater-life"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2975,9 +2975,9 @@
 		},
 		{
 			"name": "@tsparticles/updater-opacity",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+updater-opacity@3.9.1/node_modules/@tsparticles/updater-opacity"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+updater-opacity@3.8.1/node_modules/@tsparticles/updater-opacity"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2986,9 +2986,9 @@
 		},
 		{
 			"name": "@tsparticles/updater-out-modes",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+updater-out-modes@3.9.1/node_modules/@tsparticles/updater-out-modes"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+updater-out-modes@3.8.1/node_modules/@tsparticles/updater-out-modes"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -2997,9 +2997,9 @@
 		},
 		{
 			"name": "@tsparticles/updater-rotate",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+updater-rotate@3.9.1/node_modules/@tsparticles/updater-rotate"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+updater-rotate@3.8.1/node_modules/@tsparticles/updater-rotate"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -3008,9 +3008,9 @@
 		},
 		{
 			"name": "@tsparticles/updater-size",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+updater-size@3.9.1/node_modules/@tsparticles/updater-size"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+updater-size@3.8.1/node_modules/@tsparticles/updater-size"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -3019,9 +3019,9 @@
 		},
 		{
 			"name": "@tsparticles/updater-stroke-color",
-			"versions": ["3.9.1"],
+			"versions": ["3.8.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+updater-stroke-color@3.9.1/node_modules/@tsparticles/updater-stroke-color"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@tsparticles+updater-stroke-color@3.8.1/node_modules/@tsparticles/updater-stroke-color"
 			],
 			"license": "MIT",
 			"author": "Matteo Bruni",
@@ -10195,7 +10195,7 @@
 			"name": "svelte-check",
 			"versions": ["4.3.4"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/svelte-check@4.3.4_picomatch@4.0.3_svelte@4.2.20_typescript@5.7.3/node_modules/svelte-check"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/svelte-check@4.3.4_picomatch@4.0.2_svelte@4.2.20_typescript@5.7.3/node_modules/svelte-check"
 			],
 			"license": "MIT",
 			"author": "The Svelte Community",
