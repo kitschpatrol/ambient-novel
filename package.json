@@ -45,11 +45,11 @@
 	"devDependencies": {
 		"@cyber2024/pdf-parse-fixed": "^1.2.5",
 		"@fortawesome/free-solid-svg-icons": "^6.7.2",
-		"@kitschpatrol/shared-config": "^5.9.2",
+		"@kitschpatrol/shared-config": "^5.10.0",
 		"@playwright/test": "^1.57.0",
 		"@prettier/sync": "^0.5.5",
 		"@sveltejs/adapter-static": "^3.0.10",
-		"@sveltejs/kit": "^2.49.0",
+		"@sveltejs/kit": "^2.49.1",
 		"@sveltejs/vite-plugin-svelte": "^3.1.2",
 		"@tailwindcss/container-queries": "^0.1.1",
 		"@tsparticles/engine": "3.8.1",
