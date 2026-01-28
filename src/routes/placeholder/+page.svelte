@@ -53,6 +53,7 @@
 {/if}
 
 <style lang="postcss">
+	@reference "../../global.css";
 	div.star-wrapper {
 		pointer-events: none;
 		touch-action: none;
@@ -71,7 +72,7 @@
 	h1,
 	h2,
 	h3 {
-		@apply w-full text-center font-display tracking-wider text-white shadow-vm-shadow text-shadow;
+		@apply font-display shadow-vm-shadow text-shadow w-full text-center tracking-wider text-white;
 	}
 
 	h2 {

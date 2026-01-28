@@ -16,12 +16,12 @@
 		{/if}
 	</div>
 	{#if rawPath === ''}
-		<h1 class="font-display tracking-wider text-vm-text-headline shadow-vm-shadow text-shadow">
+		<h1 class="font-display text-vm-text-headline shadow-vm-shadow text-shadow tracking-wider">
 			{title.replaceAll('a', 'A')}
 		</h1>
 	{:else}
 		<a class="home" href={base}>
-			<h1 class="font-display tracking-wider text-vm-text-headline shadow-vm-shadow text-shadow">
+			<h1 class="font-display text-vm-text-headline shadow-vm-shadow text-shadow tracking-wider">
 				{title.replaceAll('a', 'A')}
 			</h1>
 		</a>
@@ -36,6 +36,7 @@
 </header>
 
 <style lang="postcss">
+	@reference "../../global.css";
 	header {
 		position: var(--position);
 		z-index: 5;
@@ -54,7 +55,7 @@
 	header a:not(.home) {
 		font-size: min(min(calc(100svh / 52), calc(100vw / 32), 1rem));
 
-		@apply flex h-full items-center justify-center px-5 text-center font-display text-base leading-none text-white opacity-80 shadow-vm-shadow text-shadow;
+		@apply font-display shadow-vm-shadow text-shadow flex h-full items-center justify-center px-5 text-center text-base leading-none text-white opacity-80;
 	}
 
 	header a:not(.home):hover {

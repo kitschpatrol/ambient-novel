@@ -83,7 +83,7 @@
 	--shadow="-10px 25px 50px 0px rgba(0, 0, 0, 0.2)"
 />
 
-<main class="mx-auto mb-16 mt-36 max-w-[25rem]">
+<main class="mx-auto mt-36 mb-16 max-w-[25rem]">
 	<p class="font-display text-white">{name} version {version}</p>
 	<p class="font-display text-white">
 		Service Workers: {#await swCount then count}

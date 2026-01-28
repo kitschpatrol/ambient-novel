@@ -511,7 +511,7 @@
 
 	{#if debug}
 		<div
-			class="mouse pointer-events-none absolute left-[50%] top-0 h-[10dvh] w-1 touch-none bg-red-500"
+			class="mouse pointer-events-none absolute top-0 left-[50%] h-[10dvh] w-1 touch-none bg-red-500"
 		/>
 	{/if}
 
@@ -532,7 +532,7 @@
 		</div>
 	{/if}
 
-	<div class="absolute left-0 top-0 flex h-full" class:w-full={isReset}>
+	<div class="absolute top-0 left-0 flex h-full" class:w-full={isReset}>
 		<Button
 			icon={isPlaying ? faPause : faPlay}
 			isTransitionEnabled={true}
@@ -543,7 +543,7 @@
 	</div>
 
 	{#if !isReset}
-		<div class="absolute right-0 top-0 flex h-full">
+		<div class="absolute top-0 right-0 flex h-full">
 			<Button
 				icon={faRotateBack}
 				isTransitionEnabled={true}
@@ -556,7 +556,7 @@
 
 	{#if debug}
 		<div
-			class="pointer-events-none absolute left-0 top-0 h-full cursor-none touch-none text-xs text-red-400"
+			class="pointer-events-none absolute top-0 left-0 h-full cursor-none touch-none text-xs text-red-400"
 		>
 			<p>isUserHoldingDownFingerOrMouse: {isUserHoldingDownFingerOrMouse}</p>
 			<p>isPlayingAndNotSeeking: {isPlayingAndNotSeeking}</p>

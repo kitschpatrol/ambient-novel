@@ -55,7 +55,7 @@
 {/if}
 
 <main
-	class="mx-auto mb-20 mt-36 max-w-[90ch] bg-[#f7f7f7] bg-opacity-90 px-12 pb-16 pt-3 font-serif text-xl text-[#222222] max-sm:mx-auto max-sm:mb-16 max-sm:mt-24 max-sm:w-[90vw] max-sm:px-5 max-sm:text-xl"
+	class="bg-opacity-90 mx-auto mt-36 mb-20 max-w-[90ch] bg-[#f7f7f7] px-12 pt-3 pb-16 font-serif text-xl text-[#222222] max-sm:mx-auto max-sm:mt-24 max-sm:mb-16 max-sm:w-[90vw] max-sm:px-5 max-sm:text-xl"
 >
 	<h2>Get the Book</h2>
 
@@ -133,6 +133,7 @@
 />
 
 <style lang="postcss">
+	@reference "../../global.css";
 	div.star-wrapper {
 		pointer-events: none;
 		touch-action: none;
@@ -152,11 +153,11 @@
 	}
 
 	main h2 {
-		@apply pb-3 pt-6 text-3xl font-normal;
+		@apply pt-6 pb-3 text-3xl font-normal;
 	}
 
 	main h3 {
-		@apply pb-3 pt-14 text-2xl font-medium italic;
+		@apply pt-14 pb-3 text-2xl font-medium italic;
 	}
 
 	img.heart {
