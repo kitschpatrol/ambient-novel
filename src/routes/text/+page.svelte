@@ -1,11 +1,11 @@
 <script lang="ts">
+	import { onMount } from 'svelte'
+	import { fade } from 'svelte/transition'
 	import type { BookSource } from '$lib/schemas/book-source-schema'
-	import { base } from '$app/paths'
+	import { asset } from '$app/paths'
 	import Header from '$lib/components/Header.svelte'
 	import Starfield from '$lib/components/Starfield.svelte'
 	import bookSourceRaw from '$lib/data/book-source.json'
-	import { onMount } from 'svelte'
-	import { fade } from 'svelte/transition'
 	const bookData = bookSourceRaw as BookSource
 
 	// Doing the server-loaded approach in the "text" subdirectory messes up the
@@ -63,19 +63,19 @@
 	<section class="table-of-contents">
 		<p>Contents</p>
 		<ol>
-			{#each chapters as chapter, index}
+			{#each chapters as chapter, index (index)}
 				<li><a href="#chapter-{index + 1}">{chapter.title}</a></li>
 			{/each}
 		</ol>
 	</section>
 
-	{#each chapters as chapter, index}
+	{#each chapters as chapter, index (index)}
 		<hr />
 		<section class="chapter">
 			<h3 id="chapter-{index + 1}">
 				<span class="chapter-number">{index + 1}</span>{chapter.title}
 			</h3>
-			{#each chapter.lines as line}
+			{#each chapter.lines as line, lineIndex (lineIndex)}
 				<p>{@html line}</p>
 			{/each}
 		</section>
@@ -83,8 +83,8 @@
 </main>
 <img
 	alt="heart"
-	class="heart mx-auto mb-16 w-[10vw] max-w-[4rem] pb-16 opacity-90"
-	src="{base}/heart.svg"
+	class="heart mx-auto mb-16 w-[10vw] max-w-16 pb-16 opacity-90"
+	src={asset('/heart.svg')}
 />
 
 {#if isMounted}
@@ -105,7 +105,7 @@
 {/if}
 
 <style lang="postcss">
-	@reference "../../global.css";
+	@import url('../../global.css') reference;
 	/* General */
 	div.star-wrapper {
 		pointer-events: none;

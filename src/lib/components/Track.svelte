@@ -3,21 +3,21 @@
 <script lang="ts">
 	import { faPause, faPlay, faRotateBack } from '@fortawesome/free-solid-svg-icons'
 	import { browser } from '$app/environment'
-	import { base } from '$app/paths'
+	import { asset } from '$app/paths'
 	import Audio from '$lib/components/Audio.svelte'
 	// Import AudioFadeProxy from '$lib/components/AudioFadeProxy.svelte';
-	import Button from '$lib/components/Button.svelte'
-	import ChapterCover from '$lib/components/ChapterCover.svelte'
-	import Starfield from '$lib/components/Starfield.svelte'
-	import { CHAPTER_COVER_TRANSITION_DURATION } from '$lib/config'
-	import type { ChapterData } from '$lib/schemas/book-schema'
-	import { fastFadeFromJs } from '$lib/utils/transition/fast-fade-from-js'
-	import { fastFadeJs } from '$lib/utils/transition/fast-fade-js'
 	import ScrollBooster from 'scrollbooster'
 	import { onDestroy, onMount, tick } from 'svelte'
 	import { spring } from 'svelte/motion'
 	import tinycolor from 'tinycolor2'
 	import UaParser from 'ua-parser-js'
+	import type { ChapterData } from '$lib/schemas/book-schema'
+	import Button from '$lib/components/Button.svelte'
+	import ChapterCover from '$lib/components/ChapterCover.svelte'
+	import Starfield from '$lib/components/Starfield.svelte'
+	import { CHAPTER_COVER_TRANSITION_DURATION } from '$lib/config'
+	import { fastFadeFromJs } from '$lib/utils/transition/fast-fade-from-js'
+	import { fastFadeJs } from '$lib/utils/transition/fast-fade-js'
 
 	export let chapterData: ChapterData
 	export let isPlaying = false
@@ -27,7 +27,9 @@
 	export let rowWidth = 0 // Performance thing to set this externally...
 	export let targetTime = currentTime
 
-	export let ready = () => {}
+	export let ready = () => {
+		/* Empty */
+	}
 
 	// Config
 	const showTextBeforeNarrationStarts = false
@@ -67,7 +69,7 @@
 	// wtf...
 	// https://stackoverflow.com/questions/9811429/html5-audio-tag-on-safari-has-a-delay
 	if (browser && isMobile) {
-		const AudioContext = window.AudioContext || (window as any).webkitAudioContext
+		const AudioContext = globalThis.AudioContext || (globalThis as any).webkitAudioContext
 
 		const audioContext = new AudioContext()
 	}
@@ -572,7 +574,7 @@
 
 {#if isMobile}
 	<Audio
-		audioSources={chapterData.audio.files.map((file) => `${base}/${file}`)}
+		audioSources={chapterData.audio.files.map((file) => asset(`/${file}`))}
 		bind:currentTime
 		isPlaying={isPlayingAndNotSeeking}
 		on:canplaythrough={() => {
@@ -583,7 +585,7 @@
 	/>
 {:else}
 	<Audio
-		audioSources={chapterData.audio.files.map((file) => `${base}/${file}`)}
+		audioSources={chapterData.audio.files.map((file) => asset(`/${file}`))}
 		bind:currentTime
 		isPlaying={isPlayingAndNotSeeking}
 		on:canplaythrough={() => {

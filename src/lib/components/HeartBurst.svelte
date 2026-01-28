@@ -1,11 +1,11 @@
 <script lang="ts">
 	import type { Container, Engine, ISourceOptions } from '@tsparticles/engine'
-	import { base } from '$app/paths'
 	import { loadSlim } from '@tsparticles/slim'
 	import Particles, { particlesInit } from '@tsparticles/svelte'
 	import { onMount } from 'svelte' // If you are going to use `loadSlim`, install the "tsparticles-slim" package too.
+	import { asset } from '$app/paths'
 
-	// charge-up logic
+	// Charge-up logic
 	let startTime = 0
 	let chargeDuration = 0
 	let particlesContainer: Container
@@ -47,7 +47,7 @@
 					images: {
 						fill: true,
 						replaceColor: true,
-						src: `${base}/heart.svg`,
+						src: asset('/heart.svg'),
 					},
 				},
 				type: 'images',

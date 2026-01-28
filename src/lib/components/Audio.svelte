@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { fadeVolume } from '$lib/utils/transition/fade-volume'
 	import { lookup } from 'mrmime'
 	import { onMount } from 'svelte'
+	import { fadeVolume } from '$lib/utils/transition/fade-volume'
 
 	export let audioSources: string[]
 	export let isPlaying = false
@@ -142,7 +142,7 @@
 		console.error(`audio error for "${String(audioSources)}"`)
 		retry()
 	}}
-	on:introend={() => {}}
+	on:introend
 	on:introstart={() => {
 		// Accommodates resumption during a transition, if that happens before a new Audio player is created
 		isInOutro = false

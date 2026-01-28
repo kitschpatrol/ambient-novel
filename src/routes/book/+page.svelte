@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { base } from '$app/paths'
-	import FancyLink from '$lib/components/FancyLink.svelte'
-	import Header from '$lib/components/Header.svelte'
-	import Starfield from '$lib/components/Starfield.svelte'
 	import { faArrowRight, faCloudArrowDown } from '@fortawesome/free-solid-svg-icons'
 	import { onMount } from 'svelte'
 	import { fade } from 'svelte/transition'
+	import { asset, resolve } from '$app/paths'
+	import FancyLink from '$lib/components/FancyLink.svelte'
+	import Header from '$lib/components/Header.svelte'
+	import Starfield from '$lib/components/Starfield.svelte'
 
 	let isMounted = false
 	onMount(() => {
@@ -65,7 +65,7 @@
 		href="https://39forkspublishing.square.site/product/the-valentine-mob/97"
 		icon={faArrowRight}
 		imageHeight={3401}
-		imagePath="{base}/images/book.webp"
+		imagePath={asset('/images/book.webp')}
 		imageWidth={2000}
 	>
 		The 72-page, perfect-bound paperback.<br /><em>Buy direct from 39forks Publishing</em>
@@ -77,7 +77,7 @@
 		href="https://39forkspublishing.square.site/product/the-valentine-mob-deluxe-version/98"
 		icon={faArrowRight}
 		imageHeight={4463}
-		imagePath="{base}/images/deluxe.webp"
+		imagePath={asset('/images/deluxe.webp')}
 		imageWidth={4644}
 	>
 		The book, plus a custom-built Lego box featuring sixteen Valentine Mob Minifigs.
@@ -88,10 +88,10 @@
 	<FancyLink
 		alt="Screenshot of The&nbsp;Valentine&nbsp;Mob playing on an iPhone in Apple Music"
 		downloadLink={true}
-		href="{base}/audio-book/The Valentine Mob - Complete Audio Book.mp3"
+		href={asset('/audio-book/The Valentine Mob - Complete Audio Book.mp3')}
 		icon={faCloudArrowDown}
 		imageHeight={2774}
-		imagePath="{base}/images/audio.webp"
+		imagePath={asset('/images/audio.webp')}
 		imageWidth={1415}
 		openInNewTab={false}
 	>
@@ -102,10 +102,10 @@
 	<h3>The Text</h3>
 	<FancyLink
 		alt="The Valentine Mob deluxe edition with book and lego set"
-		href="{base}/text"
+		href={resolve('/text', {})}
 		icon={faArrowRight}
 		imageHeight={3550}
-		imagePath="{base}/images/text.webp"
+		imagePath={asset('/images/text.webp')}
 		imageWidth={5063}
 	>
 		The complete linear text of The&nbsp;Valentine&nbsp;Mob.<br />
@@ -119,7 +119,7 @@
 		href="https://39forkspublishing.square.site/s/shop"
 		icon={faArrowRight}
 		imageHeight={2006}
-		imagePath="{base}/images/store.webp"
+		imagePath={asset('/images/store.webp')}
 		imageWidth={2723}
 	>
 		Discover more books, projects, and games from 39forks.
@@ -128,12 +128,13 @@
 </main>
 <img
 	alt="heart"
-	class="heart mx-auto mb-16 w-[10vw] max-w-[4rem] pb-16 opacity-90"
-	src="{base}/heart.svg"
+	class="heart mx-auto mb-16 w-[10vw] max-w-16 pb-16 opacity-90"
+	src={asset('/heart.svg')}
 />
 
 <style lang="postcss">
-	@reference "../../global.css";
+	@import url('../../global.css') reference;
+
 	div.star-wrapper {
 		pointer-events: none;
 		touch-action: none;

@@ -38,7 +38,7 @@
 		"generate-data": "tsx ./scripts/generate-data.ts",
 		"generate-licenses": "pnpm licenses list --json > ./src/lib/data/licenses.json",
 		"generate-package-info": "jq '{version, name, description}' package.json > ./src/lib/data/pkg-info.json",
-		"lint": "kpi lint",
+		"lint": "kpi lint && pnpm run check",
 		"preview": "vite preview --host",
 		"scrape-pdf": "tsx ./scripts/scrape-pdf.ts"
 	},

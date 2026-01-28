@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { base } from '$app/paths'
+	import { base, resolve } from '$app/paths'
 	import { page } from '$app/stores'
 
 	export let title = 'The Valentine Mob'
@@ -10,9 +10,9 @@
 <header class="grid grid-cols-[1fr_max-content_1fr]">
 	<div class="justify-self-start">
 		{#if rawPath === 'about'}
-			<a href={base}>Home</a>
+			<a href={resolve('/', {})}>Home</a>
 		{:else}
-			<a href="{base}/about">About</a>
+			<a href={resolve('/about', {})}>About</a>
 		{/if}
 	</div>
 	{#if rawPath === ''}
@@ -20,7 +20,7 @@
 			{title.replaceAll('a', 'A')}
 		</h1>
 	{:else}
-		<a class="home" href={base}>
+		<a class="home" href={resolve('/', {})}>
 			<h1 class="font-display text-vm-text-headline shadow-vm-shadow text-shadow tracking-wider">
 				{title.replaceAll('a', 'A')}
 			</h1>
@@ -28,15 +28,16 @@
 	{/if}
 	<div class="justify-self-end">
 		{#if rawPath === 'book'}
-			<a href={base}>Home</a>
+			<a href={resolve('/', {})}>Home</a>
 		{:else}
-			<a href="{base}/book">Get the Book </a>
+			<a href={resolve('/book', {})}>Get the Book </a>
 		{/if}
 	</div>
 </header>
 
 <style lang="postcss">
-	@reference "../../global.css";
+	@import url('../../global.css') reference;
+
 	header {
 		position: var(--position);
 		z-index: 5;

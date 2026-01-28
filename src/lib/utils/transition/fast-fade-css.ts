@@ -6,10 +6,10 @@ import { linear } from 'svelte/easing'
  * not really faster in practice
  */
 export function fastFadeCss(
-	node: HTMLElement,
+	_node: HTMLElement,
 	{ delay = 0, duration = 400, easing = linear }: FadeParams = {},
 ): TransitionConfig {
-	// Const o = +getComputedStyle(node).opacity;
+	// Const o = +getComputedStyle(_node).opacity;
 
 	return {
 		css: (t: number) => `opacity: ${t}`,

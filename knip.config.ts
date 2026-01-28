@@ -16,6 +16,7 @@ export default knipConfig({
 		'@types/pdf-parse',
 		'@types/sanitize-html',
 		'sanitize-html',
+		'tailwindcss',
 		'workbox-build',
 	],
 	ignoreUnresolved: [/^\$/],

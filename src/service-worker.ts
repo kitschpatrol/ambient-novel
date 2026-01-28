@@ -8,10 +8,10 @@
 /// <reference lib="esnext" />
 /// <reference lib="webworker" />
 
-// eslint-disable-next-line import/no-unresolved
-import { files } from '$service-worker'
 import { createPartialResponse } from 'workbox-range-requests'
 import { registerRoute } from 'workbox-routing'
+// eslint-disable-next-line import/no-unresolved
+import { files } from '$service-worker'
 
 // Can't use automatic vite-plugin-pwa injection because we need to
 // manage the range responses
@@ -121,7 +121,7 @@ type ServiceWorkerMessageEvent = Event & {
 
 self.addEventListener('message', (event: ServiceWorkerMessageEvent) => {
 	// eslint-disable-next-line ts/no-unnecessary-condition
-	if (event.data && event.data.action === 'clearCache') {
+	if (event.data?.action === 'clearCache') {
 		// Clear the cache
 		caches
 			.keys()
@@ -131,16 +131,15 @@ self.addEventListener('message', (event: ServiceWorkerMessageEvent) => {
 			.then(() => {
 				// Console.log('Caches cleared');
 			})
-			// eslint-disable-next-line ts/no-unused-vars, ts/use-unknown-in-catch-callback-variable
-			.catch((error: Error) => {
-				// Console.log('Error clearing caches', error);
+			.catch((_error: unknown) => {
+				// Console.log('Error clearing caches', _error);
 			})
 	}
 })
 
 self.addEventListener('message', async (event: ServiceWorkerMessageEvent) => {
 	// eslint-disable-next-line ts/no-unnecessary-condition
-	if (event.data && event.data.action === 'getCacheCount') {
+	if (event.data?.action === 'getCacheCount') {
 		const totalCount = await countCachedItems()
 
 		// Send back the total count to the main thread

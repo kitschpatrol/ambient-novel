@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { IconDefinition } from '@fortawesome/free-solid-svg-icons'
+	// eslint-disable-next-line import/no-named-as-default
 	import Fa from 'svelte-fa'
 
 	export let alt: string
@@ -10,14 +11,14 @@
 	export let imageWidth: number
 	export let imageHeight: number
 
-	export let icon: IconDefinition | null = null
+	export let icon: IconDefinition | undefined = undefined
 
-	$: rel = openInNewTab ? 'noopener noreferrer' : undefined
+	$: relationship = openInNewTab ? 'noopener noreferrer' : undefined
 	$: target = openInNewTab ? '_blank' : undefined
 	$: download = downloadLink ? '' : undefined
 </script>
 
-<a {download} {href} {rel} {target}>
+<a {download} {href} rel={relationship} {target}>
 	<div>
 		<img {alt} height={imageHeight} src={imagePath} width={imageWidth} />
 	</div>

@@ -8,10 +8,11 @@
 /* eslint-disable ts/no-unsafe-call */
 /* eslint-disable ts/no-unsafe-member-access */
 
+import type { Node } from 'node-html-parser'
 import synchronizedPrettier from '@prettier/sync'
 import { glob } from 'glob'
 import leven from 'leven'
-import { HTMLElement, type Node, TextNode } from 'node-html-parser'
+import { HTMLElement, TextNode } from 'node-html-parser'
 import id3 from 'node-id3'
 import { execSync } from 'node:child_process'
 import crypto from 'node:crypto'

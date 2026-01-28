@@ -1,7 +1,7 @@
 <script lang="ts">
-	import Starfield from '$lib/components/Starfield.svelte'
 	import { onMount } from 'svelte'
 	import { fade } from 'svelte/transition'
+	import Starfield from '$lib/components/Starfield.svelte'
 	let isMounted = false
 	onMount(() => {
 		isMounted = true
@@ -53,7 +53,8 @@
 {/if}
 
 <style lang="postcss">
-	@reference "../../global.css";
+	@import url('../../global.css') reference;
+
 	div.star-wrapper {
 		pointer-events: none;
 		touch-action: none;

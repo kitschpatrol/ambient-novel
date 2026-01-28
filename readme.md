@@ -129,19 +129,19 @@ brew install dust
 
 #### Scrolling
 
-- https://github.com/darkroomengineering/lenis
-- https://github.com/Adoratorio/hades
+- <https://github.com/darkroomengineering/lenis>
+- <https://github.com/Adoratorio/hades>
 
 #### Tailwind
 
-- https://stackoverflow.com/a/76984634/2437832
+- <https://stackoverflow.com/a/76984634/2437832>
 
 #### Svelte PWA
 
-- https://stackoverflow.com/questions/76007716/how-do-i-use-workbox-range-requests-plugin-with-vite-pwa
-- https://github.com/userquin/sveltesociety.dev/tree/pwa
-- https://www.sarcevic.dev/offline-first-installable-pwa-sveltekit-workbox-precaching
-- https://github.com/daffinm/audio-cache-test
+- <https://stackoverflow.com/questions/76007716/how-do-i-use-workbox-range-requests-plugin-with-vite-pwa>
+- <https://github.com/userquin/sveltesociety.dev/tree/pwa>
+- <https://www.sarcevic.dev/offline-first-installable-pwa-sveltekit-workbox-precaching>
+- <https://github.com/daffinm/audio-cache-test>
 - Tried `@vite-pwa/sveltekit`, but too many issues getting correct behavior around range requests.
 
 ## Deployment

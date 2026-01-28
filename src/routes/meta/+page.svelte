@@ -1,10 +1,10 @@
 <script lang="ts">
+	import { faBomb, faTrash } from '@fortawesome/free-solid-svg-icons'
+	import UaParser from 'ua-parser-js'
 	import { browser } from '$app/environment'
 	import Button from '$lib/components/Button.svelte'
 	import Header from '$lib/components/Header.svelte'
 	import { name, version } from '$lib/data/pkg-info.json'
-	import { faBomb, faTrash } from '@fortawesome/free-solid-svg-icons'
-	import UaParser from 'ua-parser-js'
 
 	async function getServiceWorkerCount() {
 		const registrations = await navigator.serviceWorker.getRegistrations()
@@ -83,7 +83,7 @@
 	--shadow="-10px 25px 50px 0px rgba(0, 0, 0, 0.2)"
 />
 
-<main class="mx-auto mt-36 mb-16 max-w-[25rem]">
+<main class="mx-auto mt-36 mb-16 max-w-100">
 	<p class="font-display text-white">{name} version {version}</p>
 	<p class="font-display text-white">
 		Service Workers: {#await swCount then count}

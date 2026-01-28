@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { base } from '$app/paths'
-	import Header from '$lib/components/Header.svelte'
-	import Starfield from '$lib/components/Starfield.svelte'
 	import { onMount } from 'svelte'
 	import { fade } from 'svelte/transition'
+	import { asset } from '$app/paths'
+	import Header from '$lib/components/Header.svelte'
+	import Starfield from '$lib/components/Starfield.svelte'
 	// Import OpenSourceCredits from '$lib/components/OpenSourceCredits.svelte';
 	// import licenseDataRaw from '$lib/data/licenses.json';
 	// import { licenseSchema } from '$lib/schemas/licenses-schema';
@@ -145,12 +145,13 @@
 </main>
 <img
 	alt="heart"
-	class="heart mx-auto mb-16 w-[10vw] max-w-[4rem] pb-16 opacity-90"
-	src="{base}/heart.svg"
+	class="heart mx-auto mb-16 w-[10vw] max-w-16 pb-16 opacity-90"
+	src={asset('/heart.svg')}
 />
 
 <style lang="postcss">
-	@reference "../../global.css";
+	@import url('../../global.css') reference;
+
 	div.star-wrapper {
 		pointer-events: none;
 		touch-action: none;
