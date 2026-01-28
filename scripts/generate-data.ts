@@ -7,6 +7,7 @@
 /* eslint-disable ts/no-unsafe-assignment */
 
 import { parse } from 'node-html-parser'
+import assert from 'node:assert'
 import fs from 'node:fs'
 import path from 'node:path'
 import type { BookData } from '../src/lib/schemas/book-schema'
@@ -219,6 +220,8 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 		lines: [],
 		title: chapterSource.title,
 	}
+
+	assert.ok(chapter.audio !== undefined)
 	chapter.audio.files = []
 
 	// The period is important for timing inference in both tts and transcription
@@ -429,7 +432,7 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 			throw new Error('Word html is undefined')
 		}
 
-		chapter.lines.push(renderedLineHtml)
+		chapter.lines?.push(renderedLineHtml)
 	}
 
 	// -------------------------

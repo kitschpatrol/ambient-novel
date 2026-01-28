@@ -103,7 +103,6 @@ export function findHashedFile(filePath: string): null | string {
 function hashFile(filePath: string): string {
 	const fileBuffer = fs.readFileSync(filePath)
 	const hashSum = crypto.createHash('sha256')
-	// @ts-expect-error - update() expects a Buffer
 	hashSum.update(fileBuffer)
 
 	// Get the first 8 characters of the hash

@@ -69,6 +69,7 @@
 	// wtf...
 	// https://stackoverflow.com/questions/9811429/html5-audio-tag-on-safari-has-a-delay
 	if (browser && isMobile) {
+		// eslint-disable-next-line ts/no-explicit-any, ts/prefer-nullish-coalescing
 		const AudioContext = globalThis.AudioContext || (globalThis as any).webkitAudioContext
 
 		const audioContext = new AudioContext()
@@ -151,6 +152,7 @@
 
 	onDestroy(() => {
 		if (intervalId) {
+			// eslint-disable-next-line ts/no-explicit-any
 			clearInterval(intervalId as any)
 		}
 	})

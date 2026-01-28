@@ -65,6 +65,7 @@
 		const chapterCount = isMobile ? random(2, 3) : random(2, 6)
 		const chapterNumbers = Array.from({ length: chapters.length }, (_, i) => i)
 
+		// eslint-disable-next-line ts/require-array-sort-compare
 		const randomChapters = shuffle(chapterNumbers).slice(0, chapterCount).toSorted()
 
 		for (const chapterIndex of randomChapters) {
