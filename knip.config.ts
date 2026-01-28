@@ -6,6 +6,7 @@ export default knipConfig({
 		'src/lib/utils/**/*.ts',
 		'src/service-worker.ts',
 		'src/store.ts',
+		'src/global.css',
 	],
 	ignoreBinaries: ['dust', 'jq', 'kpi-prettier'],
 	ignoreDependencies: [
