@@ -111,7 +111,7 @@
 <Header --height="calc(100dvh / 12)" />
 
 <!-- eslint-disable-next-line ts/no-unused-vars -->
-{#each chapters as _, index}
+{#each chapters as _, index (index)}
 	{#if loadCount >= index && width > 0}
 		<!-- {#if 0 >= index && width > 0} -->
 		<Track

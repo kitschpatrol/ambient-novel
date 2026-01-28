@@ -61,7 +61,7 @@
 	}}
 	transition:fadeVolume|local={{ duration: 5000 }}
 >
-	{#each audioSources as source}
+	{#each audioSources as source (source)}
 		<source src={source} type={lookup(source) ?? 'audio'} />
 	{/each}
 	Your browser does not support the audio element.

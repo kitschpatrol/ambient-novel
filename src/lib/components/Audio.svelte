@@ -157,7 +157,7 @@
 	preload="auto"
 	transition:fadeVolume|local={{ duration: 600 }}
 >
-	{#each audioSources as source}
+	{#each audioSources as source (source)}
 		<source
 			on:error={() => {
 				console.error(`audio source error for "${source}"`)

@@ -18,6 +18,7 @@
 	$: download = downloadLink ? '' : undefined
 </script>
 
+<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- href is passed from caller who handles resolve() -->
 <a {download} {href} rel={relationship} {target}>
 	<div>
 		<img {alt} height={imageHeight} src={imagePath} width={imageWidth} />

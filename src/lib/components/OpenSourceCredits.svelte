@@ -43,7 +43,7 @@
 </script>
 
 <ul>
-	{#each licenses as license}
+	{#each licenses as license, index (index)}
 		<li>{@html formatLicense(license)}</li>
 	{/each}
 </ul>

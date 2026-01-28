@@ -490,7 +490,7 @@
 		<!-- prettier-ignore -->
 		<div bind:this={scrollAreaElement} class=scroll-area class:hide-text={!showTextBeforeNarrationStarts && currentTime < chapterData.narrationTime.start}><!--
 		--><div class="spacer" /><!--
-			-->{#each chapterData.lines as line}<!--
+			-->{#each chapterData.lines as line, lineIndex (lineIndex)}<!--
 					-->{@html line}<!--
 		-->{/each}<!--
 		--><div class="spacer" />
