@@ -307,7 +307,7 @@ function mapFloatToInt(input: number, minOut: number, maxOut: number): number {
 }
 
 function mapFloatToCbr(quality: number): string {
-	const cbrQualityRange = ['32k', '64k', '96k', '128k', '256k']
+	const cbrQualityRange = ['32k', '40k', '48k', '64k', '96k', '128k', '256k']
 	return cbrQualityRange[mapFloatToInt(quality, 0, cbrQualityRange.length - 1)]
 }
 

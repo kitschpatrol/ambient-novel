@@ -73,7 +73,8 @@ const config = {
 			},
 		],
 		regenerateCompressed: false,
-		sourceDir: '/Users/mika/Documents/Projects/Ambient Novel with Scott Wayne Indiana/Audio/Mix',
+		sourceDir:
+			'/Volumes/Working/Overflow/Documents/Projects/Ambient Novel with Scott Wayne Indiana/Audio/Mix',
 	},
 	fullAudioBookSettings: {
 		outputDir: './static/audio-book',
@@ -81,14 +82,14 @@ const config = {
 		outputs: [
 			{
 				format: 'mp3',
-				quality: 0.3,
-				sampleRate: 44_100,
-				vbr: true,
+				quality: 0.1,
+				sampleRate: 22_050,
+				vbr: false,
 			},
 		],
 		regenerateCompressed: true,
 		sourceDir:
-			'/Users/mika/Documents/Projects/Ambient Novel with Scott Wayne Indiana/Complete Book',
+			'/Volumes/Working/Overflow/Documents/Projects/Ambient Novel with Scott Wayne Indiana/Complete Book',
 	},
 	jsonSettings: {
 		abortOnSchemaErrors: false, // Useful for outputting the resulting book.json with minor errors
@@ -103,7 +104,8 @@ const config = {
 		regenerateSource: false, // Runs TTS on the script
 		regenerateTranscript: false,
 		regenerateWordAlignment: false,
-		sourceDir: '/Users/mika/Documents/Projects/Ambient Novel with Scott Wayne Indiana/Audio/Voice', // Will generate using say if missing
+		sourceDir:
+			'/Volumes/Working/Overflow/Documents/Projects/Ambient Novel with Scott Wayne Indiana/Audio/Voice', // Will generate using say if missing
 	},
 }
 
@@ -397,7 +399,6 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 
 			const renderedWordHtml = wordHtml.outerHTML
 
-			// eslint-disable-next-line ts/no-unnecessary-condition
 			if (renderedWordHtml === undefined) {
 				throw new Error('Word html is undefined')
 			}
@@ -427,7 +428,6 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 
 		const renderedLineHtml = lineHtml.outerHTML
 
-		// eslint-disable-next-line ts/no-unnecessary-condition
 		if (renderedLineHtml === undefined) {
 			throw new Error('Word html is undefined')
 		}
