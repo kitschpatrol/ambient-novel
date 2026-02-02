@@ -3,21 +3,21 @@
 <script lang="ts">
 	import { faPause, faPlay, faRotateBack } from '@fortawesome/free-solid-svg-icons'
 	import { browser } from '$app/environment'
-	import { base } from '$app/paths'
+	import { asset } from '$app/paths'
 	import Audio from '$lib/components/Audio.svelte'
 	// Import AudioFadeProxy from '$lib/components/AudioFadeProxy.svelte';
-	import Button from '$lib/components/Button.svelte'
-	import ChapterCover from '$lib/components/ChapterCover.svelte'
-	import Starfield from '$lib/components/Starfield.svelte'
-	import { CHAPTER_COVER_TRANSITION_DURATION } from '$lib/config'
-	import type { ChapterData } from '$lib/schemas/book-schema'
-	import { fastFadeFromJs } from '$lib/utils/transition/fast-fade-from-js'
-	import { fastFadeJs } from '$lib/utils/transition/fast-fade-js'
 	import ScrollBooster from 'scrollbooster'
 	import { onDestroy, onMount, tick } from 'svelte'
 	import { spring } from 'svelte/motion'
 	import tinycolor from 'tinycolor2'
 	import UaParser from 'ua-parser-js'
+	import type { ChapterData } from '$lib/schemas/book-schema'
+	import Button from '$lib/components/Button.svelte'
+	import ChapterCover from '$lib/components/ChapterCover.svelte'
+	import Starfield from '$lib/components/Starfield.svelte'
+	import { CHAPTER_COVER_TRANSITION_DURATION } from '$lib/config'
+	import { fastFadeFromJs } from '$lib/utils/transition/fast-fade-from-js'
+	import { fastFadeJs } from '$lib/utils/transition/fast-fade-js'
 
 	export let chapterData: ChapterData
 	export let isPlaying = false
@@ -27,7 +27,9 @@
 	export let rowWidth = 0 // Performance thing to set this externally...
 	export let targetTime = currentTime
 
-	export let ready = () => {}
+	export let ready = () => {
+		/* Empty */
+	}
 
 	// Config
 	const showTextBeforeNarrationStarts = false
@@ -67,7 +69,8 @@
 	// wtf...
 	// https://stackoverflow.com/questions/9811429/html5-audio-tag-on-safari-has-a-delay
 	if (browser && isMobile) {
-		const AudioContext = window.AudioContext || (window as any).webkitAudioContext
+		// eslint-disable-next-line ts/no-explicit-any, ts/prefer-nullish-coalescing
+		const AudioContext = globalThis.AudioContext || (globalThis as any).webkitAudioContext
 
 		const audioContext = new AudioContext()
 	}
@@ -149,6 +152,7 @@
 
 	onDestroy(() => {
 		if (intervalId) {
+			// eslint-disable-next-line ts/no-explicit-any
 			clearInterval(intervalId as any)
 		}
 	})
@@ -488,7 +492,7 @@
 		<!-- prettier-ignore -->
 		<div bind:this={scrollAreaElement} class=scroll-area class:hide-text={!showTextBeforeNarrationStarts && currentTime < chapterData.narrationTime.start}><!--
 		--><div class="spacer" /><!--
-			-->{#each chapterData.lines as line}<!--
+			-->{#each chapterData.lines as line, lineIndex (lineIndex)}<!--
 					-->{@html line}<!--
 		-->{/each}<!--
 		--><div class="spacer" />
@@ -511,7 +515,7 @@
 
 	{#if debug}
 		<div
-			class="mouse pointer-events-none absolute left-[50%] top-0 h-[10dvh] w-1 touch-none bg-red-500"
+			class="mouse pointer-events-none absolute top-0 left-[50%] h-[10dvh] w-1 touch-none bg-red-500"
 		/>
 	{/if}
 
@@ -532,7 +536,7 @@
 		</div>
 	{/if}
 
-	<div class="absolute left-0 top-0 flex h-full" class:w-full={isReset}>
+	<div class="absolute top-0 left-0 flex h-full" class:w-full={isReset}>
 		<Button
 			icon={isPlaying ? faPause : faPlay}
 			isTransitionEnabled={true}
@@ -543,7 +547,7 @@
 	</div>
 
 	{#if !isReset}
-		<div class="absolute right-0 top-0 flex h-full">
+		<div class="absolute top-0 right-0 flex h-full">
 			<Button
 				icon={faRotateBack}
 				isTransitionEnabled={true}
@@ -556,7 +560,7 @@
 
 	{#if debug}
 		<div
-			class="pointer-events-none absolute left-0 top-0 h-full cursor-none touch-none text-xs text-red-400"
+			class="pointer-events-none absolute top-0 left-0 h-full cursor-none touch-none text-xs text-red-400"
 		>
 			<p>isUserHoldingDownFingerOrMouse: {isUserHoldingDownFingerOrMouse}</p>
 			<p>isPlayingAndNotSeeking: {isPlayingAndNotSeeking}</p>
@@ -572,7 +576,7 @@
 
 {#if isMobile}
 	<Audio
-		audioSources={chapterData.audio.files.map((file) => `${base}/${file}`)}
+		audioSources={chapterData.audio.files.map((file) => asset(`/${file}`))}
 		bind:currentTime
 		isPlaying={isPlayingAndNotSeeking}
 		on:canplaythrough={() => {
@@ -583,7 +587,7 @@
 	/>
 {:else}
 	<Audio
-		audioSources={chapterData.audio.files.map((file) => `${base}/${file}`)}
+		audioSources={chapterData.audio.files.map((file) => asset(`/${file}`))}
 		bind:currentTime
 		isPlaying={isPlayingAndNotSeeking}
 		on:canplaythrough={() => {

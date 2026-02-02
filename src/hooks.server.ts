@@ -1,6 +1,6 @@
+import { minify } from 'html-minifier'
 // eslint-disable-next-line import/no-unresolved
 import { building } from '$app/environment'
-import { minify } from 'html-minifier'
 
 const minificationOptions = {
 	collapseBooleanAttributes: true,

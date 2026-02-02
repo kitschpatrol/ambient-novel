@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { base } from '$app/paths'
+	import { base, resolve } from '$app/paths'
 	import { page } from '$app/stores'
 
 	export let title = 'The Valentine Mob'
@@ -10,32 +10,34 @@
 <header class="grid grid-cols-[1fr_max-content_1fr]">
 	<div class="justify-self-start">
 		{#if rawPath === 'about'}
-			<a href={base}>Home</a>
+			<a href={resolve('/', {})}>Home</a>
 		{:else}
-			<a href="{base}/about">About</a>
+			<a href={resolve('/about', {})}>About</a>
 		{/if}
 	</div>
 	{#if rawPath === ''}
-		<h1 class="font-display tracking-wider text-vm-text-headline shadow-vm-shadow text-shadow">
+		<h1 class="font-display text-vm-text-headline shadow-vm-shadow text-shadow tracking-wider">
 			{title.replaceAll('a', 'A')}
 		</h1>
 	{:else}
-		<a class="home" href={base}>
-			<h1 class="font-display tracking-wider text-vm-text-headline shadow-vm-shadow text-shadow">
+		<a class="home" href={resolve('/', {})}>
+			<h1 class="font-display text-vm-text-headline shadow-vm-shadow text-shadow tracking-wider">
 				{title.replaceAll('a', 'A')}
 			</h1>
 		</a>
 	{/if}
 	<div class="justify-self-end">
 		{#if rawPath === 'book'}
-			<a href={base}>Home</a>
+			<a href={resolve('/', {})}>Home</a>
 		{:else}
-			<a href="{base}/book">Get the Book </a>
+			<a href={resolve('/book', {})}>Get the Book </a>
 		{/if}
 	</div>
 </header>
 
 <style lang="postcss">
+	@import url('../../global.css') reference;
+
 	header {
 		position: var(--position);
 		z-index: 5;
@@ -54,7 +56,7 @@
 	header a:not(.home) {
 		font-size: min(min(calc(100svh / 52), calc(100vw / 32), 1rem));
 
-		@apply flex h-full items-center justify-center px-5 text-center font-display text-base leading-none text-white opacity-80 shadow-vm-shadow text-shadow;
+		@apply font-display shadow-vm-shadow text-shadow flex h-full items-center justify-center px-5 text-center text-base leading-none text-white opacity-80;
 	}
 
 	header a:not(.home):hover {

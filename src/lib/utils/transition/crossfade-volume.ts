@@ -1,4 +1,3 @@
-import type { CrossfadeParams } from 'svelte/transition'
 import { crossfade } from 'svelte/transition'
 import { fadeVolume } from './fade-volume'
 
@@ -13,8 +12,7 @@ import { fadeVolume } from './fade-volume'
 
 export const crossfadeVolume = crossfade({
 	duration: 5000,
-	// eslint-disable-next-line ts/no-unused-vars
-	fallback(node: Element, params: CrossfadeParams, intro: boolean) {
+	fallback(node: Element) {
 		return fadeVolume(node as HTMLAudioElement, {})
 	},
 })

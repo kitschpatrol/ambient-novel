@@ -7,11 +7,22 @@ export default stylelintConfig({
 		'at-rule-no-unknown': [
 			true,
 			{
-				ignoreAtRules: ['apply', 'layer', 'responsive', 'screen', 'tailwind', 'variants'],
+				ignoreAtRules: [
+					'apply',
+					'layer',
+					'reference',
+					'responsive',
+					'screen',
+					'tailwind',
+					'theme',
+					'utility',
+					'variants',
+				],
 			},
 		],
+		'custom-property-pattern': null,
 		'function-no-unknown': null,
-		// 'declaration-block-trailing-semicolon': null,
+		'nesting-selector-no-missing-scoping-root': null,
 		'no-descending-specificity': null,
 	},
 })

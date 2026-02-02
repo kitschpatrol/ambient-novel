@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { fadeVolume } from '$lib/utils/transition/fade-volume'
 	import { lookup } from 'mrmime'
 	import { onMount } from 'svelte'
+	import { fadeVolume } from '$lib/utils/transition/fade-volume'
 
 	export let audioSources: string[]
 	export let isPlaying = false
@@ -61,8 +61,8 @@
 	}}
 	transition:fadeVolume|local={{ duration: 5000 }}
 >
-	{#each audioSources as source}
-		<source src={`${source}`} type={lookup(source) ?? 'audio'} />
+	{#each audioSources as source (source)}
+		<source src={source} type={lookup(source) ?? 'audio'} />
 	{/each}
 	Your browser does not support the audio element.
 </audio>

@@ -63,8 +63,8 @@ function chapterTextToLines(
 	})
 
 	// Stitch lines
-	// eslint-disable-next-line ts/no-unused-vars, unicorn/no-array-reduce
-	lines = lines.reduce<string[]>((acc, line, index) => {
+	// eslint-disable-next-line unicorn/no-array-reduce
+	lines = lines.reduce<string[]>((acc, line) => {
 		// Console.log(`acc: ${acc}`);
 
 		if (breakOnIndentsOnly) {
@@ -159,10 +159,9 @@ for (let i = 0; i < chapterDelimiters.length; i++) {
 		chapterBreakOnIndentConfig[i],
 	)
 
-	// eslint-disable-next-line ts/no-unused-vars
-	for (const [i, line] of chapterLines.entries()) {
+	for (const [_i, line] of chapterLines.entries()) {
 		chapterJson.lines.push(line)
-		// Console.log(`${i}|${line}`);
+		// Console.log(`${_i}|${line}`);
 		// console.log(`${line}`);
 	}
 

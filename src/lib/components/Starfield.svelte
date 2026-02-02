@@ -1,9 +1,9 @@
 <script lang="ts">
 	import type { Engine, ISourceOptions } from '@tsparticles/engine'
-	import { base } from '$app/paths'
 	import { loadSlim } from '@tsparticles/slim'
 	import Particles, { particlesInit } from '@tsparticles/svelte'
 	import { onMount } from 'svelte' // If you are going to use `loadSlim`, install the "tsparticles-slim" package too.
+	import { asset } from '$app/paths'
 
 	export let id = 'tsparticles'
 	export let color = '#cccccc' // Optimization
@@ -50,8 +50,8 @@
 						direction: 'random',
 						random: true,
 						value: {
-							max: 10,
 							min: -10,
+							max: 10,
 						},
 					},
 					shape: {
@@ -59,15 +59,15 @@
 							images: {
 								fill: true,
 								replaceColor: true,
-								src: strokeEnabled ? `${base}/saturn.svg` : `${base}/saturn-no-stroke.svg`,
+								src: strokeEnabled ? asset('/saturn.svg') : asset('/saturn-no-stroke.svg'),
 							},
 						},
 						type: 'images',
 					},
 					size: {
 						value: {
-							max: 25,
 							min: 15,
+							max: 25,
 						},
 					},
 				},
@@ -101,15 +101,15 @@
 					images: {
 						fill: true,
 						replaceColor: true,
-						src: strokeEnabled ? `${base}/star.svg` : `${base}/star-no-stroke.svg`,
+						src: strokeEnabled ? asset('/star.svg') : asset('/star-no-stroke.svg'),
 					},
 				},
 				type: 'images',
 			},
 			size: {
 				value: {
-					max: 10,
 					min: 5,
+					max: 10,
 				},
 			},
 		},

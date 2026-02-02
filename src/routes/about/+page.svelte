@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { base } from '$app/paths'
-	import Header from '$lib/components/Header.svelte'
-	import Starfield from '$lib/components/Starfield.svelte'
 	import { onMount } from 'svelte'
 	import { fade } from 'svelte/transition'
+	import { asset } from '$app/paths'
+	import Header from '$lib/components/Header.svelte'
+	import Starfield from '$lib/components/Starfield.svelte'
 	// Import OpenSourceCredits from '$lib/components/OpenSourceCredits.svelte';
 	// import licenseDataRaw from '$lib/data/licenses.json';
 	// import { licenseSchema } from '$lib/schemas/licenses-schema';
@@ -56,7 +56,7 @@
 {/if}
 
 <main
-	class="mx-auto mb-20 mt-36 max-w-[70ch] bg-[#f7f7f7] bg-opacity-90 px-12 pb-8 pt-3 font-serif text-xl text-[#222222] max-sm:mx-auto max-sm:mb-16 max-sm:mt-24 max-sm:w-[90vw] max-sm:px-5 max-sm:text-xl"
+	class="bg-opacity-90 mx-auto mt-36 mb-20 max-w-[70ch] bg-[#f7f7f7] px-12 pt-3 pb-8 font-serif text-xl text-[#222222] max-sm:mx-auto max-sm:mt-24 max-sm:mb-16 max-sm:w-[90vw] max-sm:px-5 max-sm:text-xl"
 >
 	<h2>About the Project</h2>
 	<h3>
@@ -145,11 +145,13 @@
 </main>
 <img
 	alt="heart"
-	class="heart mx-auto mb-16 w-[10vw] max-w-[4rem] pb-16 opacity-90"
-	src="{base}/heart.svg"
+	class="heart mx-auto mb-16 w-[10vw] max-w-16 pb-16 opacity-90"
+	src={asset('/heart.svg')}
 />
 
 <style lang="postcss">
+	@import url('../../global.css') reference;
+
 	div.star-wrapper {
 		pointer-events: none;
 		touch-action: none;
@@ -172,11 +174,11 @@
 	}
 
 	main h2 {
-		@apply pb-3 pt-6 text-3xl font-normal;
+		@apply pt-6 pb-3 text-3xl font-normal;
 	}
 
 	main h3 {
-		@apply pb-3 pt-6 text-2xl font-medium italic;
+		@apply pt-6 pb-3 text-2xl font-medium italic;
 	}
 
 	main a {

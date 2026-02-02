@@ -1,7 +1,7 @@
 <script lang="ts">
-	import Starfield from '$lib/components/Starfield.svelte'
 	import { onMount } from 'svelte'
 	import { fade } from 'svelte/transition'
+	import Starfield from '$lib/components/Starfield.svelte'
 	let isMounted = false
 	onMount(() => {
 		isMounted = true
@@ -53,6 +53,8 @@
 {/if}
 
 <style lang="postcss">
+	@import url('../../global.css') reference;
+
 	div.star-wrapper {
 		pointer-events: none;
 		touch-action: none;
@@ -71,7 +73,7 @@
 	h1,
 	h2,
 	h3 {
-		@apply w-full text-center font-display tracking-wider text-white shadow-vm-shadow text-shadow;
+		@apply font-display shadow-vm-shadow text-shadow w-full text-center tracking-wider text-white;
 	}
 
 	h2 {

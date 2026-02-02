@@ -14,8 +14,8 @@ export const bookSchema = z.object({
 				index: z.number().int().nonnegative(),
 				lines: z.array(z.string().min(1)).nonempty(),
 				narrationTime: z.object({
-					end: z.number().positive(),
 					start: z.number().positive(),
+					end: z.number().positive(),
 				}),
 				title: z.string().min(1),
 			}),

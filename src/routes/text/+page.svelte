@@ -1,11 +1,11 @@
 <script lang="ts">
+	import { onMount } from 'svelte'
+	import { fade } from 'svelte/transition'
 	import type { BookSource } from '$lib/schemas/book-source-schema'
-	import { base } from '$app/paths'
+	import { asset } from '$app/paths'
 	import Header from '$lib/components/Header.svelte'
 	import Starfield from '$lib/components/Starfield.svelte'
 	import bookSourceRaw from '$lib/data/book-source.json'
-	import { onMount } from 'svelte'
-	import { fade } from 'svelte/transition'
 	const bookData = bookSourceRaw as BookSource
 
 	// Doing the server-loaded approach in the "text" subdirectory messes up the
@@ -51,7 +51,7 @@
 />
 
 <main
-	class="mx-auto mb-20 mt-36 max-w-[90ch] bg-[#f7f7f7] bg-opacity-90 px-12 pb-16 pt-3 font-serif text-xl text-[#222222] max-sm:mx-auto max-sm:mb-16 max-sm:mt-24 max-sm:w-[90vw] max-sm:px-5 max-sm:text-xl"
+	class="bg-opacity-90 mx-auto mt-36 mb-20 max-w-[90ch] bg-[#f7f7f7] px-12 pt-3 pb-16 font-serif text-xl text-[#222222] max-sm:mx-auto max-sm:mt-24 max-sm:mb-16 max-sm:w-[90vw] max-sm:px-5 max-sm:text-xl"
 >
 	<section class="cover">
 		<h2>
@@ -63,19 +63,19 @@
 	<section class="table-of-contents">
 		<p>Contents</p>
 		<ol>
-			{#each chapters as chapter, index}
+			{#each chapters as chapter, index (index)}
 				<li><a href="#chapter-{index + 1}">{chapter.title}</a></li>
 			{/each}
 		</ol>
 	</section>
 
-	{#each chapters as chapter, index}
+	{#each chapters as chapter, index (index)}
 		<hr />
 		<section class="chapter">
 			<h3 id="chapter-{index + 1}">
 				<span class="chapter-number">{index + 1}</span>{chapter.title}
 			</h3>
-			{#each chapter.lines as line}
+			{#each chapter.lines as line, lineIndex (lineIndex)}
 				<p>{@html line}</p>
 			{/each}
 		</section>
@@ -83,8 +83,8 @@
 </main>
 <img
 	alt="heart"
-	class="heart mx-auto mb-16 w-[10vw] max-w-[4rem] pb-16 opacity-90"
-	src="{base}/heart.svg"
+	class="heart mx-auto mb-16 w-[10vw] max-w-16 pb-16 opacity-90"
+	src={asset('/heart.svg')}
 />
 
 {#if isMounted}
@@ -105,6 +105,7 @@
 {/if}
 
 <style lang="postcss">
+	@import url('../../global.css') reference;
 	/* General */
 	div.star-wrapper {
 		pointer-events: none;
@@ -151,7 +152,7 @@
 
 	/* Cover */
 	main > section.cover > h2 {
-		@apply pb-3 pt-12 text-center text-3xl font-normal;
+		@apply pt-12 pb-3 text-center text-3xl font-normal;
 	}
 
 	main > section.cover > h2 > span.alternate-title {

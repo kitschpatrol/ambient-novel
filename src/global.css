@@ -1,21 +1,46 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import url('tailwindcss');
+
+@theme {
+	/* Custom colors */
+	--color-vm-blue: #4447fb;
+	--color-vm-inner-shadow: #00000010;
+	--color-vm-inner-shadow-dark: #00000020;
+	--color-vm-inner-shadow-light: #00000007;
+	--color-vm-magenta: #f01ef6;
+	--color-vm-magenta-highlight: #f6cdfb;
+	--color-vm-magenta-mild: #c63bee;
+	--color-vm-shadow: #00000067;
+	--color-vm-text-dark: rgb(87 87 87);
+	--color-vm-text-headline: rgb(240 240 240);
+	--color-vm-text-light: rgb(215 215 215);
+
+	/* Font families - override defaults */
+	--font-display: 'Nasalization Extended', sans-serif;
+	--font-serif: 'Times New Roman', times, serif;
+
+	/* Box shadows */
+	--shadow-button: -3px 3px 5px rgb(0 0 0 / 40%);
+	--shadow-: -3px 3px 5px var(--tw-shadow-color);
+
+	/* Text shadows */
+	--text-shadow-: -0.05em 0.05em 0.125em var(--tw-shadow-color);
+}
+
+/* Custom text-shadow utility */
+@utility text-shadow {
+	text-shadow: var(--text-shadow-);
+}
 
 /* https://dev.to/derick1530/how-to-create-scrollable-element-in-tailwind-without-a-scrollbar-4mbd */
-@layer utilities {
-	/* @layer utilities { */
+@utility no-scrollbar {
+	/* Hide scrollbar for Firefox */
+	scrollbar-width: none;
+	/* Hide scrollbar for IE and Edge */
+	-ms-overflow-style: none;
 	/* Hide scrollbar for Chrome, Safari and Opera */
-	.no-scrollbar::-webkit-scrollbar {
+	&::-webkit-scrollbar {
 		display: none;
 	}
-
-	/* Hide scrollbar for IE, Edge and Firefox */
-	.no-scrollbar {
-		scrollbar-width: none; /* Firefox */
-		-ms-overflow-style: none; /* IE and Edge */
-	}
-	/* } */
 }
 
 /* via https://fontsgeek.com/fonts/Nasalization-Extended-Light-Regular */
@@ -30,15 +55,9 @@
 		url('/fonts/nasalization/nasalization-extended-light.ttf') format('truetype');
 }
 
-/* @property --backgroundGradientAngle {
-	syntax: '<angle>';
-	inherits: false;
-	initial-value: 0deg;
-} */
-
 :root {
-	--background-color-gradient-1: theme(colors.vm-magenta);
-	--background-color-gradient-2: theme(colors.vm-blue);
+	--background-color-gradient-1: var(--color-vm-magenta);
+	--background-color-gradient-2: var(--color-vm-blue);
 }
 
 body,
@@ -63,19 +82,13 @@ body {
 
 ::selection {
 	color: white;
-	/* stylelint-disable-next-line declaration-property-value-no-unknown */
-	background: theme('colors.vm-magenta');
+	background: var(--color-vm-magenta);
 }
 
 /* This seems to save touch cancellation issues (none and pan-x don't work) */
 * {
 	touch-action: manipulation;
 }
-
-/* nope */
-/* body {
-	user-select: none;
-} */
 
 /* takes care of flashing on mobile links */
 a,

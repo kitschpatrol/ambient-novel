@@ -1,4 +1,9 @@
 <script lang="ts">
+	import { faBookReader, faDiceD20, faPause, faRotateBack } from '@fortawesome/free-solid-svg-icons'
+	import random from 'lodash/random'
+	import shuffle from 'lodash/shuffle'
+	import { onMount, tick } from 'svelte'
+	import UaParser from 'ua-parser-js'
 	import type { BookData } from '$lib/schemas/book-schema'
 	import Button from '$lib/components/Button.svelte'
 	import Header from '$lib/components/Header.svelte'
@@ -7,11 +12,6 @@
 	import * as config from '$lib/config'
 	import { delayedForEach } from '$lib/utils/collection/delayed-for-each'
 	import { getIndicesMatchingValue } from '$lib/utils/collection/get-indices-matching-value'
-	import { faBookReader, faDiceD20, faPause, faRotateBack } from '@fortawesome/free-solid-svg-icons'
-	import random from 'lodash/random'
-	import shuffle from 'lodash/shuffle'
-	import { onMount, tick } from 'svelte'
-	import UaParser from 'ua-parser-js'
 
 	export let bookData: BookData
 	const { chapters } = bookData
@@ -65,7 +65,8 @@
 		const chapterCount = isMobile ? random(2, 3) : random(2, 6)
 		const chapterNumbers = Array.from({ length: chapters.length }, (_, i) => i)
 
-		const randomChapters = shuffle(chapterNumbers).slice(0, chapterCount).sort()
+		// eslint-disable-next-line ts/require-array-sort-compare
+		const randomChapters = shuffle(chapterNumbers).slice(0, chapterCount).toSorted()
 
 		for (const chapterIndex of randomChapters) {
 			const startTime = random(
@@ -111,7 +112,7 @@
 <Header --height="calc(100dvh / 12)" />
 
 <!-- eslint-disable-next-line ts/no-unused-vars -->
-{#each chapters as _, index}
+{#each chapters as _, index (index)}
 	{#if loadCount >= index && width > 0}
 		<!-- {#if 0 >= index && width > 0} -->
 		<Track
@@ -148,7 +149,7 @@
 
 <footer>
 	<div class="flex h-full w-full justify-between gap-6 max-sm:gap-1" id="controls">
-		<span class="flex basis-[32rem]">
+		<span class="flex basis-lg">
 			<Button
 				icon={faBookReader}
 				isDown={isPlayingThrough}
@@ -168,7 +169,7 @@
 			/>
 		</span>
 		<span />
-		<span class="flex basis-[32rem]">
+		<span class="flex basis-lg">
 			<Button
 				icon={faPause}
 				isEnabled={somethingPlaying && isAllLoaded}

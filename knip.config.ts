@@ -6,8 +6,9 @@ export default knipConfig({
 		'src/lib/utils/**/*.ts',
 		'src/service-worker.ts',
 		'src/store.ts',
+		'src/global.css',
 	],
-	ignoreBinaries: ['dust', 'jq', 'kpi-prettier'],
+	ignoreBinaries: ['dust', 'jq', 'open'],
 	ignoreDependencies: [
 		'node-jq',
 		'@types/glob',
@@ -15,7 +16,10 @@ export default knipConfig({
 		'@types/pdf-parse',
 		'@types/sanitize-html',
 		'sanitize-html',
+		'tailwindcss',
 		'workbox-build',
+		'node-addon-api',
+		'node-gyp',
 	],
 	ignoreUnresolved: [/^\$/],
 })

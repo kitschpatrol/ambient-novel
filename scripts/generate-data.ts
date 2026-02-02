@@ -7,9 +7,11 @@
 /* eslint-disable ts/no-unsafe-assignment */
 
 import { parse } from 'node-html-parser'
+import assert from 'node:assert'
 import fs from 'node:fs'
 import path from 'node:path'
-import { type BookData, bookSchema } from '../src/lib/schemas/book-schema'
+import type { BookData } from '../src/lib/schemas/book-schema'
+import { bookSchema } from '../src/lib/schemas/book-schema'
 import { bookSourceSchema } from '../src/lib/schemas/book-source-schema'
 import {
 	actionWordTrimmer,
@@ -212,11 +214,14 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 		`Processing chapter ${chapterNumber}: ${truncateWithEllipsis(chapterSource.title, 30)}`,
 	)
 
-	const chapter: StripArray<typeof bookOutput.chapters> = {}
-	chapter.title = chapterSource.title
-	chapter.index = chapterNumber
-	chapter.lines = []
-	chapter.audio = {}
+	const chapter: StripArray<typeof bookOutput.chapters> = {
+		audio: {},
+		index: chapterNumber,
+		lines: [],
+		title: chapterSource.title,
+	}
+
+	assert.ok(chapter.audio !== undefined)
 	chapter.audio.files = []
 
 	// The period is important for timing inference in both tts and transcription
@@ -335,8 +340,8 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 
 	// Overall chapter narration timing
 	chapter.narrationTime = {
-		end: wordTimings.at(-1).end,
 		start: wordTimings[0].start,
+		end: wordTimings.at(-1).end,
 	}
 
 	// Generate lines
@@ -427,7 +432,7 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 			throw new Error('Word html is undefined')
 		}
 
-		chapter.lines.push(renderedLineHtml)
+		chapter.lines?.push(renderedLineHtml)
 	}
 
 	// -------------------------
