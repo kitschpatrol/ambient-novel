@@ -27,11 +27,11 @@
 	"type": "module",
 	"scripts": {
 		"prebuild": "svelte-kit sync && pnpm run generate-package-info && pnpm run generate-licenses && pnpm run copy-source-data && ksc-prettier fix",
-		"build": "pnpm run prebuild && vite build &&  tsx ./scripts/generate-version-json.ts > ./dist/version.json",
+		"build": "pnpm run prebuild && vite build &&  tsx ./scripts/generate-version-json.ts > ./build/version.json",
 		"build-report": "dust -t -b ./build",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"clean": "rm -rf ./build ./dist ./node_modules pnpm-lock.yaml",
+		"clean": "rm -rf ./build ./node_modules pnpm-lock.yaml",
 		"copy-source-data": "cp ./data/book.json ./src/lib/data/book-source.json",
 		"dev": "vite dev --host",
 		"fix": "ksc fix",

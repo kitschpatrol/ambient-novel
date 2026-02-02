@@ -399,6 +399,7 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 
 			const renderedWordHtml = wordHtml.outerHTML
 
+			// eslint-disable-next-line ts/no-unnecessary-condition
 			if (renderedWordHtml === undefined) {
 				throw new Error('Word html is undefined')
 			}
@@ -428,6 +429,7 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 
 		const renderedLineHtml = lineHtml.outerHTML
 
+		// eslint-disable-next-line ts/no-unnecessary-condition
 		if (renderedLineHtml === undefined) {
 			throw new Error('Word html is undefined')
 		}

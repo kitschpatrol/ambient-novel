@@ -3448,6 +3448,16 @@
 			"description": "TypeScript definitions for seedrandom"
 		},
 		{
+			"name": "@types/semver",
+			"versions": ["7.7.1"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@types+semver@7.7.1/node_modules/@types/semver"
+			],
+			"license": "MIT",
+			"homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/semver",
+			"description": "TypeScript definitions for semver"
+		},
+		{
 			"name": "@types/supports-color",
 			"versions": ["8.1.3"],
 			"paths": [
@@ -3707,9 +3717,10 @@
 		},
 		{
 			"name": "ansi-styles",
-			"versions": ["4.3.0"],
+			"versions": ["4.3.0", "6.2.3"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/ansi-styles@4.3.0/node_modules/ansi-styles"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/ansi-styles@4.3.0/node_modules/ansi-styles",
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/ansi-styles@6.2.3/node_modules/ansi-styles"
 			],
 			"license": "MIT",
 			"author": "Sindre Sorhus",
@@ -3726,6 +3737,17 @@
 			"author": "Josh Goldberg",
 			"homepage": "https://github.com/JoshuaKGoldberg/are-docs-informative#readme",
 			"description": "Checks whether a documentation description introduces any new information."
+		},
+		{
+			"name": "args-tokenizer",
+			"versions": ["0.3.0"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/args-tokenizer@0.3.0/node_modules/args-tokenizer"
+			],
+			"license": "MIT",
+			"author": "Bogdan Chadkin",
+			"homepage": "https://github.com/TrySound/args-tokenizer#readme",
+			"description": "Tokenize a shell string into argv array"
 		},
 		{
 			"name": "array-buffer-byte-length",
@@ -4006,6 +4028,33 @@
 			"description": "A static list of the Node.js builtin modules from the latest Node.js version"
 		},
 		{
+			"name": "bumpp",
+			"versions": ["10.4.0"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/bumpp@10.4.0/node_modules/bumpp"
+			],
+			"license": "MIT",
+			"homepage": "https://github.com/antfu-collective/bumpp",
+			"description": "Bump version, commit changes, tag, and push to Git"
+		},
+		{
+			"name": "c12",
+			"versions": ["3.3.3"],
+			"paths": ["/Users/mika/Code/ambient-novel/node_modules/.pnpm/c12@3.3.3/node_modules/c12"],
+			"license": "MIT",
+			"homepage": "https://github.com/unjs/c12#readme",
+			"description": "Smart Config Loader"
+		},
+		{
+			"name": "cac",
+			"versions": ["6.7.14"],
+			"paths": ["/Users/mika/Code/ambient-novel/node_modules/.pnpm/cac@6.7.14/node_modules/cac"],
+			"license": "MIT",
+			"author": "egoist",
+			"homepage": "https://github.com/egoist/cac#readme",
+			"description": "Simple yet powerful framework for building command-line apps."
+		},
+		{
 			"name": "cacheable",
 			"versions": ["2.3.2"],
 			"paths": [
@@ -4171,9 +4220,10 @@
 		},
 		{
 			"name": "chokidar",
-			"versions": ["4.0.3"],
+			"versions": ["4.0.3", "5.0.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/chokidar@4.0.3/node_modules/chokidar"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/chokidar@4.0.3/node_modules/chokidar",
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/chokidar@5.0.0/node_modules/chokidar"
 			],
 			"license": "MIT",
 			"author": "Paul Miller",
@@ -4190,6 +4240,17 @@
 			"author": "Thomas Watson Steen",
 			"homepage": "https://github.com/watson/ci-info",
 			"description": "Get details about the current Continuous Integration environment"
+		},
+		{
+			"name": "citty",
+			"versions": ["0.1.6", "0.2.0"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/citty@0.1.6/node_modules/citty",
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/citty@0.2.0/node_modules/citty"
+			],
+			"license": "MIT",
+			"homepage": "https://github.com/unjs/citty#readme",
+			"description": "Elegant CLI Builder"
 		},
 		{
 			"name": "clean-css",
@@ -4399,6 +4460,16 @@
 			"license": "MIT",
 			"homepage": "https://github.com/unjs/confbox#readme",
 			"description": "Compact YAML, TOML, JSONC, JSON5 and INI parser and serializer"
+		},
+		{
+			"name": "consola",
+			"versions": ["3.4.2"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/consola@3.4.2/node_modules/consola"
+			],
+			"license": "MIT",
+			"homepage": "https://github.com/unjs/consola#readme",
+			"description": "Elegant Console Wrapper"
 		},
 		{
 			"name": "convert-source-map",
@@ -4723,6 +4794,14 @@
 			"description": "Define multiple non-enumerable properties at once. Uses `Object.defineProperty` when available; falls back to standard assignment in older engines."
 		},
 		{
+			"name": "defu",
+			"versions": ["6.1.4"],
+			"paths": ["/Users/mika/Code/ambient-novel/node_modules/.pnpm/defu@6.1.4/node_modules/defu"],
+			"license": "MIT",
+			"homepage": "https://github.com/unjs/defu#readme",
+			"description": "Recursively assign default properties. Lightweight and Fast!"
+		},
+		{
 			"name": "delayed-stream",
 			"versions": ["1.0.0"],
 			"paths": [
@@ -4743,6 +4822,14 @@
 			"author": "Luke Edwards",
 			"homepage": "https://github.com/lukeed/dequal#readme",
 			"description": "A tiny (304B to 489B) utility for check for deep equality"
+		},
+		{
+			"name": "destr",
+			"versions": ["2.0.5"],
+			"paths": ["/Users/mika/Code/ambient-novel/node_modules/.pnpm/destr@2.0.5/node_modules/destr"],
+			"license": "MIT",
+			"homepage": "https://github.com/unjs/destr#readme",
+			"description": "A faster, secure and convenient alternative for JSON.parse"
 		},
 		{
 			"name": "detect-indent",
@@ -5831,6 +5918,14 @@
 			"description": "Find and parse the tsconfig.json file from a directory path"
 		},
 		{
+			"name": "giget",
+			"versions": ["2.0.0"],
+			"paths": ["/Users/mika/Code/ambient-novel/node_modules/.pnpm/giget@2.0.0/node_modules/giget"],
+			"license": "MIT",
+			"homepage": "https://github.com/unjs/giget#readme",
+			"description": "Download templates and git repositories with pleasure!"
+		},
+		{
 			"name": "git-hooks-list",
 			"versions": ["4.2.1"],
 			"paths": [
@@ -6867,6 +6962,17 @@
 			"author": "Yosuke Ota",
 			"homepage": "https://github.com/ota-meshi/jsonc-eslint-parser#readme",
 			"description": "JSON, JSONC and JSON5 parser for use with ESLint plugins"
+		},
+		{
+			"name": "jsonc-parser",
+			"versions": ["3.3.1"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/jsonc-parser@3.3.1/node_modules/jsonc-parser"
+			],
+			"license": "MIT",
+			"author": "Microsoft Corporation",
+			"homepage": "https://github.com/microsoft/node-jsonc-parser#readme",
+			"description": "Scanner and parser for JSON with comments."
 		},
 		{
 			"name": "jsonfile",
@@ -7909,9 +8015,9 @@
 		},
 		{
 			"name": "minipass-fetch",
-			"versions": ["5.0.0"],
+			"versions": ["5.0.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/minipass-fetch@5.0.0/node_modules/minipass-fetch"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/minipass-fetch@5.0.1/node_modules/minipass-fetch"
 			],
 			"license": "MIT",
 			"author": "GitHub Inc.",
@@ -7975,6 +8081,17 @@
 			"license": "MIT",
 			"homepage": "https://github.com/vercel/ms#readme",
 			"description": "Tiny millisecond conversion utility"
+		},
+		{
+			"name": "nano-spawn",
+			"versions": ["2.0.0"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/nano-spawn@2.0.0/node_modules/nano-spawn"
+			],
+			"license": "MIT",
+			"author": "Sindre Sorhus",
+			"homepage": "https://github.com/sindresorhus/nano-spawn#readme",
+			"description": "Tiny process execution for humans — a better child_process"
 		},
 		{
 			"name": "nanoid",
@@ -8063,6 +8180,16 @@
 			"description": "Async module-loading library and protocol for bundlers/loaders targeting isomorphic apps and Node.js."
 		},
 		{
+			"name": "node-fetch-native",
+			"versions": ["1.6.7"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/node-fetch-native@1.6.7/node_modules/node-fetch-native"
+			],
+			"license": "MIT",
+			"homepage": "https://github.com/unjs/node-fetch-native#readme",
+			"description": "better fetch for Node.js. Works on any JavaScript runtime!"
+		},
+		{
 			"name": "node-gyp",
 			"versions": ["12.2.0"],
 			"paths": [
@@ -8140,6 +8267,14 @@
 			"description": "Get your PATH prepended with locally installed binaries"
 		},
 		{
+			"name": "nypm",
+			"versions": ["0.6.4"],
+			"paths": ["/Users/mika/Code/ambient-novel/node_modules/.pnpm/nypm@0.6.4/node_modules/nypm"],
+			"license": "MIT",
+			"homepage": "https://github.com/unjs/nypm#readme",
+			"description": "Unified Package Manager for Node.js"
+		},
+		{
 			"name": "object-deep-merge",
 			"versions": ["2.0.0"],
 			"paths": [
@@ -8204,6 +8339,16 @@
 			"author": "Jordan Harband",
 			"homepage": "https://github.com/es-shims/Object.values#readme",
 			"description": "ES2017 spec-compliant Object.values shim."
+		},
+		{
+			"name": "ohash",
+			"versions": ["2.0.11"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/ohash@2.0.11/node_modules/ohash"
+			],
+			"license": "MIT",
+			"homepage": "https://github.com/unjs/ohash#readme",
+			"description": "Simple object hashing, serialization and comparison utils."
 		},
 		{
 			"name": "optionator",
@@ -8278,6 +8423,17 @@
 			"author": "Nick Sullivan",
 			"homepage": "https://github.com/JoshuaKGoldberg/package-json-validator#readme",
 			"description": "Tools to validate package.json files."
+		},
+		{
+			"name": "package-manager-detector",
+			"versions": ["1.6.0"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/package-manager-detector@1.6.0/node_modules/package-manager-detector"
+			],
+			"license": "MIT",
+			"author": "Anthony Fu",
+			"homepage": "https://github.com/antfu-collective/package-manager-detector#readme",
+			"description": "Package manager detector"
 		},
 		{
 			"name": "param-case",
@@ -8434,6 +8590,16 @@
 			"description": "Universal filesystem path utils"
 		},
 		{
+			"name": "perfect-debounce",
+			"versions": ["2.1.0"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/perfect-debounce@2.1.0/node_modules/perfect-debounce"
+			],
+			"license": "MIT",
+			"homepage": "https://github.com/unjs/perfect-debounce#readme",
+			"description": ""
+		},
+		{
 			"name": "periscopic",
 			"versions": ["3.1.0"],
 			"paths": [
@@ -8476,6 +8642,17 @@
 			"author": "Blake Embrey",
 			"homepage": "https://github.com/blakeembrey/pluralize#readme",
 			"description": "Pluralize and singularize any word"
+		},
+		{
+			"name": "poptab",
+			"versions": ["1.0.4"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/poptab@1.0.4/node_modules/poptab"
+			],
+			"license": "MIT",
+			"author": "Eric Mika",
+			"homepage": "https://github.com/kitschpatrol/poptab",
+			"description": "A CLI tool and library to clean up specific browser tabs."
 		},
 		{
 			"name": "possible-typed-array-names",
@@ -8826,6 +9003,14 @@
 			"description": "Sort string index ranges"
 		},
 		{
+			"name": "rc9",
+			"versions": ["2.1.2"],
+			"paths": ["/Users/mika/Code/ambient-novel/node_modules/.pnpm/rc9@2.1.2/node_modules/rc9"],
+			"license": "MIT",
+			"homepage": "https://github.com/unjs/rc9#readme",
+			"description": "Read/Write config couldn't be easier!"
+		},
+		{
 			"name": "read-package-up",
 			"versions": ["12.0.0"],
 			"paths": [
@@ -8859,14 +9044,15 @@
 		},
 		{
 			"name": "readdirp",
-			"versions": ["4.1.2"],
+			"versions": ["4.1.2", "5.0.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/readdirp@4.1.2/node_modules/readdirp"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/readdirp@4.1.2/node_modules/readdirp",
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/readdirp@5.0.0/node_modules/readdirp"
 			],
 			"license": "MIT",
 			"author": "Thorsten Lorenz",
 			"homepage": "https://github.com/paulmillr/readdirp",
-			"description": "Recursive version of fs.readdir with small RAM & CPU footprint."
+			"description": "Recursive version of fs.readdir with small RAM & CPU footprint"
 		},
 		{
 			"name": "refa",
@@ -9426,6 +9612,17 @@
 			"author": "Titus Wormer",
 			"homepage": "https://github.com/remarkjs/remark-validate-links#readme",
 			"description": "remark plugin to validate links to headings and files"
+		},
+		{
+			"name": "require-directory",
+			"versions": ["2.1.1"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/require-directory@2.1.1/node_modules/require-directory"
+			],
+			"license": "MIT",
+			"author": "Troy Goode",
+			"homepage": "https://github.com/troygoode/node-require-directory/",
+			"description": "Recursively iterates over specified directory, require()'ing each file, and returning a nested hash structure containing those modules."
 		},
 		{
 			"name": "require-from-string",
@@ -10416,6 +10613,17 @@
 			"description": "Fast Color Parsing and Manipulation"
 		},
 		{
+			"name": "tinyexec",
+			"versions": ["1.0.2"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/tinyexec@1.0.2/node_modules/tinyexec"
+			],
+			"license": "MIT",
+			"author": "James Garbutt",
+			"homepage": "https://github.com/tinylibs/tinyexec#readme",
+			"description": "A minimal library for executing processes in Node"
+		},
+		{
 			"name": "tinyglobby",
 			"versions": ["0.2.15"],
 			"paths": [
@@ -11281,9 +11489,10 @@
 		},
 		{
 			"name": "wrap-ansi",
-			"versions": ["7.0.0", "9.0.2"],
+			"versions": ["7.0.0", "8.1.0", "9.0.2"],
 			"paths": [
 				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/wrap-ansi@7.0.0/node_modules/wrap-ansi",
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/wrap-ansi@8.1.0/node_modules/wrap-ansi",
 				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/wrap-ansi@9.0.2/node_modules/wrap-ansi"
 			],
 			"license": "MIT",
@@ -11324,8 +11533,9 @@
 		},
 		{
 			"name": "yargs",
-			"versions": ["18.0.0"],
+			"versions": ["17.7.2", "18.0.0"],
 			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/yargs@17.7.2/node_modules/yargs",
 				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/yargs@18.0.0/node_modules/yargs"
 			],
 			"license": "MIT",
@@ -11546,6 +11756,15 @@
 			"description": "Like ruby's abbrev module, but in js"
 		},
 		{
+			"name": "ansis",
+			"versions": ["4.2.0"],
+			"paths": ["/Users/mika/Code/ambient-novel/node_modules/.pnpm/ansis@4.2.0/node_modules/ansis"],
+			"license": "ISC",
+			"author": "webdiscus",
+			"homepage": "https://github.com/webdiscus/ansis#readme",
+			"description": "ANSI color lib"
+		},
+		{
 			"name": "at-least-node",
 			"versions": ["1.0.0"],
 			"paths": [
@@ -11580,8 +11799,11 @@
 		},
 		{
 			"name": "cliui",
-			"versions": ["9.0.1"],
-			"paths": ["/Users/mika/Code/ambient-novel/node_modules/.pnpm/cliui@9.0.1/node_modules/cliui"],
+			"versions": ["8.0.1", "9.0.1"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/cliui@8.0.1/node_modules/cliui",
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/cliui@9.0.1/node_modules/cliui"
+			],
 			"license": "ISC",
 			"author": "Ben Coe",
 			"homepage": "https://github.com/yargs/cliui#readme",
@@ -11876,9 +12098,9 @@
 		},
 		{
 			"name": "minipass-sized",
-			"versions": ["1.0.3"],
+			"versions": ["2.0.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/minipass-sized@1.0.3/node_modules/minipass-sized"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/minipass-sized@2.0.0/node_modules/minipass-sized"
 			],
 			"license": "ISC",
 			"author": "Isaac Z. Schlueter",
@@ -12124,8 +12346,9 @@
 		},
 		{
 			"name": "yargs-parser",
-			"versions": ["22.0.0"],
+			"versions": ["21.1.1", "22.0.0"],
 			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/yargs-parser@21.1.1/node_modules/yargs-parser",
 				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/yargs-parser@22.0.0/node_modules/yargs-parser"
 			],
 			"license": "ISC",
