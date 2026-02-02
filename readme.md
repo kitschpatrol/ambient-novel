@@ -6,7 +6,7 @@
 
 The Ambient Novel is an experimental interface for nonlinear long-form narrated text. It was developed for Scott Wayne Indiana's book _The Valentine Mob_. The interface allows for simultaneous playback, scrubbing, and interleaving of multiple narrated audio tracks.
 
-The project is live at [39forks.com/thevalentinemob](https://39forks.com/thevalentinemob).
+The project is live at [thevalentinemob.com](https://thevalentinemob.com).
 
 > [!NOTE]
 > This source code is released as a curiosity, and its quality reflects that of a quick personal side project subject to a number of hasty iterations.
@@ -146,32 +146,7 @@ brew install dust
 
 ## Deployment
 
-The app is deployed via a GitHub action to Scott's DreamHost server, which runs automatically on deployment to the `main` or `develop` branches. Each branch deploys to a different subdirectory on the server. Configuration and secrets are stored in the GitHub repo settings.
-
-**Required GitHub [secrets](https://github.com/kitschpatrol/ambient-novel/settings/secrets/actions):**
-
-- `SERVER_HOST`\
-  DreamHost server host name
-
-- `SERVER_USERNAME`\
-  DreamHost server SSH user
-
-- `SERVER_PASSWORD`\
-  DreamHost server SSH password
-
-**Required GitHub [variables](https://github.com/kitschpatrol/ambient-novel/settings/variables/actions):**
-
-- `BASE_PATH_PRODUCTION`\
-  Name of subfolder to copy the site to. During the build process, this variable is also used in `svelte.config.js`. Must start with `/` and end without `/`.\
-  Example: `/thevalentinemob`
-
-- `BASE_PATH_STAGING`\
-  As above, but for the develop branch.\
-  Example: `/thevalentinemob-staging`
-
-- `SERVER_PATH`\
-  DreamHost server path, this is prepended to the base path when files are copied. Must start with `/` and end without `/`.\
-  Example: `/home/some-user/some-folder`
+The app is deployed to a Cloudflare Worker manually via the `release` command. The site was migrated from Scott's DreamHost server in February 2026.
 
 Note: The deployment server _must_ support HTTP 206 range requests to successfully set `currentTime` on audio elements on chrome.
 

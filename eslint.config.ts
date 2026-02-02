@@ -16,7 +16,7 @@ export default eslintConfig({
 			'depend/ban-dependencies': [
 				'error',
 				{
-					allowed: ['execa', 'glob', 'dotenv', 'lodash'],
+					allowed: ['execa', 'glob', 'dotenv', 'lodash', 'read-package-up'],
 				},
 			],
 		},

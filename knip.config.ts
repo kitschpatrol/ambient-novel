@@ -8,7 +8,7 @@ export default knipConfig({
 		'src/store.ts',
 		'src/global.css',
 	],
-	ignoreBinaries: ['dust', 'jq', 'kpi-prettier'],
+	ignoreBinaries: ['dust', 'jq', 'open'],
 	ignoreDependencies: [
 		'node-jq',
 		'@types/glob',
@@ -18,6 +18,8 @@ export default knipConfig({
 		'sanitize-html',
 		'tailwindcss',
 		'workbox-build',
+		'node-addon-api',
+		'node-gyp',
 	],
 	ignoreUnresolved: [/^\$/],
 })

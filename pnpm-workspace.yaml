@@ -2,13 +2,14 @@ onlyBuiltDependencies:
   - '@tsparticles/engine'
   - esbuild
   - node-jq
+  - sharp
   - unrs-resolver
+  - workerd
 
-# Required by @kitschpatrol/shared-config
 publicHoistPattern:
   - '@kitschpatrol/repo-config'
   - '@kitschpatrol/typescript-config'
-  - 'case-police'
+  - case-police
   - '*cspell*'
   - '*eslint*'
   - '*knip*'

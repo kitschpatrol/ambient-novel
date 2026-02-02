@@ -34,9 +34,9 @@
 		},
 		{
 			"name": "@babel/code-frame",
-			"versions": ["7.28.6"],
+			"versions": ["7.29.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+code-frame@7.28.6/node_modules/@babel/code-frame"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+code-frame@7.29.0/node_modules/@babel/code-frame"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -45,9 +45,9 @@
 		},
 		{
 			"name": "@babel/compat-data",
-			"versions": ["7.28.6"],
+			"versions": ["7.29.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+compat-data@7.28.6/node_modules/@babel/compat-data"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+compat-data@7.29.0/node_modules/@babel/compat-data"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -56,9 +56,9 @@
 		},
 		{
 			"name": "@babel/core",
-			"versions": ["7.28.6"],
+			"versions": ["7.29.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+core@7.28.6/node_modules/@babel/core"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+core@7.29.0/node_modules/@babel/core"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -67,9 +67,9 @@
 		},
 		{
 			"name": "@babel/generator",
-			"versions": ["7.28.6"],
+			"versions": ["7.29.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+generator@7.28.6/node_modules/@babel/generator"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+generator@7.29.0/node_modules/@babel/generator"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -102,7 +102,7 @@
 			"name": "@babel/helper-create-class-features-plugin",
 			"versions": ["7.28.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+helper-create-class-features-plugin@7.28.6_@babel+core@7.28.6/node_modules/@babel/helper-create-class-features-plugin"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+helper-create-class-features-plugin@7.28.6_@babel+core@7.29.0/node_modules/@babel/helper-create-class-features-plugin"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -113,7 +113,7 @@
 			"name": "@babel/helper-create-regexp-features-plugin",
 			"versions": ["7.28.5"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+helper-create-regexp-features-plugin@7.28.5_@babel+core@7.28.6/node_modules/@babel/helper-create-regexp-features-plugin"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+helper-create-regexp-features-plugin@7.28.5_@babel+core@7.29.0/node_modules/@babel/helper-create-regexp-features-plugin"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -124,7 +124,7 @@
 			"name": "@babel/helper-define-polyfill-provider",
 			"versions": ["0.6.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+helper-define-polyfill-provider@0.6.6_@babel+core@7.28.6/node_modules/@babel/helper-define-polyfill-provider"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+helper-define-polyfill-provider@0.6.6_@babel+core@7.29.0/node_modules/@babel/helper-define-polyfill-provider"
 			],
 			"license": "MIT",
 			"homepage": "https://github.com/babel/babel-polyfills#readme",
@@ -167,7 +167,7 @@
 			"name": "@babel/helper-module-transforms",
 			"versions": ["7.28.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+helper-module-transforms@7.28.6_@babel+core@7.28.6/node_modules/@babel/helper-module-transforms"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+helper-module-transforms@7.28.6_@babel+core@7.29.0/node_modules/@babel/helper-module-transforms"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -200,7 +200,7 @@
 			"name": "@babel/helper-remap-async-to-generator",
 			"versions": ["7.27.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+helper-remap-async-to-generator@7.27.1_@babel+core@7.28.6/node_modules/@babel/helper-remap-async-to-generator"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+helper-remap-async-to-generator@7.27.1_@babel+core@7.29.0/node_modules/@babel/helper-remap-async-to-generator"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -211,7 +211,7 @@
 			"name": "@babel/helper-replace-supers",
 			"versions": ["7.28.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+helper-replace-supers@7.28.6_@babel+core@7.28.6/node_modules/@babel/helper-replace-supers"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+helper-replace-supers@7.28.6_@babel+core@7.29.0/node_modules/@babel/helper-replace-supers"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -286,9 +286,9 @@
 		},
 		{
 			"name": "@babel/parser",
-			"versions": ["7.28.6"],
+			"versions": ["7.29.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+parser@7.28.6/node_modules/@babel/parser"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+parser@7.29.0/node_modules/@babel/parser"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -299,7 +299,7 @@
 			"name": "@babel/plugin-bugfix-firefox-class-in-computed-class-key",
 			"versions": ["7.28.5"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-bugfix-firefox-class-in-computed-class-key@7.28.5_@babel+core@7.28.6/node_modules/@babel/plugin-bugfix-firefox-class-in-computed-class-key"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-bugfix-firefox-class-in-computed-class-key@7.28.5_@babel+core@7.29.0/node_modules/@babel/plugin-bugfix-firefox-class-in-computed-class-key"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -310,7 +310,7 @@
 			"name": "@babel/plugin-bugfix-safari-class-field-initializer-scope",
 			"versions": ["7.27.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-bugfix-safari-class-field-initializer-scope@7.27.1_@babel+core@7.28.6/node_modules/@babel/plugin-bugfix-safari-class-field-initializer-scope"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-bugfix-safari-class-field-initializer-scope@7.27.1_@babel+core@7.29.0/node_modules/@babel/plugin-bugfix-safari-class-field-initializer-scope"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -321,7 +321,7 @@
 			"name": "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression",
 			"versions": ["7.27.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-bugfix-safari-id-destructuring-collision-in-function-expression@7.27.1_@babel+core@7.28.6/node_modules/@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-bugfix-safari-id-destructuring-collision-in-function-expression@7.27.1_@babel+core@7.29.0/node_modules/@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -332,7 +332,7 @@
 			"name": "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining",
 			"versions": ["7.27.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-bugfix-v8-spread-parameters-in-optional-chaining@7.27.1_@babel+core@7.28.6/node_modules/@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-bugfix-v8-spread-parameters-in-optional-chaining@7.27.1_@babel+core@7.29.0/node_modules/@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -343,7 +343,7 @@
 			"name": "@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly",
 			"versions": ["7.28.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-bugfix-v8-static-class-fields-redefine-readonly@7.28.6_@babel+core@7.28.6/node_modules/@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-bugfix-v8-static-class-fields-redefine-readonly@7.28.6_@babel+core@7.29.0/node_modules/@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -354,7 +354,7 @@
 			"name": "@babel/plugin-proposal-private-property-in-object",
 			"versions": ["7.21.0-placeholder-for-preset-env.2"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-proposal-private-property-in-object@7.21.0-placeholder-for-preset-env.2_@babel+core@7.28.6/node_modules/@babel/plugin-proposal-private-property-in-object"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-proposal-private-property-in-object@7.21.0-placeholder-for-preset-env.2_@babel+core@7.29.0/node_modules/@babel/plugin-proposal-private-property-in-object"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -365,7 +365,7 @@
 			"name": "@babel/plugin-syntax-import-assertions",
 			"versions": ["7.28.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-syntax-import-assertions@7.28.6_@babel+core@7.28.6/node_modules/@babel/plugin-syntax-import-assertions"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-syntax-import-assertions@7.28.6_@babel+core@7.29.0/node_modules/@babel/plugin-syntax-import-assertions"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -376,7 +376,7 @@
 			"name": "@babel/plugin-syntax-import-attributes",
 			"versions": ["7.28.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-syntax-import-attributes@7.28.6_@babel+core@7.28.6/node_modules/@babel/plugin-syntax-import-attributes"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-syntax-import-attributes@7.28.6_@babel+core@7.29.0/node_modules/@babel/plugin-syntax-import-attributes"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -387,7 +387,7 @@
 			"name": "@babel/plugin-syntax-unicode-sets-regex",
 			"versions": ["7.18.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-syntax-unicode-sets-regex@7.18.6_@babel+core@7.28.6/node_modules/@babel/plugin-syntax-unicode-sets-regex"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-syntax-unicode-sets-regex@7.18.6_@babel+core@7.29.0/node_modules/@babel/plugin-syntax-unicode-sets-regex"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -398,7 +398,7 @@
 			"name": "@babel/plugin-transform-arrow-functions",
 			"versions": ["7.27.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-arrow-functions@7.27.1_@babel+core@7.28.6/node_modules/@babel/plugin-transform-arrow-functions"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-arrow-functions@7.27.1_@babel+core@7.29.0/node_modules/@babel/plugin-transform-arrow-functions"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -407,9 +407,9 @@
 		},
 		{
 			"name": "@babel/plugin-transform-async-generator-functions",
-			"versions": ["7.28.6"],
+			"versions": ["7.29.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-async-generator-functions@7.28.6_@babel+core@7.28.6/node_modules/@babel/plugin-transform-async-generator-functions"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-async-generator-functions@7.29.0_@babel+core@7.29.0/node_modules/@babel/plugin-transform-async-generator-functions"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -420,7 +420,7 @@
 			"name": "@babel/plugin-transform-async-to-generator",
 			"versions": ["7.28.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-async-to-generator@7.28.6_@babel+core@7.28.6/node_modules/@babel/plugin-transform-async-to-generator"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-async-to-generator@7.28.6_@babel+core@7.29.0/node_modules/@babel/plugin-transform-async-to-generator"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -431,7 +431,7 @@
 			"name": "@babel/plugin-transform-block-scoped-functions",
 			"versions": ["7.27.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-block-scoped-functions@7.27.1_@babel+core@7.28.6/node_modules/@babel/plugin-transform-block-scoped-functions"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-block-scoped-functions@7.27.1_@babel+core@7.29.0/node_modules/@babel/plugin-transform-block-scoped-functions"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -442,7 +442,7 @@
 			"name": "@babel/plugin-transform-block-scoping",
 			"versions": ["7.28.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-block-scoping@7.28.6_@babel+core@7.28.6/node_modules/@babel/plugin-transform-block-scoping"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-block-scoping@7.28.6_@babel+core@7.29.0/node_modules/@babel/plugin-transform-block-scoping"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -453,7 +453,7 @@
 			"name": "@babel/plugin-transform-class-properties",
 			"versions": ["7.28.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-class-properties@7.28.6_@babel+core@7.28.6/node_modules/@babel/plugin-transform-class-properties"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-class-properties@7.28.6_@babel+core@7.29.0/node_modules/@babel/plugin-transform-class-properties"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -464,7 +464,7 @@
 			"name": "@babel/plugin-transform-class-static-block",
 			"versions": ["7.28.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-class-static-block@7.28.6_@babel+core@7.28.6/node_modules/@babel/plugin-transform-class-static-block"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-class-static-block@7.28.6_@babel+core@7.29.0/node_modules/@babel/plugin-transform-class-static-block"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -475,7 +475,7 @@
 			"name": "@babel/plugin-transform-classes",
 			"versions": ["7.28.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-classes@7.28.6_@babel+core@7.28.6/node_modules/@babel/plugin-transform-classes"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-classes@7.28.6_@babel+core@7.29.0/node_modules/@babel/plugin-transform-classes"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -486,7 +486,7 @@
 			"name": "@babel/plugin-transform-computed-properties",
 			"versions": ["7.28.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-computed-properties@7.28.6_@babel+core@7.28.6/node_modules/@babel/plugin-transform-computed-properties"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-computed-properties@7.28.6_@babel+core@7.29.0/node_modules/@babel/plugin-transform-computed-properties"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -497,7 +497,7 @@
 			"name": "@babel/plugin-transform-destructuring",
 			"versions": ["7.28.5"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-destructuring@7.28.5_@babel+core@7.28.6/node_modules/@babel/plugin-transform-destructuring"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-destructuring@7.28.5_@babel+core@7.29.0/node_modules/@babel/plugin-transform-destructuring"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -508,7 +508,7 @@
 			"name": "@babel/plugin-transform-dotall-regex",
 			"versions": ["7.28.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-dotall-regex@7.28.6_@babel+core@7.28.6/node_modules/@babel/plugin-transform-dotall-regex"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-dotall-regex@7.28.6_@babel+core@7.29.0/node_modules/@babel/plugin-transform-dotall-regex"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -519,7 +519,7 @@
 			"name": "@babel/plugin-transform-duplicate-keys",
 			"versions": ["7.27.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-duplicate-keys@7.27.1_@babel+core@7.28.6/node_modules/@babel/plugin-transform-duplicate-keys"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-duplicate-keys@7.27.1_@babel+core@7.29.0/node_modules/@babel/plugin-transform-duplicate-keys"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -528,9 +528,9 @@
 		},
 		{
 			"name": "@babel/plugin-transform-duplicate-named-capturing-groups-regex",
-			"versions": ["7.28.6"],
+			"versions": ["7.29.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-duplicate-named-capturing-groups-regex@7.28.6_@babel+core@7.28.6/node_modules/@babel/plugin-transform-duplicate-named-capturing-groups-regex"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-duplicate-named-capturing-groups-regex@7.29.0_@babel+core@7.29.0/node_modules/@babel/plugin-transform-duplicate-named-capturing-groups-regex"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -541,7 +541,7 @@
 			"name": "@babel/plugin-transform-dynamic-import",
 			"versions": ["7.27.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-dynamic-import@7.27.1_@babel+core@7.28.6/node_modules/@babel/plugin-transform-dynamic-import"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-dynamic-import@7.27.1_@babel+core@7.29.0/node_modules/@babel/plugin-transform-dynamic-import"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -552,7 +552,7 @@
 			"name": "@babel/plugin-transform-explicit-resource-management",
 			"versions": ["7.28.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-explicit-resource-management@7.28.6_@babel+core@7.28.6/node_modules/@babel/plugin-transform-explicit-resource-management"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-explicit-resource-management@7.28.6_@babel+core@7.29.0/node_modules/@babel/plugin-transform-explicit-resource-management"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -563,7 +563,7 @@
 			"name": "@babel/plugin-transform-exponentiation-operator",
 			"versions": ["7.28.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-exponentiation-operator@7.28.6_@babel+core@7.28.6/node_modules/@babel/plugin-transform-exponentiation-operator"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-exponentiation-operator@7.28.6_@babel+core@7.29.0/node_modules/@babel/plugin-transform-exponentiation-operator"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -574,7 +574,7 @@
 			"name": "@babel/plugin-transform-export-namespace-from",
 			"versions": ["7.27.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-export-namespace-from@7.27.1_@babel+core@7.28.6/node_modules/@babel/plugin-transform-export-namespace-from"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-export-namespace-from@7.27.1_@babel+core@7.29.0/node_modules/@babel/plugin-transform-export-namespace-from"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -585,7 +585,7 @@
 			"name": "@babel/plugin-transform-for-of",
 			"versions": ["7.27.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-for-of@7.27.1_@babel+core@7.28.6/node_modules/@babel/plugin-transform-for-of"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-for-of@7.27.1_@babel+core@7.29.0/node_modules/@babel/plugin-transform-for-of"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -596,7 +596,7 @@
 			"name": "@babel/plugin-transform-function-name",
 			"versions": ["7.27.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-function-name@7.27.1_@babel+core@7.28.6/node_modules/@babel/plugin-transform-function-name"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-function-name@7.27.1_@babel+core@7.29.0/node_modules/@babel/plugin-transform-function-name"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -607,7 +607,7 @@
 			"name": "@babel/plugin-transform-json-strings",
 			"versions": ["7.28.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-json-strings@7.28.6_@babel+core@7.28.6/node_modules/@babel/plugin-transform-json-strings"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-json-strings@7.28.6_@babel+core@7.29.0/node_modules/@babel/plugin-transform-json-strings"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -618,7 +618,7 @@
 			"name": "@babel/plugin-transform-literals",
 			"versions": ["7.27.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-literals@7.27.1_@babel+core@7.28.6/node_modules/@babel/plugin-transform-literals"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-literals@7.27.1_@babel+core@7.29.0/node_modules/@babel/plugin-transform-literals"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -629,7 +629,7 @@
 			"name": "@babel/plugin-transform-logical-assignment-operators",
 			"versions": ["7.28.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-logical-assignment-operators@7.28.6_@babel+core@7.28.6/node_modules/@babel/plugin-transform-logical-assignment-operators"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-logical-assignment-operators@7.28.6_@babel+core@7.29.0/node_modules/@babel/plugin-transform-logical-assignment-operators"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -640,7 +640,7 @@
 			"name": "@babel/plugin-transform-member-expression-literals",
 			"versions": ["7.27.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-member-expression-literals@7.27.1_@babel+core@7.28.6/node_modules/@babel/plugin-transform-member-expression-literals"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-member-expression-literals@7.27.1_@babel+core@7.29.0/node_modules/@babel/plugin-transform-member-expression-literals"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -651,7 +651,7 @@
 			"name": "@babel/plugin-transform-modules-amd",
 			"versions": ["7.27.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-modules-amd@7.27.1_@babel+core@7.28.6/node_modules/@babel/plugin-transform-modules-amd"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-modules-amd@7.27.1_@babel+core@7.29.0/node_modules/@babel/plugin-transform-modules-amd"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -662,7 +662,7 @@
 			"name": "@babel/plugin-transform-modules-commonjs",
 			"versions": ["7.28.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-modules-commonjs@7.28.6_@babel+core@7.28.6/node_modules/@babel/plugin-transform-modules-commonjs"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-modules-commonjs@7.28.6_@babel+core@7.29.0/node_modules/@babel/plugin-transform-modules-commonjs"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -671,9 +671,9 @@
 		},
 		{
 			"name": "@babel/plugin-transform-modules-systemjs",
-			"versions": ["7.28.5"],
+			"versions": ["7.29.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-modules-systemjs@7.28.5_@babel+core@7.28.6/node_modules/@babel/plugin-transform-modules-systemjs"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-modules-systemjs@7.29.0_@babel+core@7.29.0/node_modules/@babel/plugin-transform-modules-systemjs"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -684,7 +684,7 @@
 			"name": "@babel/plugin-transform-modules-umd",
 			"versions": ["7.27.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-modules-umd@7.27.1_@babel+core@7.28.6/node_modules/@babel/plugin-transform-modules-umd"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-modules-umd@7.27.1_@babel+core@7.29.0/node_modules/@babel/plugin-transform-modules-umd"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -693,9 +693,9 @@
 		},
 		{
 			"name": "@babel/plugin-transform-named-capturing-groups-regex",
-			"versions": ["7.27.1"],
+			"versions": ["7.29.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-named-capturing-groups-regex@7.27.1_@babel+core@7.28.6/node_modules/@babel/plugin-transform-named-capturing-groups-regex"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-named-capturing-groups-regex@7.29.0_@babel+core@7.29.0/node_modules/@babel/plugin-transform-named-capturing-groups-regex"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -706,7 +706,7 @@
 			"name": "@babel/plugin-transform-new-target",
 			"versions": ["7.27.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-new-target@7.27.1_@babel+core@7.28.6/node_modules/@babel/plugin-transform-new-target"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-new-target@7.27.1_@babel+core@7.29.0/node_modules/@babel/plugin-transform-new-target"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -717,7 +717,7 @@
 			"name": "@babel/plugin-transform-nullish-coalescing-operator",
 			"versions": ["7.28.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-nullish-coalescing-operator@7.28.6_@babel+core@7.28.6/node_modules/@babel/plugin-transform-nullish-coalescing-operator"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-nullish-coalescing-operator@7.28.6_@babel+core@7.29.0/node_modules/@babel/plugin-transform-nullish-coalescing-operator"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -728,7 +728,7 @@
 			"name": "@babel/plugin-transform-numeric-separator",
 			"versions": ["7.28.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-numeric-separator@7.28.6_@babel+core@7.28.6/node_modules/@babel/plugin-transform-numeric-separator"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-numeric-separator@7.28.6_@babel+core@7.29.0/node_modules/@babel/plugin-transform-numeric-separator"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -739,7 +739,7 @@
 			"name": "@babel/plugin-transform-object-rest-spread",
 			"versions": ["7.28.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-object-rest-spread@7.28.6_@babel+core@7.28.6/node_modules/@babel/plugin-transform-object-rest-spread"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-object-rest-spread@7.28.6_@babel+core@7.29.0/node_modules/@babel/plugin-transform-object-rest-spread"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -750,7 +750,7 @@
 			"name": "@babel/plugin-transform-object-super",
 			"versions": ["7.27.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-object-super@7.27.1_@babel+core@7.28.6/node_modules/@babel/plugin-transform-object-super"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-object-super@7.27.1_@babel+core@7.29.0/node_modules/@babel/plugin-transform-object-super"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -761,7 +761,7 @@
 			"name": "@babel/plugin-transform-optional-catch-binding",
 			"versions": ["7.28.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-optional-catch-binding@7.28.6_@babel+core@7.28.6/node_modules/@babel/plugin-transform-optional-catch-binding"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-optional-catch-binding@7.28.6_@babel+core@7.29.0/node_modules/@babel/plugin-transform-optional-catch-binding"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -772,7 +772,7 @@
 			"name": "@babel/plugin-transform-optional-chaining",
 			"versions": ["7.28.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-optional-chaining@7.28.6_@babel+core@7.28.6/node_modules/@babel/plugin-transform-optional-chaining"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-optional-chaining@7.28.6_@babel+core@7.29.0/node_modules/@babel/plugin-transform-optional-chaining"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -783,7 +783,7 @@
 			"name": "@babel/plugin-transform-parameters",
 			"versions": ["7.27.7"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-parameters@7.27.7_@babel+core@7.28.6/node_modules/@babel/plugin-transform-parameters"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-parameters@7.27.7_@babel+core@7.29.0/node_modules/@babel/plugin-transform-parameters"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -794,7 +794,7 @@
 			"name": "@babel/plugin-transform-private-methods",
 			"versions": ["7.28.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-private-methods@7.28.6_@babel+core@7.28.6/node_modules/@babel/plugin-transform-private-methods"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-private-methods@7.28.6_@babel+core@7.29.0/node_modules/@babel/plugin-transform-private-methods"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -805,7 +805,7 @@
 			"name": "@babel/plugin-transform-private-property-in-object",
 			"versions": ["7.28.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-private-property-in-object@7.28.6_@babel+core@7.28.6/node_modules/@babel/plugin-transform-private-property-in-object"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-private-property-in-object@7.28.6_@babel+core@7.29.0/node_modules/@babel/plugin-transform-private-property-in-object"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -816,7 +816,7 @@
 			"name": "@babel/plugin-transform-property-literals",
 			"versions": ["7.27.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-property-literals@7.27.1_@babel+core@7.28.6/node_modules/@babel/plugin-transform-property-literals"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-property-literals@7.27.1_@babel+core@7.29.0/node_modules/@babel/plugin-transform-property-literals"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -825,9 +825,9 @@
 		},
 		{
 			"name": "@babel/plugin-transform-regenerator",
-			"versions": ["7.28.6"],
+			"versions": ["7.29.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-regenerator@7.28.6_@babel+core@7.28.6/node_modules/@babel/plugin-transform-regenerator"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-regenerator@7.29.0_@babel+core@7.29.0/node_modules/@babel/plugin-transform-regenerator"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -838,7 +838,7 @@
 			"name": "@babel/plugin-transform-regexp-modifiers",
 			"versions": ["7.28.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-regexp-modifiers@7.28.6_@babel+core@7.28.6/node_modules/@babel/plugin-transform-regexp-modifiers"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-regexp-modifiers@7.28.6_@babel+core@7.29.0/node_modules/@babel/plugin-transform-regexp-modifiers"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -849,7 +849,7 @@
 			"name": "@babel/plugin-transform-reserved-words",
 			"versions": ["7.27.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-reserved-words@7.27.1_@babel+core@7.28.6/node_modules/@babel/plugin-transform-reserved-words"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-reserved-words@7.27.1_@babel+core@7.29.0/node_modules/@babel/plugin-transform-reserved-words"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -860,7 +860,7 @@
 			"name": "@babel/plugin-transform-shorthand-properties",
 			"versions": ["7.27.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-shorthand-properties@7.27.1_@babel+core@7.28.6/node_modules/@babel/plugin-transform-shorthand-properties"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-shorthand-properties@7.27.1_@babel+core@7.29.0/node_modules/@babel/plugin-transform-shorthand-properties"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -871,7 +871,7 @@
 			"name": "@babel/plugin-transform-spread",
 			"versions": ["7.28.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-spread@7.28.6_@babel+core@7.28.6/node_modules/@babel/plugin-transform-spread"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-spread@7.28.6_@babel+core@7.29.0/node_modules/@babel/plugin-transform-spread"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -882,7 +882,7 @@
 			"name": "@babel/plugin-transform-sticky-regex",
 			"versions": ["7.27.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-sticky-regex@7.27.1_@babel+core@7.28.6/node_modules/@babel/plugin-transform-sticky-regex"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-sticky-regex@7.27.1_@babel+core@7.29.0/node_modules/@babel/plugin-transform-sticky-regex"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -893,7 +893,7 @@
 			"name": "@babel/plugin-transform-template-literals",
 			"versions": ["7.27.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-template-literals@7.27.1_@babel+core@7.28.6/node_modules/@babel/plugin-transform-template-literals"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-template-literals@7.27.1_@babel+core@7.29.0/node_modules/@babel/plugin-transform-template-literals"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -904,7 +904,7 @@
 			"name": "@babel/plugin-transform-typeof-symbol",
 			"versions": ["7.27.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-typeof-symbol@7.27.1_@babel+core@7.28.6/node_modules/@babel/plugin-transform-typeof-symbol"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-typeof-symbol@7.27.1_@babel+core@7.29.0/node_modules/@babel/plugin-transform-typeof-symbol"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -915,7 +915,7 @@
 			"name": "@babel/plugin-transform-unicode-escapes",
 			"versions": ["7.27.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-unicode-escapes@7.27.1_@babel+core@7.28.6/node_modules/@babel/plugin-transform-unicode-escapes"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-unicode-escapes@7.27.1_@babel+core@7.29.0/node_modules/@babel/plugin-transform-unicode-escapes"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -926,7 +926,7 @@
 			"name": "@babel/plugin-transform-unicode-property-regex",
 			"versions": ["7.28.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-unicode-property-regex@7.28.6_@babel+core@7.28.6/node_modules/@babel/plugin-transform-unicode-property-regex"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-unicode-property-regex@7.28.6_@babel+core@7.29.0/node_modules/@babel/plugin-transform-unicode-property-regex"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -937,7 +937,7 @@
 			"name": "@babel/plugin-transform-unicode-regex",
 			"versions": ["7.27.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-unicode-regex@7.27.1_@babel+core@7.28.6/node_modules/@babel/plugin-transform-unicode-regex"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-unicode-regex@7.27.1_@babel+core@7.29.0/node_modules/@babel/plugin-transform-unicode-regex"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -948,7 +948,7 @@
 			"name": "@babel/plugin-transform-unicode-sets-regex",
 			"versions": ["7.28.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-unicode-sets-regex@7.28.6_@babel+core@7.28.6/node_modules/@babel/plugin-transform-unicode-sets-regex"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+plugin-transform-unicode-sets-regex@7.28.6_@babel+core@7.29.0/node_modules/@babel/plugin-transform-unicode-sets-regex"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -957,9 +957,9 @@
 		},
 		{
 			"name": "@babel/preset-env",
-			"versions": ["7.28.6"],
+			"versions": ["7.29.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+preset-env@7.28.6_@babel+core@7.28.6/node_modules/@babel/preset-env"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+preset-env@7.29.0_@babel+core@7.29.0/node_modules/@babel/preset-env"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -970,7 +970,7 @@
 			"name": "@babel/preset-modules",
 			"versions": ["0.1.6-no-external-plugins"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+preset-modules@0.1.6-no-external-plugins_@babel+core@7.28.6/node_modules/@babel/preset-modules"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+preset-modules@0.1.6-no-external-plugins_@babel+core@7.29.0/node_modules/@babel/preset-modules"
 			],
 			"license": "MIT",
 			"homepage": "https://github.com/babel/preset-modules#readme",
@@ -1000,9 +1000,9 @@
 		},
 		{
 			"name": "@babel/traverse",
-			"versions": ["7.28.6"],
+			"versions": ["7.29.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+traverse@7.28.6/node_modules/@babel/traverse"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+traverse@7.29.0/node_modules/@babel/traverse"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -1011,9 +1011,9 @@
 		},
 		{
 			"name": "@babel/types",
-			"versions": ["7.28.6"],
+			"versions": ["7.29.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+types@7.28.6/node_modules/@babel/types"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@babel+types@7.29.0/node_modules/@babel/types"
 			],
 			"license": "MIT",
 			"author": "The Babel Team",
@@ -1064,9 +1064,9 @@
 		},
 		{
 			"name": "@cspell/cspell-bundled-dicts",
-			"versions": ["9.6.2"],
+			"versions": ["9.6.3"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+cspell-bundled-dicts@9.6.2/node_modules/@cspell/cspell-bundled-dicts"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+cspell-bundled-dicts@9.6.3/node_modules/@cspell/cspell-bundled-dicts"
 			],
 			"license": "MIT",
 			"author": "Jason Dent",
@@ -1075,9 +1075,9 @@
 		},
 		{
 			"name": "@cspell/cspell-json-reporter",
-			"versions": ["9.6.2"],
+			"versions": ["9.6.3"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+cspell-json-reporter@9.6.2/node_modules/@cspell/cspell-json-reporter"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+cspell-json-reporter@9.6.3/node_modules/@cspell/cspell-json-reporter"
 			],
 			"license": "MIT",
 			"author": "Jason Dent",
@@ -1086,9 +1086,9 @@
 		},
 		{
 			"name": "@cspell/cspell-performance-monitor",
-			"versions": ["9.6.2"],
+			"versions": ["9.6.3"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+cspell-performance-monitor@9.6.2/node_modules/@cspell/cspell-performance-monitor"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+cspell-performance-monitor@9.6.3/node_modules/@cspell/cspell-performance-monitor"
 			],
 			"license": "MIT",
 			"author": "Jason Dent",
@@ -1097,9 +1097,9 @@
 		},
 		{
 			"name": "@cspell/cspell-pipe",
-			"versions": ["9.6.2"],
+			"versions": ["9.6.3"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+cspell-pipe@9.6.2/node_modules/@cspell/cspell-pipe"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+cspell-pipe@9.6.3/node_modules/@cspell/cspell-pipe"
 			],
 			"license": "MIT",
 			"author": "Jason Dent",
@@ -1108,9 +1108,9 @@
 		},
 		{
 			"name": "@cspell/cspell-resolver",
-			"versions": ["9.6.2"],
+			"versions": ["9.6.3"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+cspell-resolver@9.6.2/node_modules/@cspell/cspell-resolver"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+cspell-resolver@9.6.3/node_modules/@cspell/cspell-resolver"
 			],
 			"license": "MIT",
 			"author": "Jason Dent",
@@ -1119,9 +1119,9 @@
 		},
 		{
 			"name": "@cspell/cspell-service-bus",
-			"versions": ["9.6.2"],
+			"versions": ["9.6.3"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+cspell-service-bus@9.6.2/node_modules/@cspell/cspell-service-bus"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+cspell-service-bus@9.6.3/node_modules/@cspell/cspell-service-bus"
 			],
 			"license": "MIT",
 			"author": "Jason Dent",
@@ -1130,9 +1130,9 @@
 		},
 		{
 			"name": "@cspell/cspell-types",
-			"versions": ["9.6.2"],
+			"versions": ["9.6.3"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+cspell-types@9.6.2/node_modules/@cspell/cspell-types"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+cspell-types@9.6.3/node_modules/@cspell/cspell-types"
 			],
 			"license": "MIT",
 			"author": "Jason Dent",
@@ -1141,9 +1141,9 @@
 		},
 		{
 			"name": "@cspell/cspell-worker",
-			"versions": ["9.6.2"],
+			"versions": ["9.6.3"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+cspell-worker@9.6.2/node_modules/@cspell/cspell-worker"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+cspell-worker@9.6.3/node_modules/@cspell/cspell-worker"
 			],
 			"license": "MIT",
 			"author": "Jason Dent",
@@ -1317,9 +1317,9 @@
 		},
 		{
 			"name": "@cspell/dict-en_us",
-			"versions": ["4.4.27"],
+			"versions": ["4.4.28"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+dict-en_us@4.4.27/node_modules/@cspell/dict-en_us"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+dict-en_us@4.4.28/node_modules/@cspell/dict-en_us"
 			],
 			"license": "MIT",
 			"author": "Street Side Software",
@@ -1328,9 +1328,9 @@
 		},
 		{
 			"name": "@cspell/dict-en-gb-mit",
-			"versions": ["3.1.16"],
+			"versions": ["3.1.17"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+dict-en-gb-mit@3.1.16/node_modules/@cspell/dict-en-gb-mit"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+dict-en-gb-mit@3.1.17/node_modules/@cspell/dict-en-gb-mit"
 			],
 			"license": "MIT",
 			"author": "Street Side Software",
@@ -1592,9 +1592,9 @@
 		},
 		{
 			"name": "@cspell/dict-npm",
-			"versions": ["5.2.31"],
+			"versions": ["5.2.32"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+dict-npm@5.2.31/node_modules/@cspell/dict-npm"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+dict-npm@5.2.32/node_modules/@cspell/dict-npm"
 			],
 			"license": "MIT",
 			"author": "Street Side Software",
@@ -1669,9 +1669,9 @@
 		},
 		{
 			"name": "@cspell/dict-rust",
-			"versions": ["4.1.1"],
+			"versions": ["4.1.2"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+dict-rust@4.1.1/node_modules/@cspell/dict-rust"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+dict-rust@4.1.2/node_modules/@cspell/dict-rust"
 			],
 			"license": "MIT",
 			"author": "Street Side Software",
@@ -1790,9 +1790,9 @@
 		},
 		{
 			"name": "@cspell/dynamic-import",
-			"versions": ["9.6.2"],
+			"versions": ["9.6.3"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+dynamic-import@9.6.2/node_modules/@cspell/dynamic-import"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+dynamic-import@9.6.3/node_modules/@cspell/dynamic-import"
 			],
 			"license": "MIT",
 			"author": "Jason Dent",
@@ -1801,9 +1801,9 @@
 		},
 		{
 			"name": "@cspell/filetypes",
-			"versions": ["9.6.2"],
+			"versions": ["9.6.3"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+filetypes@9.6.2/node_modules/@cspell/filetypes"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+filetypes@9.6.3/node_modules/@cspell/filetypes"
 			],
 			"license": "MIT",
 			"author": "Jason Dent",
@@ -1811,10 +1811,21 @@
 			"description": "Library to determine file types based upon the file name."
 		},
 		{
-			"name": "@cspell/strong-weak-map",
-			"versions": ["9.6.2"],
+			"name": "@cspell/rpc",
+			"versions": ["9.6.3"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+strong-weak-map@9.6.2/node_modules/@cspell/strong-weak-map"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+rpc@9.6.3/node_modules/@cspell/rpc"
+			],
+			"license": "MIT",
+			"author": "Jason Dent",
+			"homepage": "https://github.com/streetsidesoftware/cspell/tree/main/packages/rpc#readme",
+			"description": "Type Safe RPC library."
+		},
+		{
+			"name": "@cspell/strong-weak-map",
+			"versions": ["9.6.3"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+strong-weak-map@9.6.3/node_modules/@cspell/strong-weak-map"
 			],
 			"license": "MIT",
 			"author": "Jason Dent",
@@ -1823,14 +1834,24 @@
 		},
 		{
 			"name": "@cspell/url",
-			"versions": ["9.6.2"],
+			"versions": ["9.6.3"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+url@9.6.2/node_modules/@cspell/url"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspell+url@9.6.3/node_modules/@cspell/url"
 			],
 			"license": "MIT",
 			"author": "Jason Dent",
 			"homepage": "https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell-url#readme",
 			"description": "URL parsing and manipulation utilities for cspell"
+		},
+		{
+			"name": "@cspotcode/source-map-support",
+			"versions": ["0.8.1"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cspotcode+source-map-support@0.8.1/node_modules/@cspotcode/source-map-support"
+			],
+			"license": "MIT",
+			"homepage": "https://github.com/cspotcode/node-source-map-support#readme",
+			"description": "Fixes stack traces for files with source maps"
 		},
 		{
 			"name": "@csstools/css-parser-algorithms",
@@ -1897,9 +1918,10 @@
 		},
 		{
 			"name": "@esbuild/darwin-arm64",
-			"versions": ["0.21.5", "0.27.2"],
+			"versions": ["0.21.5", "0.27.0", "0.27.2"],
 			"paths": [
 				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@esbuild+darwin-arm64@0.21.5/node_modules/@esbuild/darwin-arm64",
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@esbuild+darwin-arm64@0.27.0/node_modules/@esbuild/darwin-arm64",
 				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@esbuild+darwin-arm64@0.27.2/node_modules/@esbuild/darwin-arm64"
 			],
 			"license": "MIT",
@@ -2115,6 +2137,16 @@
 			"description": "Types for @html-eslint/eslint-plugin"
 		},
 		{
+			"name": "@img/colour",
+			"versions": ["1.0.0"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@img+colour@1.0.0/node_modules/@img/colour"
+			],
+			"license": "MIT",
+			"homepage": "https://github.com/lovell/colour#readme",
+			"description": "The ESM-only 'color' package made compatible for use with CommonJS runtimes"
+		},
+		{
 			"name": "@isaacs/balanced-match",
 			"versions": ["4.0.1"],
 			"paths": [
@@ -2190,8 +2222,9 @@
 		},
 		{
 			"name": "@jridgewell/trace-mapping",
-			"versions": ["0.3.31"],
+			"versions": ["0.3.9", "0.3.31"],
 			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@jridgewell+trace-mapping@0.3.9/node_modules/@jridgewell/trace-mapping",
 				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@jridgewell+trace-mapping@0.3.31/node_modules/@jridgewell/trace-mapping"
 			],
 			"license": "MIT",
@@ -2302,7 +2335,7 @@
 			"name": "@kitschpatrol/shared-config",
 			"versions": ["5.13.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@kitschpatrol+shared-config@5.13.0_@types+estree@1.0.8_@types+node@22.19.7_@typescript-_274bdcc5178135ca2a477d2603b4bbc5/node_modules/@kitschpatrol/shared-config"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@kitschpatrol+shared-config@5.13.0_@types+estree@1.0.8_@types+node@22.19.7_@typescript-_c68b021be4366155a437d333cc28c170/node_modules/@kitschpatrol/shared-config"
 			],
 			"license": "MIT",
 			"author": "Eric Mika",
@@ -2313,7 +2346,7 @@
 			"name": "@kitschpatrol/stylelint-config",
 			"versions": ["5.13.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@kitschpatrol+stylelint-config@5.13.0_@types+node@22.19.7_postcss-html@1.8.1_stylelint-_e668d8e9112eea3c7a664291964c47ed/node_modules/@kitschpatrol/stylelint-config"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@kitschpatrol+stylelint-config@5.13.0_@types+node@22.19.7_postcss-html@1.8.1_stylelint-_714d2a0df75b54ce89c895000bd1edb9/node_modules/@kitschpatrol/stylelint-config"
 			],
 			"license": "MIT",
 			"author": "Eric Mika",
@@ -2363,9 +2396,9 @@
 		},
 		{
 			"name": "@oxc-resolver/binding-darwin-arm64",
-			"versions": ["11.16.4"],
+			"versions": ["11.17.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@oxc-resolver+binding-darwin-arm64@11.16.4/node_modules/@oxc-resolver/binding-darwin-arm64"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@oxc-resolver+binding-darwin-arm64@11.17.0/node_modules/@oxc-resolver/binding-darwin-arm64"
 			],
 			"license": "MIT",
 			"homepage": "https://oxc.rs",
@@ -2413,6 +2446,39 @@
 			"author": "Luke Edwards",
 			"homepage": "https://github.com/lukeed/polka#readme",
 			"description": "Super fast, memoized `req.url` parser"
+		},
+		{
+			"name": "@poppinss/colors",
+			"versions": ["4.1.6"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@poppinss+colors@4.1.6/node_modules/@poppinss/colors"
+			],
+			"license": "MIT",
+			"author": "virk",
+			"homepage": "https://github.com/poppinss/colors#readme",
+			"description": "A wrapper on top of kleur with ability to write test against the color functions"
+		},
+		{
+			"name": "@poppinss/dumper",
+			"versions": ["0.6.5"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@poppinss+dumper@0.6.5/node_modules/@poppinss/dumper"
+			],
+			"license": "MIT",
+			"author": "Harminder Virk",
+			"homepage": "https://github.com/poppinss/dumper#readme",
+			"description": "Pretty print JavaScript data types in the terminal and the browser"
+		},
+		{
+			"name": "@poppinss/exception",
+			"versions": ["1.2.3"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@poppinss+exception@1.2.3/node_modules/@poppinss/exception"
+			],
+			"license": "MIT",
+			"author": "Harminder Virk",
+			"homepage": "https://github.com/poppinss/exception#readme",
+			"description": "Utility to create custom exceptions"
 		},
 		{
 			"name": "@prettier/plugin-php",
@@ -2473,7 +2539,7 @@
 			"name": "@rollup/plugin-babel",
 			"versions": ["5.3.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@rollup+plugin-babel@5.3.1_@babel+core@7.28.6_rollup@2.79.2/node_modules/@rollup/plugin-babel"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@rollup+plugin-babel@5.3.1_@babel+core@7.29.0_rollup@2.79.2/node_modules/@rollup/plugin-babel"
 			],
 			"license": "MIT",
 			"author": "Rich Harris",
@@ -2527,9 +2593,9 @@
 		},
 		{
 			"name": "@rollup/rollup-darwin-arm64",
-			"versions": ["4.57.0"],
+			"versions": ["4.57.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@rollup+rollup-darwin-arm64@4.57.0/node_modules/@rollup/rollup-darwin-arm64"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@rollup+rollup-darwin-arm64@4.57.1/node_modules/@rollup/rollup-darwin-arm64"
 			],
 			"license": "MIT",
 			"author": "Lukas Taegert-Atkinson",
@@ -2557,6 +2623,17 @@
 			"author": "Sindre Sorhus",
 			"homepage": "https://github.com/sindresorhus/base62#readme",
 			"description": "Encode & decode strings, bytes, and integers to Base62"
+		},
+		{
+			"name": "@sindresorhus/is",
+			"versions": ["7.2.0"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@sindresorhus+is@7.2.0/node_modules/@sindresorhus/is"
+			],
+			"license": "MIT",
+			"author": "Sindre Sorhus",
+			"homepage": "https://github.com/sindresorhus/is#readme",
+			"description": "Type check values"
 		},
 		{
 			"name": "@sindresorhus/merge-streams",
@@ -3594,6 +3671,17 @@
 			"description": "Modern, fast React.js JSX parser"
 		},
 		{
+			"name": "agent-base",
+			"versions": ["7.1.4"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/agent-base@7.1.4/node_modules/agent-base"
+			],
+			"license": "MIT",
+			"author": "Nathan Rajlich",
+			"homepage": "https://github.com/TooTallNate/proxy-agents#readme",
+			"description": "Turn a function into an `http.Agent` instance"
+		},
+		{
 			"name": "ajv",
 			"versions": ["6.12.6", "8.17.1"],
 			"paths": [
@@ -3805,7 +3893,7 @@
 			"name": "babel-plugin-polyfill-corejs2",
 			"versions": ["0.4.15"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/babel-plugin-polyfill-corejs2@0.4.15_@babel+core@7.28.6/node_modules/babel-plugin-polyfill-corejs2"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/babel-plugin-polyfill-corejs2@0.4.15_@babel+core@7.29.0/node_modules/babel-plugin-polyfill-corejs2"
 			],
 			"license": "MIT",
 			"homepage": "https://github.com/babel/babel-polyfills#readme",
@@ -3813,9 +3901,9 @@
 		},
 		{
 			"name": "babel-plugin-polyfill-corejs3",
-			"versions": ["0.13.0"],
+			"versions": ["0.14.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/babel-plugin-polyfill-corejs3@0.13.0_@babel+core@7.28.6/node_modules/babel-plugin-polyfill-corejs3"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/babel-plugin-polyfill-corejs3@0.14.0_@babel+core@7.29.0/node_modules/babel-plugin-polyfill-corejs3"
 			],
 			"license": "MIT",
 			"homepage": "https://github.com/babel/babel-polyfills#readme",
@@ -3825,7 +3913,7 @@
 			"name": "babel-plugin-polyfill-regenerator",
 			"versions": ["0.6.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/babel-plugin-polyfill-regenerator@0.6.6_@babel+core@7.28.6/node_modules/babel-plugin-polyfill-regenerator"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/babel-plugin-polyfill-regenerator@0.6.6_@babel+core@7.29.0/node_modules/babel-plugin-polyfill-regenerator"
 			],
 			"license": "MIT",
 			"homepage": "https://github.com/babel/babel-polyfills#readme",
@@ -3851,6 +3939,17 @@
 			"author": "Julian Gruber",
 			"homepage": "https://github.com/juliangruber/balanced-match",
 			"description": "Match balanced character pairs, like \"{\" and \"}\""
+		},
+		{
+			"name": "blake3-wasm",
+			"versions": ["2.1.5"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/blake3-wasm@2.1.5/node_modules/blake3-wasm"
+			],
+			"license": "MIT",
+			"author": "Connor Peet",
+			"homepage": "https://github.com/connor4312/blake3#readme",
+			"description": "BLAKE3 hashing for JavaScript: native Node bindings (where available) and WebAssembly"
 		},
 		{
 			"name": "brace-expansion",
@@ -4083,9 +4182,9 @@
 		},
 		{
 			"name": "ci-info",
-			"versions": ["4.3.1"],
+			"versions": ["4.4.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/ci-info@4.3.1/node_modules/ci-info"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/ci-info@4.4.0/node_modules/ci-info"
 			],
 			"license": "MIT",
 			"author": "Thomas Watson Steen",
@@ -4214,10 +4313,10 @@
 		},
 		{
 			"name": "commander",
-			"versions": ["2.20.3", "14.0.2"],
+			"versions": ["2.20.3", "14.0.3"],
 			"paths": [
 				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/commander@2.20.3/node_modules/commander",
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/commander@14.0.2/node_modules/commander"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/commander@14.0.3/node_modules/commander"
 			],
 			"license": "MIT",
 			"author": "TJ Holowaychuk",
@@ -4314,9 +4413,10 @@
 		},
 		{
 			"name": "cookie",
-			"versions": ["0.6.0"],
+			"versions": ["0.6.0", "1.1.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/cookie@0.6.0/node_modules/cookie"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/cookie@0.6.0/node_modules/cookie",
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/cookie@1.1.1/node_modules/cookie"
 			],
 			"license": "MIT",
 			"author": "Roman Shtylman",
@@ -4392,9 +4492,9 @@
 		},
 		{
 			"name": "cspell",
-			"versions": ["9.6.2"],
+			"versions": ["9.6.3"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/cspell@9.6.2/node_modules/cspell"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/cspell@9.6.3/node_modules/cspell"
 			],
 			"license": "MIT",
 			"author": "Jason Dent",
@@ -4403,9 +4503,9 @@
 		},
 		{
 			"name": "cspell-config-lib",
-			"versions": ["9.6.2"],
+			"versions": ["9.6.3"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/cspell-config-lib@9.6.2/node_modules/cspell-config-lib"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/cspell-config-lib@9.6.3/node_modules/cspell-config-lib"
 			],
 			"license": "MIT",
 			"author": "Jason Dent",
@@ -4414,9 +4514,9 @@
 		},
 		{
 			"name": "cspell-dictionary",
-			"versions": ["9.6.2"],
+			"versions": ["9.6.3"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/cspell-dictionary@9.6.2/node_modules/cspell-dictionary"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/cspell-dictionary@9.6.3/node_modules/cspell-dictionary"
 			],
 			"license": "MIT",
 			"author": "Jason Dent",
@@ -4425,9 +4525,9 @@
 		},
 		{
 			"name": "cspell-gitignore",
-			"versions": ["9.6.2"],
+			"versions": ["9.6.3"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/cspell-gitignore@9.6.2/node_modules/cspell-gitignore"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/cspell-gitignore@9.6.3/node_modules/cspell-gitignore"
 			],
 			"license": "MIT",
 			"author": "Jason Dent",
@@ -4436,9 +4536,9 @@
 		},
 		{
 			"name": "cspell-glob",
-			"versions": ["9.6.2"],
+			"versions": ["9.6.3"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/cspell-glob@9.6.2/node_modules/cspell-glob"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/cspell-glob@9.6.3/node_modules/cspell-glob"
 			],
 			"license": "MIT",
 			"author": "Jason Dent",
@@ -4447,9 +4547,9 @@
 		},
 		{
 			"name": "cspell-grammar",
-			"versions": ["9.6.2"],
+			"versions": ["9.6.3"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/cspell-grammar@9.6.2/node_modules/cspell-grammar"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/cspell-grammar@9.6.3/node_modules/cspell-grammar"
 			],
 			"license": "MIT",
 			"author": "Jason Dent",
@@ -4458,9 +4558,9 @@
 		},
 		{
 			"name": "cspell-io",
-			"versions": ["9.6.2"],
+			"versions": ["9.6.3"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/cspell-io@9.6.2/node_modules/cspell-io"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/cspell-io@9.6.3/node_modules/cspell-io"
 			],
 			"license": "MIT",
 			"author": "Jason Dent",
@@ -4469,9 +4569,9 @@
 		},
 		{
 			"name": "cspell-lib",
-			"versions": ["9.6.2"],
+			"versions": ["9.6.3"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/cspell-lib@9.6.2/node_modules/cspell-lib"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/cspell-lib@9.6.3/node_modules/cspell-lib"
 			],
 			"license": "MIT",
 			"author": "Jason Dent",
@@ -4480,9 +4580,9 @@
 		},
 		{
 			"name": "cspell-trie-lib",
-			"versions": ["9.6.2"],
+			"versions": ["9.6.3"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/cspell-trie-lib@9.6.2_@cspell+cspell-types@9.6.2/node_modules/cspell-trie-lib"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/cspell-trie-lib@9.6.3_@cspell+cspell-types@9.6.3/node_modules/cspell-trie-lib"
 			],
 			"license": "MIT",
 			"author": "Jason Dent",
@@ -4756,6 +4856,17 @@
 			"description": "A set of small and fast Node.js utilities to understand your pathing needs."
 		},
 		{
+			"name": "encoding",
+			"versions": ["0.1.13"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/encoding@0.1.13/node_modules/encoding"
+			],
+			"license": "MIT",
+			"author": "Andris Reinman",
+			"homepage": "https://github.com/andris9/encoding#readme",
+			"description": "Convert encodings, uses iconv-lite"
+		},
+		{
 			"name": "enhanced-resolve",
 			"versions": ["5.18.4"],
 			"paths": [
@@ -4768,10 +4879,10 @@
 		},
 		{
 			"name": "env-paths",
-			"versions": ["2.2.1", "3.0.0"],
+			"versions": ["2.2.1", "4.0.0"],
 			"paths": [
 				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/env-paths@2.2.1/node_modules/env-paths",
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/env-paths@3.0.0/node_modules/env-paths"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/env-paths@4.0.0/node_modules/env-paths"
 			],
 			"license": "MIT",
 			"author": "Sindre Sorhus",
@@ -4798,6 +4909,16 @@
 			"license": "MIT",
 			"homepage": "https://github.com/qix-/node-error-ex#readme",
 			"description": "Easy error subclassing and stack customization"
+		},
+		{
+			"name": "error-stack-parser-es",
+			"versions": ["1.0.5"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/error-stack-parser-es@1.0.5/node_modules/error-stack-parser-es"
+			],
+			"license": "MIT",
+			"homepage": "https://github.com/antfu/error-stack-parser-es#readme",
+			"description": "Cross-browser Error parser"
 		},
 		{
 			"name": "es-abstract",
@@ -4886,9 +5007,10 @@
 		},
 		{
 			"name": "esbuild",
-			"versions": ["0.21.5", "0.27.2"],
+			"versions": ["0.21.5", "0.27.0", "0.27.2"],
 			"paths": [
 				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/esbuild@0.21.5/node_modules/esbuild",
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/esbuild@0.27.0/node_modules/esbuild",
 				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/esbuild@0.27.2/node_modules/esbuild"
 			],
 			"license": "MIT",
@@ -4955,9 +5077,9 @@
 		},
 		{
 			"name": "eslint-fix-utils",
-			"versions": ["0.4.0"],
+			"versions": ["0.4.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/eslint-fix-utils@0.4.0_@types+estree@1.0.8_eslint@9.39.2_jiti@2.6.1_/node_modules/eslint-fix-utils"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/eslint-fix-utils@0.4.1_@types+estree@1.0.8_eslint@9.39.2_jiti@2.6.1_/node_modules/eslint-fix-utils"
 			],
 			"license": "MIT",
 			"author": "Josh Goldberg ✨",
@@ -5699,9 +5821,9 @@
 		},
 		{
 			"name": "get-tsconfig",
-			"versions": ["4.13.0"],
+			"versions": ["4.13.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/get-tsconfig@4.13.0/node_modules/get-tsconfig"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/get-tsconfig@4.13.1/node_modules/get-tsconfig"
 			],
 			"license": "MIT",
 			"author": "Hiroki Osame",
@@ -5754,12 +5876,12 @@
 		},
 		{
 			"name": "globals",
-			"versions": ["14.0.0", "15.15.0", "16.5.0", "17.2.0"],
+			"versions": ["14.0.0", "15.15.0", "16.5.0", "17.3.0"],
 			"paths": [
 				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/globals@14.0.0/node_modules/globals",
 				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/globals@15.15.0/node_modules/globals",
 				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/globals@16.5.0/node_modules/globals",
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/globals@17.2.0/node_modules/globals"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/globals@17.3.0/node_modules/globals"
 			],
 			"license": "MIT",
 			"author": "Sindre Sorhus",
@@ -5931,9 +6053,9 @@
 		},
 		{
 			"name": "hookified",
-			"versions": ["1.15.0"],
+			"versions": ["1.15.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/hookified@1.15.0/node_modules/hookified"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/hookified@1.15.1/node_modules/hookified"
 			],
 			"license": "MIT",
 			"author": "Jared Wray",
@@ -5986,10 +6108,33 @@
 			"description": "Fast & forgiving HTML/XML parser"
 		},
 		{
-			"name": "iconv-lite",
-			"versions": ["0.6.2"],
+			"name": "http-proxy-agent",
+			"versions": ["7.0.2"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/iconv-lite@0.6.2/node_modules/iconv-lite"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/http-proxy-agent@7.0.2/node_modules/http-proxy-agent"
+			],
+			"license": "MIT",
+			"author": "Nathan Rajlich",
+			"homepage": "https://github.com/TooTallNate/proxy-agents#readme",
+			"description": "An HTTP(s) proxy `http.Agent` implementation for HTTP"
+		},
+		{
+			"name": "https-proxy-agent",
+			"versions": ["7.0.6"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/https-proxy-agent@7.0.6/node_modules/https-proxy-agent"
+			],
+			"license": "MIT",
+			"author": "Nathan Rajlich",
+			"homepage": "https://github.com/TooTallNate/proxy-agents#readme",
+			"description": "An HTTP(s) proxy `http.Agent` implementation for HTTPS"
+		},
+		{
+			"name": "iconv-lite",
+			"versions": ["0.6.2", "0.6.3"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/iconv-lite@0.6.2/node_modules/iconv-lite",
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/iconv-lite@0.6.3/node_modules/iconv-lite"
 			],
 			"license": "MIT",
 			"author": "Alexander Shtuchkin",
@@ -6074,6 +6219,17 @@
 			"author": "Jordan Harband",
 			"homepage": "https://github.com/ljharb/internal-slot#readme",
 			"description": "ES spec-like internal slots"
+		},
+		{
+			"name": "ip-address",
+			"versions": ["10.1.0"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/ip-address@10.1.0/node_modules/ip-address"
+			],
+			"license": "MIT",
+			"author": "Beau Gunderson",
+			"homepage": "https://github.com/beaugunderson/ip-address#readme",
+			"description": "A library for parsing IPv4 and IPv6 IP addresses in node and the browser."
 		},
 		{
 			"name": "is-alphabetical",
@@ -6449,6 +6605,17 @@
 			"author": "Sindre Sorhus",
 			"homepage": "https://github.com/sindresorhus/is-regexp#readme",
 			"description": "Check whether a variable is a regular expression"
+		},
+		{
+			"name": "is-safe-filename",
+			"versions": ["0.1.1"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/is-safe-filename@0.1.1/node_modules/is-safe-filename"
+			],
+			"license": "MIT",
+			"author": "Sindre Sorhus",
+			"homepage": "https://github.com/sindresorhus/is-safe-filename#readme",
+			"description": "Check if a filename is safe to use in a path join operation"
 		},
 		{
 			"name": "is-set",
@@ -7719,6 +7886,17 @@
 			"description": "The ultimate javascript content-type utility."
 		},
 		{
+			"name": "miniflare",
+			"versions": ["4.20260128.0"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/miniflare@4.20260128.0/node_modules/miniflare"
+			],
+			"license": "MIT",
+			"author": "MrBBot",
+			"homepage": "https://github.com/cloudflare/workers-sdk/tree/main/packages/miniflare#readme",
+			"description": "Fun, full-featured, fully-local simulator for Cloudflare Workers"
+		},
+		{
 			"name": "minimist",
 			"versions": ["1.2.8"],
 			"paths": [
@@ -7728,6 +7906,17 @@
 			"author": "James Halliday",
 			"homepage": "https://github.com/minimistjs/minimist",
 			"description": "parse argument options"
+		},
+		{
+			"name": "minipass-fetch",
+			"versions": ["5.0.0"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/minipass-fetch@5.0.0/node_modules/minipass-fetch"
+			],
+			"license": "MIT",
+			"author": "GitHub Inc.",
+			"homepage": "https://github.com/npm/minipass-fetch#readme",
+			"description": "An implementation of window.fetch in Node.js using Minipass streams"
 		},
 		{
 			"name": "minizlib",
@@ -7832,6 +8021,16 @@
 			"description": "Lightweight and performant natural sorting of arrays and collections by differentiating between unicode characters, numbers, dates, etc."
 		},
 		{
+			"name": "negotiator",
+			"versions": ["1.0.0"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/negotiator@1.0.0/node_modules/negotiator"
+			],
+			"license": "MIT",
+			"homepage": "https://github.com/jshttp/negotiator#readme",
+			"description": "HTTP content negotiation"
+		},
+		{
 			"name": "no-case",
 			"versions": ["2.3.2"],
 			"paths": [
@@ -7843,6 +8042,16 @@
 			"description": "Remove case from a string"
 		},
 		{
+			"name": "node-addon-api",
+			"versions": ["8.5.0"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/node-addon-api@8.5.0/node_modules/node-addon-api"
+			],
+			"license": "MIT",
+			"homepage": "https://github.com/nodejs/node-addon-api",
+			"description": "Node.js API (Node-API)"
+		},
+		{
 			"name": "node-ensure",
 			"versions": ["0.0.0"],
 			"paths": [
@@ -7852,6 +8061,17 @@
 			"author": "Carl A. Bauer",
 			"homepage": "https://github.com/bauerca/node-ensure",
 			"description": "Async module-loading library and protocol for bundlers/loaders targeting isomorphic apps and Node.js."
+		},
+		{
+			"name": "node-gyp",
+			"versions": ["12.2.0"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/node-gyp@12.2.0/node_modules/node-gyp"
+			],
+			"license": "MIT",
+			"author": "Nathan Rajlich",
+			"homepage": "https://github.com/nodejs/node-gyp#readme",
+			"description": "Node.js native addon build tool"
 		},
 		{
 			"name": "node-html-parser",
@@ -8009,9 +8229,9 @@
 		},
 		{
 			"name": "oxc-resolver",
-			"versions": ["11.16.4"],
+			"versions": ["11.17.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/oxc-resolver@11.16.4/node_modules/oxc-resolver"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/oxc-resolver@11.17.0/node_modules/oxc-resolver"
 			],
 			"license": "MIT",
 			"homepage": "https://oxc.rs",
@@ -8038,6 +8258,15 @@
 			"author": "Sindre Sorhus",
 			"homepage": "https://github.com/sindresorhus/p-locate#readme",
 			"description": "Get the first fulfilled promise that satisfies the provided testing function"
+		},
+		{
+			"name": "p-map",
+			"versions": ["7.0.4"],
+			"paths": ["/Users/mika/Code/ambient-novel/node_modules/.pnpm/p-map@7.0.4/node_modules/p-map"],
+			"license": "MIT",
+			"author": "Sindre Sorhus",
+			"homepage": "https://github.com/sindresorhus/p-map#readme",
+			"description": "Map over promises concurrently"
 		},
 		{
 			"name": "package-json-validator",
@@ -8174,6 +8403,16 @@
 			"author": "Javier Blanco",
 			"homepage": "https://github.com/jbgutierrez/path-parse#readme",
 			"description": "Node.js path.parse() ponyfill"
+		},
+		{
+			"name": "path-to-regexp",
+			"versions": ["6.3.0"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/path-to-regexp@6.3.0/node_modules/path-to-regexp"
+			],
+			"license": "MIT",
+			"homepage": "https://github.com/pillarjs/path-to-regexp#readme",
+			"description": "Express style path to RegExp utility"
 		},
 		{
 			"name": "path-type",
@@ -8585,6 +8824,17 @@
 			"author": "Roy Revelt",
 			"homepage": "https://codsen.com/os/ranges-sort",
 			"description": "Sort string index ranges"
+		},
+		{
+			"name": "read-package-up",
+			"versions": ["12.0.0"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/read-package-up@12.0.0/node_modules/read-package-up"
+			],
+			"license": "MIT",
+			"author": "Sindre Sorhus",
+			"homepage": "https://github.com/sindresorhus/read-package-up#readme",
+			"description": "Read the closest package.json file"
 		},
 		{
 			"name": "read-pkg",
@@ -9266,10 +9516,10 @@
 		},
 		{
 			"name": "rollup",
-			"versions": ["2.79.2", "4.57.0"],
+			"versions": ["2.79.2", "4.57.1"],
 			"paths": [
 				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/rollup@2.79.2/node_modules/rollup",
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/rollup@4.57.0/node_modules/rollup"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/rollup@4.57.1/node_modules/rollup"
 			],
 			"license": "MIT",
 			"author": "Rich Harris",
@@ -9578,6 +9828,17 @@
 			"description": "Slice a string with ANSI escape codes"
 		},
 		{
+			"name": "smart-buffer",
+			"versions": ["4.2.0"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/smart-buffer@4.2.0/node_modules/smart-buffer"
+			],
+			"license": "MIT",
+			"author": "Josh Glazebrook",
+			"homepage": "https://github.com/JoshGlazebrook/smart-buffer/",
+			"description": "smart-buffer is a Buffer wrapper that adds automatic read & write offset tracking, string operations, data insertions, and more."
+		},
+		{
 			"name": "smob",
 			"versions": ["1.5.0"],
 			"paths": ["/Users/mika/Code/ambient-novel/node_modules/.pnpm/smob@1.5.0/node_modules/smob"],
@@ -9585,6 +9846,26 @@
 			"author": "Peter Placzek",
 			"homepage": "https://github.com/Tada5hi/smob#readme",
 			"description": "Zero dependency library to safe merge objects."
+		},
+		{
+			"name": "socks",
+			"versions": ["2.8.7"],
+			"paths": ["/Users/mika/Code/ambient-novel/node_modules/.pnpm/socks@2.8.7/node_modules/socks"],
+			"license": "MIT",
+			"author": "Josh Glazebrook",
+			"homepage": "https://github.com/JoshGlazebrook/socks/",
+			"description": "Fully featured SOCKS proxy client supporting SOCKSv4, SOCKSv4a, and SOCKSv5. Includes Bind and Associate functionality."
+		},
+		{
+			"name": "socks-proxy-agent",
+			"versions": ["8.0.5"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/socks-proxy-agent@8.0.5/node_modules/socks-proxy-agent"
+			],
+			"license": "MIT",
+			"author": "Nathan Rajlich",
+			"homepage": "https://github.com/TooTallNate/proxy-agents#readme",
+			"description": "A SOCKS proxy `http.Agent` implementation for HTTP and HTTPS"
 		},
 		{
 			"name": "sort-object-keys",
@@ -9742,13 +10023,13 @@
 		},
 		{
 			"name": "string-width",
-			"versions": ["4.2.3", "5.1.2", "6.1.0", "7.2.0", "8.1.0"],
+			"versions": ["4.2.3", "5.1.2", "6.1.0", "7.2.0", "8.1.1"],
 			"paths": [
 				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/string-width@4.2.3/node_modules/string-width",
 				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/string-width@5.1.2/node_modules/string-width",
 				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/string-width@6.1.0/node_modules/string-width",
 				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/string-width@7.2.0/node_modules/string-width",
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/string-width@8.1.0/node_modules/string-width"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/string-width@8.1.1/node_modules/string-width"
 			],
 			"license": "MIT",
 			"author": "Sindre Sorhus",
@@ -9881,9 +10162,9 @@
 		},
 		{
 			"name": "stylelint",
-			"versions": ["17.0.0"],
+			"versions": ["17.1.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/stylelint@17.0.0_typescript@5.9.3/node_modules/stylelint"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/stylelint@17.1.0_typescript@5.9.3/node_modules/stylelint"
 			],
 			"license": "MIT",
 			"author": "stylelint",
@@ -9894,7 +10175,7 @@
 			"name": "stylelint-config-clean-order",
 			"versions": ["8.0.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/stylelint-config-clean-order@8.0.0_stylelint-order@7.0.1_stylelint@17.0.0_typescript@5._dd581683adfe4baf63dec942ffe6b6fe/node_modules/stylelint-config-clean-order"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/stylelint-config-clean-order@8.0.0_stylelint-order@7.0.1_stylelint@17.1.0_typescript@5._64ef5fb27e7b036cf4bd5a2c87a6e918/node_modules/stylelint-config-clean-order"
 			],
 			"license": "MIT",
 			"author": "Kutsan Kaplan",
@@ -9905,7 +10186,7 @@
 			"name": "stylelint-config-html",
 			"versions": ["1.1.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/stylelint-config-html@1.1.0_postcss-html@1.8.1_stylelint@17.0.0_typescript@5.9.3_/node_modules/stylelint-config-html"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/stylelint-config-html@1.1.0_postcss-html@1.8.1_stylelint@17.1.0_typescript@5.9.3_/node_modules/stylelint-config-html"
 			],
 			"license": "MIT",
 			"author": "Yosuke Ota",
@@ -9916,7 +10197,7 @@
 			"name": "stylelint-config-recommended",
 			"versions": ["18.0.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/stylelint-config-recommended@18.0.0_stylelint@17.0.0_typescript@5.9.3_/node_modules/stylelint-config-recommended"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/stylelint-config-recommended@18.0.0_stylelint@17.1.0_typescript@5.9.3_/node_modules/stylelint-config-recommended"
 			],
 			"license": "MIT",
 			"author": "Stylelint",
@@ -9927,7 +10208,7 @@
 			"name": "stylelint-config-standard",
 			"versions": ["40.0.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/stylelint-config-standard@40.0.0_stylelint@17.0.0_typescript@5.9.3_/node_modules/stylelint-config-standard"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/stylelint-config-standard@40.0.0_stylelint@17.1.0_typescript@5.9.3_/node_modules/stylelint-config-standard"
 			],
 			"license": "MIT",
 			"author": "Stylelint",
@@ -9938,7 +10219,7 @@
 			"name": "stylelint-order",
 			"versions": ["7.0.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/stylelint-order@7.0.1_stylelint@17.0.0_typescript@5.9.3_/node_modules/stylelint-order"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/stylelint-order@7.0.1_stylelint@17.1.0_typescript@5.9.3_/node_modules/stylelint-order"
 			],
 			"license": "MIT",
 			"author": "Aleks Hudochenkov",
@@ -10003,9 +10284,9 @@
 		},
 		{
 			"name": "svelte-check",
-			"versions": ["4.3.5"],
+			"versions": ["4.3.6"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/svelte-check@4.3.5_picomatch@4.0.3_svelte@4.2.20_typescript@5.9.3/node_modules/svelte-check"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/svelte-check@4.3.6_picomatch@4.0.3_svelte@4.2.20_typescript@5.9.3/node_modules/svelte-check"
 			],
 			"license": "MIT",
 			"author": "The Svelte Community",
@@ -10102,10 +10383,10 @@
 		},
 		{
 			"name": "tempy",
-			"versions": ["0.6.0", "3.1.2"],
+			"versions": ["0.6.0", "3.2.0"],
 			"paths": [
 				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/tempy@0.6.0/node_modules/tempy",
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/tempy@3.1.2/node_modules/tempy"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/tempy@3.2.0/node_modules/tempy"
 			],
 			"license": "MIT",
 			"author": "Sindre Sorhus",
@@ -10348,6 +10629,16 @@
 			"description": "Unbox a boxed JS primitive value."
 		},
 		{
+			"name": "undici",
+			"versions": ["7.18.2"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/undici@7.18.2/node_modules/undici"
+			],
+			"license": "MIT",
+			"homepage": "https://undici.nodejs.org",
+			"description": "An HTTP/1.1 client, written from scratch for Node.js"
+		},
+		{
 			"name": "undici-types",
 			"versions": ["6.21.0"],
 			"paths": [
@@ -10356,6 +10647,16 @@
 			"license": "MIT",
 			"homepage": "https://undici.nodejs.org",
 			"description": "A stand-alone types package for Undici"
+		},
+		{
+			"name": "unenv",
+			"versions": ["2.0.0-rc.24"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/unenv@2.0.0-rc.24/node_modules/unenv"
+			],
+			"license": "MIT",
+			"homepage": "https://github.com/unjs/unenv#readme",
+			"description": ""
 		},
 		{
 			"name": "unicode-canonical-property-names-ecmascript",
@@ -10991,6 +11292,15 @@
 			"description": "Wordwrap a string with ANSI escape codes"
 		},
 		{
+			"name": "ws",
+			"versions": ["8.18.0"],
+			"paths": ["/Users/mika/Code/ambient-novel/node_modules/.pnpm/ws@8.18.0/node_modules/ws"],
+			"license": "MIT",
+			"author": "Einar Otto Stangvik",
+			"homepage": "https://github.com/websockets/ws",
+			"description": "Simple to use, blazing fast and thoroughly tested websocket client and server for Node.js"
+		},
+		{
 			"name": "xdg-basedir",
 			"versions": ["5.1.0"],
 			"paths": [
@@ -11043,6 +11353,28 @@
 			"author": "Sindre Sorhus",
 			"homepage": "https://github.com/sindresorhus/yoctocolors#readme",
 			"description": "The smallest and fastest command-line coloring package on the internet"
+		},
+		{
+			"name": "youch",
+			"versions": ["4.1.0-beta.10"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/youch@4.1.0-beta.10/node_modules/youch"
+			],
+			"license": "MIT",
+			"author": "Harminder Virk",
+			"homepage": "https://github.com/poppinss/youch#readme",
+			"description": "Pretty print JavaScript errors on the Web and the Terminal"
+		},
+		{
+			"name": "youch-core",
+			"versions": ["0.3.3"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/youch-core@0.3.3/node_modules/youch-core"
+			],
+			"license": "MIT",
+			"author": "Harminder Virk",
+			"homepage": "https://github.com/poppinss/youch-core#readme",
+			"description": "Error parser to parse an error instance into a collection of frames"
 		},
 		{
 			"name": "zod",
@@ -11103,6 +11435,17 @@
 			"description": "fs read and write streams based on minipass"
 		},
 		{
+			"name": "@npmcli/agent",
+			"versions": ["4.0.0"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@npmcli+agent@4.0.0/node_modules/@npmcli/agent"
+			],
+			"license": "ISC",
+			"author": "GitHub Inc.",
+			"homepage": "https://github.com/npm/agent#readme",
+			"description": "the http/https agent used by the npm cli"
+		},
+		{
 			"name": "@npmcli/config",
 			"versions": ["8.3.4"],
 			"paths": [
@@ -11112,6 +11455,17 @@
 			"author": "GitHub Inc.",
 			"homepage": "https://github.com/npm/cli#readme",
 			"description": "Configuration management for the npm cli"
+		},
+		{
+			"name": "@npmcli/fs",
+			"versions": ["5.0.0"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@npmcli+fs@5.0.0/node_modules/@npmcli/fs"
+			],
+			"license": "ISC",
+			"author": "GitHub Inc.",
+			"homepage": "https://github.com/npm/fs#readme",
+			"description": "filesystem utilities for the npm cli"
 		},
 		{
 			"name": "@npmcli/git",
@@ -11181,9 +11535,10 @@
 		},
 		{
 			"name": "abbrev",
-			"versions": ["2.0.0"],
+			"versions": ["2.0.0", "4.0.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/abbrev@2.0.0/node_modules/abbrev"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/abbrev@2.0.0/node_modules/abbrev",
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/abbrev@4.0.0/node_modules/abbrev"
 			],
 			"license": "ISC",
 			"author": "GitHub Inc.",
@@ -11213,6 +11568,17 @@
 			"description": "two functions: One that returns true, one that returns false"
 		},
 		{
+			"name": "cacache",
+			"versions": ["20.0.3"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/cacache@20.0.3/node_modules/cacache"
+			],
+			"license": "ISC",
+			"author": "GitHub Inc.",
+			"homepage": "https://github.com/npm/cacache#readme",
+			"description": "Fast, fault-tolerant, cross-platform, disk-based, data-agnostic, content-addressable cache."
+		},
+		{
 			"name": "cliui",
 			"versions": ["9.0.1"],
 			"paths": ["/Users/mika/Code/ambient-novel/node_modules/.pnpm/cliui@9.0.1/node_modules/cliui"],
@@ -11223,9 +11589,9 @@
 		},
 		{
 			"name": "electron-to-chromium",
-			"versions": ["1.5.279"],
+			"versions": ["1.5.283"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/electron-to-chromium@1.5.279/node_modules/electron-to-chromium"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/electron-to-chromium@1.5.283/node_modules/electron-to-chromium"
 			],
 			"license": "ISC",
 			"author": "Kilian Valkhof",
@@ -11285,6 +11651,17 @@
 			"author": "Isaac Z. Schlueter",
 			"homepage": "https://github.com/tapjs/foreground-child#readme",
 			"description": "Run a child as if it's the foreground process. Give it stdio. Exit when it exits."
+		},
+		{
+			"name": "fs-minipass",
+			"versions": ["3.0.3"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/fs-minipass@3.0.3/node_modules/fs-minipass"
+			],
+			"license": "ISC",
+			"author": "GitHub Inc.",
+			"homepage": "https://github.com/npm/fs-minipass#readme",
+			"description": "fs read and write streams based on minipass"
 		},
 		{
 			"name": "get-caller-file",
@@ -11408,9 +11785,9 @@
 		},
 		{
 			"name": "knip",
-			"versions": ["5.82.1"],
+			"versions": ["5.83.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/knip@5.82.1_@types+node@22.19.7_typescript@5.9.3/node_modules/knip"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/knip@5.83.0_@types+node@22.19.7_typescript@5.9.3/node_modules/knip"
 			],
 			"license": "ISC",
 			"author": "Lars Kappert",
@@ -11430,6 +11807,17 @@
 			"description": "A cache object that deletes the least-recently-used items."
 		},
 		{
+			"name": "make-fetch-happen",
+			"versions": ["15.0.3"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/make-fetch-happen@15.0.3/node_modules/make-fetch-happen"
+			],
+			"license": "ISC",
+			"author": "GitHub Inc.",
+			"homepage": "https://github.com/npm/make-fetch-happen#readme",
+			"description": "Opinionated, caching, retrying fetch client"
+		},
+		{
 			"name": "minimatch",
 			"versions": ["3.1.2", "5.1.6", "9.0.5"],
 			"paths": [
@@ -11444,8 +11832,9 @@
 		},
 		{
 			"name": "minipass",
-			"versions": ["7.1.2"],
+			"versions": ["3.3.6", "7.1.2"],
 			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/minipass@3.3.6/node_modules/minipass",
 				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/minipass@7.1.2/node_modules/minipass"
 			],
 			"license": "ISC",
@@ -11454,9 +11843,55 @@
 			"description": "minimal implementation of a PassThrough stream"
 		},
 		{
+			"name": "minipass-collect",
+			"versions": ["2.0.1"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/minipass-collect@2.0.1/node_modules/minipass-collect"
+			],
+			"license": "ISC",
+			"author": "Isaac Z. Schlueter",
+			"homepage": "https://github.com/isaacs/minipass-collect#readme",
+			"description": "A Minipass stream that collects all the data into a single chunk"
+		},
+		{
+			"name": "minipass-flush",
+			"versions": ["1.0.5"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/minipass-flush@1.0.5/node_modules/minipass-flush"
+			],
+			"license": "ISC",
+			"author": "Isaac Z. Schlueter",
+			"homepage": "https://github.com/isaacs/minipass-flush#readme",
+			"description": "A Minipass stream that calls a flush function before emitting 'end'"
+		},
+		{
+			"name": "minipass-pipeline",
+			"versions": ["1.2.4"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/minipass-pipeline@1.2.4/node_modules/minipass-pipeline"
+			],
+			"license": "ISC",
+			"author": "Isaac Z. Schlueter",
+			"description": "create a pipeline of streams using Minipass"
+		},
+		{
+			"name": "minipass-sized",
+			"versions": ["1.0.3"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/minipass-sized@1.0.3/node_modules/minipass-sized"
+			],
+			"license": "ISC",
+			"author": "Isaac Z. Schlueter",
+			"homepage": "https://github.com/isaacs/minipass-sized#readme",
+			"description": "A Minipass stream that raises an error if you get a different number of bytes than expected"
+		},
+		{
 			"name": "nopt",
-			"versions": ["7.2.1"],
-			"paths": ["/Users/mika/Code/ambient-novel/node_modules/.pnpm/nopt@7.2.1/node_modules/nopt"],
+			"versions": ["7.2.1", "9.0.0"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/nopt@7.2.1/node_modules/nopt",
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/nopt@9.0.0/node_modules/nopt"
+			],
 			"license": "ISC",
 			"author": "GitHub Inc.",
 			"homepage": "https://github.com/npm/nopt#readme",
@@ -11508,9 +11943,10 @@
 		},
 		{
 			"name": "proc-log",
-			"versions": ["4.2.0"],
+			"versions": ["4.2.0", "6.1.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/proc-log@4.2.0/node_modules/proc-log"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/proc-log@4.2.0/node_modules/proc-log",
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/proc-log@6.1.0/node_modules/proc-log"
 			],
 			"license": "ISC",
 			"author": "GitHub Inc.",
@@ -11563,6 +11999,15 @@
 			"description": "when you want to fire an event no matter how a process exits."
 		},
 		{
+			"name": "ssri",
+			"versions": ["13.0.0"],
+			"paths": ["/Users/mika/Code/ambient-novel/node_modules/.pnpm/ssri@13.0.0/node_modules/ssri"],
+			"license": "ISC",
+			"author": "GitHub Inc.",
+			"homepage": "https://github.com/npm/ssri#readme",
+			"description": "Standard Subresource Integrity library -- parses, serializes, generates, and verifies integrity metadata according to the SRI spec."
+		},
+		{
 			"name": "svelte-hmr",
 			"versions": ["0.16.0"],
 			"paths": [
@@ -11572,6 +12017,28 @@
 			"author": "rixo",
 			"homepage": "https://github.com/sveltejs/svelte-hmr",
 			"description": "Bundler agnostic HMR utils for Svelte 3"
+		},
+		{
+			"name": "unique-filename",
+			"versions": ["5.0.0"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/unique-filename@5.0.0/node_modules/unique-filename"
+			],
+			"license": "ISC",
+			"author": "GitHub Inc.",
+			"homepage": "https://github.com/iarna/unique-filename",
+			"description": "Generate a unique filename for use in temporary directories or caches."
+		},
+		{
+			"name": "unique-slug",
+			"versions": ["6.0.0"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/unique-slug@6.0.0/node_modules/unique-slug"
+			],
+			"license": "ISC",
+			"author": "GitHub Inc.",
+			"homepage": "https://github.com/npm/unique-slug#readme",
+			"description": "Generate a unique character string suitible for use in files and URLs."
 		},
 		{
 			"name": "validate-npm-package-name",
@@ -11599,11 +12066,12 @@
 		},
 		{
 			"name": "which",
-			"versions": ["1.3.1", "2.0.2", "4.0.0"],
+			"versions": ["1.3.1", "2.0.2", "4.0.0", "6.0.0"],
 			"paths": [
 				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/which@1.3.1/node_modules/which",
 				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/which@2.0.2/node_modules/which",
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/which@4.0.0/node_modules/which"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/which@4.0.0/node_modules/which",
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/which@6.0.0/node_modules/which"
 			],
 			"license": "ISC",
 			"author": "GitHub Inc.",
@@ -11632,9 +12100,10 @@
 		},
 		{
 			"name": "yallist",
-			"versions": ["3.1.1"],
+			"versions": ["3.1.1", "4.0.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/yallist@3.1.1/node_modules/yallist"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/yallist@3.1.1/node_modules/yallist",
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/yallist@4.0.0/node_modules/yallist"
 			],
 			"license": "ISC",
 			"author": "Isaac Z. Schlueter",
@@ -11678,6 +12147,16 @@
 			"description": "Remap sequential sourcemaps through transformations to point at the original source code"
 		},
 		{
+			"name": "@cloudflare/workerd-darwin-arm64",
+			"versions": ["1.20260128.0"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cloudflare+workerd-darwin-arm64@1.20260128.0/node_modules/@cloudflare/workerd-darwin-arm64"
+			],
+			"license": "Apache-2.0",
+			"homepage": "https://github.com/cloudflare/workerd#readme",
+			"description": "👷 workerd for macOS ARM 64-bit, Cloudflare's JavaScript/Wasm Runtime"
+		},
+		{
 			"name": "@eslint/compat",
 			"versions": ["1.4.1"],
 			"paths": [
@@ -11701,10 +12180,10 @@
 		},
 		{
 			"name": "@eslint/config-helpers",
-			"versions": ["0.4.2", "0.5.1"],
+			"versions": ["0.4.2", "0.5.2"],
 			"paths": [
 				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@eslint+config-helpers@0.4.2/node_modules/@eslint/config-helpers",
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@eslint+config-helpers@0.5.1/node_modules/@eslint/config-helpers"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@eslint+config-helpers@0.5.2/node_modules/@eslint/config-helpers"
 			],
 			"license": "Apache-2.0",
 			"homepage": "https://github.com/eslint/rewrite/tree/main/packages/config-helpers#readme",
@@ -11712,10 +12191,10 @@
 		},
 		{
 			"name": "@eslint/core",
-			"versions": ["0.17.0", "1.0.1"],
+			"versions": ["0.17.0", "1.1.0"],
 			"paths": [
 				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@eslint+core@0.17.0/node_modules/@eslint/core",
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@eslint+core@1.0.1/node_modules/@eslint/core"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@eslint+core@1.1.0/node_modules/@eslint/core"
 			],
 			"license": "Apache-2.0",
 			"author": "Nicholas C. Zakas",
@@ -11790,10 +12269,21 @@
 			"description": "A utility to retry failed async methods."
 		},
 		{
-			"name": "@playwright/test",
-			"versions": ["1.58.0"],
+			"name": "@img/sharp-darwin-arm64",
+			"versions": ["0.34.5"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@playwright+test@1.58.0/node_modules/@playwright/test"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@img+sharp-darwin-arm64@0.34.5/node_modules/@img/sharp-darwin-arm64"
+			],
+			"license": "Apache-2.0",
+			"author": "Lovell Fuller",
+			"homepage": "https://sharp.pixelplumbing.com",
+			"description": "Prebuilt sharp for use with macOS 64-bit ARM"
+		},
+		{
+			"name": "@playwright/test",
+			"versions": ["1.58.1"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@playwright+test@1.58.1/node_modules/@playwright/test"
 			],
 			"license": "Apache-2.0",
 			"author": "Microsoft Corporation",
@@ -11898,6 +12388,17 @@
 			"description": "Constants and utilities about visitor keys to traverse AST."
 		},
 		{
+			"name": "exponential-backoff",
+			"versions": ["3.1.3"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/exponential-backoff@3.1.3/node_modules/exponential-backoff"
+			],
+			"license": "Apache-2.0",
+			"author": "Sami Sayegh",
+			"homepage": "https://github.com/coveooss/exponential-backoff#readme",
+			"description": "A utility that allows retrying a function with an exponential delay between attempts."
+		},
+		{
 			"name": "filelist",
 			"versions": ["1.0.4"],
 			"paths": [
@@ -11930,9 +12431,9 @@
 		},
 		{
 			"name": "playwright",
-			"versions": ["1.58.0"],
+			"versions": ["1.58.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/playwright@1.58.0/node_modules/playwright"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/playwright@1.58.1/node_modules/playwright"
 			],
 			"license": "Apache-2.0",
 			"author": "Microsoft Corporation",
@@ -11941,14 +12442,25 @@
 		},
 		{
 			"name": "playwright-core",
-			"versions": ["1.58.0"],
+			"versions": ["1.58.1"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/playwright-core@1.58.0/node_modules/playwright-core"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/playwright-core@1.58.1/node_modules/playwright-core"
 			],
 			"license": "Apache-2.0",
 			"author": "Microsoft Corporation",
 			"homepage": "https://playwright.dev",
 			"description": "A high-level API to automate web browsers"
+		},
+		{
+			"name": "sharp",
+			"versions": ["0.34.5"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/sharp@0.34.5/node_modules/sharp"
+			],
+			"license": "Apache-2.0",
+			"author": "Lovell Fuller",
+			"homepage": "https://sharp.pixelplumbing.com",
+			"description": "High performance Node.js image processing, the fastest module to resize JPEG, PNG, WebP, GIF, AVIF and TIFF images"
 		},
 		{
 			"name": "spdx-correct",
@@ -11981,6 +12493,50 @@
 			"author": "Kyle E. Mitchell",
 			"homepage": "https://github.com/kemitchell/validate-npm-package-license.js#readme",
 			"description": "Give me a string and I'll tell you if it's a valid npm package license string"
+		},
+		{
+			"name": "workerd",
+			"versions": ["1.20260128.0"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/workerd@1.20260128.0/node_modules/workerd"
+			],
+			"license": "Apache-2.0",
+			"homepage": "https://github.com/cloudflare/workerd#readme",
+			"description": "👷 workerd, Cloudflare's JavaScript/Wasm Runtime"
+		}
+	],
+	"MIT OR Apache-2.0": [
+		{
+			"name": "@cloudflare/kv-asset-handler",
+			"versions": ["0.4.2"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cloudflare+kv-asset-handler@0.4.2/node_modules/@cloudflare/kv-asset-handler"
+			],
+			"license": "MIT OR Apache-2.0",
+			"author": "wrangler@cloudflare.com",
+			"homepage": "https://github.com/cloudflare/workers-sdk#readme",
+			"description": "Routes requests to KV assets"
+		},
+		{
+			"name": "@cloudflare/unenv-preset",
+			"versions": ["2.12.0"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@cloudflare+unenv-preset@2.12.0_unenv@2.0.0-rc.24_workerd@1.20260128.0/node_modules/@cloudflare/unenv-preset"
+			],
+			"license": "MIT OR Apache-2.0",
+			"homepage": "https://github.com/cloudflare/workers-sdk#readme",
+			"description": "cloudflare preset for unenv"
+		},
+		{
+			"name": "wrangler",
+			"versions": ["4.61.1"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/wrangler@4.61.1/node_modules/wrangler"
+			],
+			"license": "MIT OR Apache-2.0",
+			"author": "wrangler@cloudflare.com",
+			"homepage": "https://github.com/cloudflare/workers-sdk#readme",
+			"description": "Command-line interface for all things Cloudflare Workers"
 		}
 	],
 	"CC BY-SA 4.0": [
@@ -12039,6 +12595,66 @@
 			"author": "The Font Awesome Team",
 			"homepage": "https://fontawesome.com",
 			"description": "The iconic font, CSS, and SVG framework"
+		}
+	],
+	"LGPL-3.0-or-later": [
+		{
+			"name": "@img/sharp-libvips-darwin-arm64",
+			"versions": ["1.2.4"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@img+sharp-libvips-darwin-arm64@1.2.4/node_modules/@img/sharp-libvips-darwin-arm64"
+			],
+			"license": "LGPL-3.0-or-later",
+			"author": "Lovell Fuller",
+			"homepage": "https://sharp.pixelplumbing.com",
+			"description": "Prebuilt libvips and dependencies for use with sharp on macOS 64-bit ARM"
+		}
+	],
+	"CC0-1.0": [
+		{
+			"name": "@speed-highlight/core",
+			"versions": ["1.2.14"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/@speed-highlight+core@1.2.14/node_modules/@speed-highlight/core"
+			],
+			"license": "CC0-1.0",
+			"author": "matubu",
+			"homepage": "https://github.com/speed-highlight/core#readme",
+			"description": "🌈 Light, fast, and easy to use, dependencies free javascript syntax highlighter, with automatic language detection"
+		},
+		{
+			"name": "language-subtag-registry",
+			"versions": ["0.3.23"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/language-subtag-registry@0.3.23/node_modules/language-subtag-registry"
+			],
+			"license": "CC0-1.0",
+			"homepage": "https://github.com/mattcg/language-subtag-registry",
+			"description": "Full BCP 47 language subtag data from the official IANA repository, in JSON format with multiple indices."
+		},
+		{
+			"name": "mdn-data",
+			"versions": ["2.0.30", "2.12.2", "2.23.0"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/mdn-data@2.0.30/node_modules/mdn-data",
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/mdn-data@2.12.2/node_modules/mdn-data",
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/mdn-data@2.23.0/node_modules/mdn-data"
+			],
+			"license": "CC0-1.0",
+			"author": "Mozilla Developer Network",
+			"homepage": "https://developer.mozilla.org",
+			"description": "Open Web data by the Mozilla Developer Network"
+		},
+		{
+			"name": "spdx-license-ids",
+			"versions": ["3.0.22"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/spdx-license-ids@3.0.22/node_modules/spdx-license-ids"
+			],
+			"license": "CC0-1.0",
+			"author": "Shinnosuke Watanabe",
+			"homepage": "https://github.com/jslicense/spdx-license-ids#readme",
+			"description": "A list of SPDX license identifiers"
 		}
 	],
 	"Python-2.0": [
@@ -12101,9 +12717,9 @@
 	"CC-BY-4.0": [
 		{
 			"name": "caniuse-lite",
-			"versions": ["1.0.30001766"],
+			"versions": ["1.0.30001767"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/caniuse-lite@1.0.30001766/node_modules/caniuse-lite"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/caniuse-lite@1.0.30001767/node_modules/caniuse-lite"
 			],
 			"license": "CC-BY-4.0",
 			"author": "Ben Briggs",
@@ -12368,6 +12984,17 @@
 			"description": "utility box for ECMAScript language tools"
 		},
 		{
+			"name": "http-cache-semantics",
+			"versions": ["4.2.0"],
+			"paths": [
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/http-cache-semantics@4.2.0/node_modules/http-cache-semantics"
+			],
+			"license": "BSD-2-Clause",
+			"author": "Kornel Lesiński",
+			"homepage": "https://github.com/kornelski/http-cache-semantics#readme",
+			"description": "Parses Cache-Control and other headers. Helps building correct HTTP caches and proxies"
+		},
+		{
 			"name": "normalize-package-data",
 			"versions": ["6.0.2", "8.0.0"],
 			"paths": [
@@ -12489,9 +13116,9 @@
 		},
 		{
 			"name": "eslint-plugin-jsdoc",
-			"versions": ["62.4.1"],
+			"versions": ["62.5.0"],
 			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/eslint-plugin-jsdoc@62.4.1_eslint@9.39.2_jiti@2.6.1_/node_modules/eslint-plugin-jsdoc"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/eslint-plugin-jsdoc@62.5.0_eslint@9.39.2_jiti@2.6.1_/node_modules/eslint-plugin-jsdoc"
 			],
 			"license": "BSD-3-Clause",
 			"author": "Gajus Kuizinas",
@@ -12621,42 +13248,6 @@
 			"description": "JSON Schema validation and specifications"
 		}
 	],
-	"CC0-1.0": [
-		{
-			"name": "language-subtag-registry",
-			"versions": ["0.3.23"],
-			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/language-subtag-registry@0.3.23/node_modules/language-subtag-registry"
-			],
-			"license": "CC0-1.0",
-			"homepage": "https://github.com/mattcg/language-subtag-registry",
-			"description": "Full BCP 47 language subtag data from the official IANA repository, in JSON format with multiple indices."
-		},
-		{
-			"name": "mdn-data",
-			"versions": ["2.0.30", "2.12.2", "2.23.0"],
-			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/mdn-data@2.0.30/node_modules/mdn-data",
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/mdn-data@2.12.2/node_modules/mdn-data",
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/mdn-data@2.23.0/node_modules/mdn-data"
-			],
-			"license": "CC0-1.0",
-			"author": "Mozilla Developer Network",
-			"homepage": "https://developer.mozilla.org",
-			"description": "Open Web data by the Mozilla Developer Network"
-		},
-		{
-			"name": "spdx-license-ids",
-			"versions": ["3.0.22"],
-			"paths": [
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/spdx-license-ids@3.0.22/node_modules/spdx-license-ids"
-			],
-			"license": "CC0-1.0",
-			"author": "Shinnosuke Watanabe",
-			"homepage": "https://github.com/jslicense/spdx-license-ids#readme",
-			"description": "A list of SPDX license identifiers"
-		}
-	],
 	"CC-BY-3.0": [
 		{
 			"name": "spdx-exceptions",
@@ -12684,14 +13275,14 @@
 	"(MIT OR CC0-1.0)": [
 		{
 			"name": "type-fest",
-			"versions": ["0.16.0", "1.4.0", "2.19.0", "3.13.1", "4.41.0", "5.4.2"],
+			"versions": ["0.16.0", "1.4.0", "2.19.0", "3.13.1", "4.41.0", "5.4.3"],
 			"paths": [
 				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/type-fest@0.16.0/node_modules/type-fest",
 				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/type-fest@1.4.0/node_modules/type-fest",
 				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/type-fest@2.19.0/node_modules/type-fest",
 				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/type-fest@3.13.1/node_modules/type-fest",
 				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/type-fest@4.41.0/node_modules/type-fest",
-				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/type-fest@5.4.2/node_modules/type-fest"
+				"/Users/mika/Code/ambient-novel/node_modules/.pnpm/type-fest@5.4.3/node_modules/type-fest"
 			],
 			"license": "(MIT OR CC0-1.0)",
 			"author": "Sindre Sorhus",
