@@ -152,6 +152,7 @@ Note: The deployment server _must_ support HTTP 206 range requests to successful
 
 ### Known issues
 
+- `@sveltejs/kit` 2.23+ emits build warnings about `untrack`, `fork`, and `settled` not being exported by Svelte 4. These are harmless — SvelteKit uses optional chaining to fall back gracefully at runtime. The warnings will go away after migrating to Svelte 5.
 - There are some issues with flick scrolling of chapter text on mobile Safari, where there are no touch up events during inertial scroll animations.
 
 ## Acknowledgments
