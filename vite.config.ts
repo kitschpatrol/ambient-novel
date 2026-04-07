@@ -10,7 +10,7 @@ export default defineConfig({
 		'process.env.NODE_ENV':
 			process.env.NODE_ENV === 'production' ? '"production"' : '"development"',
 	},
-	plugins: [sveltekit(), mkcert()],
+	plugins: [sveltekit(), process.env.CI === 'true' ? [] : mkcert()],
 	server: {
 		open: true,
 		proxy: {},

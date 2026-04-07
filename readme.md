@@ -1,5 +1,12 @@
 # Ambient Novel
 
+<!-- badges({ npm: []}) -->
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![CI](https://github.com/kitschpatrol/ambient-novel/actions/workflows/ci.yml/badge.svg)](https://github.com/kitschpatrol/ambient-novel/actions/workflows/ci.yml)
+
+<!-- /badges -->
+
 ## Overview
 
 The Ambient Novel is an experimental interface for nonlinear long-form narrated text. It was developed for Scott Wayne Indiana's book _The Valentine Mob_. The interface allows for simultaneous playback, scrubbing, and interleaving of multiple narrated audio tracks.
