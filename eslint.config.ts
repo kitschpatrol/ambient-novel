@@ -29,6 +29,8 @@ export default eslintConfig({
 					allowed: ['execa', 'glob', 'dotenv', 'lodash'],
 				},
 			],
+			// Messes with types...
+			'e18e/prefer-array-fill': 'off',
 			'import/no-duplicates': 'off',
 			'import/no-unresolved': 'off',
 			'no-irregular-whitespace': 'off',

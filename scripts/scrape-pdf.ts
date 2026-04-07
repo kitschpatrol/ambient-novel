@@ -1,4 +1,6 @@
+/* eslint-disable e18e/prefer-static-regex */
 /* eslint-disable no-lonely-if */
+
 import pdf from '@cyber2024/pdf-parse-fixed'
 import fs from 'node:fs'
 import { getTextBetween, saveFormattedJson } from './utilities'

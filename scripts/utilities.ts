@@ -1,3 +1,4 @@
+/* eslint-disable e18e/prefer-static-regex */
 /* eslint-disable unicorn/no-null */
 /* eslint-disable ts/no-unnecessary-condition */
 /* eslint-disable ts/no-restricted-types */
@@ -598,8 +599,8 @@ export function generateRegexForString(inputString: string): RegExp {
 	return new RegExp(
 		[
 			'(<span.*>)?',
-			// eslint-disable-next-line ts/no-misused-spread
-			...[...inputString].map((c) => escapeRegex(c) + '(</span>)?' + emojiRegex),
+
+			...Array.from(inputString, (c) => escapeRegex(c) + '(</span>)?' + emojiRegex),
 		].join(''),
 	)
 }

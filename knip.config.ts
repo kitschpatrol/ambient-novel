@@ -2,24 +2,25 @@ import { knipConfig } from '@kitschpatrol/knip-config'
 
 export default knipConfig({
 	entry: [
+		'src/global.css',
 		'src/lib/components/**/*.svelte',
 		'src/lib/utils/**/*.ts',
 		'src/service-worker.ts',
 		'src/store.ts',
-		'src/global.css',
 	],
 	ignoreBinaries: ['dust', 'jq', 'open'],
 	ignoreDependencies: [
-		'node-jq',
 		'@types/glob',
 		'@types/howler',
 		'@types/pdf-parse',
 		'@types/sanitize-html',
-		'sanitize-html',
-		'tailwindcss',
-		'workbox-build',
 		'node-addon-api',
 		'node-gyp',
+		'node-jq',
+		'sanitize-html',
+		'svelte-fa',
+		'tailwindcss',
+		'workbox-build',
 	],
 	ignoreUnresolved: [/^\$/],
 })

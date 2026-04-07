@@ -18,12 +18,15 @@
 		// });
 	}
 
+	const VERSION_REGEX = /@[\d.]+$/
+	const GIT_PREFIX_REGEX = /^\+git/
+
 	function stripVersion(input: string): string {
-		return input.replace(/@[\d.]+$/, '')
+		return input.replace(VERSION_REGEX, '')
 	}
 
 	function cleanUrl(url: string): string {
-		let cleanUrl = url.replace(/^\+git/, '')
+		let cleanUrl = url.replace(GIT_PREFIX_REGEX, '')
 		if (!cleanUrl.startsWith('http')) {
 			cleanUrl = 'https://' + cleanUrl
 		}
