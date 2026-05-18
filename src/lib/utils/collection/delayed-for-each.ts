@@ -1,5 +1,6 @@
 /**
- * Iterates over an array and calls a callback function for each item with a delay between each call.
+ * Iterates over an array and calls a callback function for each item with a
+ * delay between each call.
  */
 export async function delayedForEach<T>(
 	array: T[],

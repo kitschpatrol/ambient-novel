@@ -1,4 +1,3 @@
-import type { BookData } from '$lib/schemas/book-schema'
 import bookDataRaw from '$lib/data/book.json'
 import type { PageServerLoad } from './$types'
 
@@ -6,4 +5,4 @@ import type { PageServerLoad } from './$types'
 // export const prerender = true;
 
 // eslint-disable-next-line ts/require-await
-export const load: PageServerLoad = async () => ({ bookData: bookDataRaw as BookData })
+export const load: PageServerLoad = async () => ({ bookData: bookDataRaw })

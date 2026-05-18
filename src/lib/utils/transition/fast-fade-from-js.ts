@@ -2,8 +2,8 @@ import type { FadeParams, TransitionConfig } from 'svelte/transition'
 import { linear } from 'svelte/easing'
 
 /**
- * Weirdly much faster than either the stock fade or the fastFadeCss
- * supports graceful transition interruption or partially opaque elements
+ * Weirdly much faster than either the stock fade or the fastFadeCss supports
+ * graceful transition interruption or partially opaque elements
  */
 export function fastFadeFromJs(
 	node: HTMLElement,

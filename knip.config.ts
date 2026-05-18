@@ -8,7 +8,7 @@ export default knipConfig({
 		'src/service-worker.ts',
 		'src/store.ts',
 	],
-	ignoreBinaries: ['dust', 'jq', 'open'],
+	ignoreBinaries: ['jq', 'open'],
 	ignoreDependencies: [
 		'@types/glob',
 		'@types/howler',

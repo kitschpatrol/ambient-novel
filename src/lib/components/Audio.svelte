@@ -50,7 +50,7 @@
 		audioElement.currentTime = targetTime // Critical
 		audioElement.volume = maxVolume
 		audioElement.muted = false
-		if (isPlaying)
+		if (isPlaying) {
 			audioElement
 				.play()
 				.then(() => {
@@ -60,6 +60,7 @@
 					console.error(error)
 					retry()
 				})
+		}
 	}
 
 	onMount(() => {
@@ -115,7 +116,9 @@
 	}
 
 	function pauseAudio() {
-		if (audioElement) audioElement.pause()
+		if (audioElement) {
+			audioElement.pause()
+		}
 	}
 
 	$: isPlaying ? playAudio() : pauseAudio()

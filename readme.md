@@ -2,7 +2,7 @@
 
 <!-- badges({ npm: []}) -->
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/license/mit/)
 [![CI](https://github.com/kitschpatrol/ambient-novel/actions/workflows/ci.yml/badge.svg)](https://github.com/kitschpatrol/ambient-novel/actions/workflows/ci.yml)
 
 <!-- /badges -->
@@ -118,16 +118,6 @@ conda install numpy scipy scikit-learn Cython
 pip install -e .
 make install
 conda deactivate
-```
-
-### Size optimization
-
-No bundle size advantage to moving content preprocessing deps only to their own package.json.
-
-To use the `build-report` npm script, install [`dust`](https://github.com/bootandy/dust) via homebrew if needed.
-
-```bash
-brew install dust
 ```
 
 ### Reference links

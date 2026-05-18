@@ -2,8 +2,8 @@ import type { FadeParams, TransitionConfig } from 'svelte/transition'
 import { linear } from 'svelte/easing'
 
 /**
- * Hypothetically optimize by not reading initial opacity
- * not really faster in practice
+ * Hypothetically optimize by not reading initial opacity not really faster in
+ * practice
  */
 export function fastFadeCss(
 	_node: HTMLElement,

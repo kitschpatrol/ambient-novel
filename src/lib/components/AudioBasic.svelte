@@ -29,11 +29,15 @@
 	}
 
 	function updateCurrentTimeProxy(time: number, isInOutro: boolean) {
-		if (!isInOutro) currentTimeProxy = time
+		if (!isInOutro) {
+			currentTimeProxy = time
+		}
 	}
 
 	function updateCurrentTime(time: number, isInOutro: boolean) {
-		if (!isInOutro) currentTime = time
+		if (!isInOutro) {
+			currentTime = time
+		}
 	}
 
 	$: updatePlay(isPlaying)

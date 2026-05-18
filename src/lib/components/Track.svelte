@@ -229,8 +229,14 @@
 	}
 
 	function timeFromWordIndex(index: number): number {
-		if (index < 0) return timeCache[0]
-		if (index > wordElements.length) return timeCache[wordElements.length]
+		if (index < 0) {
+			return timeCache[0]
+		}
+
+		if (index > wordElements.length) {
+			return timeCache[wordElements.length]
+		}
+
 		return timeCache[index]
 	}
 

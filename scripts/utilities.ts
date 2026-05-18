@@ -644,7 +644,10 @@ export function stripTagNodeHtml(
 	elements.forEach((element: HTMLElement) => {
 		const parentElement = element.parentNode
 
-		if (!parentElement) return // Skip if the element has no parent
+		if (!parentElement) {
+			// Skip if the element has no parent
+			return
+		}
 
 		// Find index of the element within its parent's children array
 		const index = parentElement.childNodes.indexOf(element)

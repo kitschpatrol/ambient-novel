@@ -54,7 +54,10 @@
 	let blendingInProgress = false
 
 	async function onLuckyBlend() {
-		if (blendingInProgress) return
+		if (blendingInProgress) {
+			return
+		}
+
 		blendingInProgress = true
 		await resetAll()
 
