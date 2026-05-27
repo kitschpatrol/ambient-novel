@@ -4,10 +4,6 @@
 	import { asset } from '$app/paths'
 	import Header from '$lib/components/Header.svelte'
 	import Starfield from '$lib/components/Starfield.svelte'
-	// Import OpenSourceCredits from '$lib/components/OpenSourceCredits.svelte';
-	// import licenseDataRaw from '$lib/data/licenses.json';
-	// import { licenseSchema } from '$lib/schemas/licenses-schema';
-	// const licenseData = licenseSchema.parse(licenseDataRaw);
 	let isMounted = false
 	onMount(() => {
 		isMounted = true

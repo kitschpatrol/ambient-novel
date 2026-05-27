@@ -1,13 +1,7 @@
 import { cspellConfig } from '@kitschpatrol/cspell-config'
 
 export default cspellConfig({
-	ignorePaths: [
-		'*.m4a',
-		'*.mp3',
-		'./src/lib/data/licenses.json',
-		'./data-generated/**/*',
-		'./build/**/*',
-	],
+	ignorePaths: ['*.m4a', '*.mp3', './data-generated/**/*', './build/**/*'],
 	words: [
 		'adelay',
 		'afterall',
