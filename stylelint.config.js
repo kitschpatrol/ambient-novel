@@ -19,6 +19,8 @@ export default stylelintConfig({
 				],
 			},
 		],
+		// Tailwind's @apply takes utility class names, not a standard CSS prelude
+		'at-rule-prelude-no-invalid': [true, { ignoreAtRules: ['apply'] }],
 		'custom-property-pattern': null,
 		'function-no-unknown': null,
 		'nesting-selector-no-missing-scoping-root': null,

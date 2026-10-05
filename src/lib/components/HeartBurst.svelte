@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" strictEvents>
 	import type { Container, Engine, ISourceOptions } from '@tsparticles/engine'
 	import { loadSlim } from '@tsparticles/slim'
 	import Particles, { particlesInit } from '@tsparticles/svelte'
@@ -8,7 +8,7 @@
 	// Charge-up logic
 	let startTime = 0
 	let chargeDuration = 0
-	let particlesContainer: Container
+	let particlesContainer: Container | undefined
 
 	function markTime(charging: boolean) {
 		if (charging) {
@@ -76,11 +76,14 @@
 {#if mounted}
 	<Particles
 		id="heartburst"
+		options={particlesConfig}
 		on:particlesLoaded={(event) => {
 			// @ts-expect-error no ts in template
-			event.detail.particles && (particlesContainer = event.detail.particles)
+			const { particles } = event.detail
+			if (particles !== undefined) {
+				particlesContainer = particles
+			}
 		}}
-		options={particlesConfig}
 	/>
 {/if}
 <br />
@@ -89,6 +92,7 @@
 {chargeDuration}
 <br />
 <button
+	type="button"
 	on:pointercancel={() => {
 		isCharging = false
 	}}

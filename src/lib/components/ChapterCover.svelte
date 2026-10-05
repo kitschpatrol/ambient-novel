@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" strictEvents>
 	import type { ChapterData } from '$lib/schemas/book-schema'
 
 	export let chapterColor = '#ff0000'
@@ -11,8 +11,8 @@
 <!-- funky comments here to avoid implicit white space issues -->
 <!-- prettier-ignore -->
 <h2
-	class="chapter-title absolute left-0 top-0 h-full w-full text-center font-display tracking-wider text-vm-text-light shadow-vm-shadow text-shadow"
 	style:background-color={chapterColor}
+	class="chapter-title absolute left-0 top-0 h-full w-full text-center font-display tracking-wider text-vm-text-light shadow-vm-shadow text-shadow"
 >
 	<span class="max-sm:hidden">Chapter </span><!--
   -->{chapterData.index + 1}<!--

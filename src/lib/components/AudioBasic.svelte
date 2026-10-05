@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" strictEvents>
 	import { lookup } from 'mrmime'
 	import { onMount } from 'svelte'
 	import { fadeVolume } from '$lib/utils/transition/fade-volume'
@@ -7,13 +7,16 @@
 	export let isPlaying = false
 	export let currentTime = 0
 
-	let audioElement: HTMLAudioElement
+	let audioElement: HTMLAudioElement | undefined
 	let isInOutro = false
 	let currentTimeProxy: number = currentTime
 
 	onMount(() => {
-		// AudioElement.load();
-		audioElement.currentTime = currentTimeProxy // Critical
+		if (audioElement) {
+			// AudioElement.load();
+			audioElement.currentTime = currentTimeProxy // Critical
+		}
+
 		updatePlay(isPlaying)
 	})
 
@@ -28,14 +31,14 @@
 		}
 	}
 
-	function updateCurrentTimeProxy(time: number, isInOutro: boolean) {
-		if (!isInOutro) {
+	function updateCurrentTimeProxy(time: number, inOutro: boolean) {
+		if (!inOutro) {
 			currentTimeProxy = time
 		}
 	}
 
-	function updateCurrentTime(time: number, isInOutro: boolean) {
-		if (!isInOutro) {
+	function updateCurrentTime(time: number, inOutro: boolean) {
+		if (!inOutro) {
 			currentTime = time
 		}
 	}
@@ -50,8 +53,8 @@
 <!-- // now apparently not necessary after switching to netlify with 206 support -->
 
 <audio
-	bind:currentTime={currentTimeProxy}
 	bind:this={audioElement}
+	bind:currentTime={currentTimeProxy}
 	on:ended
 	on:introstart={() => {
 		// Accommodates resumption during a transition, if that happens before a new Audio player is created

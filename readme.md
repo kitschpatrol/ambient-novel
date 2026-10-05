@@ -1,8 +1,8 @@
 # Ambient Novel
 
-<!-- badges({ npm: []}) -->
+<!-- badges -->
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/license/mit/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/license/mit)
 [![CI](https://github.com/kitschpatrol/ambient-novel/actions/workflows/ci.yml/badge.svg)](https://github.com/kitschpatrol/ambient-novel/actions/workflows/ci.yml)
 
 <!-- /badges -->
@@ -57,7 +57,7 @@ The content generator does a number of things depending on the config object in 
 - Compresses the ambient music to a number of formats.
 - Information gathered in the above steps is merged with data from `/data/book.json` to yield the final `/src/lib/data`
 
-To install dependencies for the content generation process, run:
+Dependencies for the content generation process (ffmpeg, whisperx, coqui TTS) are installed via the conda/brew steps in [Transcript alignment and text to speech](#transcript-alignment-and-text-to-speech) below.
 
 To update the generated data, run:
 

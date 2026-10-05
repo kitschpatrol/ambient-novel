@@ -13,10 +13,8 @@ export function fadeVolume(
 		duration,
 		easing,
 		tick(t) {
-			// eslint-disable-next-line ts/no-unsafe-assignment, ts/no-unsafe-member-access
 			const maxVolume = node.dataset.volumeMax
-			// eslint-disable-next-line ts/no-unsafe-argument, ts/no-unsafe-member-access
-			node.volume = maxVolume ? Number.parseFloat(maxVolume) * t : t
+			node.volume = maxVolume === undefined || maxVolume === '' ? t : Number(maxVolume) * t
 		},
 	}
 }

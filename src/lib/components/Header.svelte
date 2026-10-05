@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" strictEvents>
 	import { base, resolve } from '$app/paths'
 	import { page } from '$app/stores'
 
@@ -36,7 +36,7 @@
 </header>
 
 <style lang="postcss">
-	@import url('../../global.css') reference;
+	@reference '../../global.css';
 
 	header {
 		position: var(--position);
@@ -59,6 +59,7 @@
 		@apply font-display shadow-vm-shadow text-shadow flex h-full items-center justify-center px-5 text-center text-base leading-none text-white opacity-80;
 	}
 
+	/* stylelint-disable-next-line defensive-css/no-accidental-hover -- A (hover: hover) query would change link styling on touch devices */
 	header a:not(.home):hover {
 		text-decoration: underline;
 		text-underline-offset: 0.2em;

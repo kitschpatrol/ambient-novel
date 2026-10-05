@@ -9,7 +9,7 @@ export function fastFadeFromJs(
 	node: HTMLElement,
 	{ delay = 0, duration = 1000, easing = linear }: FadeParams = {},
 ): TransitionConfig {
-	// eslint-disable-next-line ts/no-unsafe-argument, ts/no-unsafe-member-access
+	// eslint-disable-next-line unicorn/prefer-number-coercion -- An unset opacity is '', which must parse to NaN (opacity 1), not Number('') === 0
 	const startingOpacityRaw = Number.parseFloat(node.style.opacity)
 	const startingOpacity = Number.isNaN(startingOpacityRaw) ? 1 : startingOpacityRaw
 
@@ -18,7 +18,6 @@ export function fastFadeFromJs(
 		duration,
 		easing,
 		tick(t) {
-			// eslint-disable-next-line ts/no-unsafe-member-access
 			node.style.opacity = `${t * startingOpacity}`
 		},
 	}

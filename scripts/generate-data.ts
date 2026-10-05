@@ -168,11 +168,11 @@ for (const { format, quality, sampleRate, vbr } of config.fullAudioBookSettings.
 	const audioFileUnhashed = `${config.fullAudioBookSettings.outputDir}/${cleanFilename}.${format}`
 	const audioFile = findFile(audioFileUnhashed)
 
-	if (audioFile && !config.fullAudioBookSettings.regenerateCompressed) {
+	if (audioFile !== null && !config.fullAudioBookSettings.regenerateCompressed) {
 		console.log(`Already found audio track ${audioFile}, nothing to generate...`)
 	} else {
 		// Clean up existing
-		if (audioFile) {
+		if (audioFile !== null) {
 			fs.rmSync(audioFile, { force: true })
 		}
 
@@ -198,7 +198,7 @@ if (config.speechSettings.regenerateSource) {
 createIntermediatePaths(config.jsonSettings.outputFile, true)
 
 // eslint-disable-next-line ts/no-unnecessary-condition
-if (config.speechSettings.outputDir) {
+if (config.speechSettings.outputDir !== null) {
 	createIntermediatePaths(
 		config.speechSettings.outputDir,
 		config.speechSettings.regenerateCompressed,
@@ -388,12 +388,11 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 
 			// Add timing data
 			const spanElement = wordHtml.querySelector('span')!
-			// eslint-disable-next-line unicorn/prefer-dom-node-dataset
 			spanElement.setAttribute('data-time', wordTiming.start)
 
 			// Add a class to set horizontal spacing between lines via css
 			// but don't do it on the first line of the chapter
-			if (lineNumber > 0 && wordIndex === 0) {
+			if (wordIndex === 0 && lineNumber > 0) {
 				spanElement.classList.add('line')
 			}
 
@@ -442,24 +441,24 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 	// mixed audio
 	console.log(`Processing chapter ${chapterNumber} ambient track ${chapterSource.audioMix}`)
 
-	const cleanFilename = kebabCase(path.parse(path.basename(chapterSource.audioMix)).name)
-	const sourceFile = `${config.audioMixSettings.sourceDir}/${chapterSource.audioMix}`
-	chapter.audio.durationSeconds = getAudioDuration(sourceFile)
+	const mixCleanFilename = kebabCase(path.parse(path.basename(chapterSource.audioMix)).name)
+	const mixSourceFile = `${config.audioMixSettings.sourceDir}/${chapterSource.audioMix}`
+	chapter.audio.durationSeconds = getAudioDuration(mixSourceFile)
 
 	for (const { format, quality, sampleRate, vbr } of config.audioMixSettings.outputs) {
-		const audioFileUnhashed = `${config.audioMixSettings.outputDir}/${cleanFilename}.${format}`
+		const audioFileUnhashed = `${config.audioMixSettings.outputDir}/${mixCleanFilename}.${format}`
 		let audioFile = findHashedFile(audioFileUnhashed)
 
-		if (audioFile && !config.audioMixSettings.regenerateCompressed) {
+		if (audioFile !== null && !config.audioMixSettings.regenerateCompressed) {
 			console.log(`Already found audio track ${audioFile}, nothing to generate...`)
 		} else {
 			// Clean up existing
-			if (audioFile) {
+			if (audioFile !== null) {
 				fs.rmSync(audioFile, { force: true })
 			}
 
-			console.log(`Compressing audio file ${sourceFile} to ${format}`)
-			compressTo(sourceFile, audioFileUnhashed, quality, sampleRate, vbr)
+			console.log(`Compressing audio file ${mixSourceFile} to ${format}`)
+			compressTo(mixSourceFile, audioFileUnhashed, quality, sampleRate, vbr)
 
 			// Hash it
 			audioFile = renameFileWithHash(audioFileUnhashed)

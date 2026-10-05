@@ -1,4 +1,5 @@
-@import url('tailwindcss');
+/* stylelint-disable-next-line import-notation -- @tailwindcss/postcss only resolves string imports outside of Vite (e.g. in eslint-plugin-svelte's valid-compile) */
+@import 'tailwindcss';
 
 @theme {
 	/* Custom colors */

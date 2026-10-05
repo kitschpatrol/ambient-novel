@@ -1,9 +1,8 @@
 /* eslint-disable e18e/prefer-static-regex */
 /* eslint-disable unicorn/no-null */
-/* eslint-disable ts/no-unnecessary-condition */
 /* eslint-disable ts/no-restricted-types */
 /* eslint-disable jsdoc/require-jsdoc */
-/* eslint-disable unicorn/no-array-for-each */
+/* eslint-disable unicorn/no-for-each */
 /* eslint-disable ts/no-unsafe-argument */
 /* eslint-disable ts/no-unsafe-assignment */
 /* eslint-disable ts/no-unsafe-call */
@@ -40,8 +39,9 @@ function setTagsForMP3(audioFilePath: string, tags: TagOptions) {
 		title: tags.trackName,
 	}
 
-	if (!id3.write(id3Tags, audioFilePath)) {
-		throw new Error(`Failed to write ID3 tags to ${audioFilePath}`)
+	const result = id3.write(id3Tags, audioFilePath)
+	if (result !== true) {
+		throw new Error(`Failed to write ID3 tags to ${audioFilePath}`, { cause: result })
 	}
 }
 
@@ -79,8 +79,8 @@ export function findFile(filePath: string): null | string {
 export function findHashedFile(filePath: string): null | string {
 	// Match the hash area
 	const parts = filePath.split('.')
-	parts.splice(-1, 0, '*')
-	const pattern = parts.join('.')
+	const extension = parts.pop()
+	const pattern = [...parts, '*', extension].join('.')
 
 	// Synchronously get all files matching the pattern
 	const files = glob.sync(pattern)
@@ -114,8 +114,8 @@ export function renameFileWithHash(filePath: string): string {
 	const fileHash = hashFile(filePath)
 
 	const parts = filePath.split('.')
-	parts.splice(-1, 0, fileHash)
-	const newFileName = parts.join('.')
+	const extension = parts.pop()
+	const newFileName = [...parts, fileHash, extension].join('.')
 
 	fs.renameSync(filePath, newFileName)
 	return newFileName
@@ -143,7 +143,9 @@ export function runCommand(command: string): string {
 		const output = execSync(command, { stdio: 'pipe' })
 		return output.toString()
 	} catch (error) {
-		throw new Error(`Error running command: ${command}\nMessage: ${String(error)}`)
+		throw new Error(`Error running command: ${command}\nMessage: ${String(error)}`, {
+			cause: error,
+		})
 	}
 }
 
@@ -216,13 +218,17 @@ export function trimSilence(sourceFile: string, outputFile: string, secondsToKee
 
 	// measure durations
 	const totalDuration = getAudioDuration(sourceFile)
+	// eslint-disable-next-line unicorn/prefer-number-coercion -- Empty command output must parse to NaN, not Number('') === 0
 	const silenceDurationStart = Number.parseFloat(
 		runCommand(
+			// eslint-disable-next-line unicorn/no-incorrect-template-string-interpolation -- $NF is an awk field reference
 			`ffmpeg -y -vn -i "${sourceFile}" -af "silencedetect=noise=-50dB:d=0.25" -f null - 2>&1 | grep "silence_duration" | head -n 1  | awk '{print $NF}'`,
 		),
 	)
+	// eslint-disable-next-line unicorn/prefer-number-coercion -- Empty command output must parse to NaN, not Number('') === 0
 	const silenceDurationEnd = Number.parseFloat(
 		runCommand(
+			// eslint-disable-next-line unicorn/no-incorrect-template-string-interpolation -- $NF is an awk field reference
 			`ffmpeg -y -vn -i "${sourceFile}" -af "areverse,silencedetect=noise=-50dB:d=0.25" -f null - 2>&1 | grep "silence_duration" | head -n 1 | awk '{print $NF}'`,
 		),
 	)
@@ -277,7 +283,7 @@ export function createIntermediatePaths(inputPath: string, clearExisting = false
 		fs.rmSync(inputPath, { force: true, recursive: true })
 	}
 
-	const isDirectoryPath = !path.extname(inputPath)
+	const isDirectoryPath = path.extname(inputPath) === ''
 	const targetPath = isDirectoryPath ? inputPath : path.dirname(inputPath)
 	fs.mkdirSync(targetPath, { recursive: true })
 }
@@ -287,6 +293,7 @@ export function getAudioDuration(file: string): number {
 		throw new Error(`Source file does not exist: ${file}`)
 	}
 
+	// eslint-disable-next-line unicorn/prefer-number-coercion -- Empty command output must parse to NaN, not Number('') === 0
 	return Number.parseFloat(
 		runCommand(
 			`ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "${file}"`,
@@ -511,11 +518,13 @@ export function alignTranscriptToAudioWithWordLevelTimings(
 						.join(' '),
 				)
 
-				if (similarity < minSimilarity) {
-					// Console.log(`Min similarity ${similarity} at window ${i}`);
-					minSimilarity = similarity
-					minSimilarityIndex = i
+				if (!(similarity < minSimilarity)) {
+					continue
 				}
+
+				// Console.log(`Min similarity ${similarity} at window ${i}`);
+				minSimilarity = similarity
+				minSimilarityIndex = i
 			}
 
 			// Build the matched transcript
@@ -548,7 +557,7 @@ export function alignTranscriptToAudioWithWordLevelTimings(
 		}
 	}
 
-	if (destinationTranscriptMatchedFile) {
+	if (destinationTranscriptMatchedFile !== undefined && destinationTranscriptMatchedFile !== '') {
 		saveFormattedJson(destinationTranscriptMatchedFile, matchedTranscript)
 	}
 
@@ -610,15 +619,15 @@ export function regexMatchInRange(
 	regex: RegExp,
 	start: number,
 ): null | string {
-	const subString = inputString.slice(start)
+	const substring = inputString.slice(start)
 
-	const match = regex.exec(subString)
+	const match = regex.exec(substring)
 
 	if (match && match.length > 0) {
 		return match[0]
 	}
 
-	throw new Error(`Bad regex in "${subString}"`)
+	throw new Error(`Bad regex in "${substring}"`)
 }
 
 export function replaceSubstring(
@@ -641,7 +650,9 @@ export function stripTagNodeHtml(
 ): void {
 	const elements = rootNode.querySelectorAll(tagName)
 
-	elements.forEach((element: HTMLElement) => {
+	// Innermost first, since unwrapping an outer element leaves its children's
+	// parentNode pointing at the detached element
+	elements.toReversed().forEach((element: HTMLElement) => {
 		const parentElement = element.parentNode
 
 		if (!parentElement) {
@@ -663,7 +674,8 @@ export function stripTagNodeHtml(
 
 		// Insert the children of the element back in place
 		element.childNodes.forEach((child: Node, i: number) => {
-			parentElement.childNodes.splice(index + (replacementText ? 1 : 0) + i, 0, child)
+			const offset = replacementText !== undefined && replacementText !== '' ? 1 : 0
+			parentElement.childNodes.splice(index + offset + i, 0, child)
 		})
 	})
 }
@@ -672,7 +684,7 @@ export function replaceTextNodeHtml(element: HTMLElement, find: RegExp, replace:
 	element.childNodes.forEach((node: Node) => {
 		// Text nodes have a nodeType of 3
 		if (node instanceof TextNode) {
-			node.rawText = node.rawText.replace(find, replace)
+			node.rawText = node.rawText.replace(find, () => replace)
 		} else if (node instanceof HTMLElement) {
 			// Recursively sanitize child elements
 			replaceTextNodeHtml(node, find, replace)

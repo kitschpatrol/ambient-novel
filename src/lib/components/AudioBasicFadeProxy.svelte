@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" strictEvents>
 	// This wraps the Audio component and uses Svelte's transitions functionality
 	// to fade the volume in and out when the audio is played and paused.
 	import AudioBasic from '$lib/components/AudioBasic.svelte'
@@ -56,8 +56,8 @@
 	{#key isPlaying}
 		<AudioBasic
 			{audioSources}
-			bind:currentTime={currentTimeProxy}
 			isPlaying={isPlayingProxy && isPlaying}
+			bind:currentTime={currentTimeProxy}
 			on:ended
 		/>
 	{/key}

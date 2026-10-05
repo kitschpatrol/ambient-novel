@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" strictEvents>
 	import { onMount } from 'svelte'
 	import { fade } from 'svelte/transition'
 	import Starfield from '$lib/components/Starfield.svelte'
@@ -10,6 +10,7 @@
 
 <svelte:head>
 	<title>The Valentine Mob: Coming Soon</title>
+	<!-- eslint-disable-next-line svelte/no-nested-style-tag -- Route-specific body styles that must only apply while this page's head content is mounted -->
 	<style>
 		/* all the fixed position hacks (like ::before) are subtly broken */
 		body,
@@ -53,7 +54,7 @@
 {/if}
 
 <style lang="postcss">
-	@import url('../../global.css') reference;
+	@reference '../../global.css';
 
 	div.star-wrapper {
 		pointer-events: none;
@@ -81,6 +82,7 @@
 		opacity: 0.75;
 	}
 
+	/* stylelint-disable-next-line defensive-css/no-accidental-hover -- A (hover: hover) query would change link styling on touch devices */
 	h2 a:hover {
 		text-decoration: underline;
 		text-underline-offset: 0.2em;

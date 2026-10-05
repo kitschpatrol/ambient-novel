@@ -8,8 +8,9 @@ export async function delayedForEach<T>(
 	delay: number,
 ): Promise<void> {
 	for (let i = 0; i < array.length; i++) {
-		// eslint-disable-next-line no-promise-executor-return
-		await new Promise((resolve) => setTimeout(resolve, delay))
+		await new Promise((resolve) => {
+			setTimeout(resolve, delay)
+		})
 		callback(array[i], i, array)
 	}
 }

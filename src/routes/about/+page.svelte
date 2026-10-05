@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" strictEvents>
 	import { onMount } from 'svelte'
 	import { fade } from 'svelte/transition'
 	import { asset } from '$app/paths'
@@ -12,6 +12,7 @@
 
 <svelte:head>
 	<title>About — The Valentine Mob</title>
+	<!-- eslint-disable-next-line svelte/no-nested-style-tag -- Route-specific body styles that must only apply while this page's head content is mounted -->
 	<style>
 		/* all the fixed position hacks (like ::before) are subtly broken */
 		body,
@@ -140,13 +141,13 @@
 	</p>
 </main>
 <img
-	alt="heart"
 	class="heart mx-auto mb-16 w-[10vw] max-w-16 pb-16 opacity-90"
+	alt="heart"
 	src={asset('/heart.svg')}
 />
 
 <style lang="postcss">
-	@import url('../../global.css') reference;
+	@reference '../../global.css';
 
 	div.star-wrapper {
 		pointer-events: none;
@@ -185,6 +186,7 @@
 		text-underline-offset: 0.2em;
 	}
 
+	/* stylelint-disable-next-line defensive-css/no-accidental-hover -- A (hover: hover) query would change link styling on touch devices */
 	main a:hover {
 		text-decoration: underline;
 		text-decoration-color: rgb(0 0 0 / 100%);

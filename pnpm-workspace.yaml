@@ -13,6 +13,17 @@ allowBuilds:
   '@tsparticles/engine': true
   esbuild: true
   node-jq: true
-  sharp: true
   unrs-resolver: true
   workerd: true
+peerDependencyRules:
+  allowedVersions:
+    # eslint-plugin-jsx-a11y 6.10.2 still caps its eslint peer at ^9 but runs on 10
+    # https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/issues/1075
+    eslint-plugin-jsx-a11y>eslint: ^10.0.0
+auditConfig:
+  ignoreGhsas:
+    # Vitest 3.2.7 is the last release that supports Vite 5. The advisory only affects the
+    # mocker dev server and browser mode, not `vitest run` of Node tests. Drop this after
+    # upgrading to Vite 6+ and vitest 5.
+    # cspell:disable-next-line
+    - GHSA-82fw-gwwq-j7x9

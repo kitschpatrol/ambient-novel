@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" strictEvents>
 	import { onMount } from 'svelte'
 	import { fade } from 'svelte/transition'
 	import type { BookSource } from '$lib/schemas/book-source-schema'
@@ -6,7 +6,7 @@
 	import Header from '$lib/components/Header.svelte'
 	import Starfield from '$lib/components/Starfield.svelte'
 	import bookSourceRaw from '$lib/data/book-source.json'
-	const bookData = bookSourceRaw as BookSource
+	const bookData = bookSourceRaw
 
 	// Doing the server-loaded approach in the "text" subdirectory messes up the
 	// .htaccess routing on DreamHost...
@@ -28,6 +28,7 @@
 
 <svelte:head>
 	<title>The Text — The Valentine Mob</title>
+	<!-- eslint-disable-next-line svelte/no-nested-style-tag -- Route-specific body styles that must only apply while this page's head content is mounted -->
 	<style>
 		/* all the fixed position hacks (like ::before) are subtly broken */
 		body,
@@ -82,8 +83,8 @@
 	{/each}
 </main>
 <img
-	alt="heart"
 	class="heart mx-auto mb-16 w-[10vw] max-w-16 pb-16 opacity-90"
+	alt="heart"
 	src={asset('/heart.svg')}
 />
 
@@ -105,7 +106,7 @@
 {/if}
 
 <style lang="postcss">
-	@import url('../../global.css') reference;
+	@reference '../../global.css';
 	/* General */
 	div.star-wrapper {
 		pointer-events: none;
@@ -142,6 +143,7 @@
 		text-underline-offset: 0.2em;
 	}
 
+	/* stylelint-disable-next-line defensive-css/no-accidental-hover -- A (hover: hover) query would change link styling on touch devices */
 	main a:hover {
 		text-decoration: underline;
 		text-decoration-color: rgb(0 0 0 / 100%);
@@ -206,7 +208,7 @@
 
 	main > section.chapter > p > :global(span) {
 		color: unset !important;
-		/* Hide inline color no shadow combination seems to yield legibility... 
+		/* Hide inline color no shadow combination seems to yield legibility...
 		/* text-shadow: 1px 1px 8px rgb(0 0 0); */
 	}
 

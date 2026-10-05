@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" strictEvents>
 	import type { IconDefinition } from '@fortawesome/free-solid-svg-icons'
 	// eslint-disable-next-line import/no-named-as-default
 	import Fa from 'svelte-fa'
@@ -23,10 +23,15 @@
 	}
 </script>
 
-<button class="h-full w-full px-1 pt-2 pb-3 first:pl-5 last:pr-5" disabled={!isEnabled} on:click>
+<button
+	class="h-full w-full px-1 pt-2 pb-3 first:pl-5 last:pr-5"
+	disabled={!isEnabled}
+	type="button"
+	on:click
+>
 	<div
 		class="bg-opacity-60 font-display text-vm-text-light text-opacity-90 flex h-8 flex-1 items-center justify-center gap-2 rounded-lg bg-gray-400 text-base"
-		class:aspect-square={!label}
+		class:aspect-square={label === undefined || label === ''}
 		class:down={isDown}
 		class:flex-row={iconAlign === 'left'}
 		class:flex-row-reverse={iconAlign === 'right'}

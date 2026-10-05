@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" strictEvents>
 	import { lookup } from 'mrmime'
 	import { onMount } from 'svelte'
 	import { fadeVolume } from '$lib/utils/transition/fade-volume'
@@ -10,7 +10,7 @@
 	export let currentTime = 0 // Actual time of audio
 	export let targetTime = 0 // Time we're requesting
 
-	let audioElement: HTMLAudioElement
+	let audioElement: HTMLAudioElement | undefined
 
 	const retryIntervalMs = 5000
 	let maxRetry = 3
@@ -37,10 +37,14 @@
 	}
 
 	function mount() {
+		if (!audioElement) {
+			return
+		}
+
 		// Voodoo implementation
 		// not sure if any of this helps
 		// https://stackoverflow.com/a/73910818/2437832
-		let savedCurrentTime = audioElement.currentTime
+		const savedCurrentTime = audioElement.currentTime
 		// AudioElement.src = audioSources[0];
 
 		audioElement.load()
@@ -51,15 +55,16 @@
 		audioElement.volume = maxVolume
 		audioElement.muted = false
 		if (isPlaying) {
-			audioElement
-				.play()
-				.then(() => {
-					// All good
-				})
-				.catch((error: unknown) => {
-					console.error(error)
-					retry()
-				})
+			void playOrRetry(audioElement)
+		}
+	}
+
+	async function playOrRetry(element: HTMLAudioElement) {
+		try {
+			await element.play()
+		} catch (error) {
+			console.error(error)
+			retry()
 		}
 	}
 
@@ -99,19 +104,18 @@
 		// 	// Perform the seek
 		// 	audioElement.currentTime = time;
 		// });
-		audioElement.currentTime = time
+		if (audioElement) {
+			audioElement.currentTime = time
+		}
 	}
 
-	function playAudio() {
+	async function playAudio() {
 		if (audioElement) {
-			audioElement
-				.play()
-				.then(() => {
-					// All good
-				})
-				.catch((error: unknown) => {
-					console.error(error)
-				})
+			try {
+				await audioElement.play()
+			} catch (error) {
+				console.error(error)
+			}
 		}
 	}
 
@@ -135,10 +139,11 @@
 <!-- // now apparently not necessary after switching to netlify with 206 support -->
 <!-- // preload auto without a manual call to "load" only runs on the first file on mobile safari -->
 <audio
-	bind:currentTime={currentTimeProxy}
 	bind:this={audioElement}
 	{loop}
 	muted
+	preload="auto"
+	bind:currentTime={currentTimeProxy}
 	on:canplaythrough
 	on:ended
 	on:error={() => {
@@ -157,17 +162,16 @@
 		// Don't send time updates during transitions
 		isInOutro = true
 	}}
-	preload="auto"
 	transition:fadeVolume|local={{ duration: 600 }}
 >
 	{#each audioSources as source (source)}
 		<source
+			src={source}
+			type={lookup(source) ?? 'audio'}
 			on:error={() => {
 				console.error(`audio source error for "${source}"`)
 				retry()
 			}}
-			src={source}
-			type={lookup(source) ?? 'audio'}
 		/>
 	{/each}
 	Your browser does not support the audio element.

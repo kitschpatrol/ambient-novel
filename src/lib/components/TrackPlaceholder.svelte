@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" strictEvents>
 	import type { ChapterData } from '$lib/schemas/book-schema'
 	import ChapterCover from '$lib/components/ChapterCover.svelte'
 

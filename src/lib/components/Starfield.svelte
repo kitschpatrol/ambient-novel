@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" strictEvents>
 	import type { Engine, ISourceOptions } from '@tsparticles/engine'
 	import { loadSlim } from '@tsparticles/slim'
 	import Particles, { particlesInit } from '@tsparticles/svelte'
@@ -59,7 +59,7 @@
 							images: {
 								fill: true,
 								replaceColor: true,
-								src: strokeEnabled ? asset('/saturn.svg') : asset('/saturn-no-stroke.svg'),
+								src: asset(strokeEnabled ? '/saturn.svg' : '/saturn-no-stroke.svg'),
 							},
 						},
 						type: 'images',
@@ -101,7 +101,7 @@
 					images: {
 						fill: true,
 						replaceColor: true,
-						src: strokeEnabled ? asset('/star.svg') : asset('/star-no-stroke.svg'),
+						src: asset(strokeEnabled ? '/star.svg' : '/star-no-stroke.svg'),
 					},
 				},
 				type: 'images',
@@ -148,7 +148,7 @@
 {#if mounted}
 	<Particles
 		{id}
-		options={particlesConfig}
 		style="position: var(--position); top: var(--top); left: 0; width: 100%; height: var(--height); background: var(--background);"
+		options={particlesConfig}
 	/>
 {/if}

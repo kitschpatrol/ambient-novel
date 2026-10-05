@@ -14,7 +14,6 @@ export function fastFadeJs(
 		duration,
 		easing,
 		tick(t) {
-			// eslint-disable-next-line ts/no-unsafe-call, ts/no-unsafe-member-access
 			node.style.setProperty('opacity', `${t}`)
 		},
 	}

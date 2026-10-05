@@ -1,6 +1,6 @@
 <svelte:options immutable={true} />
 
-<script lang="ts">
+<script lang="ts" strictEvents>
 	import { faPause, faPlay, faRotateBack } from '@fortawesome/free-solid-svg-icons'
 	import { browser } from '$app/environment'
 	import { asset } from '$app/paths'
@@ -69,7 +69,7 @@
 	// wtf...
 	// https://stackoverflow.com/questions/9811429/html5-audio-tag-on-safari-has-a-delay
 	if (browser && isMobile) {
-		// eslint-disable-next-line ts/no-explicit-any, ts/prefer-nullish-coalescing
+		// eslint-disable-next-line ts/no-explicit-any, ts/strict-boolean-expressions -- AudioContext is missing in older Safari even though the DOM types declare it
 		const AudioContext = globalThis.AudioContext || (globalThis as any).webkitAudioContext
 
 		const audioContext = new AudioContext()
@@ -113,37 +113,38 @@
 		// Watch scroll velocity
 		// have to do this instead of an on:scroll handler so we can calculate velocity / delta
 		function loop() {
-			if (!isReset && isSeeking) {
-				scrollLeftDelta = scrollWrapperElement.scrollLeft - scrollLeft
-				scrollLeft = scrollWrapperElement.scrollLeft
-
-				// Doesn't really work on ios...
-				if (!isUserHoldingDownFingerOrMouse && scrollLeftDelta === 0) {
-					// Stop the scroll booster which can "flicker" between 0 and .5 as it slows down
-					// todo is isMoving ever true? isDragging is broken
-					// if (scrollBooster.getState().isMoving) {
-					scrollBooster.setPosition({
-						x: scrollLeft,
-						y: 0,
-					})
-					// }
-
-					// optimization, only seek audio at the end of a scroll input
-					targetTime = timeFromWordIndex(activeWordIndex)
-					currentTime = targetTime
-					isSeeking = false
-				}
+			if (isReset || !isSeeking) {
+				return
 			}
+
+			scrollLeftDelta = scrollWrapperElement.scrollLeft - scrollLeft
+			scrollLeft = scrollWrapperElement.scrollLeft
+
+			// Doesn't really work on ios...
+			if (isUserHoldingDownFingerOrMouse || scrollLeftDelta !== 0) {
+				return
+			}
+
+			// Stop the scroll booster which can "flicker" between 0 and .5 as it slows down
+			// todo is isMoving ever true? isDragging is broken
+			// if (scrollBooster.getState().isMoving) {
+			scrollBooster.setPosition({
+				x: scrollLeft,
+				y: 0,
+			})
+			// }
+
+			// optimization, only seek audio at the end of a scroll input
+			targetTime = timeFromWordIndex(activeWordIndex)
+			currentTime = targetTime
+			isSeeking = false
 		}
 
 		intervalId = setInterval(() => {
 			loop()
 		}, 100)
 
-		wordElements = [
-			...// @ts-expect-error - Iterator?
-			scrollAreaElement.querySelectorAll<HTMLSpanElement>('span[data-time]'),
-		]
+		wordElements = [...scrollAreaElement.querySelectorAll<HTMLSpanElement>('span[data-time]')]
 
 		timeCache = generateTimeCache(chapterData, wordElements)
 
@@ -158,7 +159,7 @@
 	})
 
 	function generateTimeCache(data: ChapterData, wordSpans: HTMLSpanElement[]): number[] {
-		const timeCache: number[] = []
+		const times: number[] = []
 
 		// Iterate through each span element
 		for (const span of wordSpans) {
@@ -169,29 +170,27 @@
 					`data-time attribute is missing from word ${span.innerHTML} in chapter ${chapterData.title}`,
 				)
 			} else {
-				timeCache.push(Number.parseFloat(dataTime))
+				times.push(Number(dataTime))
 			}
 		}
 
 		// Add the final time
-		timeCache.push(chapterData.narrationTime.end)
+		times.push(chapterData.narrationTime.end)
 
-		return timeCache
+		return times
 	}
 
 	function scrollToOffset(offset: number, rightOnly = true, immediate = false) {
 		// Only scroll to the right
 		if (
+			// eslint-disable-next-line ts/strict-boolean-expressions -- bind:this leaves the element undefined before mount and null after destroy
 			scrollWrapperElement &&
 			rowWidth > 0 &&
-			(rightOnly ? offset >= scrollWrapperElement.scrollLeft : true)
+			(!rightOnly || offset >= scrollWrapperElement.scrollLeft)
 		) {
 			if (isSpringEnabled && !immediate) {
 				// This was the trick for the flashes...
-
-				tick().then(() => {
-					$scrollTween = offset
-				})
+				void tweenAfterTick(offset)
 			} else {
 				scrollWrapperElement.scrollLeft = offset
 				if (immediate) {
@@ -199,6 +198,11 @@
 				}
 			}
 		}
+	}
+
+	async function tweenAfterTick(offset: number) {
+		await tick()
+		$scrollTween = offset
 	}
 
 	// ==== Time / Word index / Scroll offset conversions ============================
@@ -229,15 +233,7 @@
 	}
 
 	function timeFromWordIndex(index: number): number {
-		if (index < 0) {
-			return timeCache[0]
-		}
-
-		if (index > wordElements.length) {
-			return timeCache[wordElements.length]
-		}
-
-		return timeCache[index]
+		return timeCache[index < 0 ? 0 : Math.min(index, wordElements.length)]
 	}
 
 	function wordIndexFromScrollOffset(offset: number): number {
@@ -393,19 +389,22 @@
 	// If we set target time while reset, react immediately
 	// todo mobile safari bugs?
 	function setTargetTime(time: number) {
-		if (isMounted && isReset && isChapterCoverVisible) {
-			const wordIndex = wordIndexFromTime(time)
-			const scrollPosition = wordIndex === -1 ? 0 : scrollOffsetFromWordIndex(wordIndex)
-			scrollToOffset(scrollPosition, false, true)
+		if (!isMounted || !isReset || !isChapterCoverVisible) {
+			return
 		}
+
+		const wordIndex = wordIndexFromTime(time)
+		const scrollPosition = wordIndex === -1 ? 0 : scrollOffsetFromWordIndex(wordIndex)
+		scrollToOffset(scrollPosition, false, true)
 	}
 
-	function setLoaded(loaded: boolean) {
-		if (loaded) {
-			tick().then(() => {
-				ready()
-			})
+	async function setLoaded(loaded: boolean) {
+		if (!loaded) {
+			return
 		}
+
+		await tick()
+		ready()
 	}
 
 	// Reactive zone --------------------------
@@ -477,43 +476,45 @@
 		}}
 		on:wheel|passive={(event) => {
 			// Allow gesture / wheel scrolling, e.g. two finger drag on mac track pad
-			if (Math.abs(event.deltaX) > 0) {
-				isSeeking = true
-				isUserHoldingDownFingerOrMouse = true
-
-				// Clear the timeout if it's already set
-				if (wheelTimer !== undefined) {
-					clearTimeout(wheelTimer)
-				}
-
-				// Set the new timeout
-				wheelTimer = setTimeout(() => {
-					wheelTimer = undefined
-					isUserHoldingDownFingerOrMouse = false
-				}, 200) // 200ms delay; adjust as needed
+			if (!(Math.abs(event.deltaX) > 0)) {
+				return
 			}
+
+			isSeeking = true
+			isUserHoldingDownFingerOrMouse = true
+
+			// Clear the timeout if it's already set
+			if (wheelTimer !== undefined) {
+				clearTimeout(wheelTimer)
+			}
+
+			// Set the new timeout
+			wheelTimer = setTimeout(() => {
+				wheelTimer = undefined
+				isUserHoldingDownFingerOrMouse = false
+			}, 200) // 200ms delay; adjust as needed
 		}}
 	>
 		<!-- funky comments here to avoid implicit white space issues -->
 		<!-- prettier-ignore -->
 		<div bind:this={scrollAreaElement} class=scroll-area class:hide-text={!showTextBeforeNarrationStarts && currentTime < chapterData.narrationTime.start}><!--
-		--><div class="spacer" /><!--
+		--><div class="spacer" ></div><!--
 			-->{#each chapterData.lines as line, lineIndex (lineIndex)}<!--
 					-->{@html line}<!--
 		-->{/each}<!--
-		--><div class="spacer" />
+		--><div class="spacer" ></div>
 		</div>
 
 		<!-- Control starfield visibility -->
 		{#if (isStarfieldEnabled && !isReset && currentTime > 0.5 && currentTime < chapterData.narrationTime.start - 3.5) || currentTime > chapterData.narrationTime.end + 3}
 			<div transition:fastFadeFromJs|local={{ duration: 3000 }}>
 				<Starfield
+					id={`particles-${chapterData.index}`}
 					--background="linear-gradient(0deg, #f5f5f5 0%, #f7f7f7 13%, #f7f7f7 100%) #f7f7f7"
 					--height="100%"
 					--position="absolute"
 					--top="0.1px"
 					color={starfieldColor}
-					id={`particles-${chapterData.index}`}
 				/>
 			</div>
 		{/if}
@@ -522,7 +523,7 @@
 	{#if debug}
 		<div
 			class="mouse pointer-events-none absolute top-0 left-[50%] h-[10dvh] w-1 touch-none bg-red-500"
-		/>
+		></div>
 	{/if}
 
 	{#if isReset}
@@ -583,24 +584,24 @@
 {#if isMobile}
 	<Audio
 		audioSources={chapterData.audio.files.map((file) => asset(`/${file}`))}
-		bind:currentTime
 		isPlaying={isPlayingAndNotSeeking}
+		{targetTime}
+		bind:currentTime
 		on:canplaythrough={() => {
 			isLoaded = true
 		}}
 		on:ended
-		{targetTime}
 	/>
 {:else}
 	<Audio
 		audioSources={chapterData.audio.files.map((file) => asset(`/${file}`))}
-		bind:currentTime
 		isPlaying={isPlayingAndNotSeeking}
+		{targetTime}
+		bind:currentTime
 		on:canplaythrough={() => {
 			isLoaded = true
 		}}
 		on:ended
-		{targetTime}
 	/>
 {/if}
 
@@ -664,6 +665,7 @@
 		/* height: 100%; */
 		overflow-x: scroll;
 		white-space: nowrap;
+		/* stylelint-disable-next-line defensive-css/require-background-repeat -- At the default mask size the gradient covers the whole element, so it never tiles */
 		mask-image: linear-gradient(90deg, transparent, rgb(0 0 0 / 100%) 20% 80%, transparent);
 	}
 

@@ -1,3 +1,4 @@
+import type { Handle } from '@sveltejs/kit'
 import { minify } from 'html-minifier'
 // eslint-disable-next-line import/no-unresolved
 import { building } from '$app/environment'
@@ -21,14 +22,12 @@ const minificationOptions = {
 	sortClassName: true,
 }
 
-// eslint-disable-next-line ts/require-await, jsdoc/require-jsdoc
-export async function handle({ event, resolve }) {
+// eslint-disable-next-line jsdoc/require-jsdoc
+export async function handle({ event, resolve }: Parameters<Handle>[0]) {
 	let page = ''
 
-	// eslint-disable-next-line ts/no-unsafe-return, ts/no-unsafe-call
 	return resolve(event, {
 		transformPageChunk({ done, html }) {
-			// eslint-disable-next-line ts/restrict-plus-operands
 			page += html
 			if (done) {
 				return building ? minify(page, minificationOptions) : page

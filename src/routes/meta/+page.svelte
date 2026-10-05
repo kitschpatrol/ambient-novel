@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" strictEvents>
 	import { faBomb, faTrash } from '@fortawesome/free-solid-svg-icons'
 	import UaParser from 'ua-parser-js'
 	import { browser } from '$app/environment'
@@ -13,7 +13,7 @@
 
 	async function uninstallServiceWorker() {
 		const registrations = await navigator.serviceWorker.getRegistrations()
-		for (let registration of registrations) {
+		for (const registration of registrations) {
 			await registration.unregister()
 		}
 
@@ -21,12 +21,15 @@
 	}
 
 	function clearServiceWorkerCache() {
-		if (browser && 'serviceWorker' in navigator) {
-			navigator.serviceWorker.controller?.postMessage({
-				action: 'clearCache',
-			})
-			cacheCount = getCacheCount()
+		if (!browser || !('serviceWorker' in navigator)) {
+			return
 		}
+
+		const { controller } = navigator.serviceWorker
+		controller?.postMessage({
+			action: 'clearCache',
+		})
+		cacheCount = getCacheCount()
 	}
 
 	async function getCacheCount(): Promise<number> {
@@ -61,6 +64,7 @@
 
 <svelte:head>
 	<title>Meta — The Valentine Mob</title>
+	<!-- eslint-disable-next-line svelte/no-nested-style-tag -- Route-specific body styles that must only apply while this page's head content is mounted -->
 	<style>
 		/* all the fixed position hacks (like ::before) are subtly broken */
 		body,
@@ -89,14 +93,14 @@
 		Service Workers: {#await swCount then count}
 			{count}
 		{:catch error}
-			<span style="color: red">{error.message}</span>
+			<span style:color="red">{error.message}</span>
 		{/await}
 	</p>
 	<p class="font-display text-white">
 		Cached Items: {#await cacheCount then count}
 			{count}
 		{:catch error}
-			<span style="color: red">{error.message}</span>
+			<span style:color="red">{error.message}</span>
 		{/await}
 	</p>
 	<Button icon={faBomb} label="Uninstall Service Worker" on:click={uninstallServiceWorker} />

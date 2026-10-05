@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" strictEvents>
 	import { faBookReader, faDiceD20, faPause, faRotateBack } from '@fortawesome/free-solid-svg-icons'
 	import random from 'lodash/random'
 	import shuffle from 'lodash/shuffle'
@@ -34,9 +34,9 @@
 		'#4e3bff',
 	]
 
-	let targetTimes = Array.from({ length: chapters.length }, () => 0)
+	const targetTimes = Array.from({ length: chapters.length }, () => 0)
 	let playStatus = Array.from({ length: chapters.length }, () => false)
-	let resetStatus = Array.from({ length: chapters.length }, () => true)
+	const resetStatus = Array.from({ length: chapters.length }, () => true)
 
 	let isResetting = false
 	let isPlayingThrough = false
@@ -44,11 +44,9 @@
 	$: somethingPlaying = playStatus.includes(true)
 	$: somethingNotReset = resetStatus.includes(false)
 
-	$: {
-		// Messing with anything stops playing through
-		if (!isResetting && isPlayingThrough && playStatus.filter(Boolean).length !== 1) {
-			isPlayingThrough = false
-		}
+	// Messing with anything stops playing through
+	$: if (!isResetting && isPlayingThrough && playStatus.filter(Boolean).length !== 1) {
+		isPlayingThrough = false
 	}
 
 	let blendingInProgress = false
@@ -65,7 +63,7 @@
 
 		// Pick some random chapters, and start playing
 		// lower max chapters on slow mobile
-		const chapterCount = isMobile ? random(2, 3) : random(2, 6)
+		const chapterCount = random(2, isMobile ? 3 : 6)
 		const chapterNumbers = Array.from({ length: chapters.length }, (_, i) => i)
 
 		// eslint-disable-next-line ts/require-array-sort-compare
@@ -80,13 +78,16 @@
 
 			targetTimes[chapterIndex] = startTime
 
-			tick().then(() => {
-				playStatus[chapterIndex] = true
-			})
+			void playAfterTick(chapterIndex)
 			await sleep(luckyBlendDelay)
 		}
 
 		blendingInProgress = false
+	}
+
+	async function playAfterTick(chapterIndex: number) {
+		await tick()
+		playStatus[chapterIndex] = true
 	}
 
 	let loadCount = -1
@@ -102,12 +103,21 @@
 		isResetting = true
 		const chapterIndicesToReset = getIndicesMatchingValue(resetStatus, false)
 
-		await delayedForEach(chapterIndicesToReset, (index) => (resetStatus[index] = true), resetDelay)
+		await delayedForEach(
+			chapterIndicesToReset,
+			(index) => {
+				resetStatus[index] = true
+			},
+			resetDelay,
+		)
 		await sleep(config.CHAPTER_COVER_TRANSITION_DURATION - resetDelay)
 		isResetting = false
 	}
 
-	const sleep = async (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+	const sleep = async (ms: number) =>
+		new Promise((resolve) => {
+			setTimeout(resolve, ms)
+		})
 </script>
 
 <svelte:window bind:innerWidth={width} />
@@ -119,11 +129,15 @@
 	{#if loadCount >= index && width > 0}
 		<!-- {#if 0 >= index && width > 0} -->
 		<Track
+			chapterColor={chapterColors[index]}
+			chapterData={chapters[index]}
+			ready={() => {
+				loadCount++
+			}}
+			rowWidth={width}
 			bind:isPlaying={playStatus[index]}
 			bind:isReset={resetStatus[index]}
 			bind:targetTime={targetTimes[index]}
-			chapterColor={chapterColors[index]}
-			chapterData={chapters[index]}
 			on:ended={() => {
 				if (isPlayingThrough) {
 					// TODO
@@ -140,10 +154,6 @@
 					// Reached the end of the book
 				}
 			}}
-			ready={() => {
-				loadCount++
-			}}
-			rowWidth={width}
 		/>
 	{:else}
 		<TrackPlaceholder chapterColor={chapterColors[index]} chapterData={chapters[index]} />
@@ -151,7 +161,7 @@
 {/each}
 
 <footer>
-	<div class="flex h-full w-full justify-between gap-6 max-sm:gap-1" id="controls">
+	<div id="controls" class="flex h-full w-full justify-between gap-6 max-sm:gap-1">
 		<span class="flex basis-lg">
 			<Button
 				icon={faBookReader}
@@ -171,7 +181,7 @@
 				on:click={onLuckyBlend}
 			/>
 		</span>
-		<span />
+		<span></span>
 		<span class="flex basis-lg">
 			<Button
 				icon={faPause}

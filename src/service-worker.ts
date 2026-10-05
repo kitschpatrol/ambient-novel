@@ -1,5 +1,3 @@
-/* eslint-disable ts/no-unsafe-assignment */
-/* eslint-disable ts/no-unsafe-argument */
 /* eslint-disable ts/no-unsafe-member-access */
 /* eslint-disable ts/no-unsafe-call */
 /* eslint-disable ts/triple-slash-reference */
@@ -19,21 +17,26 @@ import { files } from '$service-worker'
 const filesToCache = new Set(files.filter((f) => f.endsWith('m4a')))
 const cacheName = `tvm-audio-cache`
 
-self.addEventListener('install', () => {
+addEventListener('install', () => {
 	// eslint-disable-next-line ts/no-explicit-any, unicorn/prefer-global-this
 	;(self as any).skipWaiting()
 
 	// Console.log('SW installed');
 })
 
-self.addEventListener('activate', async () => {
+addEventListener('activate', () => {
+	void activate()
+})
+
+async function activate() {
 	// Console.log('SW activated');
 
 	// eslint-disable-next-line ts/no-explicit-any, unicorn/prefer-global-this
 	;(self as any).clients.claim()
 
 	// Delete old caches
-	for (const key of await caches.keys()) {
+	const cacheKeys = await caches.keys()
+	for (const key of cacheKeys) {
 		if (key !== cacheName) {
 			// Console.log(`Removing stale cache ${key}`);
 			await caches.delete(key)
@@ -54,34 +57,33 @@ self.addEventListener('activate', async () => {
 			await cache.delete(cachedFile)
 		}
 	}
-})
+}
 
 // Tricky handler that fetches and caches the full file if needed
 // even if it's responding to a range request...
 // if the file's already in cache, serve a range response if necessary
 
-// eslint-disable-next-line ts/no-explicit-any
-const m4aHandler = async ({ event }: { event: any }) => {
+const m4aHandler = async ({ request }: { request: Request }) => {
 	const cache = await caches.open(cacheName)
 
-	// Console.log('SW handling', event.request.url);
+	// Console.log('SW handling', request.url);
 
-	let response = await cache.match(event.request)
+	let response = await cache.match(request)
 
 	// Cache the request
 	if (response) {
 		// Console.log('SW found match in cache');
 	} else {
 		// Clone the request to manipulate headers
-		const newHeaders = new Headers(event.request.headers)
+		const newHeaders = new Headers(request.headers)
 		newHeaders.delete('Range')
 
-		const newRequest = new Request(event.request.url, {
-			credentials: event.request.credentials,
+		const newRequest = new Request(request.url, {
+			credentials: request.credentials,
 			headers: newHeaders,
-			method: event.request.method,
-			mode: event.request.mode,
-			redirect: event.request.redirect,
+			method: request.method,
+			mode: request.mode,
+			redirect: request.redirect,
 		})
 
 		// Fetch the full .m4a file
@@ -89,16 +91,16 @@ const m4aHandler = async ({ event }: { event: any }) => {
 
 		if (response.status === 200) {
 			// Put it in the cache
-			// console.log('SW Caching', event.request.url);
-			await cache.put(event.request, response.clone())
+			// console.log('SW Caching', request.url);
+			await cache.put(request, response.clone())
 		} else {
-			console.error(`SW failed to fetch ${event.request.url}`)
+			console.error(`SW failed to fetch ${request.url}`)
 		}
 	}
 
 	// Create a partial response if this is a Range request
-	if (event.request.headers.has('Range')) {
-		const partialResponse = await createPartialResponse(event.request, response)
+	if (request.headers.has('Range')) {
+		const partialResponse = await createPartialResponse(request, response)
 		return partialResponse
 	}
 
@@ -119,36 +121,41 @@ type ServiceWorkerMessageEvent = Event & {
 	}
 }
 
-self.addEventListener('message', (event: ServiceWorkerMessageEvent) => {
+addEventListener('message', (event: ServiceWorkerMessageEvent) => {
 	// eslint-disable-next-line ts/no-unnecessary-condition
 	if (event.data?.action === 'clearCache') {
-		// Clear the cache
-		caches
-			.keys()
-			.then(async (cacheNames: string[]) =>
-				Promise.all(cacheNames.map(async (cacheName: string) => caches.delete(cacheName))),
-			)
-			.then(() => {
-				// Console.log('Caches cleared');
-			})
-			.catch((_error: unknown) => {
-				// Console.log('Error clearing caches', _error);
-			})
+		void clearCaches()
 	}
 })
 
-self.addEventListener('message', async (event: ServiceWorkerMessageEvent) => {
+async function clearCaches() {
+	try {
+		const cacheNames = await caches.keys()
+		await Promise.all(cacheNames.map(async (name) => caches.delete(name)))
+		// Console.log('Caches cleared');
+	} catch {
+		// Console.log('Error clearing caches');
+	}
+}
+
+addEventListener('message', (event: ServiceWorkerMessageEvent) => {
+	void postCacheCount(event)
+})
+
+async function postCacheCount(event: ServiceWorkerMessageEvent) {
 	// eslint-disable-next-line ts/no-unnecessary-condition
-	if (event.data?.action === 'getCacheCount') {
-		const totalCount = await countCachedItems()
-
-		// Send back the total count to the main thread
-		// eslint-disable-next-line ts/no-explicit-any
-		;((event as any).ports[0] as MessagePort).postMessage({
-			cacheCount: totalCount,
-		})
+	if (event.data?.action !== 'getCacheCount') {
+		return
 	}
-})
+
+	const totalCount = await countCachedItems()
+
+	// Send back the total count to the main thread
+	// eslint-disable-next-line ts/no-explicit-any
+	;((event as any).ports[0] as MessagePort).postMessage({
+		cacheCount: totalCount,
+	})
+}
 
 const countCachedItems = async () => {
 	let totalCount = 0
@@ -156,9 +163,9 @@ const countCachedItems = async () => {
 	// Get the keys of all cache names
 	const cacheNames: string[] = await caches.keys()
 
-	for (const cacheName of cacheNames) {
+	for (const name of cacheNames) {
 		// Open each cache by its name
-		const cache = await caches.open(cacheName)
+		const cache = await caches.open(name)
 
 		// Get keys of all items in this cache
 		const requestKeys: Request[] = (await cache.keys()) as Request[]

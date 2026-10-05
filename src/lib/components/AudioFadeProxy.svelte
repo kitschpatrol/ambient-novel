@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" strictEvents>
 	// This wraps the Audio component and uses Svelte's transitions functionality
 	// to fade the volume in and out when the audio is played and paused.
 	import Audio from '$lib/components/Audio.svelte'
@@ -19,28 +19,26 @@
 	let isPlayingProxy = isPlaying
 
 	// A bit precarious
-	$: {
-		if (isPlaying && !isPlayingProxy) {
-			// Starting to play
-			targetTimeProxy = targetTime
-			currentTime = targetTime
-			isPlayingProxy = true
-		} else if (isPlaying && isPlayingProxy) {
-			// Playing
-			targetTimeProxy = targetTime
-			currentTime = currentTimeProxy
-		} else if (!isPlaying && isPlayingProxy) {
-			// Starting to pause
-			// remember play position... this creates the issue...
-			// remember in parent instead
-			// targetTimeProxy = currentTime;
-			// targetTime = currentTime;
-			isPlayingProxy = false
-		} else if (!isPlaying && !isPlayingProxy) {
-			// Paused
-			targetTimeProxy = targetTime
-			currentTime = targetTimeProxy
-		}
+	$: if (isPlaying && !isPlayingProxy) {
+		// Starting to play
+		targetTimeProxy = targetTime
+		currentTime = targetTime
+		isPlayingProxy = true
+	} else if (isPlaying && isPlayingProxy) {
+		// Playing
+		targetTimeProxy = targetTime
+		currentTime = currentTimeProxy
+	} else if (!isPlaying && isPlayingProxy) {
+		// Starting to pause
+		// remember play position... this creates the issue...
+		// remember in parent instead
+		// targetTimeProxy = currentTime;
+		// targetTime = currentTime;
+		isPlayingProxy = false
+	} else if (!isPlaying && !isPlayingProxy) {
+		// Paused
+		targetTimeProxy = targetTime
+		currentTime = targetTimeProxy
 	}
 
 	// Crossfade...
@@ -53,11 +51,11 @@
 {#key isPlaying}
 	<Audio
 		{audioSources}
-		bind:currentTime={currentTimeProxy}
 		isPlaying={isPlayingProxy}
 		{maxVolume}
+		targetTime={targetTimeProxy}
+		bind:currentTime={currentTimeProxy}
 		on:canplaythrough
 		on:ended
-		targetTime={targetTimeProxy}
 	/>
 {/key}

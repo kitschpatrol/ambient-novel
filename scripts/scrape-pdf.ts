@@ -58,7 +58,7 @@ function chapterTextToLines(
 	lines = lines.map((line) => {
 		let lineWithEmoji = line
 		for (const [pdfEmoji, scriptEmoji] of emojiReplacements) {
-			lineWithEmoji = lineWithEmoji.replace(pdfEmoji, scriptEmoji)
+			lineWithEmoji = lineWithEmoji.replace(pdfEmoji, () => scriptEmoji)
 		}
 
 		return lineWithEmoji
@@ -161,7 +161,7 @@ for (let i = 0; i < chapterDelimiters.length; i++) {
 		chapterBreakOnIndentConfig[i],
 	)
 
-	for (const [_i, line] of chapterLines.entries()) {
+	for (const line of chapterLines) {
 		chapterJson.lines.push(line)
 		// Console.log(`${_i}|${line}`);
 		// console.log(`${line}`);

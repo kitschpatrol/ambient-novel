@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" strictEvents>
 	// Import { browser } from '$app/environment';
 	// Import { pwaInfo } from 'virtual:pwa-info';
 	import { page } from '$app/stores'
@@ -43,6 +43,10 @@
 	// 	const audioContext = new window.AudioContext();
 	// }
 
+	type $$Slots = {
+		default: Record<string, never>
+	}
+
 	$: canonicalUrl = `${CANONICAL_PATH}${$page.route.id === '/' ? '' : $page.route.id}`
 </script>
 
@@ -50,4 +54,4 @@
 	<link href={canonicalUrl} rel="canonical" />
 </svelte:head>
 
-<slot />
+<slot></slot>

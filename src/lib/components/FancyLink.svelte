@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" strictEvents>
 	import type { IconDefinition } from '@fortawesome/free-solid-svg-icons'
 	// eslint-disable-next-line import/no-named-as-default
 	import Fa from 'svelte-fa'
@@ -13,6 +13,10 @@
 
 	export let icon: IconDefinition | undefined = undefined
 
+	type $$Slots = {
+		default: Record<string, never>
+	}
+
 	$: relationship = openInNewTab ? 'noopener noreferrer' : undefined
 	$: target = openInNewTab ? '_blank' : undefined
 	$: download = downloadLink ? '' : undefined
@@ -24,7 +28,7 @@
 		<img {alt} height={imageHeight} src={imagePath} width={imageWidth} />
 	</div>
 	<div>
-		<slot />
+		<slot></slot>
 		{#if icon}
 			<Fa {icon} />
 		{/if}
@@ -36,6 +40,7 @@
 		/* fixes background bleed-through */
 		transform: translate(0);
 		display: grid;
+		/* stylelint-disable-next-line defensive-css/require-grid-minmax -- minmax(0, 1fr) lets columns get narrower than their content, changing the existing layout */
 		grid-template-columns: 1fr 1fr;
 		place-items: center center;
 		border-radius: 1rem;
@@ -53,6 +58,7 @@
 
 	@media (width <= 600px) {
 		a {
+			/* stylelint-disable-next-line defensive-css/require-grid-minmax -- minmax(0, 1fr) lets the column get narrower than its content, changing the existing layout */
 			grid-template-columns: 1fr;
 			grid-template-rows: 1fr 1fr;
 		}
@@ -85,6 +91,7 @@
 		object-fit: contain;
 	}
 
+	/* stylelint-disable-next-line defensive-css/no-accidental-hover -- a (hover: hover) query would also drop the :active feedback on touch devices */
 	a:active,
 	a:hover {
 		background-color: rgb(255 255 255 / 60%);
