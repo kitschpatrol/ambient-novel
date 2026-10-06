@@ -1,8 +1,8 @@
-<script lang="ts" strictEvents>
+<script lang="ts">
+	import Starfield from '#lib/components/Starfield.svelte'
 	import { onMount } from 'svelte'
 	import { fade } from 'svelte/transition'
-	import Starfield from '$lib/components/Starfield.svelte'
-	let isMounted = false
+	let isMounted = $state(false)
 	onMount(() => {
 		isMounted = true
 	})
@@ -37,7 +37,7 @@
 </main>
 
 {#if isMounted}
-	<div class="star-wrapper" transition:fade={{ delay: 250, duration: 3000 }}>
+	<div class="star-wrapper" transition:fade|global={{ delay: 250, duration: 3000 }}>
 		<Starfield
 			--height="100%"
 			--position="fixed"

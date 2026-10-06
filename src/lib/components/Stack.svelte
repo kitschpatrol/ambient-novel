@@ -1,25 +1,25 @@
-<script lang="ts" strictEvents>
+<script lang="ts">
+	import type { BookData } from '#lib/schemas/book-schema.js'
 	import { faBookReader, faDiceD20, faPause, faRotateBack } from '@fortawesome/free-solid-svg-icons'
+	import Button from '#lib/components/Button.svelte'
+	import Header from '#lib/components/Header.svelte'
+	import Track from '#lib/components/Track.svelte'
+	import TrackPlaceholder from '#lib/components/TrackPlaceholder.svelte'
+	import * as config from '#lib/config.js'
+	import { delayedForEach } from '#lib/utils/collection/delayed-for-each.js'
+	import { getIndicesMatchingValue } from '#lib/utils/collection/get-indices-matching-value.js'
 	import random from 'lodash/random'
 	import shuffle from 'lodash/shuffle'
 	import { onMount, tick } from 'svelte'
 	import UaParser from 'ua-parser-js'
-	import type { BookData } from '$lib/schemas/book-schema'
-	import Button from '$lib/components/Button.svelte'
-	import Header from '$lib/components/Header.svelte'
-	import Track from '$lib/components/Track.svelte'
-	import TrackPlaceholder from '$lib/components/TrackPlaceholder.svelte'
-	import * as config from '$lib/config'
-	import { delayedForEach } from '$lib/utils/collection/delayed-for-each'
-	import { getIndicesMatchingValue } from '$lib/utils/collection/get-indices-matching-value'
 
-	export let bookData: BookData
-	const { chapters } = bookData
+	let { bookData }: { bookData: BookData } = $props()
+	const { chapters } = $derived(bookData)
 	const luckyBlendDelay = 250
 	const resetDelay = 100
 	const isMobile = (new UaParser().getDevice().type ?? '') === 'mobile'
 
-	let width = 0
+	let width = $state(0)
 
 	const chapterColors = [
 		'#f01ef6',
@@ -34,22 +34,28 @@
 		'#4e3bff',
 	]
 
-	const targetTimes = Array.from({ length: chapters.length }, () => 0)
-	let playStatus = Array.from({ length: chapters.length }, () => false)
-	const resetStatus = Array.from({ length: chapters.length }, () => true)
+	// The chapter count is fixed for the life of the component, so the per-chapter
+	// state arrays only need its initial value
+	// svelte-ignore state_referenced_locally
+	const totalChapters = chapters.length
+	const targetTimes = $state(Array.from({ length: totalChapters }, () => 0))
+	let playStatus = $state(Array.from({ length: totalChapters }, () => false))
+	const resetStatus = $state(Array.from({ length: totalChapters }, () => true))
 
-	let isResetting = false
-	let isPlayingThrough = false
+	let isResetting = $state(false)
+	let isPlayingThrough = $state(false)
 
-	$: somethingPlaying = playStatus.includes(true)
-	$: somethingNotReset = resetStatus.includes(false)
+	const somethingPlaying = $derived(playStatus.includes(true))
+	const somethingNotReset = $derived(resetStatus.includes(false))
 
 	// Messing with anything stops playing through
-	$: if (!isResetting && isPlayingThrough && playStatus.filter(Boolean).length !== 1) {
-		isPlayingThrough = false
-	}
+	$effect(() => {
+		if (!isResetting && isPlayingThrough && playStatus.filter(Boolean).length !== 1) {
+			isPlayingThrough = false
+		}
+	})
 
-	let blendingInProgress = false
+	let blendingInProgress = $state(false)
 
 	async function onLuckyBlend() {
 		if (blendingInProgress) {
@@ -70,13 +76,16 @@
 		const randomChapters = shuffle(chapterNumbers).slice(0, chapterCount).toSorted()
 
 		for (const chapterIndex of randomChapters) {
-			const startTime = random(
-				chapters[chapterIndex].narrationTime.start * 1.25,
-				chapters[chapterIndex].narrationTime.end * 0.75,
+			const chapter = chapters[chapterIndex]
+			if (chapter === undefined) {
+				continue
+			}
+
+			targetTimes[chapterIndex] = random(
+				chapter.narrationTime.start * 1.25,
+				chapter.narrationTime.end * 0.75,
 				true,
 			)
-
-			targetTimes[chapterIndex] = startTime
 
 			void playAfterTick(chapterIndex)
 			await sleep(luckyBlendDelay)
@@ -90,12 +99,12 @@
 		playStatus[chapterIndex] = true
 	}
 
-	let loadCount = -1
+	let loadCount = $state(-1)
 	onMount(() => {
 		loadCount++
 	})
 
-	$: isAllLoaded = loadCount === chapters.length
+	const isAllLoaded = $derived(loadCount === chapters.length)
 
 	// Returns when all animations are done
 	async function resetAll() {
@@ -124,39 +133,34 @@
 
 <Header --height="calc(100dvh / 12)" />
 
-<!-- eslint-disable-next-line ts/no-unused-vars -->
-{#each chapters as _, index (index)}
+{#each chapters as chapter, index (index)}
 	{#if loadCount >= index && width > 0}
-		<!-- {#if 0 >= index && width > 0} -->
 		<Track
 			chapterColor={chapterColors[index]}
-			chapterData={chapters[index]}
-			ready={() => {
+			chapterData={chapter}
+			onended={() => {
+				if (isPlayingThrough) {
+					// Resetting also clears the playing through flag
+					void resetAll()
+				} else {
+					resetStatus[index] = true
+				}
+
+				// Continue with the next chapter, unless we've reached the end of the book
+				if (index < chapters.length - 1) {
+					playStatus[index + 1] = true
+				}
+			}}
+			onready={() => {
 				loadCount++
 			}}
 			rowWidth={width}
 			bind:isPlaying={playStatus[index]}
 			bind:isReset={resetStatus[index]}
 			bind:targetTime={targetTimes[index]}
-			on:ended={() => {
-				if (isPlayingThrough) {
-					// TODO
-
-					resetAll() // This throws the right flag
-				} else {
-					resetStatus[index] = true
-				}
-
-				if (index < chapters.length - 1) {
-					const nextChapterIndex = index + 1
-					playStatus[nextChapterIndex] ||= true
-				} else {
-					// Reached the end of the book
-				}
-			}}
 		/>
 	{:else}
-		<TrackPlaceholder chapterColor={chapterColors[index]} chapterData={chapters[index]} />
+		<TrackPlaceholder chapterColor={chapterColors[index]} chapterData={chapter} />
 	{/if}
 {/each}
 
@@ -168,7 +172,7 @@
 				isDown={isPlayingThrough}
 				isEnabled={!isPlayingThrough && isAllLoaded}
 				label="Play Through"
-				on:click={async () => {
+				onclick={async () => {
 					await resetAll()
 					playStatus[0] = true
 					isPlayingThrough = true
@@ -178,7 +182,7 @@
 				icon={faDiceD20}
 				isEnabled={isAllLoaded && !blendingInProgress}
 				label="Lucky Blend"
-				on:click={onLuckyBlend}
+				onclick={onLuckyBlend}
 			/>
 		</span>
 		<span></span>
@@ -187,7 +191,7 @@
 				icon={faPause}
 				isEnabled={somethingPlaying && isAllLoaded}
 				label="Pause all"
-				on:click={() => {
+				onclick={() => {
 					playStatus = playStatus.map(() => false)
 				}}
 			/>
@@ -195,7 +199,7 @@
 				icon={faRotateBack}
 				isEnabled={somethingNotReset && isAllLoaded && !isResetting}
 				label="Reset all"
-				on:click={resetAll}
+				onclick={resetAll}
 			/>
 		</span>
 	</div>

@@ -1,11 +1,10 @@
-<script lang="ts" strictEvents>
+<script lang="ts">
+	import Header from '#lib/components/Header.svelte'
+	import Starfield from '#lib/components/Starfield.svelte'
+	import bookSourceRaw from '#lib/data/book-source.json'
 	import { onMount } from 'svelte'
 	import { fade } from 'svelte/transition'
-	import type { BookSource } from '$lib/schemas/book-source-schema'
 	import { asset } from '$app/paths'
-	import Header from '$lib/components/Header.svelte'
-	import Starfield from '$lib/components/Starfield.svelte'
-	import bookSourceRaw from '$lib/data/book-source.json'
 	const bookData = bookSourceRaw
 
 	// Doing the server-loaded approach in the "text" subdirectory messes up the
@@ -15,12 +14,12 @@
 	// Clean up rare HTML-conflicting entities
 	// Encoding everything would be trickier because of the embedded HTML
 	for (const chapter of chapters) {
-		for (let i = 0; i < chapter.lines.length; i++) {
-			chapter.lines[i] = chapter.lines[i].replace('< They all snap >', '&lt; They all snap &gt;')
-		}
+		chapter.lines = chapter.lines.map((line) =>
+			line.replace('< They all snap >', '&lt; They all snap &gt;'),
+		)
 	}
 
-	let isMounted = false
+	let isMounted = $state(false)
 	onMount(() => {
 		isMounted = true
 	})
@@ -77,7 +76,12 @@
 				<span class="chapter-number">{index + 1}</span>{chapter.title}
 			</h3>
 			{#each chapter.lines as line, lineIndex (lineIndex)}
-				<p>{@html line}</p>
+				{#if line.includes('<ul')}
+					<!-- A list can't live inside a paragraph, the HTML parser would close the paragraph early and break hydration -->
+					<div class="list">{@html line}</div>
+				{:else}
+					<p>{@html line}</p>
+				{/if}
 			{/each}
 		</section>
 	{/each}
@@ -85,11 +89,11 @@
 <img
 	class="heart mx-auto mb-16 w-[10vw] max-w-16 pb-16 opacity-90"
 	alt="heart"
-	src={asset('/heart.svg')}
+	src={asset('heart.svg')}
 />
 
 {#if isMounted}
-	<div class="star-wrapper" transition:fade={{ delay: 250, duration: 3000 }}>
+	<div class="star-wrapper" transition:fade|global={{ delay: 250, duration: 3000 }}>
 		<Starfield
 			--height="calc(100svh - (100svh / 12))"
 			--position="fixed"
@@ -213,18 +217,17 @@
 	}
 
 	/* Optional Options & Opportunities list */
-	main > section.chapter > p :global(ul li) {
+	main > section.chapter > .list :global(li) {
 		margin-left: 3em;
-		text-indent: 0;
 		list-style-type: disc;
 	}
 
 	/* No breaks for the multi-line  */
-	main > section.chapter > p:has(ul) {
+	main > section.chapter > .list {
 		margin-top: 1em;
 	}
 
-	main > section.chapter > p:has(ul) + p:has(ul) {
+	main > section.chapter > .list + .list {
 		margin-top: 0;
 		margin-bottom: 1em;
 	}

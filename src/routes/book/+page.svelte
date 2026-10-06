@@ -1,13 +1,13 @@
-<script lang="ts" strictEvents>
+<script lang="ts">
 	import { faArrowRight, faCloudArrowDown } from '@fortawesome/free-solid-svg-icons'
+	import FancyLink from '#lib/components/FancyLink.svelte'
+	import Header from '#lib/components/Header.svelte'
+	import Starfield from '#lib/components/Starfield.svelte'
 	import { onMount } from 'svelte'
 	import { fade } from 'svelte/transition'
 	import { asset, resolve } from '$app/paths'
-	import FancyLink from '$lib/components/FancyLink.svelte'
-	import Header from '$lib/components/Header.svelte'
-	import Starfield from '$lib/components/Starfield.svelte'
 
-	let isMounted = false
+	let isMounted = $state(false)
 	onMount(() => {
 		isMounted = true
 	})
@@ -39,7 +39,7 @@
 />
 
 {#if isMounted}
-	<div class="star-wrapper" transition:fade={{ delay: 250, duration: 3000 }}>
+	<div class="star-wrapper" transition:fade|global={{ delay: 250, duration: 3000 }}>
 		<Starfield
 			--height="calc(100svh - (100svh / 12))"
 			--position="fixed"
@@ -66,7 +66,7 @@
 		href="https://39forkspublishing.square.site/product/the-valentine-mob/97"
 		icon={faArrowRight}
 		imageHeight={3401}
-		imagePath={asset('/images/book.webp')}
+		imagePath={asset('images/book.webp')}
 		imageWidth={2000}
 	>
 		The 72-page, perfect-bound paperback.<br /><em>Buy direct from 39forks Publishing</em>
@@ -78,7 +78,7 @@
 		href="https://39forkspublishing.square.site/product/the-valentine-mob-deluxe-version/98"
 		icon={faArrowRight}
 		imageHeight={4463}
-		imagePath={asset('/images/deluxe.webp')}
+		imagePath={asset('images/deluxe.webp')}
 		imageWidth={4644}
 	>
 		The book, plus a custom-built Lego box featuring sixteen Valentine Mob Minifigs.
@@ -89,10 +89,10 @@
 	<FancyLink
 		alt="Screenshot of The&nbsp;Valentine&nbsp;Mob playing on an iPhone in Apple Music"
 		downloadLink={true}
-		href={asset('/audio-book/The Valentine Mob - Complete Audio Book.mp3')}
+		href={asset('audio-book/The Valentine Mob - Complete Audio Book.mp3')}
 		icon={faCloudArrowDown}
 		imageHeight={2774}
-		imagePath={asset('/images/audio.webp')}
+		imagePath={asset('images/audio.webp')}
 		imageWidth={1415}
 		openInNewTab={false}
 	>
@@ -103,10 +103,10 @@
 	<h3>The Text</h3>
 	<FancyLink
 		alt="The Valentine Mob deluxe edition with book and lego set"
-		href={resolve('/text', {})}
+		href={resolve('/text')}
 		icon={faArrowRight}
 		imageHeight={3550}
-		imagePath={asset('/images/text.webp')}
+		imagePath={asset('images/text.webp')}
 		imageWidth={5063}
 	>
 		The complete linear text of The&nbsp;Valentine&nbsp;Mob.<br />
@@ -120,7 +120,7 @@
 		href="https://39forkspublishing.square.site/s/shop"
 		icon={faArrowRight}
 		imageHeight={2006}
-		imagePath={asset('/images/store.webp')}
+		imagePath={asset('images/store.webp')}
 		imageWidth={2723}
 	>
 		Discover more books, projects, and games from 39forks.
@@ -130,7 +130,7 @@
 <img
 	class="heart mx-auto mb-16 w-[10vw] max-w-16 pb-16 opacity-90"
 	alt="heart"
-	src={asset('/heart.svg')}
+	src={asset('heart.svg')}
 />
 
 <style lang="postcss">

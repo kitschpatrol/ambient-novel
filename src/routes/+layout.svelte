@@ -1,57 +1,18 @@
-<script lang="ts" strictEvents>
-	// Import { browser } from '$app/environment';
-	// Import { pwaInfo } from 'virtual:pwa-info';
-	import { page } from '$app/stores'
-	import { CANONICAL_PATH } from '$lib/config'
-	// Import { onMount } from 'svelte';
+<script lang="ts">
+	import { CANONICAL_PATH } from '#lib/config.js'
+	import { page } from '$app/state'
+	import type { LayoutProps } from './$types'
 	import '/src/global.css'
-	/// TODO remove this
-	// onMount(() => {
-	// 	navigator.serviceWorker.getRegistrations().then(function (registrations) {
-	// 		for (let registration of registrations) {
-	// 			console.log('unregister sw');
-	// 			registration.unregister();
-	// 		}
-	// 	});
-	// });
 
-	// onMount(async () => {
-	// if (pwaInfo) {
-	// 	const { registerSW } = await import('virtual:pwa-register');
-	// 	registerSW({
-	// 		immediate: true,
-	// 		onRegistered(r) {
-	// 			// uncomment following code if you want check for updates
-	// 			// r && setInterval(() => {
-	// 			//    console.log('Checking for sw update')
-	// 			//    r.update()
-	// 			// }, 20000 /* 20s for testing purposes */)
-	// 			console.log(`SW Registered: ${r}`);
-	// 		},
-	// 		onRegisterError(error) {
-	// 			console.log('SW registration error', error);
-	// 		}
-	// 	});
-	// }
-	// });
+	let { children }: LayoutProps = $props()
 
-	// $: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : '';
-
-	// wtf...
-	// https://stackoverflow.com/questions/9811429/html5-audio-tag-on-safari-has-a-delay
-	// if (browser) {
-	// 	const audioContext = new window.AudioContext();
-	// }
-
-	type $$Slots = {
-		default: Record<string, never>
-	}
-
-	$: canonicalUrl = `${CANONICAL_PATH}${$page.route.id === '/' ? '' : $page.route.id}`
+	const canonicalUrl = $derived(
+		`${CANONICAL_PATH}${page.route.id === '/' ? '' : (page.route.id ?? '')}`,
+	)
 </script>
 
 <svelte:head>
 	<link href={canonicalUrl} rel="canonical" />
 </svelte:head>
 
-<slot></slot>
+{@render children()}

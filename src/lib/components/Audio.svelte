@@ -1,16 +1,31 @@
-<script lang="ts" strictEvents>
+<script lang="ts">
+	import { fadeVolume } from '#lib/utils/transition/fade-volume.js'
 	import { lookup } from 'mrmime'
 	import { onMount } from 'svelte'
-	import { fadeVolume } from '$lib/utils/transition/fade-volume'
 
-	export let audioSources: string[]
-	export let isPlaying = false
-	export let maxVolume = 1
-	export let loop = false
-	export let currentTime = 0 // Actual time of audio
-	export let targetTime = 0 // Time we're requesting
+	type Props = {
+		audioSources: string[]
+		currentTime?: number // Actual time of audio
+		isPlaying?: boolean
+		loop?: boolean
+		maxVolume?: number
+		oncanplaythrough?: () => void
+		onended?: () => void
+		targetTime?: number // Time we're requesting
+	}
 
-	let audioElement: HTMLAudioElement | undefined
+	let {
+		audioSources,
+		currentTime = $bindable(0),
+		isPlaying = false,
+		loop = false,
+		maxVolume = 1,
+		oncanplaythrough,
+		onended,
+		targetTime = 0,
+	}: Props = $props()
+
+	let audioElement: HTMLAudioElement | undefined = $state()
 
 	const retryIntervalMs = 5000
 	let maxRetry = 3
@@ -30,7 +45,7 @@
 				if (audioElement) {
 					mount()
 				} else {
-					console.error('audioElement is null')
+					console.error('audioElement is missing')
 				}
 			}, retryIntervalMs)
 		}
@@ -45,7 +60,6 @@
 		// not sure if any of this helps
 		// https://stackoverflow.com/a/73910818/2437832
 		const savedCurrentTime = audioElement.currentTime
-		// AudioElement.src = audioSources[0];
 
 		audioElement.load()
 
@@ -72,43 +86,6 @@
 		mount()
 	})
 
-	// Function afterLoaded() {
-
-	// }
-
-	// // have to use this instead of onMount to avoid null reference issues in Chapter
-	// function onAudioElementMounted(node: HTMLAudioElement) {
-	// 	console.log('mount audio');
-	// 	// forcing load fixes safari bugs changing chapters while playing
-	// 	// https://stackoverflow.com/a/73441313/2437832
-	// 	// needed even on a server that supports 206s
-	// 	// node.load();
-	// 	node.currentTime = targetTime;
-	// 	node.
-	// }
-
-	const seekAudio = (time: number) => {
-		// Return new Promise((resolve) => {
-		// 	// Event listener for when the seek is complete
-		// 	// const onSeeked = () => {
-		// 	// 	// console.log('seeked');
-		// 	// 	// Remove the event listener to clean up
-		// 	// 	audioElement.removeEventListener('seeked', onSeeked);
-		// 	// 	// Resolve the promise
-		// 	// 	// resolve();
-		// 	// };
-
-		// 	// Add the event listener
-		// 	// audioElement.addEventListener('seeked', onSeeked);
-
-		// 	// Perform the seek
-		// 	audioElement.currentTime = time;
-		// });
-		if (audioElement) {
-			audioElement.currentTime = time
-		}
-	}
-
 	async function playAudio() {
 		if (audioElement) {
 			try {
@@ -125,13 +102,29 @@
 		}
 	}
 
-	$: isPlaying ? playAudio() : pauseAudio()
-	$: audioElement && seekAudio(targetTime)
+	$effect(() => {
+		if (isPlaying) {
+			void playAudio()
+		} else {
+			pauseAudio()
+		}
+	})
 
-	let currentTimeProxy: number = currentTime
-	let isInOutro = false
+	$effect(() => {
+		if (audioElement) {
+			audioElement.currentTime = targetTime
+		}
+	})
 
-	$: !isInOutro && (currentTime = currentTimeProxy)
+	let currentTimeProxy = $state(currentTime)
+	let isInOutro = $state(false)
+
+	// Don't send time updates up during transitions
+	$effect(() => {
+		if (!isInOutro) {
+			currentTime = currentTimeProxy
+		}
+	})
 </script>
 
 <!-- // adding preload="none" was key to currentTime bugs on mobile safari -->
@@ -142,36 +135,34 @@
 	bind:this={audioElement}
 	{loop}
 	muted
-	preload="auto"
-	bind:currentTime={currentTimeProxy}
-	on:canplaythrough
-	on:ended
-	on:error={() => {
+	{oncanplaythrough}
+	{onended}
+	onerror={() => {
 		console.error(`audio error for "${String(audioSources)}"`)
 		retry()
 	}}
-	on:introend
-	on:introstart={() => {
+	onintrostart={() => {
 		// Accommodates resumption during a transition, if that happens before a new Audio player is created
 		isInOutro = false
 	}}
-	on:outroend={() => {
+	onoutroend={() => {
 		isInOutro = false
 	}}
-	on:outrostart={() => {
-		// Don't send time updates during transitions
+	onoutrostart={() => {
 		isInOutro = true
 	}}
-	transition:fadeVolume|local={{ duration: 600 }}
+	preload="auto"
+	bind:currentTime={currentTimeProxy}
+	transition:fadeVolume={{ duration: 600 }}
 >
 	{#each audioSources as source (source)}
 		<source
-			src={source}
-			type={lookup(source) ?? 'audio'}
-			on:error={() => {
+			onerror={() => {
 				console.error(`audio source error for "${source}"`)
 				retry()
 			}}
+			src={source}
+			type={lookup(source) ?? 'audio'}
 		/>
 	{/each}
 	Your browser does not support the audio element.

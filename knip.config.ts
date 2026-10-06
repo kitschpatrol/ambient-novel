@@ -5,7 +5,7 @@ export default knipConfig({
 		'src/global.css',
 		'src/lib/components/**/*.svelte',
 		'src/lib/utils/**/*.ts',
-		'src/service-worker.ts',
+		'src/service-worker/index.ts',
 		'src/store.ts',
 	],
 	ignoreBinaries: ['jq', 'open'],

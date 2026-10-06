@@ -1,8 +1,8 @@
-<script lang="ts" strictEvents>
-	import Stack from '$lib/components/Stack.svelte'
-	import type { PageServerData } from './$types'
+<script lang="ts">
+	import Stack from '#lib/components/Stack.svelte'
+	import type { PageProps } from './$types'
 
-	export let data: PageServerData
+	let { data }: PageProps = $props()
 </script>
 
 <svelte:head>

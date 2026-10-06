@@ -1,41 +1,51 @@
-<svelte:options immutable={true} />
-
-<script lang="ts" strictEvents>
+<script lang="ts">
+	import type { ChapterData } from '#lib/schemas/book-schema.js'
 	import { faPause, faPlay, faRotateBack } from '@fortawesome/free-solid-svg-icons'
-	import { browser } from '$app/environment'
-	import { asset } from '$app/paths'
-	import Audio from '$lib/components/Audio.svelte'
-	// Import AudioFadeProxy from '$lib/components/AudioFadeProxy.svelte';
+	import Audio from '#lib/components/Audio.svelte'
+	import Button from '#lib/components/Button.svelte'
+	import ChapterCover from '#lib/components/ChapterCover.svelte'
+	import Starfield from '#lib/components/Starfield.svelte'
+	import { CHAPTER_COVER_TRANSITION_DURATION } from '#lib/config.js'
+	import { fastFadeFromJs } from '#lib/utils/transition/fast-fade-from-js.js'
+	import { fastFadeJs } from '#lib/utils/transition/fast-fade-js.js'
 	import ScrollBooster from 'scrollbooster'
-	import { onDestroy, onMount, tick } from 'svelte'
-	import { spring } from 'svelte/motion'
+	import { onMount, tick, untrack } from 'svelte'
+	import { on } from 'svelte/events'
+	import { Spring } from 'svelte/motion'
 	import tinycolor from 'tinycolor2'
 	import UaParser from 'ua-parser-js'
-	import type { ChapterData } from '$lib/schemas/book-schema'
-	import Button from '$lib/components/Button.svelte'
-	import ChapterCover from '$lib/components/ChapterCover.svelte'
-	import Starfield from '$lib/components/Starfield.svelte'
-	import { CHAPTER_COVER_TRANSITION_DURATION } from '$lib/config'
-	import { fastFadeFromJs } from '$lib/utils/transition/fast-fade-from-js'
-	import { fastFadeJs } from '$lib/utils/transition/fast-fade-js'
+	import type { AssetPath } from '$app/types'
+	import { browser } from '$app/env'
+	import { asset } from '$app/paths'
 
-	export let chapterData: ChapterData
-	export let isPlaying = false
-	export let isReset = true
-	export let currentTime = 0
-	export let chapterColor = '#ff0000'
-	export let rowWidth = 0 // Performance thing to set this externally...
-	export let targetTime = currentTime
-
-	export let ready = () => {
-		/* Empty */
+	type Props = {
+		chapterColor?: string
+		chapterData: ChapterData
+		currentTime?: number
+		isPlaying?: boolean
+		isReset?: boolean
+		onended?: () => void
+		onready?: () => void
+		rowWidth?: number // Performance thing to set this externally...
+		targetTime?: number
 	}
+
+	let {
+		chapterColor = '#ff0000',
+		chapterData,
+		currentTime = $bindable(0),
+		isPlaying = $bindable(false),
+		isReset = $bindable(true),
+		onended,
+		onready,
+		rowWidth = 0,
+		targetTime = $bindable(currentTime),
+	}: Props = $props()
 
 	// Config
 	const showTextBeforeNarrationStarts = false
 	const isStarfieldEnabled = true
 	const isMobile = (new UaParser().getDevice().type ?? '') === 'mobile'
-	// Const clickToTogglePlayPause = false;
 	const debug = false
 	const isSpringEnabled = true
 	const springConfig = {
@@ -43,43 +53,46 @@
 		stiffness: 0.005,
 	}
 
-	let isSeeking = false
-	let scrollWrapperElement: HTMLDivElement
-	let scrollLeftBinding = 0 // Optimization? or just use scrollLeft?
-	let scrollTween = spring(0, springConfig)
-	let activeWordIndex = -1 // Optimization vs. referencing the element... -1 means before first word, > wordElements.length means after last word
-	let wheelTimer: NodeJS.Timeout | undefined
+	let isSeeking = $state(false)
+	let scrollWrapperElement: HTMLDivElement | undefined = $state()
+	let scrollLeftBinding = $state(0) // Optimization? or just use scrollLeft?
+	const scrollTween = new Spring(0, springConfig)
+	let wheelTimer: ReturnType<typeof setTimeout> | undefined
 	let isChapterCoverVisible = true
 
-	let timeCache: number[] // One element longer than the number of words, to accommodate the "end" time of the last word
-	let wordElements: HTMLSpanElement[]
-	let isMounted = false
-	let scrollAreaElement: HTMLDivElement
+	let timeCache: number[] = [] // One element longer than the number of words, to accommodate the "end" time of the last word
+	let wordElements: HTMLSpanElement[] = []
+	let isMounted = $state(false)
+	let scrollAreaElement: HTMLDivElement | undefined = $state()
 	let isLoaded = false
 
 	// Scroll booster / frame loop
-	let scrollBooster: ScrollBooster
-	let isUserHoldingDownFingerOrMouse = false
+	let isUserHoldingDownFingerOrMouse = $state(false)
 	let scrollLeft = 0
 	let scrollLeftDelta = 0
-	let intervalId: NodeJS.Timer | undefined
-	// Let scrollBoosterStart = 0;
 
 	// TODO does this help?
-	// wtf...
 	// https://stackoverflow.com/questions/9811429/html5-audio-tag-on-safari-has-a-delay
 	if (browser && isMobile) {
-		// eslint-disable-next-line ts/no-explicit-any, ts/strict-boolean-expressions -- AudioContext is missing in older Safari even though the DOM types declare it
-		const AudioContext = globalThis.AudioContext || (globalThis as any).webkitAudioContext
-
-		const audioContext = new AudioContext()
+		const AudioContextConstructor =
+			globalThis.AudioContext ??
+			// AudioContext is missing in older Safari even though the DOM types declare it
+			(globalThis as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext
+		// eslint-disable-next-line no-new -- Creating the context is the side effect we want
+		new AudioContextConstructor()
 	}
 
 	onMount(() => {
+		const wrapper = scrollWrapperElement
+		const area = scrollAreaElement
+		if (!wrapper || !area) {
+			throw new Error('Track scroll elements must be bound before mount')
+		}
+
 		// Allow drag scrolling on desktop
-		scrollBooster = new ScrollBooster({
+		const scrollBooster = new ScrollBooster({
 			bounce: true,
-			content: scrollAreaElement,
+			content: area,
 			direction: 'horizontal',
 			onPointerDown() {
 				// Doesn't fire on ios mobile while inertial scroll animation is playing
@@ -87,38 +100,24 @@
 
 				// Seem to have to set this to avoid jumps
 				scrollBooster.setPosition({
-					x: scrollWrapperElement.scrollLeft,
+					x: wrapper.scrollLeft,
 					y: 0,
 				})
-
-				// Track position to distinguish between click and drag
-				// scrollBoosterStart = e.position.x;
 			},
 			pointerMode: 'mouse',
 			scrollMode: 'native',
-			viewport: scrollWrapperElement,
-			// OnPointerUp: (e) => {
-			// 	// Play / pause on click without drag
-			// 	if (clickToTogglePlayPause && isSeeking) {
-			// 		const dragDistance = Math.abs(scrollBoosterStart - e.position.x);
-			// 		// TODO Don't play / pause if we "stab" during an inertial scroll?
-			// 		if (dragDistance < 3) {
-			// 			isSeeking = false;
-			// 			isPlaying = !isPlaying;
-			// 		}
-			// 	}
-			// }
+			viewport: wrapper,
 		})
 
 		// Watch scroll velocity
-		// have to do this instead of an on:scroll handler so we can calculate velocity / delta
-		function loop() {
+		// have to do this instead of an onscroll handler so we can calculate velocity / delta
+		const loop = () => {
 			if (isReset || !isSeeking) {
 				return
 			}
 
-			scrollLeftDelta = scrollWrapperElement.scrollLeft - scrollLeft
-			scrollLeft = scrollWrapperElement.scrollLeft
+			scrollLeftDelta = wrapper.scrollLeft - scrollLeft
+			scrollLeft = wrapper.scrollLeft
 
 			// Doesn't really work on ios...
 			if (isUserHoldingDownFingerOrMouse || scrollLeftDelta !== 0) {
@@ -126,35 +125,30 @@
 			}
 
 			// Stop the scroll booster which can "flicker" between 0 and .5 as it slows down
-			// todo is isMoving ever true? isDragging is broken
-			// if (scrollBooster.getState().isMoving) {
 			scrollBooster.setPosition({
 				x: scrollLeft,
 				y: 0,
 			})
-			// }
 
-			// optimization, only seek audio at the end of a scroll input
+			// Optimization, only seek audio at the end of a scroll input
 			targetTime = timeFromWordIndex(activeWordIndex)
 			currentTime = targetTime
 			isSeeking = false
 		}
 
-		intervalId = setInterval(() => {
+		const intervalId = setInterval(() => {
 			loop()
 		}, 100)
 
-		wordElements = [...scrollAreaElement.querySelectorAll<HTMLSpanElement>('span[data-time]')]
+		wordElements = [...area.querySelectorAll<HTMLSpanElement>('span[data-time]')]
 
 		timeCache = generateTimeCache(chapterData, wordElements)
 
 		isMounted = true
-	})
 
-	onDestroy(() => {
-		if (intervalId) {
-			// eslint-disable-next-line ts/no-explicit-any
-			clearInterval(intervalId as any)
+		return () => {
+			clearInterval(intervalId)
+			scrollBooster.destroy()
 		}
 	})
 
@@ -165,9 +159,9 @@
 		for (const span of wordSpans) {
 			const dataTime = span.dataset.time
 
-			if (dataTime === null || dataTime === undefined) {
+			if (dataTime === undefined) {
 				console.warn(
-					`data-time attribute is missing from word ${span.innerHTML} in chapter ${chapterData.title}`,
+					`data-time attribute is missing from word ${span.innerHTML} in chapter ${data.title}`,
 				)
 			} else {
 				times.push(Number(dataTime))
@@ -175,7 +169,7 @@
 		}
 
 		// Add the final time
-		times.push(chapterData.narrationTime.end)
+		times.push(data.narrationTime.end)
 
 		return times
 	}
@@ -183,26 +177,28 @@
 	function scrollToOffset(offset: number, rightOnly = true, immediate = false) {
 		// Only scroll to the right
 		if (
-			// eslint-disable-next-line ts/strict-boolean-expressions -- bind:this leaves the element undefined before mount and null after destroy
-			scrollWrapperElement &&
-			rowWidth > 0 &&
-			(!rightOnly || offset >= scrollWrapperElement.scrollLeft)
+			!scrollWrapperElement ||
+			rowWidth <= 0 ||
+			(rightOnly && offset < scrollWrapperElement.scrollLeft)
 		) {
-			if (isSpringEnabled && !immediate) {
-				// This was the trick for the flashes...
-				void tweenAfterTick(offset)
-			} else {
-				scrollWrapperElement.scrollLeft = offset
-				if (immediate) {
-					setSpringStartPoint(offset)
-				}
+			return
+		}
+
+		if (isSpringEnabled && !immediate) {
+			// This was the trick for the flashes...
+			void tweenAfterTick(offset)
+		} else {
+			scrollWrapperElement.scrollLeft = offset
+			if (immediate) {
+				// Keep the spring's starting point in sync with the manual scroll position
+				scrollTween.set(offset, { instant: true })
 			}
 		}
 	}
 
 	async function tweenAfterTick(offset: number) {
 		await tick()
-		$scrollTween = offset
+		scrollTween.target = offset
 	}
 
 	// ==== Time / Word index / Scroll offset conversions ============================
@@ -210,20 +206,24 @@
 	// TODO only search if time delta is greater than minimum word spacing?
 	// prob not this is pretty fast
 	function wordIndexFromTime(time: number): number {
-		if (time <= timeCache[0]) {
+		const firstTime = timeCache[0]
+		const lastTime = timeCache.at(-1)
+
+		if (firstTime === undefined || lastTime === undefined || time <= firstTime) {
 			// Before first word
 			return -1
 		}
 
-		// @ts-expect-error trusted access
-		if (time >= timeCache.at(-1)) {
+		if (time >= lastTime) {
 			// After last word
 			return wordElements.length
 		}
 
 		// Somewhere between
 		for (let i = 0; i < wordElements.length; i++) {
-			if (time >= timeCache[i] && time < timeCache[i + 1]) {
+			const start = timeCache[i]
+			const end = timeCache[i + 1]
+			if (start !== undefined && end !== undefined && time >= start && time < end) {
 				return i
 			}
 		}
@@ -233,42 +233,47 @@
 	}
 
 	function timeFromWordIndex(index: number): number {
-		return timeCache[index < 0 ? 0 : Math.min(index, wordElements.length)]
+		// The index is clamped into range, so the lookup always succeeds
+		return timeCache[index < 0 ? 0 : Math.min(index, wordElements.length)] ?? 0
 	}
 
 	function wordIndexFromScrollOffset(offset: number): number {
 		const scrollOffset = offset + rowWidth / 2
+		const firstWord = wordElements[0]
+		const secondWord = wordElements[1]
+		const lastWord = wordElements.at(-1)
+		const penultimateWord = wordElements.at(-2)
+
+		if (
+			firstWord === undefined ||
+			secondWord === undefined ||
+			lastWord === undefined ||
+			penultimateWord === undefined
+		) {
+			console.warn('issues!')
+			return 0
+		}
 
 		// Before first word
-		if (scrollOffset <= wordElements[0].offsetLeft) {
+		if (scrollOffset <= firstWord.offsetLeft) {
 			return -1
 		}
 
 		// After last word
-		// @ts-expect-error trusted access
-		if (scrollOffset >= wordElements.at(-1).offsetLeft + wordElements.at(-1).offsetWidth) {
+		if (scrollOffset >= lastWord.offsetLeft + lastWord.offsetWidth) {
 			return wordElements.length
 		}
 
 		// First word
-		// average of right edge of current word and left edge of previous
-		if (
-			scrollOffset <
-			(wordElements[0].offsetLeft + wordElements[0].offsetWidth + wordElements[1].offsetLeft) / 2
-		) {
+		// average of right edge of current word and left edge of next
+		if (scrollOffset < (firstWord.offsetLeft + firstWord.offsetWidth + secondWord.offsetLeft) / 2) {
 			return 0
 		}
 
 		// Last word
 		if (
 			scrollOffset >=
-			// @ts-expect-error trusted access
-			(wordElements.at(-1).offsetLeft +
-				// @ts-expect-error trusted access
-				wordElements.at(-2).offsetLeft +
-				// @ts-expect-error trusted access
-				wordElements.at(-2).offsetWidth) /
-				2
+			(lastWord.offsetLeft + penultimateWord.offsetLeft + penultimateWord.offsetWidth) / 2
 		) {
 			return wordElements.length - 1
 		}
@@ -276,17 +281,14 @@
 		// Between
 		// TODO consider whether any point after the word should be the next word...
 		for (let i = 1; i < wordElements.length - 1; i++) {
-			// Average of right edge of previous word and left edge of current
-			// const leftEdge =
-			// 	(wordElements[i - 1].offsetLeft +
-			// 		wordElements[i - 1].offsetWidth +
-			// 		wordElements[i].offsetLeft) /
-			// 	2;
-			const rightEdge =
-				(wordElements[i].offsetLeft +
-					wordElements[i].offsetWidth +
-					wordElements[i + 1].offsetLeft) /
-				2
+			const word = wordElements[i]
+			const nextWord = wordElements[i + 1]
+			if (word === undefined || nextWord === undefined) {
+				break
+			}
+
+			// Average of right edge of current word and left edge of next
+			const rightEdge = (word.offsetLeft + word.offsetWidth + nextWord.offsetLeft) / 2
 
 			if (scrollOffset <= rightEdge) {
 				return i
@@ -300,25 +302,24 @@
 	function scrollOffsetFromWordIndex(index: number): number {
 		// Before first word
 		if (index < 0) {
-			// Return wordElements[0].offsetLeft - rowWidth / 2;
-			// optimization
+			// Optimization, instead of wordElements[0].offsetLeft - rowWidth / 2
 			return 0
 		}
 
 		// After last word
 		if (index >= wordElements.length) {
-			// @ts-expect-error trusted access
-			return wordElements.at(-1).offsetLeft + wordElements.at(-1).offsetWidth - rowWidth / 2
+			const lastWord = wordElements.at(-1)
+			return lastWord === undefined ? 0 : lastWord.offsetLeft + lastWord.offsetWidth - rowWidth / 2
 		}
 
 		// Between, use the center of the word
-		return wordElements[index].offsetLeft + wordElements[index].offsetWidth / 2 - rowWidth / 2
+		const word = wordElements[index]
+		return word === undefined ? 0 : word.offsetLeft + word.offsetWidth / 2 - rowWidth / 2
 	}
 
 	// ==== Reactive setters ========================================================
 
 	function setWordStylesFromActiveWordIndex(index: number) {
-		// Console.time('updateWordStyles');
 		// TODO optimize hot path, don't need to do this on all lines at the same time?
 		// many are out of view...
 
@@ -353,42 +354,11 @@
 				}
 			}
 		}
-
-		// Console.timeEnd('updateWordStyles');
-	}
-
-	// Keep spring starting point up to date if we're scrolling manually
-	function setSpringStartPoint(startPoint: number) {
-		scrollTween = spring(startPoint, springConfig)
-	}
-
-	function setActiveWordIndex(index: number) {
-		activeWordIndex = index
-	}
-
-	function setScrollOffset(offset: number) {
-		scrollWrapperElement.scrollLeft = offset
-	}
-
-	// React to reset being set
-	function setReset(reset: boolean) {
-		if (reset) {
-			// IsPlaying = true; // force invalidation
-			isPlaying = false
-			// Placeholder's transition completion does the rest
-		}
-	}
-
-	function setPlaying(playing: boolean) {
-		if (playing) {
-			// IsReset = true; // force invalidation
-			isReset = false
-		}
 	}
 
 	// If we set target time while reset, react immediately
 	// todo mobile safari bugs?
-	function setTargetTime(time: number) {
+	function previewTargetTime(time: number) {
 		if (!isMounted || !isReset || !isChapterCoverVisible) {
 			return
 		}
@@ -398,106 +368,149 @@
 		scrollToOffset(scrollPosition, false, true)
 	}
 
-	async function setLoaded(loaded: boolean) {
-		if (!loaded) {
+	function onCanPlayThrough() {
+		if (isLoaded) {
 			return
 		}
 
+		isLoaded = true
+		void notifyReady()
+	}
+
+	async function notifyReady() {
 		await tick()
-		ready()
+		onready?.()
+	}
+
+	function onWheel(event: WheelEvent) {
+		// Allow gesture / wheel scrolling, e.g. two finger drag on mac track pad
+		if (!(Math.abs(event.deltaX) > 0)) {
+			return
+		}
+
+		isSeeking = true
+		isUserHoldingDownFingerOrMouse = true
+
+		// Clear the timeout if it's already set
+		if (wheelTimer !== undefined) {
+			clearTimeout(wheelTimer)
+		}
+
+		// Set the new timeout
+		wheelTimer = setTimeout(() => {
+			wheelTimer = undefined
+			isUserHoldingDownFingerOrMouse = false
+		}, 200) // 200ms delay; adjust as needed
 	}
 
 	// Reactive zone --------------------------
 
-	$: starfieldColor = tinycolor(chapterColor).lighten(10).toHexString()
+	const starfieldColor = $derived(tinycolor(chapterColor).lighten(10).toHexString())
+	const isPlayingAndNotSeeking = $derived(isPlaying && !isSeeking) // Only really play the audio if we're not seeking
 
-	$: setLoaded(isLoaded)
-	$: setPlaying(isPlaying)
-	$: setReset(isReset)
-	$: setTargetTime(targetTime)
-	$: isPlayingAndNotSeeking = isPlaying && !isSeeking // Only really play the audio if we're not seeking
+	// -1 means before first word, > wordElements.length means after last word
+	// While seeking the scroll position drives the active word, otherwise the audio time does
+	const activeWordIndex = $derived.by(() => {
+		if (!isMounted) {
+			return -1
+		}
 
-	// While Playing / paused --------
-	$: isMounted && !isSeeking && setActiveWordIndex(wordIndexFromTime(currentTime))
-	$: isMounted &&
-		isPlayingAndNotSeeking &&
-		scrollToOffset(scrollOffsetFromWordIndex(activeWordIndex))
-
-	// Seek audio time to active word when scrolling
-	// bad for performance?
-	// $: wordElements && wordElements.length > 0 && isSeeking && seekTimeFromScroll(scrollLeftBinding);
-
-	// save the play time when we pause
-	$: isMounted && !isPlaying && (targetTime = currentTime)
-	$: isMounted && isSpringEnabled && !isSeeking && setScrollOffset($scrollTween)
-
-	// Special seeking behavior ------
-	$: isMounted && isSeeking && setSpringStartPoint(scrollLeftBinding)
-	$: isMounted && isSeeking && setActiveWordIndex(wordIndexFromScrollOffset(scrollLeftBinding))
-
-	// Style
-	$: isMounted && setWordStylesFromActiveWordIndex(activeWordIndex)
+		return isSeeking ? wordIndexFromScrollOffset(scrollLeftBinding) : wordIndexFromTime(currentTime)
+	})
 
 	// Show pointer if we're in "button" mode
-	$: overrideCursor =
+	const overrideCursor = $derived(
 		isStarfieldEnabled &&
-		!isReset &&
-		currentTime >= 0 &&
-		currentTime <= chapterData.narrationTime.start
+			!isReset &&
+			currentTime >= 0 &&
+			currentTime <= chapterData.narrationTime.start,
+	)
+
+	// Playing and reset are mutually exclusive
+	$effect(() => {
+		if (isPlaying) {
+			isReset = false
+		}
+	})
+
+	$effect(() => {
+		if (isReset) {
+			isPlaying = false
+			// Placeholder's transition completion does the rest
+		}
+	})
+
+	// Only the target time itself should trigger the preview, so the lookup is untracked
+	$effect(() => {
+		const time = targetTime
+		untrack(() => {
+			previewTargetTime(time)
+		})
+	})
+
+	// While playing, follow the active word
+	$effect(() => {
+		if (isMounted && isPlayingAndNotSeeking) {
+			scrollToOffset(scrollOffsetFromWordIndex(activeWordIndex))
+		}
+	})
+
+	// Save the play time when we pause
+	$effect(() => {
+		if (isMounted && !isPlaying) {
+			targetTime = currentTime
+		}
+	})
+
+	// Apply the spring's position to the scroll wrapper
+	$effect(() => {
+		if (isMounted && isSpringEnabled && !isSeeking && scrollWrapperElement) {
+			scrollWrapperElement.scrollLeft = scrollTween.current
+		}
+	})
+
+	// Keep spring starting point up to date if we're scrolling manually
+	$effect(() => {
+		if (isMounted && isSeeking) {
+			scrollTween.set(scrollLeftBinding, { instant: true })
+		}
+	})
+
+	// Style
+	$effect(() => {
+		if (isMounted) {
+			setWordStylesFromActiveWordIndex(activeWordIndex)
+		}
+	})
 </script>
 
 <div class="track">
+	<!--
+		There is deliberately no pointercancel handler, clearing the holding flag there
+		breaks mobile. The wheel listener is attached manually so it can be passive.
+	-->
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div
 		bind:this={scrollWrapperElement}
-		class="scroll-wrapper no-scrollbar"
-		class:override-cursor={overrideCursor}
-		on:pointercancel={() => {
-			// Breaks mobile?
-			// isUserHoldingDownFingerOrMouse = false;
-		}}
-		on:pointerdown={(event) => {
+		class={['scroll-wrapper no-scrollbar', { 'override-cursor': overrideCursor }]}
+		{@attach (element) => on(element, 'wheel', onWheel, { passive: true })}
+		onpointerdown={(event) => {
 			isSeeking = true
 			isUserHoldingDownFingerOrMouse = true
-			if (event.target) {
-				// @ts-expect-error no ts in template
-
+			if (event.target instanceof Element) {
 				event.target.setPointerCapture(event.pointerId)
 			}
 		}}
-		on:pointerup={() => {
+		onpointerup={() => {
 			isUserHoldingDownFingerOrMouse = false
 		}}
-		on:scroll={(event) => {
-			if (event.target) {
-				// @ts-expect-error no ts in template
-
-				scrollLeftBinding = event.target.scrollLeft
-			}
-		}}
-		on:wheel|passive={(event) => {
-			// Allow gesture / wheel scrolling, e.g. two finger drag on mac track pad
-			if (!(Math.abs(event.deltaX) > 0)) {
-				return
-			}
-
-			isSeeking = true
-			isUserHoldingDownFingerOrMouse = true
-
-			// Clear the timeout if it's already set
-			if (wheelTimer !== undefined) {
-				clearTimeout(wheelTimer)
-			}
-
-			// Set the new timeout
-			wheelTimer = setTimeout(() => {
-				wheelTimer = undefined
-				isUserHoldingDownFingerOrMouse = false
-			}, 200) // 200ms delay; adjust as needed
+		onscroll={(event) => {
+			scrollLeftBinding = event.currentTarget.scrollLeft
 		}}
 	>
 		<!-- funky comments here to avoid implicit white space issues -->
 		<!-- prettier-ignore -->
-		<div bind:this={scrollAreaElement} class=scroll-area class:hide-text={!showTextBeforeNarrationStarts && currentTime < chapterData.narrationTime.start}><!--
+		<div bind:this={scrollAreaElement} class={['scroll-area', { 'hide-text': !showTextBeforeNarrationStarts && currentTime < chapterData.narrationTime.start }]}><!--
 		--><div class="spacer" ></div><!--
 			-->{#each chapterData.lines as line, lineIndex (lineIndex)}<!--
 					-->{@html line}<!--
@@ -507,7 +520,7 @@
 
 		<!-- Control starfield visibility -->
 		{#if (isStarfieldEnabled && !isReset && currentTime > 0.5 && currentTime < chapterData.narrationTime.start - 3.5) || currentTime > chapterData.narrationTime.end + 3}
-			<div transition:fastFadeFromJs|local={{ duration: 3000 }}>
+			<div transition:fastFadeFromJs={{ duration: 3000 }}>
 				<Starfield
 					id={`particles-${chapterData.index}`}
 					--background="linear-gradient(0deg, #f5f5f5 0%, #f7f7f7 13%, #f7f7f7 100%) #f7f7f7"
@@ -528,26 +541,26 @@
 
 	{#if isReset}
 		<div
-			on:introend={() => {
+			onintroend={() => {
 				isChapterCoverVisible = true
 				// Still broken sometimes?
 				targetTime = -1 // Force reactive update...
 				targetTime = 0 // Go even further than the first scroll pos
 			}}
-			on:outrostart={() => {
+			onoutrostart={() => {
 				isChapterCoverVisible = false
 			}}
-			transition:fastFadeJs|local={{ duration: CHAPTER_COVER_TRANSITION_DURATION }}
+			transition:fastFadeJs={{ duration: CHAPTER_COVER_TRANSITION_DURATION }}
 		>
 			<ChapterCover {chapterColor} {chapterData} />
 		</div>
 	{/if}
 
-	<div class="absolute top-0 left-0 flex h-full" class:w-full={isReset}>
+	<div class={['absolute top-0 left-0 flex h-full', { 'w-full': isReset }]}>
 		<Button
 			icon={isPlaying ? faPause : faPlay}
 			isTransitionEnabled={true}
-			on:click={() => {
+			onclick={() => {
 				isPlaying = !isPlaying
 			}}
 		/>
@@ -558,7 +571,7 @@
 			<Button
 				icon={faRotateBack}
 				isTransitionEnabled={true}
-				on:click={() => {
+				onclick={() => {
 					isReset = true
 				}}
 			/>
@@ -576,34 +589,19 @@
 			<p>currentTime: {Math.round(currentTime)}</p>
 			<p>isReset: {isReset}</p>
 			<p>activeWordIndex: {activeWordIndex}</p>
-			<!-- <p class="inline-block">scrollLeftDelta: {scrollLeftDelta}</p> -->
 		</div>
 	{/if}
 </div>
 
-{#if isMobile}
-	<Audio
-		audioSources={chapterData.audio.files.map((file) => asset(`/${file}`))}
-		isPlaying={isPlayingAndNotSeeking}
-		{targetTime}
-		bind:currentTime
-		on:canplaythrough={() => {
-			isLoaded = true
-		}}
-		on:ended
-	/>
-{:else}
-	<Audio
-		audioSources={chapterData.audio.files.map((file) => asset(`/${file}`))}
-		isPlaying={isPlayingAndNotSeeking}
-		{targetTime}
-		bind:currentTime
-		on:canplaythrough={() => {
-			isLoaded = true
-		}}
-		on:ended
-	/>
-{/if}
+<!-- The audio file list comes from the book data, so it can't be checked against the static asset union -->
+<Audio
+	audioSources={chapterData.audio.files.map((file) => asset(file as AssetPath))}
+	isPlaying={isPlayingAndNotSeeking}
+	oncanplaythrough={onCanPlayThrough}
+	{onended}
+	{targetTime}
+	bind:currentTime
+/>
 
 <style lang="postcss">
 	div.track {
@@ -616,10 +614,6 @@
 		background: linear-gradient(0deg, #f5f5f5 0%, #f7f7f7 13%, #f7f7f7 100%) #f7f7f7;
 		-webkit-touch-callout: none; /* iOS Safari */
 	}
-
-	/* :global(body.cursor-grabbing-important *) {
-		cursor: grabbing !important;
-	} */
 
 	/* Horizontal space between lines */
 	:global(div.scroll-area span.line) {
@@ -681,16 +675,6 @@
 		font-family: serif;
 		font-size: min(calc(100dvh / 36), 1.75rem);
 		line-height: calc(100dvh / 12);
-
-		/* Nothing works */
-		/* -webkit-touch-callout: none;
-		-webkit-text-size-adjust: none;
-		-webkit-user-select: none;
-		user-select: none;
-		-webkit-user-callout: none;
-		-webkit-user-drag: none;
-		-webkit-user-modify: none;
-		-webkit-highlight: none; */
 	}
 
 	div.scroll-wrapper:active {

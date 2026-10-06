@@ -23,16 +23,18 @@ import { getTextBetween, saveFormattedJson } from './utilities'
 // Helpers ----------------------------------------------------------------------
 
 function getChapterText(source: string, chapterIndex: number, chapterDelimiters: string[]): string {
-	return getTextBetween(
-		source,
-		chapterDelimiters[chapterIndex],
-		chapterDelimiters[chapterIndex + 1] ?? source.length,
-	)
+	const startDelimiter = chapterDelimiters[chapterIndex]
+	if (startDelimiter === undefined) {
+		throw new Error(`No chapter delimiter found for chapter index ${chapterIndex}`)
+	}
+
+	// The last chapter runs to the end of the source
+	return getTextBetween(source, startDelimiter, chapterDelimiters[chapterIndex + 1])
 }
 
 function chapterTextToLines(
 	text: string,
-	emojiReplacements: string[][],
+	emojiReplacements: Array<[pdfEmoji: string, scriptEmoji: string]>,
 	breakOnIndentsOnly = false,
 ): string[] {
 	let chapterText = text
@@ -132,7 +134,7 @@ const chapterBreakOnIndentConfig = [
 ]
 
 // The pdf parser chokes on emoji, this recreates them after the fact
-const emojiReplacements = [
+const emojiReplacements: Array<[pdfEmoji: string, scriptEmoji: string]> = [
 	['力', '🦊'], // Coco
 	['', '💜'], // Chaplin
 	['', '🗝'], // Buster
@@ -148,10 +150,10 @@ const json: {
 }
 
 // Parse each chapter into lines
-for (let i = 0; i < chapterDelimiters.length; i++) {
+for (const [i, chapterDelimiter] of chapterDelimiters.entries()) {
 	const chapterJson = {
 		lines: [] as string[],
-		title: chapterDelimiters[i].replaceAll(/\n|[^A-Za-z\s]/gu, ''),
+		title: chapterDelimiter.replaceAll(/\n|[^A-Za-z\s]/gu, ''),
 	}
 
 	const chapterText = getChapterText(text, i, chapterDelimiters)

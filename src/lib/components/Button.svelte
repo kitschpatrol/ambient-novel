@@ -1,41 +1,52 @@
-<script lang="ts" strictEvents>
+<script lang="ts">
 	import type { IconDefinition } from '@fortawesome/free-solid-svg-icons'
+	import { fastFadeCss } from '#lib/utils/transition/fast-fade-css.js'
 	// eslint-disable-next-line import/no-named-as-default
 	import Fa from 'svelte-fa'
-	import { fastFadeCss } from '$lib/utils/transition/fast-fade-css'
-	export let isDown = false
-	export let iconAlign: 'left' | 'right' = 'left'
-	export let label: string | undefined = undefined
 
-	export let icon: IconDefinition
-	export let isEnabled = true
-	export let isTransitionEnabled = false
-
-	// Setting duration to 0 is not enough for a smooth transition
-	// https://stackoverflow.com/a/70629246/2437832
-	// possibly still flaky
-
-	// eslint-disable-next-line ts/no-explicit-any
-	function maybe(node: HTMLElement, options: any) {
-		if (isTransitionEnabled) {
-			return options.fn(node, options)
-		}
+	type Props = {
+		icon: IconDefinition
+		iconAlign?: 'left' | 'right'
+		isDown?: boolean
+		isEnabled?: boolean
+		isTransitionEnabled?: boolean
+		label?: string
+		onclick?: (event: MouseEvent) => void
 	}
+
+	let {
+		icon,
+		iconAlign = 'left',
+		isDown = false,
+		isEnabled = true,
+		isTransitionEnabled = false,
+		label,
+		onclick,
+	}: Props = $props()
 </script>
 
+<!--
+	The transition is global so it also plays when a parent component adds or removes
+	the button. A zero duration transition finishes immediately, which disables it.
+	https://stackoverflow.com/a/70629246/2437832
+-->
 <button
 	class="h-full w-full px-1 pt-2 pb-3 first:pl-5 last:pr-5"
 	disabled={!isEnabled}
+	{onclick}
 	type="button"
-	on:click
 >
 	<div
-		class="bg-opacity-60 font-display text-vm-text-light text-opacity-90 flex h-8 flex-1 items-center justify-center gap-2 rounded-lg bg-gray-400 text-base"
-		class:aspect-square={label === undefined || label === ''}
-		class:down={isDown}
-		class:flex-row={iconAlign === 'left'}
-		class:flex-row-reverse={iconAlign === 'right'}
-		transition:maybe={{ duration: 500, fn: fastFadeCss }}
+		class={[
+			'bg-opacity-60 font-display text-vm-text-light text-opacity-90 flex h-8 flex-1 items-center justify-center gap-2 rounded-lg bg-gray-400 text-base',
+			{
+				'aspect-square': label === undefined || label === '',
+				down: isDown,
+				'flex-row': iconAlign === 'left',
+				'flex-row-reverse': iconAlign === 'right',
+			},
+		]}
+		transition:fastFadeCss|global={{ duration: isTransitionEnabled ? 500 : 0 }}
 	>
 		<Fa {icon} translateY="-.05" />
 		{#if label}
@@ -63,10 +74,6 @@
 			background-color: #f01ef6;
 			/* text-shadow: 0 0 3px white; */
 		}
-
-		/* button:not(:hover) div { */
-		/* transition: 500ms; */
-		/* } */
 	}
 
 	button:not(:disabled):active div {

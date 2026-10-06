@@ -1,25 +1,36 @@
-<script lang="ts" strictEvents>
+<script lang="ts">
 	import type { IconDefinition } from '@fortawesome/free-solid-svg-icons'
+	import type { Snippet } from 'svelte'
 	// eslint-disable-next-line import/no-named-as-default
 	import Fa from 'svelte-fa'
 
-	export let alt: string
-	export let downloadLink = false
-	export let openInNewTab = true
-	export let href: string
-	export let imagePath: string
-	export let imageWidth: number
-	export let imageHeight: number
-
-	export let icon: IconDefinition | undefined = undefined
-
-	type $$Slots = {
-		default: Record<string, never>
+	type Props = {
+		alt: string
+		children: Snippet
+		downloadLink?: boolean
+		href: string
+		icon?: IconDefinition
+		imageHeight: number
+		imagePath: string
+		imageWidth: number
+		openInNewTab?: boolean
 	}
 
-	$: relationship = openInNewTab ? 'noopener noreferrer' : undefined
-	$: target = openInNewTab ? '_blank' : undefined
-	$: download = downloadLink ? '' : undefined
+	let {
+		alt,
+		children,
+		downloadLink = false,
+		href,
+		icon,
+		imageHeight,
+		imagePath,
+		imageWidth,
+		openInNewTab = true,
+	}: Props = $props()
+
+	const relationship = $derived(openInNewTab ? 'noopener noreferrer' : undefined)
+	const target = $derived(openInNewTab ? '_blank' : undefined)
+	const download = $derived(downloadLink ? '' : undefined)
 </script>
 
 <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- href is passed from caller who handles resolve() -->
@@ -28,7 +39,7 @@
 		<img {alt} height={imageHeight} src={imagePath} width={imageWidth} />
 	</div>
 	<div>
-		<slot></slot>
+		{@render children()}
 		{#if icon}
 			<Fa {icon} />
 		{/if}

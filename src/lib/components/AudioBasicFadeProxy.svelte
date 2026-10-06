@@ -1,22 +1,29 @@
-<script lang="ts" strictEvents>
+<script lang="ts">
 	// This wraps the Audio component and uses Svelte's transitions functionality
 	// to fade the volume in and out when the audio is played and paused.
-	import AudioBasic from '$lib/components/AudioBasic.svelte'
+	import AudioBasic from '#lib/components/AudioBasic.svelte'
 
-	export let audioSources: string[]
-	export let isPlaying = false
-	export let currentTime = 0
+	type Props = {
+		audioSources: string[]
+		currentTime?: number
+		isPlaying?: boolean
+		onended?: () => void
+	}
 
-	let isPlayingProxy: boolean = isPlaying
-	let currentTimeProxy: number = currentTime
+	let { audioSources, currentTime = $bindable(0), isPlaying = false, onended }: Props = $props()
+
+	// The proxies start from the initial prop values, the effect below keeps them in sync
+	// svelte-ignore state_referenced_locally
+	let isPlayingProxy = $state(isPlaying)
+	let currentTimeProxy = $state(currentTime)
 
 	// Don't load the audio until it's first played,
 	// this is an optimization to play well with the service worker
 	// pre-caching and cut down initial load time
-	let hasPlayed = false
+	let hasPlayed = $state(false)
 
-	// // a bit precarious
-	$: {
+	// A bit precarious
+	$effect(() => {
 		// First play
 		if (!hasPlayed && isPlaying) {
 			hasPlayed = true
@@ -24,12 +31,8 @@
 
 		if (isPlaying && !isPlayingProxy) {
 			// Starting to play
-			// this tick is critical?
-
-			// tick().then(() => {
 			isPlayingProxy = true
 			currentTimeProxy = currentTime
-			// });
 		} else if (!isPlaying && !isPlayingProxy) {
 			// Possibly scrubbing, parent drives time
 			currentTimeProxy = currentTime
@@ -38,12 +41,10 @@
 			currentTime = currentTimeProxy
 		} else if (!isPlaying && isPlayingProxy) {
 			// Starting to pause
-			// tick().then(() => {
 			isPlayingProxy = false
 			currentTimeProxy = currentTime
-			// });
 		}
-	}
+	})
 
 	// Crossfade...
 	// https://github.com/sveltejs/svelte/issues/1469
@@ -57,8 +58,8 @@
 		<AudioBasic
 			{audioSources}
 			isPlaying={isPlayingProxy && isPlaying}
+			{onended}
 			bind:currentTime={currentTimeProxy}
-			on:ended
 		/>
 	{/key}
 {/if}

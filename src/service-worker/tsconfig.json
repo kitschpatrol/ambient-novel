@@ -1,0 +1,5 @@
+{
+	// Service workers need the WebWorker lib instead of DOM, which the SvelteKit
+	// generated config provides, so it must come last
+	"extends": ["@kitschpatrol/typescript-config", "$app/tsconfig/service-worker"]
+}

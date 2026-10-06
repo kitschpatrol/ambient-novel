@@ -1,18 +1,18 @@
-<script lang="ts" strictEvents>
-	import { base, resolve } from '$app/paths'
-	import { page } from '$app/stores'
+<script lang="ts">
+	import { resolve } from '$app/paths'
+	import { page } from '$app/state'
 
-	export let title = 'The Valentine Mob'
+	let { title = 'The Valentine Mob' }: { title?: string } = $props()
 
-	const rawPath = $page.url.pathname.replace(base, '').replaceAll('/', '')
+	const rawPath = $derived(page.route.id?.replace('/', '') ?? '')
 </script>
 
 <header class="grid grid-cols-[1fr_max-content_1fr]">
 	<div class="justify-self-start">
 		{#if rawPath === 'about'}
-			<a href={resolve('/', {})}>Home</a>
+			<a href={resolve('/')}>Home</a>
 		{:else}
-			<a href={resolve('/about', {})}>About</a>
+			<a href={resolve('/about')}>About</a>
 		{/if}
 	</div>
 	{#if rawPath === ''}
@@ -20,7 +20,7 @@
 			{title.replaceAll('a', 'A')}
 		</h1>
 	{:else}
-		<a class="home" href={resolve('/', {})}>
+		<a class="home" href={resolve('/')}>
 			<h1 class="font-display text-vm-text-headline shadow-vm-shadow text-shadow tracking-wider">
 				{title.replaceAll('a', 'A')}
 			</h1>
@@ -28,9 +28,9 @@
 	{/if}
 	<div class="justify-self-end">
 		{#if rawPath === 'book'}
-			<a href={resolve('/', {})}>Home</a>
+			<a href={resolve('/')}>Home</a>
 		{:else}
-			<a href={resolve('/book', {})}>Get the Book </a>
+			<a href={resolve('/book')}>Get the Book </a>
 		{/if}
 	</div>
 </header>
