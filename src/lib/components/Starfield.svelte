@@ -1,38 +1,48 @@
-<script lang="ts" strictEvents>
-	import type { Engine, ISourceOptions } from '@tsparticles/engine'
-	import { loadSlim } from '@tsparticles/slim'
-	import Particles, { particlesInit } from '@tsparticles/svelte'
-	import { onMount } from 'svelte' // If you are going to use `loadSlim`, install the "tsparticles-slim" package too.
+<script lang="ts">
+	import type { ISourceOptions } from '@tsparticles/engine'
+	import { particles } from '#lib/utils/particles.js'
 	import { asset } from '$app/paths'
 
-	export let id = 'tsparticles'
-	export let color = '#cccccc' // Optimization
+	type Props = {
+		color?: string
+		id?: string
+		maxParticlesDesktop?: number
+		maxParticlesMobile?: number
+		planetSpeed?: number
+		starRotationSpeed?: number
+		starSpeed?: number
+		strokeEnabled?: boolean
+	}
 
-	export let maxParticlesMobile = 9
-	export let maxParticlesDesktop = 18
-	export let strokeEnabled = true
-	export let starSpeed = 0.4
-	export let starRotationSpeed = 3
-	export let planetSpeed = 0.3
+	let {
+		color = '#cccccc',
+		id = 'tsparticles',
+		maxParticlesDesktop = 18,
+		maxParticlesMobile = 9,
+		planetSpeed = 0.3,
+		starRotationSpeed = 3,
+		starSpeed = 0.4,
+		strokeEnabled = true,
+	}: Props = $props()
 
-	let particlesConfig: ISourceOptions
-	$: particlesConfig = {
+	// The responsive option is gone in tsParticles 4, so the particle count follows the viewport here instead
+	let viewportWidth = $state(0)
+	const particleCount = $derived(
+		viewportWidth > 0 && viewportWidth <= 768 ? maxParticlesMobile : maxParticlesDesktop,
+	)
+
+	const particlesConfig: ISourceOptions = $derived({
 		detectRetina: true,
 		fullScreen: false,
 		name: id,
 		particles: {
 			collisions: {
 				enable: true,
-				// Distance: 100
-			},
-			color: {
-				value: color,
 			},
 			groups: {
 				saturn: {
 					collisions: {
 						enable: false,
-						// Distance: 100
 					},
 					links: {
 						enable: false,
@@ -57,9 +67,8 @@
 					shape: {
 						options: {
 							images: {
-								fill: true,
 								replaceColor: true,
-								src: asset(strokeEnabled ? '/saturn.svg' : '/saturn-no-stroke.svg'),
+								src: asset(strokeEnabled ? 'saturn.svg' : 'saturn-no-stroke.svg'),
 							},
 						},
 						type: 'images',
@@ -85,7 +94,12 @@
 				speed: starSpeed,
 			},
 			number: {
-				value: maxParticlesDesktop,
+				value: particleCount,
+			},
+			paint: {
+				color: {
+					value: color,
+				},
 			},
 			rotate: {
 				animation: {
@@ -99,9 +113,8 @@
 			shape: {
 				options: {
 					images: {
-						fill: true,
 						replaceColor: true,
-						src: asset(strokeEnabled ? '/star.svg' : '/star-no-stroke.svg'),
+						src: asset(strokeEnabled ? 'star.svg' : 'star-no-stroke.svg'),
 					},
 				},
 				type: 'images',
@@ -114,41 +127,18 @@
 			},
 		},
 		pauseOnOutsideViewport: false,
-		responsive: [
-			{
-				maxWidth: 768,
-				options: {
-					particles: {
-						number: {
-							value: maxParticlesMobile,
-						},
-					},
-				},
-			},
-		],
-	}
-
-	let mounted = false
-	onMount(() => {
-		mounted = true
 	})
-
-	void particlesInit(async (engine: Engine) => {
-		// You can use main to customize the tsParticles instance adding presets or custom shapes
-		// this loads the tsparticles package bundle, it's the easiest method for getting everything ready
-		// starting from v2 you can add only the features you need reducing the bundle size
-		// await loadFull(engine);
-		// false is key, otherwise other components will react
-		await loadSlim(engine, false)
-	})
-
-	// .1 fixes safari rounding bug
 </script>
 
-{#if mounted}
-	<Particles
-		{id}
-		style="position: var(--position); top: var(--top); left: 0; width: 100%; height: var(--height); background: var(--background);"
-		options={particlesConfig}
-	/>
-{/if}
+<svelte:window bind:innerWidth={viewportWidth} />
+
+<div
+	{id}
+	style:position="var(--position)"
+	style:top="var(--top)"
+	style:width="100%"
+	style:background="var(--background)"
+	style:height="var(--height)"
+	style:left="0"
+	{@attach particles(particlesConfig)}
+></div>

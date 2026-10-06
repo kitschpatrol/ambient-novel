@@ -1,10 +1,10 @@
-<script lang="ts" strictEvents>
+<script lang="ts">
+	import Header from '#lib/components/Header.svelte'
+	import Starfield from '#lib/components/Starfield.svelte'
 	import { onMount } from 'svelte'
 	import { fade } from 'svelte/transition'
 	import { asset } from '$app/paths'
-	import Header from '$lib/components/Header.svelte'
-	import Starfield from '$lib/components/Starfield.svelte'
-	let isMounted = false
+	let isMounted = $state(false)
 	onMount(() => {
 		isMounted = true
 	})
@@ -36,7 +36,7 @@
 />
 
 {#if isMounted}
-	<div class="star-wrapper" transition:fade={{ delay: 250, duration: 3000 }}>
+	<div class="star-wrapper" transition:fade|global={{ delay: 250, duration: 3000 }}>
 		<Starfield
 			--height="calc(100svh - (100svh / 12))"
 			--position="fixed"
@@ -143,7 +143,7 @@
 <img
 	class="heart mx-auto mb-16 w-[10vw] max-w-16 pb-16 opacity-90"
 	alt="heart"
-	src={asset('/heart.svg')}
+	src={asset('heart.svg')}
 />
 
 <style lang="postcss">

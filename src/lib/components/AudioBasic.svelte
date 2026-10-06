@@ -1,51 +1,56 @@
-<script lang="ts" strictEvents>
+<script lang="ts">
+	import { fadeVolume } from '#lib/utils/transition/fade-volume.js'
 	import { lookup } from 'mrmime'
 	import { onMount } from 'svelte'
-	import { fadeVolume } from '$lib/utils/transition/fade-volume'
 
-	export let audioSources: string[]
-	export let isPlaying = false
-	export let currentTime = 0
+	type Props = {
+		audioSources: string[]
+		currentTime?: number
+		isPlaying?: boolean
+		onended?: () => void
+	}
 
-	let audioElement: HTMLAudioElement | undefined
-	let isInOutro = false
-	let currentTimeProxy: number = currentTime
+	let { audioSources, currentTime = $bindable(0), isPlaying = false, onended }: Props = $props()
+
+	let audioElement: HTMLAudioElement | undefined = $state()
+	let isInOutro = $state(false)
+	let currentTimeProxy = $state(currentTime)
 
 	onMount(() => {
 		if (audioElement) {
-			// AudioElement.load();
 			audioElement.currentTime = currentTimeProxy // Critical
 		}
 
-		updatePlay(isPlaying)
+		updatePlay()
 	})
 
 	// Todo retries?
-	function updatePlay(playing: boolean) {
+	function updatePlay() {
 		if (!isInOutro && audioElement) {
-			if (playing) {
-				audioElement.play() // Remember this is a promise
+			if (isPlaying) {
+				void audioElement.play()
 			} else {
 				audioElement.pause()
 			}
 		}
 	}
 
-	function updateCurrentTimeProxy(time: number, inOutro: boolean) {
-		if (!inOutro) {
-			currentTimeProxy = time
-		}
-	}
+	$effect(() => {
+		updatePlay()
+	})
 
-	function updateCurrentTime(time: number, inOutro: boolean) {
-		if (!inOutro) {
-			currentTime = time
+	// Don't send time updates in either direction during transitions
+	$effect(() => {
+		if (!isInOutro) {
+			currentTime = currentTimeProxy
 		}
-	}
+	})
 
-	$: updatePlay(isPlaying)
-	$: updateCurrentTime(currentTimeProxy, isInOutro)
-	$: updateCurrentTimeProxy(currentTime, isInOutro)
+	$effect(() => {
+		if (!isInOutro) {
+			currentTimeProxy = currentTime
+		}
+	})
 </script>
 
 <!-- // adding preload="none" was key to currentTime bugs on mobile safari -->
@@ -54,19 +59,19 @@
 
 <audio
 	bind:this={audioElement}
-	bind:currentTime={currentTimeProxy}
-	on:ended
-	on:introstart={() => {
+	{onended}
+	onintrostart={() => {
 		// Accommodates resumption during a transition, if that happens before a new Audio player is created
 		isInOutro = false
 	}}
-	on:outroend={() => {
+	onoutroend={() => {
 		isInOutro = true
 	}}
-	on:outrostart={() => {
+	onoutrostart={() => {
 		isInOutro = true
 	}}
-	transition:fadeVolume|local={{ duration: 5000 }}
+	bind:currentTime={currentTimeProxy}
+	transition:fadeVolume={{ duration: 5000 }}
 >
 	{#each audioSources as source (source)}
 		<source src={source} type={lookup(source) ?? 'audio'} />

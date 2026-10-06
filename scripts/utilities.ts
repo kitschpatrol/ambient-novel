@@ -63,10 +63,14 @@ export function findFile(filePath: string): null | string {
 	// If at least one file matches the pattern
 	if (files.length === 1) {
 		// Get the first file
-		const matchedFilePath = files[0]
+		const [matchedFilePath] = files
 
 		// Check that the file exists and is a file (not a directory)
-		if (fs.existsSync(matchedFilePath) && fs.lstatSync(matchedFilePath).isFile()) {
+		if (
+			matchedFilePath !== undefined &&
+			fs.existsSync(matchedFilePath) &&
+			fs.lstatSync(matchedFilePath).isFile()
+		) {
 			return matchedFilePath
 		}
 	} else if (files.length > 1) {
@@ -88,10 +92,14 @@ export function findHashedFile(filePath: string): null | string {
 	// If at least one file matches the pattern
 	if (files.length === 1) {
 		// Get the first file
-		const matchedFilePath = files[0]
+		const [matchedFilePath] = files
 
 		// Check that the file exists and is a file (not a directory)
-		if (fs.existsSync(matchedFilePath) && fs.lstatSync(matchedFilePath).isFile()) {
+		if (
+			matchedFilePath !== undefined &&
+			fs.existsSync(matchedFilePath) &&
+			fs.lstatSync(matchedFilePath).isFile()
+		) {
 			return matchedFilePath
 		}
 	} else if (files.length > 1) {
@@ -162,10 +170,10 @@ export function stripHtmlTags(html: string): string {
 export function getTextBetween(
 	source: string,
 	firstDelimiter: string,
-	lastDelimiter: string,
+	lastDelimiter?: string,
 ): string {
 	const firstIndex = source.indexOf(firstDelimiter) + firstDelimiter.length
-	const lastIndex = source.indexOf(lastDelimiter)
+	const lastIndex = lastDelimiter === undefined ? source.length : source.indexOf(lastDelimiter)
 	return source.slice(firstIndex, lastIndex)
 }
 
@@ -316,7 +324,12 @@ function mapFloatToInt(input: number, minOut: number, maxOut: number): number {
 
 function mapFloatToCbr(quality: number): string {
 	const cbrQualityRange = ['32k', '40k', '48k', '64k', '96k', '128k', '256k']
-	return cbrQualityRange[mapFloatToInt(quality, 0, cbrQualityRange.length - 1)]
+	const cbrQuality = cbrQualityRange[mapFloatToInt(quality, 0, cbrQualityRange.length - 1)]
+	if (cbrQuality === undefined) {
+		throw new Error(`Quality ${quality} maps outside the CBR quality range`)
+	}
+
+	return cbrQuality
 }
 
 // 0 is lowest quality, 1 is highest

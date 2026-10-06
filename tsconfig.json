@@ -1,25 +1,7 @@
 {
-	"extends": "./.svelte-kit/tsconfig.json",
-	"compilerOptions": {
-		"resolveJsonModule": true,
-		"allowJs": true,
-		"checkJs": true,
-		"strict": true,
-		"sourceMap": true,
-		"esModuleInterop": true,
-		"forceConsistentCasingInFileNames": true,
-		"skipLibCheck": true
-		// Path aliases are supposedly handled by https://kit.svelte.dev/docs/configuration#alias
-		// But explored adding $app to solve stand-alone tsc errors
-		// "paths": {
-		// 	"$lib": ["./src/lib"],
-		// 	"$lib/*": ["./src/lib/*"],
-		// 	"$app/*": ["./node_modules/@sveltejs/kit/assets/app/*"]
-		// }
-	},
-	"include": ["**/**.*"],
-	"exclude": ["**/dist/", "**/bin/", "**/build/"]
-	//
-	// If you want to overwrite includes/excludes, make sure to copy over the relevant includes/excludes
-	// from the referenced tsconfig.json - TypeScript does not merge them in
+	// SvelteKit generates the second config, which must come last so its per-project
+	// paths and rootDirs take precedence
+	"extends": ["@kitschpatrol/typescript-config/svelte", "$app/tsconfig"],
+	// The service worker is its own TypeScript project, see src/service-worker/tsconfig.json
+	"exclude": ["build", "src/service-worker"]
 }

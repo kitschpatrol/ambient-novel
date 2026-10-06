@@ -15,9 +15,14 @@ export function seededShuffle<T>(array: T[], seed: string): T[] {
 		currentIndex -= 1
 
 		// And swap it with the current element.
-		const temporaryValue = array[currentIndex]
-		array[currentIndex] = array[randomIndex]
-		array[randomIndex] = temporaryValue
+		const currentValue = array[currentIndex]
+		const randomValue = array[randomIndex]
+		if (currentValue === undefined || randomValue === undefined) {
+			continue
+		}
+
+		array[currentIndex] = randomValue
+		array[randomIndex] = currentValue
 	}
 
 	return array

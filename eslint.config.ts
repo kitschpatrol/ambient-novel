@@ -77,6 +77,8 @@ export default eslintConfig(
 						allowed: ['execa', 'glob', 'dotenv', 'lodash', 'read-package-up'],
 					},
 				],
+				// SvelteKit's virtual modules only exist at build time
+				'import/no-unresolved': ['error', { ignore: [String.raw`^\$app/`] }],
 				'ts/no-unsafe-type-assertion': 'off',
 			},
 		},

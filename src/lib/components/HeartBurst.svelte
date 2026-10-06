@@ -1,22 +1,27 @@
-<script lang="ts" strictEvents>
-	import type { Container, Engine, ISourceOptions } from '@tsparticles/engine'
-	import { loadSlim } from '@tsparticles/slim'
-	import Particles, { particlesInit } from '@tsparticles/svelte'
-	import { onMount } from 'svelte' // If you are going to use `loadSlim`, install the "tsparticles-slim" package too.
+<script lang="ts">
+	import type { Container, ISourceOptions } from '@tsparticles/engine'
+	import { particles } from '#lib/utils/particles.js'
 	import { asset } from '$app/paths'
 
 	// Charge-up logic
 	let startTime = 0
-	let chargeDuration = 0
+	let chargeDuration = $state(0)
+	let isCharging = $state(false)
 	let particlesContainer: Container | undefined
 
-	function markTime(charging: boolean) {
-		if (charging) {
-			startTime = Date.now()
-		} else if (startTime !== 0) {
-			chargeDuration = Date.now() - startTime
-			launchHearts(chargeDuration / 100)
+	function startCharging() {
+		isCharging = true
+		startTime = Date.now()
+	}
+
+	function stopCharging() {
+		if (!isCharging) {
+			return
 		}
+
+		isCharging = false
+		chargeDuration = Date.now() - startTime
+		launchHearts(chargeDuration / 100)
 	}
 
 	function launchHearts(amount: number) {
@@ -31,9 +36,6 @@
 		}
 	}
 
-	let isCharging = false
-	$: markTime(isCharging)
-
 	const particlesConfig: ISourceOptions = {
 		particles: {
 			move: {
@@ -45,9 +47,8 @@
 			shape: {
 				options: {
 					images: {
-						fill: true,
 						replaceColor: true,
-						src: asset('/heart.svg'),
+						src: asset('heart.svg'),
 					},
 				},
 				type: 'images',
@@ -57,53 +58,27 @@
 			},
 		},
 	}
-
-	let mounted = false
-	onMount(() => {
-		mounted = true
-	})
-
-	void particlesInit(async (engine: Engine) => {
-		// You can use main to customize the tsParticles instance adding presets or custom shapes
-		// this loads the tsparticles package bundle, it's the easiest method for getting everything ready
-		// starting from v2 you can add only the features you need reducing the bundle size
-		// await loadFull(engine);
-		// false is key, otherwise other components will react
-		await loadSlim(engine, false)
-	})
 </script>
 
-{#if mounted}
-	<Particles
-		id="heartburst"
-		options={particlesConfig}
-		on:particlesLoaded={(event) => {
-			// @ts-expect-error no ts in template
-			const { particles } = event.detail
-			if (particles !== undefined) {
-				particlesContainer = particles
-			}
-		}}
-	/>
-{/if}
+<div
+	id="heartburst"
+	{@attach particles(particlesConfig, (container) => {
+		particlesContainer = container
+	})}
+></div>
 <br />
 {isCharging}
 <br />
 {chargeDuration}
 <br />
 <button
+	onpointercancel={stopCharging}
+	onpointerdown={(event) => {
+		event.currentTarget.setPointerCapture(event.pointerId)
+		startCharging()
+	}}
+	onpointerup={stopCharging}
 	type="button"
-	on:pointercancel={() => {
-		isCharging = false
-	}}
-	on:pointerdown={(event) => {
-		// @ts-expect-error no ts in template
-		event.target.setPointerCapture(event.pointerId)
-		isCharging = true
-	}}
-	on:pointerup={() => {
-		isCharging = false
-	}}
 >
 	Heart
 </button>

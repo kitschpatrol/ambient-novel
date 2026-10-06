@@ -1,9 +1,13 @@
-<script lang="ts" strictEvents>
-	import type { ChapterData } from '$lib/schemas/book-schema'
-	import ChapterCover from '$lib/components/ChapterCover.svelte'
+<script lang="ts">
+	import type { ChapterData } from '#lib/schemas/book-schema.js'
+	import ChapterCover from '#lib/components/ChapterCover.svelte'
 
-	export let chapterColor = '#ff0000'
-	export let chapterData: ChapterData
+	type Props = {
+		chapterColor?: string
+		chapterData: ChapterData
+	}
+
+	let { chapterColor = '#ff0000', chapterData }: Props = $props()
 
 	// Note some duplication with Track.svelte...
 	// Could try to integrate this loading placeholder there...

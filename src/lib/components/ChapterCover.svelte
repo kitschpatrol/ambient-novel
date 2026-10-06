@@ -1,8 +1,12 @@
-<script lang="ts" strictEvents>
-	import type { ChapterData } from '$lib/schemas/book-schema'
+<script lang="ts">
+	import type { ChapterData } from '#lib/schemas/book-schema.js'
 
-	export let chapterColor = '#ff0000'
-	export let chapterData: ChapterData
+	type Props = {
+		chapterColor?: string
+		chapterData: ChapterData
+	}
+
+	let { chapterColor = '#ff0000', chapterData }: Props = $props()
 
 	// Even this wasn't enough to avoid layout contention
 	// https://stackoverflow.com/a/70629246/2437832

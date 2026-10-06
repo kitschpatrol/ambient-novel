@@ -20,5 +20,3 @@ export const bookSourceSchema = z.object({
 	titleAlt: z.string().min(1),
 	year: z.number().int().positive(),
 })
-
-export type BookSource = z.infer<typeof bookSourceSchema>

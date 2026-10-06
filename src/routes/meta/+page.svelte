@@ -1,10 +1,10 @@
-<script lang="ts" strictEvents>
+<script lang="ts">
 	import { faBomb, faTrash } from '@fortawesome/free-solid-svg-icons'
+	import Button from '#lib/components/Button.svelte'
+	import Header from '#lib/components/Header.svelte'
+	import { name, version } from '#lib/data/pkg-info.json'
 	import UaParser from 'ua-parser-js'
-	import { browser } from '$app/environment'
-	import Button from '$lib/components/Button.svelte'
-	import Header from '$lib/components/Header.svelte'
-	import { name, version } from '$lib/data/pkg-info.json'
+	import { browser } from '$app/env'
 
 	async function getServiceWorkerCount() {
 		const registrations = await navigator.serviceWorker.getRegistrations()
@@ -57,9 +57,9 @@
 
 	const isMobile = (new UaParser().getDevice().type ?? '') === 'mobile'
 
-	let cacheCount = getCacheCount()
+	let cacheCount = $state.raw(getCacheCount())
 
-	let swCount = getServiceWorkerCount()
+	let swCount = $state.raw(getServiceWorkerCount())
 </script>
 
 <svelte:head>
@@ -103,8 +103,8 @@
 			<span style:color="red">{error.message}</span>
 		{/await}
 	</p>
-	<Button icon={faBomb} label="Uninstall Service Worker" on:click={uninstallServiceWorker} />
-	<Button icon={faTrash} label="Clear Service Worker Cache" on:click={clearServiceWorkerCache} />
+	<Button icon={faBomb} label="Uninstall Service Worker" onclick={uninstallServiceWorker} />
+	<Button icon={faTrash} label="Clear Service Worker Cache" onclick={clearServiceWorkerCache} />
 	<p class="font-display text-white">
 		Mobile detected: {isMobile}
 	</p>

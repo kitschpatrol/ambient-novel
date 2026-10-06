@@ -1,45 +1,56 @@
-<script lang="ts" strictEvents>
+<script lang="ts">
 	// This wraps the Audio component and uses Svelte's transitions functionality
 	// to fade the volume in and out when the audio is played and paused.
-	import Audio from '$lib/components/Audio.svelte'
+	import Audio from '#lib/components/Audio.svelte'
 
-	export let audioSources: string[]
-	export let maxVolume = 1
+	type Props = {
+		audioSources: string[]
+		currentTime?: number // Reports time to parent (does not write)
+		isPlaying?: boolean
+		maxVolume?: number
+		oncanplaythrough?: () => void
+		onended?: () => void
+		targetTime?: number // Parent uses to set requested time (does not read)
+	}
 
-	export let isPlaying = false
-	export let currentTime = 0 // Reports time to parent (does not write)
-	export let targetTime = 0 // Parent uses to set requested time (does not read)
+	let {
+		audioSources,
+		currentTime = $bindable(0),
+		isPlaying = false,
+		maxVolume = 1,
+		oncanplaythrough,
+		onended,
+		targetTime = 0,
+	}: Props = $props()
 
-	// don't load the audio until it's first played,
-	// this is an optimization to play well with the service worker
-	// pre-caching and cut down initial load time
-
-	let targetTimeProxy: number = targetTime
-	let currentTimeProxy: number = currentTime
-	let isPlayingProxy = isPlaying
+	// The proxies start from the initial prop values, the effect below keeps them in sync
+	// svelte-ignore state_referenced_locally
+	let targetTimeProxy = $state(targetTime)
+	let currentTimeProxy = $state(currentTime)
+	// svelte-ignore state_referenced_locally
+	let isPlayingProxy = $state(isPlaying)
 
 	// A bit precarious
-	$: if (isPlaying && !isPlayingProxy) {
-		// Starting to play
-		targetTimeProxy = targetTime
-		currentTime = targetTime
-		isPlayingProxy = true
-	} else if (isPlaying && isPlayingProxy) {
-		// Playing
-		targetTimeProxy = targetTime
-		currentTime = currentTimeProxy
-	} else if (!isPlaying && isPlayingProxy) {
-		// Starting to pause
-		// remember play position... this creates the issue...
-		// remember in parent instead
-		// targetTimeProxy = currentTime;
-		// targetTime = currentTime;
-		isPlayingProxy = false
-	} else if (!isPlaying && !isPlayingProxy) {
-		// Paused
-		targetTimeProxy = targetTime
-		currentTime = targetTimeProxy
-	}
+	$effect(() => {
+		if (isPlaying && !isPlayingProxy) {
+			// Starting to play
+			targetTimeProxy = targetTime
+			currentTime = targetTime
+			isPlayingProxy = true
+		} else if (isPlaying && isPlayingProxy) {
+			// Playing
+			targetTimeProxy = targetTime
+			currentTime = currentTimeProxy
+		} else if (!isPlaying && isPlayingProxy) {
+			// Starting to pause
+			// the play position is remembered in the parent
+			isPlayingProxy = false
+		} else if (!isPlaying && !isPlayingProxy) {
+			// Paused
+			targetTimeProxy = targetTime
+			currentTime = targetTimeProxy
+		}
+	})
 
 	// Crossfade...
 	// https://github.com/sveltejs/svelte/issues/1469
@@ -53,9 +64,9 @@
 		{audioSources}
 		isPlaying={isPlayingProxy}
 		{maxVolume}
+		{oncanplaythrough}
+		{onended}
 		targetTime={targetTimeProxy}
 		bind:currentTime={currentTimeProxy}
-		on:canplaythrough
-		on:ended
 	/>
 {/key}

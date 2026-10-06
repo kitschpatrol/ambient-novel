@@ -1,7 +1,6 @@
-import type { Handle } from '@sveltejs/kit'
+import type { Handle } from '@sveltejs/kit/hooks'
 import { minify } from 'html-minifier'
-// eslint-disable-next-line import/no-unresolved
-import { building } from '$app/environment'
+import { building } from '$app/env'
 
 const minificationOptions = {
 	collapseBooleanAttributes: true,
@@ -22,16 +21,20 @@ const minificationOptions = {
 	sortClassName: true,
 }
 
-// eslint-disable-next-line jsdoc/require-jsdoc
+/**
+ * Minifies the HTML of prerendered pages during the build.
+ */
 export async function handle({ event, resolve }: Parameters<Handle>[0]) {
 	let page = ''
 
 	return resolve(event, {
 		transformPageChunk({ done, html }) {
 			page += html
-			if (done) {
-				return building ? minify(page, minificationOptions) : page
+			if (!done) {
+				return
 			}
+
+			return building ? minify(page, minificationOptions) : page
 		},
 	})
 }
