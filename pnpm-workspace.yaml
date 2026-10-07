@@ -17,9 +17,10 @@ allowBuilds:
   workerd: true
 peerDependencyRules:
   allowedVersions:
-    # eslint-plugin-jsx-a11y 6.10.2 still caps its eslint peer at ^9 but runs on 10
+    # Remove once the installed version declares ESLint 10 support.
     # https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/issues/1075
-    eslint-plugin-jsx-a11y>eslint: ^10.0.0
+    # https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/pull/1081
+    eslint-plugin-jsx-a11y@6>eslint: ^10.0.0
 auditConfig:
   ignoreGhsas:
     # Vitest 3.2.7 is the last release that supports Vite 5. The advisory only affects the

@@ -27,3 +27,5 @@ vendor/
 
 # Customizations
 .wrangler/
+# Vite config bundles are deleted after loading, including during parallel linting.
+vite.config.*.timestamp-*
