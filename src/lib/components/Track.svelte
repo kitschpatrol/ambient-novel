@@ -72,7 +72,8 @@
 		// eslint-disable-next-line ts/no-explicit-any, ts/strict-boolean-expressions -- AudioContext is missing in older Safari even though the DOM types declare it
 		const AudioContext = globalThis.AudioContext || (globalThis as any).webkitAudioContext
 
-		const audioContext = new AudioContext()
+		// eslint-disable-next-line no-new -- Creating the context is the workaround, it is never used afterwards
+		new AudioContext()
 	}
 
 	onMount(() => {
@@ -167,7 +168,7 @@
 
 			if (dataTime === null || dataTime === undefined) {
 				console.warn(
-					`data-time attribute is missing from word ${span.innerHTML} in chapter ${chapterData.title}`,
+					`data-time attribute is missing from word ${span.innerHTML} in chapter ${data.title}`,
 				)
 			} else {
 				times.push(Number(dataTime))
@@ -175,7 +176,7 @@
 		}
 
 		// Add the final time
-		times.push(chapterData.narrationTime.end)
+		times.push(data.narrationTime.end)
 
 		return times
 	}
@@ -210,7 +211,7 @@
 	// TODO only search if time delta is greater than minimum word spacing?
 	// prob not this is pretty fast
 	function wordIndexFromTime(time: number): number {
-		if (time <= timeCache[0]) {
+		if (time <= timeCache[0]!) {
 			// Before first word
 			return -1
 		}
@@ -223,7 +224,7 @@
 
 		// Somewhere between
 		for (let i = 0; i < wordElements.length; i++) {
-			if (time >= timeCache[i] && time < timeCache[i + 1]) {
+			if (time >= timeCache[i]! && time < timeCache[i + 1]!) {
 				return i
 			}
 		}
@@ -233,14 +234,14 @@
 	}
 
 	function timeFromWordIndex(index: number): number {
-		return timeCache[index < 0 ? 0 : Math.min(index, wordElements.length)]
+		return timeCache[index < 0 ? 0 : Math.min(index, wordElements.length)]!
 	}
 
 	function wordIndexFromScrollOffset(offset: number): number {
 		const scrollOffset = offset + rowWidth / 2
 
 		// Before first word
-		if (scrollOffset <= wordElements[0].offsetLeft) {
+		if (scrollOffset <= wordElements[0]!.offsetLeft) {
 			return -1
 		}
 
@@ -254,7 +255,7 @@
 		// average of right edge of current word and left edge of previous
 		if (
 			scrollOffset <
-			(wordElements[0].offsetLeft + wordElements[0].offsetWidth + wordElements[1].offsetLeft) / 2
+			(wordElements[0]!.offsetLeft + wordElements[0]!.offsetWidth + wordElements[1]!.offsetLeft) / 2
 		) {
 			return 0
 		}
@@ -283,9 +284,9 @@
 			// 		wordElements[i].offsetLeft) /
 			// 	2;
 			const rightEdge =
-				(wordElements[i].offsetLeft +
-					wordElements[i].offsetWidth +
-					wordElements[i + 1].offsetLeft) /
+				(wordElements[i]!.offsetLeft +
+					wordElements[i]!.offsetWidth +
+					wordElements[i + 1]!.offsetLeft) /
 				2
 
 			if (scrollOffset <= rightEdge) {
@@ -312,7 +313,7 @@
 		}
 
 		// Between, use the center of the word
-		return wordElements[index].offsetLeft + wordElements[index].offsetWidth / 2 - rowWidth / 2
+		return wordElements[index]!.offsetLeft + wordElements[index]!.offsetWidth / 2 - rowWidth / 2
 	}
 
 	// ==== Reactive setters ========================================================

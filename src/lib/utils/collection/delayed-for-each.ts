@@ -11,6 +11,7 @@ export async function delayedForEach<T>(
 		await new Promise((resolve) => {
 			setTimeout(resolve, delay)
 		})
-		callback(array[i], i, array)
+		// Read after the delay in case the array changed, the index is in bounds so the value is T
+		callback(array[i] as T, i, array)
 	}
 }

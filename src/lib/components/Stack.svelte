@@ -71,8 +71,8 @@
 
 		for (const chapterIndex of randomChapters) {
 			const startTime = random(
-				chapters[chapterIndex].narrationTime.start * 1.25,
-				chapters[chapterIndex].narrationTime.end * 0.75,
+				chapters[chapterIndex]!.narrationTime.start * 1.25,
+				chapters[chapterIndex]!.narrationTime.end * 0.75,
 				true,
 			)
 
@@ -124,13 +124,12 @@
 
 <Header --height="calc(100dvh / 12)" />
 
-<!-- eslint-disable-next-line ts/no-unused-vars -->
-{#each chapters as _, index (index)}
+{#each chapters as chapter, index (index)}
 	{#if loadCount >= index && width > 0}
 		<!-- {#if 0 >= index && width > 0} -->
 		<Track
 			chapterColor={chapterColors[index]}
-			chapterData={chapters[index]}
+			chapterData={chapter}
 			ready={() => {
 				loadCount++
 			}}
@@ -156,7 +155,7 @@
 			}}
 		/>
 	{:else}
-		<TrackPlaceholder chapterColor={chapterColors[index]} chapterData={chapters[index]} />
+		<TrackPlaceholder chapterColor={chapterColors[index]} chapterData={chapter} />
 	{/if}
 {/each}
 
