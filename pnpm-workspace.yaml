@@ -1,3 +1,34 @@
+allowBuilds:
+  '@tsparticles/engine': true
+  esbuild: true
+  node-jq: true
+  unrs-resolver: true
+  workerd: true
+auditConfig:
+  ignoreGhsas:
+    # Vitest 3.2.7 is the last release that supports Vite 5. The advisory only affects the
+    # mocker dev server and browser mode, not `vitest run` of Node tests. Drop this after
+    # upgrading to Vite 6+ and vitest 5.
+    # cspell:disable-next-line
+    - GHSA-82fw-gwwq-j7x9
+minimumReleaseAgeExclude:
+  - '@kitschpatrol/cspell-config@8.13.1'
+  - '@kitschpatrol/eslint-config@8.13.1'
+  - '@kitschpatrol/knip-config@8.13.1'
+  - '@kitschpatrol/mdat-config@8.13.1'
+  - '@kitschpatrol/prettier-config@8.13.1'
+  - '@kitschpatrol/remark-config@8.13.1'
+  - '@kitschpatrol/repo-config@8.13.1'
+  - '@kitschpatrol/shared-config@8.13.1'
+  - '@kitschpatrol/stylelint-config@8.13.1'
+  - '@kitschpatrol/typescript-config@8.13.1'
+  - poptab@1.2.2
+peerDependencyRules:
+  allowedVersions:
+    # Remove once the installed version declares ESLint 10 support.
+    # https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/issues/1075
+    # https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/pull/1081
+    eslint-plugin-jsx-a11y@6>eslint: ^10.0.0
 publicHoistPattern:
   - '@kitschpatrol/repo-config'
   - '@kitschpatrol/typescript-config'
@@ -9,34 +40,3 @@ publicHoistPattern:
   - '*prettier*'
   - '*remark*'
   - '*stylelint*'
-allowBuilds:
-  '@tsparticles/engine': true
-  esbuild: true
-  node-jq: true
-  unrs-resolver: true
-  workerd: true
-peerDependencyRules:
-  allowedVersions:
-    # Remove once the installed version declares ESLint 10 support.
-    # https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/issues/1075
-    # https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/pull/1081
-    eslint-plugin-jsx-a11y@6>eslint: ^10.0.0
-auditConfig:
-  ignoreGhsas:
-    # Vitest 3.2.7 is the last release that supports Vite 5. The advisory only affects the
-    # mocker dev server and browser mode, not `vitest run` of Node tests. Drop this after
-    # upgrading to Vite 6+ and vitest 5.
-    # cspell:disable-next-line
-    - GHSA-82fw-gwwq-j7x9
-minimumReleaseAgeExclude:
-  - '@kitschpatrol/cspell-config@8.12.1'
-  - '@kitschpatrol/eslint-config@8.12.1'
-  - '@kitschpatrol/knip-config@8.12.1'
-  - '@kitschpatrol/mdat-config@8.12.1'
-  - '@kitschpatrol/prettier-config@8.12.1'
-  - '@kitschpatrol/remark-config@8.12.1'
-  - '@kitschpatrol/repo-config@8.12.1'
-  - '@kitschpatrol/shared-config@8.12.1'
-  - '@kitschpatrol/stylelint-config@8.12.1'
-  - '@kitschpatrol/typescript-config@8.12.1'
-  - poptab@1.2.2

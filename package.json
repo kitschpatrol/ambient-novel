@@ -37,7 +37,7 @@
 		"generate-data": "tsx ./scripts/generate-data.ts",
 		"generate-package-info": "jq \"{version, name, description}\" package.json > ./src/lib/data/pkg-info.json",
 		"lint": "ksc lint && pnpm check",
-		"prepare": "skills experimental_sync -y -f",
+		"prepare": "svelte-kit sync && skills experimental_sync -y -f",
 		"preview": "vite preview --host",
 		"preview-server": "poptab && open https://localhost:8787 && wrangler dev --show-interactive-dev-session false --https-cert-path ~/.vite-plugin-mkcert/cert.pem --https-key-path ~/.vite-plugin-mkcert/dev.pem",
 		"release": "bumpp --preid preview --commit 'Release: %s' --push false && pnpm build && wrangler deploy",
@@ -47,7 +47,7 @@
 	"devDependencies": {
 		"@cyber2024/pdf-parse-fixed": "^1.2.5",
 		"@fortawesome/free-solid-svg-icons": "^6.7.2",
-		"@kitschpatrol/shared-config": "^8.12.1",
+		"@kitschpatrol/shared-config": "^8.13.1",
 		"@prettier/sync": "^0.6.1",
 		"@sveltejs/adapter-static": "^3.0.10",
 		"@sveltejs/kit": "^2.70.3",
