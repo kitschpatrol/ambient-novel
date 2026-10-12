@@ -1,7 +1,6 @@
 <script lang="ts" strictEvents>
 	import { onMount } from 'svelte'
 	import { fade } from 'svelte/transition'
-	import type { BookSource } from '$lib/schemas/book-source-schema'
 	import { asset } from '$app/paths'
 	import Header from '$lib/components/Header.svelte'
 	import Starfield from '$lib/components/Starfield.svelte'
@@ -15,8 +14,8 @@
 	// Clean up rare HTML-conflicting entities
 	// Encoding everything would be trickier because of the embedded HTML
 	for (const chapter of chapters) {
-		for (let i = 0; i < chapter.lines.length; i++) {
-			chapter.lines[i] = chapter.lines[i].replace('< They all snap >', '&lt; They all snap &gt;')
+		for (const [i, line] of chapter.lines.entries()) {
+			chapter.lines[i] = line.replace('< They all snap >', '&lt; They all snap &gt;')
 		}
 	}
 

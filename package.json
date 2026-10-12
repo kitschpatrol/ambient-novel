@@ -59,8 +59,8 @@
 		"@types/glob": "^8.1.0",
 		"@types/howler": "^2.2.13",
 		"@types/html-minifier": "^4.0.6",
-		"@types/lodash": "^4.17.25",
-		"@types/node": "~22.0.3",
+		"@types/lodash": "^4.17.26",
+		"@types/node": "~24.13.6",
 		"@types/pdf-parse": "^1.1.5",
 		"@types/scrollbooster": "^3.0.3",
 		"@types/seedrandom": "^3.0.8",
@@ -68,7 +68,7 @@
 		"@types/tinycolor2": "^1.4.6",
 		"@types/ua-parser-js": "^0.7.39",
 		"bumpp": "^12.3.0",
-		"dotenv": "^18.0.5",
+		"dotenv": "^18.0.7",
 		"execa": "^10.1.0",
 		"glob": "^13.0.6",
 		"html-minifier": "^4.0.0",
@@ -85,7 +85,7 @@
 		"seedrandom": "^3.0.5",
 		"semver": "^7.8.5",
 		"shx": "^0.4.0",
-		"skills": "^1.7.0",
+		"skills": "^1.7.2",
 		"string-strip-html": "^13.7.7",
 		"svelte": "^4.2.20",
 		"svelte-check": "^4.7.6",
@@ -101,10 +101,10 @@
 		"workbox-build": "^7.4.1",
 		"workbox-range-requests": "^7.4.1",
 		"workbox-routing": "^7.4.1",
-		"wrangler": "^4.147.0",
+		"wrangler": "^4.149.0",
 		"zod": "^4.6.5"
 	},
-	"packageManager": "pnpm@12.9.1",
+	"packageManager": "pnpm@12.11.2",
 	"engines": {
 		"node": "^24.16.0 || >=26.3.0"
 	}

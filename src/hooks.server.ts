@@ -29,9 +29,12 @@ export async function handle({ event, resolve }: Parameters<Handle>[0]) {
 	return resolve(event, {
 		transformPageChunk({ done, html }) {
 			page += html
-			if (done) {
-				return building ? minify(page, minificationOptions) : page
+			// Hold back partial chunks until the whole page is available
+			if (!done) {
+				return
 			}
+
+			return building ? minify(page, minificationOptions) : page
 		},
 	})
 }

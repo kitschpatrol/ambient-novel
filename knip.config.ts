@@ -13,7 +13,6 @@ export default knipConfig({
 		'@types/howler',
 		'@types/pdf-parse',
 		'node-jq',
-		'tailwindcss',
 		'workbox-build',
 	],
 })

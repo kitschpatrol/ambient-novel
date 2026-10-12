@@ -66,7 +66,11 @@ export function findFile(filePath: string): null | string {
 		const matchedFilePath = files[0]
 
 		// Check that the file exists and is a file (not a directory)
-		if (fs.existsSync(matchedFilePath) && fs.lstatSync(matchedFilePath).isFile()) {
+		if (
+			matchedFilePath !== undefined &&
+			fs.existsSync(matchedFilePath) &&
+			fs.lstatSync(matchedFilePath).isFile()
+		) {
 			return matchedFilePath
 		}
 	} else if (files.length > 1) {
@@ -91,7 +95,11 @@ export function findHashedFile(filePath: string): null | string {
 		const matchedFilePath = files[0]
 
 		// Check that the file exists and is a file (not a directory)
-		if (fs.existsSync(matchedFilePath) && fs.lstatSync(matchedFilePath).isFile()) {
+		if (
+			matchedFilePath !== undefined &&
+			fs.existsSync(matchedFilePath) &&
+			fs.lstatSync(matchedFilePath).isFile()
+		) {
 			return matchedFilePath
 		}
 	} else if (files.length > 1) {
@@ -316,7 +324,12 @@ function mapFloatToInt(input: number, minOut: number, maxOut: number): number {
 
 function mapFloatToCbr(quality: number): string {
 	const cbrQualityRange = ['32k', '40k', '48k', '64k', '96k', '128k', '256k']
-	return cbrQualityRange[mapFloatToInt(quality, 0, cbrQualityRange.length - 1)]
+	const cbr = cbrQualityRange[mapFloatToInt(quality, 0, cbrQualityRange.length - 1)]
+	if (cbr === undefined) {
+		throw new Error(`No CBR quality for ${quality}`)
+	}
+
+	return cbr
 }
 
 // 0 is lowest quality, 1 is highest

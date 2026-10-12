@@ -1,22 +1,15 @@
 {
-	"extends": "./.svelte-kit/tsconfig.json",
-	"compilerOptions": {
-		"resolveJsonModule": true,
-		"allowJs": true,
-		"checkJs": true,
-		"strict": true,
-		"sourceMap": true,
-		"esModuleInterop": true,
-		"forceConsistentCasingInFileNames": true,
-		"skipLibCheck": true
-		// Path aliases are supposedly handled by https://kit.svelte.dev/docs/configuration#alias
-		// But explored adding $app to solve stand-alone tsc errors
-		// "paths": {
-		// 	"$lib": ["./src/lib"],
-		// 	"$lib/*": ["./src/lib/*"],
-		// 	"$app/*": ["./node_modules/@sveltejs/kit/assets/app/*"]
-		// }
-	},
+	"extends": ["@kitschpatrol/typescript-config/svelte", "./.svelte-kit/tsconfig.json"],
+	// Path aliases are supposedly handled by https://kit.svelte.dev/docs/configuration#alias
+	// But explored adding $app to solve stand-alone tsc errors
+	// "compilerOptions": {
+	// 	"paths": {
+	// 		"$lib": ["./src/lib"],
+	// 		"$lib/*": ["./src/lib/*"],
+	// 		"$app/*": ["./node_modules/@sveltejs/kit/assets/app/*"]
+	// 	}
+	// },
+	// The generated SvelteKit config's include list replaces the shared one, so restore project-wide coverage for scripts and config files
 	"include": ["**/**.*"],
 	"exclude": ["**/dist/", "**/bin/", "**/build/"]
 	//
