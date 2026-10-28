@@ -24,6 +24,13 @@ minimumReleaseAgeExclude:
   - '@kitschpatrol/typescript-config@8.14.0'
   - mdat@3.6.6
   - remark-mdat@3.1.2
+overrides:
+  # SvelteKit 2's Svelte 4 detection in `client/state.svelte.js` fails in the server bundle,
+  # because esbuild reformats `onMount` so it no longer matches the detection regex. Rollup
+  # 4.64.5 tree-shakes the runes branch that runs instead. Rollup 4.64.6+ keeps it
+  # (rollup/rollup#6551), so prerendering throws `$state is not defined`. Remove after
+  # upgrading to Svelte 5.
+  vite@5>rollup: 4.64.5
 peerDependencyRules:
   allowedVersions:
     # Remove once the installed version declares ESLint 10 support.
