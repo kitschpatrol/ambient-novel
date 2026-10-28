@@ -126,8 +126,6 @@ type DeepPartial<T> = {
 			: T[P]
 }
 
-type StripArray<T> = T extends Array<infer U> ? U : T
-
 const bookOutput: DeepPartial<BookData> = {
 	author: bookSource.author,
 	chapters: [],
@@ -168,9 +166,7 @@ for (const { format, quality, sampleRate, vbr } of config.fullAudioBookSettings.
 	const audioFileUnhashed = `${config.fullAudioBookSettings.outputDir}/${cleanFilename}.${format}`
 	const audioFile = findFile(audioFileUnhashed)
 
-	if (audioFile !== null && !config.fullAudioBookSettings.regenerateCompressed) {
-		console.log(`Already found audio track ${audioFile}, nothing to generate...`)
-	} else {
+	if (audioFile === null || config.fullAudioBookSettings.regenerateCompressed) {
 		// Clean up existing
 		if (audioFile !== null) {
 			fs.rmSync(audioFile, { force: true })
@@ -187,6 +183,8 @@ for (const { format, quality, sampleRate, vbr } of config.fullAudioBookSettings.
 		}
 
 		bookOutput.fullAudio.push(audioFileUnhashed.replace(/\.?\/?static\//, ''))
+	} else {
+		console.log(`Already found audio track ${audioFile}, nothing to generate...`)
 	}
 }
 
@@ -212,6 +210,7 @@ createIntermediatePaths(
 
 // Generate each chapter
 for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
+	type StripArray<T> = T extends Array<infer U> ? U : T
 	console.log(
 		`Processing chapter ${chapterNumber}: ${truncateWithEllipsis(chapterSource.title, 30)}`,
 	)
@@ -449,9 +448,7 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 		const audioFileUnhashed = `${config.audioMixSettings.outputDir}/${mixCleanFilename}.${format}`
 		let audioFile = findHashedFile(audioFileUnhashed)
 
-		if (audioFile !== null && !config.audioMixSettings.regenerateCompressed) {
-			console.log(`Already found audio track ${audioFile}, nothing to generate...`)
-		} else {
+		if (audioFile === null || config.audioMixSettings.regenerateCompressed) {
 			// Clean up existing
 			if (audioFile !== null) {
 				fs.rmSync(audioFile, { force: true })
@@ -462,6 +459,8 @@ for (const [chapterNumber, chapterSource] of bookSource.chapters.entries()) {
 
 			// Hash it
 			audioFile = renameFileWithHash(audioFileUnhashed)
+		} else {
+			console.log(`Already found audio track ${audioFile}, nothing to generate...`)
 		}
 
 		chapter.audio.files.push(audioFile.replace(/\.?\/?static\//, ''))

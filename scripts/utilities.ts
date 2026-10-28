@@ -357,15 +357,11 @@ function compressToAac(
 		} at ${sampleRate}kHz`,
 	)
 
-	if (vbr) {
-		runCommand(
-			`ffmpeg -y -vn -i "${sourceFile}" -c:a libfdk_aac -ar ${sampleRate} -vbr ${bitrateMode} -movflags +faststart "${tempOutputFile}"`,
-		)
-	} else {
-		runCommand(
-			`ffmpeg -y -vn -i "${sourceFile}" -c:a libfdk_aac -ar ${sampleRate} -b:a ${cbrQuality} -movflags +faststart "${tempOutputFile}"`,
-		)
-	}
+	runCommand(
+		vbr
+			? `ffmpeg -y -vn -i "${sourceFile}" -c:a libfdk_aac -ar ${sampleRate} -vbr ${bitrateMode} -movflags +faststart "${tempOutputFile}"`
+			: `ffmpeg -y -vn -i "${sourceFile}" -c:a libfdk_aac -ar ${sampleRate} -b:a ${cbrQuality} -movflags +faststart "${tempOutputFile}"`,
+	)
 
 	fs.renameSync(tempOutputFile, outputFile)
 }
@@ -395,15 +391,11 @@ function compressToMp3(
 		} at ${sampleRate}kHz`,
 	)
 
-	if (vbr) {
-		runCommand(
-			`ffmpeg -y -vn -i "${sourceFile}" -codec:a libmp3lame -ar ${sampleRate} -qscale:a ${bitrateMode} "${tempOutputFile}"`,
-		)
-	} else {
-		runCommand(
-			`ffmpeg -y -vn -i "${sourceFile}" -codec:a libmp3lame -ar ${sampleRate} -b:a ${cbrQuality} "${tempOutputFile}"`,
-		)
-	}
+	runCommand(
+		vbr
+			? `ffmpeg -y -vn -i "${sourceFile}" -codec:a libmp3lame -ar ${sampleRate} -qscale:a ${bitrateMode} "${tempOutputFile}"`
+			: `ffmpeg -y -vn -i "${sourceFile}" -codec:a libmp3lame -ar ${sampleRate} -b:a ${cbrQuality} "${tempOutputFile}"`,
+	)
 
 	fs.renameSync(tempOutputFile, outputFile)
 }
@@ -687,7 +679,7 @@ export function stripTagNodeHtml(
 
 		// Insert the children of the element back in place
 		element.childNodes.forEach((child: Node, i: number) => {
-			const offset = replacementText !== undefined && replacementText !== '' ? 1 : 0
+			const offset = replacementText === undefined || replacementText === '' ? 0 : 1
 			parentElement.childNodes.splice(index + offset + i, 0, child)
 		})
 	})
