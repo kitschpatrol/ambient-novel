@@ -8,10 +8,5 @@ export default knipConfig({
 		'src/store.ts',
 	],
 	ignoreBinaries: ['jq'],
-	ignoreDependencies: [
-		'@types/howler',
-		'@types/pdf-parse',
-		'node-jq',
-		'workbox-build',
-	],
+	ignoreDependencies: ['@types/howler', '@types/pdf-parse', 'node-jq', 'workbox-build'],
 })
