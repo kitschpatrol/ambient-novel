@@ -56,7 +56,6 @@
 		"@tsparticles/engine": "3.8.1",
 		"@tsparticles/slim": "3.8.1",
 		"@tsparticles/svelte": "3.1.1",
-		"@types/glob": "^8.1.0",
 		"@types/howler": "^2.2.13",
 		"@types/html-minifier": "^4.0.6",
 		"@types/lodash": "^4.17.26",

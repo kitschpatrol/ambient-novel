@@ -9,7 +9,6 @@ export default knipConfig({
 	],
 	ignoreBinaries: ['jq'],
 	ignoreDependencies: [
-		'@types/glob',
 		'@types/howler',
 		'@types/pdf-parse',
 		'node-jq',
