@@ -8,5 +8,11 @@ export default knipConfig({
 		'src/store.ts',
 	],
 	ignoreBinaries: ['jq'],
-	ignoreDependencies: ['@types/howler', '@types/pdf-parse', 'node-jq', 'workbox-build'],
+	ignoreDependencies: [
+		'@kitschpatrol/chagent', // Typically invoked through bumpp's --execute argument, which Knip doesn't parse
+		'@types/howler',
+		'@types/pdf-parse',
+		'node-jq',
+		'workbox-build',
+	],
 })

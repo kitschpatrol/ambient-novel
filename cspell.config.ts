@@ -1,7 +1,7 @@
 import { cspellConfig } from '@kitschpatrol/cspell-config'
 
 export default cspellConfig({
-	ignorePaths: ['./data-generated/**/*', './build/**/*'],
+	ignorePaths: ['./data-generated/**/*', './build/**/*', '**/changelog.md'],
 	words: [
 		'adelay',
 		'afterall',
@@ -17,6 +17,7 @@ export default cspellConfig({
 		'blowin',
 		'boomf',
 		'buncha',
+		'chagent',
 		'coffeeshops',
 		'completingness',
 		'daoist',

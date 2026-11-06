@@ -11,6 +11,8 @@ auditConfig:
     # upgrading to Vite 6+ and vitest 5.
     # cspell:disable-next-line
     - GHSA-82fw-gwwq-j7x9
+minimumReleaseAgeExclude:
+  - '@kitschpatrol/chagent@0.4.0'
 overrides:
   # SvelteKit 2's Svelte 4 detection in `client/state.svelte.js` fails in the server bundle,
   # because esbuild reformats `onMount` so it no longer matches the detection regex. Rollup

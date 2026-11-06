@@ -40,13 +40,14 @@
 		"prepare": "svelte-kit sync",
 		"preview": "vite preview --host",
 		"preview-server": "poptab && open https://localhost:8787 && wrangler dev --show-interactive-dev-session false --https-cert-path ~/.vite-plugin-mkcert/cert.pem --https-key-path ~/.vite-plugin-mkcert/dev.pem",
-		"release": "bumpp --preid preview --commit 'Release: %s' --push false && pnpm build && wrangler deploy",
+		"release": "bumpp --preid preview --commit 'Release: %s' --push false --all --execute 'chagent' && pnpm build && wrangler deploy",
 		"scrape-pdf": "tsx ./scripts/scrape-pdf.ts",
 		"test": "vitest run"
 	},
 	"devDependencies": {
 		"@cyber2024/pdf-parse-fixed": "^1.2.5",
 		"@fortawesome/free-solid-svg-icons": "^6.7.2",
+		"@kitschpatrol/chagent": "0.4.0",
 		"@kitschpatrol/shared-config": "^8.14.0",
 		"@prettier/sync": "^0.6.1",
 		"@sveltejs/adapter-static": "^3.0.10",

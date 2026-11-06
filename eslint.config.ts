@@ -12,6 +12,7 @@ export default eslintConfig(
 				],
 			},
 		},
+		ignores: ['**/changelog.md'],
 		js: {
 			overrides: {
 				'depend/ban-dependencies': [
